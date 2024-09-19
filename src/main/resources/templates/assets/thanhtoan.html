@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <style>
+        .thongTinND,
+        .thongTinSP {
+            border: 1px solid rgb(222, 226, 230);
+            border-radius: 5px;
+            padding: 15px 0 15px 15px;
+        }
+
+        .thongTinSP {
+            width: 1320px;
+            margin-left: -12px;
+        }
+
+        .titleThongTinND,
+        .titleThongTinSP {
+            font-weight: bold;
+            font-size: 22px;
+            color: #d38450;
+
+        }
+
+        .ten-NguoiDung,
+        .sdt-NguoiDung,
+        .thongTinDiaChi {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .sp-ThanhToan td {
+            padding-top: 20px;
+        }
+
+        .btn-ThayDoi {
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+
+        .btn-ThayDoi:hover{
+            color: white;
+            font-weight: bold;
+        }
+
+        .tong-TT{
+            line-height: 15px;
+            padding: 20px;
+            padding-left: 40px;
+            padding-right: 70px;
+        }
+
+        .tong-TT p{
+            font-size: 20px;
+        }
+
+        .tong-TT p span{
+            float: right;
+        }
+
+        .tongThanhTien{
+            font-size: 28px;
+            font-weight: bold;
+            color: red;
+
+        }
+    </style>
+</head>
+
+<body ng-app="myApp">
+    <div ng-include="'layout/header.html'"></div>
+    <div ng-include="'layout/menu.html'"></div>
+
+    <div class="container-fluid mx-4" style="margin-top: 55px;">
+        <div style="font-size: 20px;">
+            <a href="index.html" style="color: #2e1d15;"><span>Trang Chủ</span></a>
+            <span class="fw-bold mx-2">/</span>
+            <a href="" style="color: #2e1d15;"><span>Thanh Toán</span></a>
+
+        </div>
+    </div>
+    <div class="container mt-4">
+        <div class="row mb-3">
+            <div class="col-lg-3 thongTinND">
+                <p class="titleThongTinND">Thông Tin Người Nhận</p>
+                <span class="ten-NguoiDung">User name</span> <br>
+                <span class="sdt-NguoiDung">Số điện thoại</span>
+            </div>
+            <div class="col-lg-9  thongTinND">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <p class="titleThongTinND">Địa Chỉ Người Dùng</p>
+                        <span class="thongTinDiaChi">222/22, Phường Long Hòa, Quận Bình Thủy, Cần Thơ</span>
+                        <span class="mx-3" style="color: red;">Trạng Thái(Mặc Định)</span>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-outline-info btn-ThayDoi" style="margin-top: 35px;">Thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="thongTinSP mb-3">
+            <p class="titleThongTinSP">Thông Tin Sản Phẩm</p>
+            <table class="table">
+                <thead>
+                    <tr style="text-align: center;">
+                        <th style="width:10%">Hình</th>
+                        <th style="width:40%">Tên Sản Phẩm</th>
+                        <th style="width:10%">Kích Cỡ</th>
+                        <th style="width:11%">Giá</th>
+                        <th style="width:10%">Số Lượng</th>
+                        <th style="width:14%" class="text-center">Thành tiền</th>
+                        <th style="width:5%" class="pe-2">Hủy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="sp-ThanhToan" style="text-align: center;">
+                        <td data-th="Product" style="padding-top: 8px !important;">
+                            <img src="benner4.png" alt="Product" class="img-responsive " width="auto" height="50px">
+                        </td>
+                        <td class="size-chu" data-th="Name">Bánh kem socola</td>
+                        <td class="size-chu" data-th="size">L</td>
+                        <td class="size-chu" data-th="Price">300.000đ</td>
+                        <td class="size-chu" data-th="quantity">2</td>
+                        <td data-th="Subtotal" class="size-chu text-center">600.000đ</td>
+                        <td class="actions" data-th="" style="padding-top: 16px;">
+                            <button class="btn btn-danger btn-sm" ng-click="delete(product.id)"><i
+                                    class="bi bi-trash3"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="sp-ThanhToan" style="text-align: center;">
+                        <td data-th="Product" style="padding-top: 8px !important;">
+                            <img src="benner4.png" alt="Product" class="img-responsive " width="auto" height="50px">
+                        </td>
+                        <td class="size-chu" data-th="Name">Bánh kem socola</td>
+                        <td class="size-chu" data-th="size">L</td>
+                        <td class="size-chu" data-th="Price">300.000đ</td>
+                        <td class="size-chu" data-th="quantity">2</td>
+                        <td data-th="Subtotal" class="size-chu text-center">600.000đ</td>
+                        <td class="actions" data-th="" style="padding-top: 16px;">
+                            <button class="btn btn-danger btn-sm" ng-click="delete(product.id)"><i
+                                    class="bi bi-trash3"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-6  thongTinND">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <p class="titleThongTinND">Voucher</p>
+                        <span class="thongTinDiaChi">Giảm 5% khi hóa đơn trên 200.000đ</span>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <button type="button" class="btn btn-outline-info btn-ThayDoi">Thay đổi</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6  thongTinND">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <p class="titleThongTinND">Phương Thức Thanh Toán</p>
+                        <span class="thongTinDiaChi">Thanh Toán Khi Nhận Nhận Được Hàng</span>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <button type="button" class="btn btn-outline-info btn-ThayDoi">Thay đổi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-6  thongTinND">
+                <div class="text-center">
+                    nơi để mã QR khi thanh toán
+                </div>
+            </div>
+            <div class="col-lg-6 tong-TT thongTinND">
+               <p>Tổng tiền hàng: <span>1.200.000đ</span></p>
+               <p>Phí vận chuyển: <span>30.000đ</span></p>
+               <p>Tổng cộng Voucher giảm giá: <span>20.000đ</span></p>
+               <p>Tổng tiền hàng: <span class="tongThanhTien">1.210.000đ</span></p>
+            </div>
+        </div>
+    </div>
+    <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>

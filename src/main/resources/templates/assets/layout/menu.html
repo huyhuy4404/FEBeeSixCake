@@ -1,0 +1,91 @@
+<nav class="navbar navbar-expand-lg" style="margin-left: 70px;">
+  <div class="container-fluid parent-menu mx-3 py-2">
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 menu-left">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Trang Chủ</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="gioithieu.html">Giới Thiệu</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="lienhe.html">Liên Hệ</a>
+        </li>
+
+        <li class="nav-item">
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Sản Phẩm
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
+              <li ng-repeat="item in categorys">
+                <a class="dropdown-item" ng-href="SanPham.html#/{{item.idcategory}}"
+                  ng-click="getProductsByCategory(item.idcategory)">
+                  {{item.namecategory}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav menu-right">
+        <li class="nav-item">
+          <div data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <i class=" fa-solid fa-magnifying-glass" style="margin-top: 13px; margin-right: 10px; color: #2e1d15;"></i>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="">Yêu Thích</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="">Đơn Hàng</a>
+        </li>
+
+        <li class="nav-item fs-4 position-relative pt-1 pe-3">
+          <a href=""><img src="cart.png" alt="" style="width: 38px;"></a>
+          <span class="cart-count">0</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Tìm Kiếm</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Input tìm kiếm -->
+        <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm">
+      </div>
+      <div class="modal-footer SPTimKiem">
+        <!-- Cart mẫu để hiển thị kết quả tìm kiếm -->
+        <div class="cart-item-timkiem">
+          <div class="cart-image">
+            <img src="image_url_here" alt="Sản phẩm" width="50" height="50">
+          </div>
+          <div class="cart-details">
+            <h5>Tên sản phẩm</h5>
+            <p>Giá: 100.000 VND</p>
+          </div>
+        </div>
+        <div class="cart-item-timkiem">
+          <div class="cart-image">
+            <img src="image_url_here" alt="Sản phẩm" width="50" height="50">
+          </div>
+          <div class="cart-details">
+            <h5>Tên sản phẩm</h5>
+            <p>Giá: 200.000 VND</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
