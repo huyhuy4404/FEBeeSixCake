@@ -44,40 +44,38 @@
             <div class="col-lg-4 col-md-4"></div>
             <div class="col-lg-4 col-md-4">
                 <div class="account_form">
-                    <h2>Đăng nhập</h2>
-                    <div ng-if="!isLoggedIn">
-                        <form id="form" name="loginForm" ng-submit="login()">
+                    <h2>Thông tin cá nhân</h2>
+        
+                    <!-- Kiểm tra nếu có người dùng đã đăng nhập -->
+                    <div ng-if="user && user.idaccount">
+                        <form id="userProfileForm">
                             <p>
-                                <input type="text" ng-model="user.idaccount" placeholder="Tên đăng nhập (*)"  class="mb-2" name="txtIDAccount" required><br>
-                            <div class="form-text text-danger" ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
-                                Tên người dùng không hợp lệ
-                            </div>
+                                <label>Họ và tên <span>*</span></label>
+                                <input type="text" ng-model="user.fullname" required>
                             </p>
                             <p>
-                                <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)" minlength="6" name="txtPassword"     class="mt-2 mb-2" required><br>
-                            <div class="form-text text-danger" ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
-                                Password phải có ít nhất 6 ký tự
-                            </div>
-                            </p>                           
-                            <!-- Hiển thị thông báo lỗi -->
-                            
+                                <label>Email <span>*</span></label>
+                                <input type="email" ng-model="user.email" required>
+                            </p>
+                            <p>
+                                <label>Số điện thoại <span>*</span></label>
+                                <input type="text" ng-model="user.phonenumber" required>
+                            </p>
+                            <p>
+                                <label>Tên đăng nhập <span>*</span></label>
+                                <input type="text" ng-model="user.idaccount" readonly>
+                            </p>
+
                             <div class="login_submit">
-                                <a href="#">Quên mật khẩu?</a>
-                                <label for="remember">
-                                    <input id="remember" type="checkbox" ng-model="loginData.remember">
-                                    Ghi nhớ
-                                </label>
-                                <button type="submit" id="xacnhan" class="btn btn-primary">Đăng nhập</button>
-                                <div class="form-text text-danger" ng-show="loginError">
-                                    {{loginError}}
-                                </div>
-                                <div class="form-text text-success" ng-show="loginSuccess">
-                                    {{loginSuccess}}
-                                </div>
-                                <a href="register.html"> Đăng ký tài khoản__ </a>
-                                <a href="index.html"> Quay về trang chủ </a>
+                                <button type="submit" ng-click="updateUserProfile()">Cập nhật thông tin</button>
                             </div>
                         </form>
+                    </div>
+
+                    <!-- Nếu không có người dùng đăng nhập, hiển thị thông báo -->
+                    <div ng-if="!user || !user.idaccount">
+                        <p>Chưa có người dùng nào đăng nhập.</p>
+                        <a href="login.html">Đăng nhập ngay</a>
                     </div>
 
                 </div>
