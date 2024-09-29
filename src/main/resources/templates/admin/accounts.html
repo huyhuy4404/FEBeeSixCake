@@ -25,6 +25,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        
 
        
 <!--
@@ -38,7 +39,7 @@ Bootstrap 5 Dashboard Admin Template
 -->
     </head>
     
-    <body>
+    <body  >
         <header class="navbar sticky-top flex-md-nowrap">
             <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
                 <a class="navbar-brand" href="index.html">
@@ -228,12 +229,11 @@ Bootstrap 5 Dashboard Admin Template
                 </nav>
         
                 <!-- Main Content -->
-                <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
+                <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start" ng-app="myApp"  ng-controller="UserController">
                     <div class="title-group mb-3">
                         <h1 class="h2 mb-0">Quản Lý Người Dùng</h1>
                     </div>
-        
-                    <!-- Tabs -->
+                
                     <div class="row my-4">
                         <div class="col-12">
                             <div class="custom-block bg-white">
@@ -245,171 +245,144 @@ Bootstrap 5 Dashboard Admin Template
                                         <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
                                     </li>
                                 </ul>
-        
+                
                                 <div class="tab-content" id="myTabContent">
-                                    <!-- Edit Tab Content -->
                                     <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
-                                        <form class="row g-3" ng-controller="formController">
-                                            <!-- Product Name -->
+                                        <form class="row g-3">
                                             <div class="col-md-6">
                                                 <label for="product-name" class="form-label">Tên tài khoản</label>
-                                                <input type="text" id="product-name" ng-model="selectedProduct.nameproduct" placeholder="Nhập tên tài khoản" class="form-control" />
+                                                <input type="text" id="product-name" ng-model="selectedUser.idaccount" placeholder="Nhập tên tài khoản" class="form-control" />
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="product-name" class="form-label">Mật khẩu</label>
-                                                <input type="password" id="product-name" ng-model="selectedProduct.nameproduct" placeholder="Nhập mật khẩu" class="form-control" />
+                                                <label for="product-password" class="form-label">Mật khẩu</label>
+                                                <input type="password" id="product-password" ng-model="selectedUser.password" placeholder="Nhập mật khẩu" class="form-control" />
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="product-name" class="form-label">Họ và tên</label>
-                                                <input type="text" id="product-name" ng-model="selectedProduct.nameproduct" placeholder="Nhập họ và tên" class="form-control" />
+                                                <label for="product-fullname" class="form-label">Họ và tên</label>
+                                                <input type="text" id="product-fullname" ng-model="selectedUser.fullname" placeholder="Nhập họ và tên" class="form-control" />
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="product-name" class="form-label">Email</label>
-                                                <input type="text" id="product-name" ng-model="selectedProduct.nameproduct" placeholder="Nhập Email" class="form-control" />
+                                                <label for="product-email" class="form-label">Email</label>
+                                                <input type="email" id="product-email" ng-model="selectedUser.email" placeholder="Nhập Email" class="form-control" />
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="product-name" class="form-label">Số điện thoại</label>
-                                                <input type="text" id="product-name" ng-model="selectedProduct.nameproduct" placeholder="Số điện thoại" class="form-control" />
+                                                <label for="product-phone" class="form-label">Số điện thoại</label>
+                                                <input type="text" id="product-phone" ng-model="selectedUser.phonenumber" placeholder="Số điện thoại" class="form-control" />
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="user-role" class="form-label">Chức vụ    </label>
+                                                <label for="user-role" class="form-label">Chức vụ</label>
                                                 <div>
                                                     <label>
-                                                        <input type="radio" id="user-role-admin" name="userRole" ng-model="selectedProduct.role" value="admin" /> Admin
+                                                        <input type="radio" id="user-role-admin" name="userRole" ng-model="selectedUser.idrole" value="1" /> Admin
                                                     </label>
                                                     <label>
-                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedProduct.role" value="user" /> Tài khoản thường
+                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedUser.idrole" value="2" /> Tài khoản thường
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="product-hide" ng-model="selectedProduct.hide">
+                                                    <input class="form-check-input" type="checkbox" id="product-hide" ng-model="selectedUser.active">
                                                     <label class="form-check-label" for="product-hide">Trạng thái</label>
                                                 </div>
                                             </div>
-                                            
-        
-        
-                                           
-        
-                                         
-        
-                                          
-        
-                                            <!-- Actions -->
+                
                                             <div class="col-md-12">
-                                                <button type="button" class="btn btn-primary" ng-click="addProduct()">
+                                                <button type="button" class="btn btn-primary" ng-click="addUser()">
                                                     <i class="fas fa-plus"></i> Thêm
                                                 </button>
-                                                <button type="button" class="btn btn-info" ng-click="updateProduct()">
+                                                <button type="button" class="btn btn-info" ng-click="updateUser()">
                                                     <i class="fas fa-edit"></i> Cập nhật
                                                 </button>
-                                                <button type="button" class="btn btn-danger" ng-click="confirmDelete(selectedProduct.idproduct)">
+                                                <button type="button" class="btn btn-danger" ng-click="deleteUser(selectedUser.idaccount)">
                                                     <i class="fas fa-trash-alt"></i> Xóa
                                                 </button>
-                                                <button type="button" class="btn btn-warning" ng-click="loadProducts()">
+                                                <button type="button" class="btn btn-warning" ng-click="resetForm()">
                                                     <i class="fas fa-sync-alt"></i> Làm mới
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
-        
+                
                                     <!-- List Tab Content -->
-                                    <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
-                                        <form class="password-form" action="#" method="post">
-                                            <div class="row my-4">
-                                                <div class="col-lg-12">
-                                                    <div class="bg-white p-3">
-                                                        <div class="table-responsive">
-                                                            <table class="table account-table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Tên tài khoản</th>
-                                                                        <th>Họ và tên</th>
-                                                                        <th>Email</th>
-                                                                        <th>Số điện thoại</th>
-                                                                        <th>Chức vụ</th>
-                                                                        <th>Trạng thái</th>
-                                                                        <th class="text-end">Hành động</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>vanaql</td>
-                                                                        <td>Nguyễn Văn A</td>
-                                                                        <td>Anv@gmail.com</td>
-                                                                        <td>0788738912</td>
-                                                                        <td>Admin</td>
-                                                                        <td>Đang hoạt động</td>
-                                                                        <td class="text-end">
-                                                                            <button class="btn btn-sm btn-warning">Sửa</button>
-                                                                            <button class="btn btn-sm btn-danger">Xóa</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>vanbnv</td>
-                                                                        <td>Nguyễn Văn B</td>
-                                                                        <td>Bnv@gmail.com</td>
-                                                                        <td>0754213685</td>
-                                                                        <td>Người dùng</td>
-                                                                        <td>Không hoạt động</td>
-                                                                        <td class="text-end">
-                                                                            <button class="btn btn-sm btn-warning">Sửa</button>
-                                                                            <button class="btn btn-sm btn-danger">Xóa</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <nav aria-label="Page navigation">
-                                                            <ul class="pagination justify-content-center mb-0">
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#" aria-label="Previous">Trước</a>
-                                                                </li>
-                                                                <li class="page-item active">
-                                                                    <a class="page-link" href="#">1</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#">2</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#">3</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#">4</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#" aria-label="Next">Sau</a>
-                                                                </li>
-                                                            </ul>
-                                                        </nav>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    
-                                    
+<div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+    <form class="password-form" action="#" method="post">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <div class="bg-white p-3">
+                    <div class="table-responsive">
+                        <table class="table account-table">
+                            <thead>
+                                <tr>
+                                    <th>Tên tài khoản</th>
+                                    <th>Họ và tên</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Chức vụ</th>
+                                    <th>Trạng thái</th>
+                                    <th class="text-end">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="user in users">
+                                    <td>{{ user.idaccount }}</td>
+                                    <td>{{ user.fullname }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>{{ user.phonenumber }}</td>
+                                    <td>{{ user.idrole === 1 ? 'Admin' : 'Người dùng' }}</td>
+                                    <td>{{ user.active ? 'Đang hoạt động' : 'Không hoạt động' }}</td>
+                                    <td class="text-end">
+                                        <button type="button" class="btn btn-sm btn-warning" ng-click="editUser(user)">Sửa</button>
+                                        <button type="button" class="btn btn-sm btn-danger" ng-click="deleteUser(user.idaccount)">Xóa</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mb-0">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">Trước</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">4</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">Sau</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </main>
+                
             </div>
         </div>
-        
-
-                  
-                </main>
-
-            </div>
-        </div>
-
         <!-- JAVASCRIPT FILES -->
         <script src="../admin/js/jquery.min.js"></script>
         <script src="../admin/js/bootstrap.bundle.min.js"></script>
         <script src="../admin/js/custom.js"></script>
+        <script src="../assets/js/angular.min.js"></script>
+        <script src="../assets/js/angular-route.js"></script>
+        <script src="../admin/js/account.js"></script>     
+        
 
     </body>
 </html>
