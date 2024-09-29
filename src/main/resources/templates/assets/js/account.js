@@ -1,6 +1,6 @@
 var app = angular.module('myApp', ["ngRoute"]);
 
-app.controller("LoginController", function($scope, $http, $window) {
+app.controller("LoginController", function($scope, $http, $window, $timeout) {
     // Khởi tạo thông tin người dùng và trạng thái đăng nhập
     $scope.isLoggedIn = false;
     $scope.user = {
@@ -38,7 +38,10 @@ app.controller("LoginController", function($scope, $http, $window) {
                             $scope.loginSuccess = 'Đăng nhập thành công!';
                             // Lưu thông tin đăng nhập vào localStorage
                             localStorage.setItem('loggedInUser', JSON.stringify(foundAccount));
-                            $window.location.href = 'index.html';
+                            // Chờ 3 giây trước khi chuyển hướng
+                            $timeout(function() {
+                                $window.location.href = 'index.html';
+                            }, 3000);
                         }
                     } else {
                         // Nếu tài khoản không đúng hoặc mật khẩu không khớp

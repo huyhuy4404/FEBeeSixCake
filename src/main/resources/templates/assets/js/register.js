@@ -1,6 +1,4 @@
-var app = angular.module('myApp', ["ngRoute"]);
-
-app.controller("RegisterController", function($scope, $http, $window) {
+app.controller("RegisterController", function($scope, $http, $window, $timeout) {
     // Initialize the user object
     $scope.user = {
         idaccount: '',    
@@ -20,7 +18,7 @@ app.controller("RegisterController", function($scope, $http, $window) {
     $scope.register = function() {
         // Reset messages
         $scope.registerSuccess = '';
-        $scope.registerError = '';
+        $scope.registerError = '';  
 
         // Kiểm tra tính hợp lệ của form
         if ($scope.regisForm.$valid) {
@@ -31,9 +29,12 @@ app.controller("RegisterController", function($scope, $http, $window) {
                 data: $scope.user
             }).then(function(response) {
                 // Check if the response indicates success
-                if (response.status === 200 || response.status === 201) { // Adjusted to check for standard HTTP success status codes
+                if (response.status === 200 || response.status === 201) {
                     $scope.registerSuccess = 'Đăng ký thành công! Vui lòng đăng nhập.';
-                    $window.location.href = 'login.html';
+                    // Wait for 3 seconds before redirecting to the login page
+                    $timeout(function() {
+                        $window.location.href = 'login.html';
+                    }, 3000);
                 } else {
                     // Handle unexpected responses
                     $scope.registerError = response.data.message || 'Đăng ký thất bại! Vui lòng thử lại.';
