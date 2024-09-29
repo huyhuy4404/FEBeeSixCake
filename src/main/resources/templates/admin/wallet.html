@@ -1,430 +1,424 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <meta name="description" content="">
-        <meta name="author" content="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Mini Finance - Settings</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        <!-- CSS FILES -->      
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Mini Finance - Settings</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 
 
-        <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
 
-        <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
+    <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-        
-       
-<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
 
-Tooplate 2135 Mini Finance
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-https://www.tooplate.com/view/2135-mini-finance
 
-Bootstrap 5 Dashboard Admin Template
 
--->
-    </head>
-    
-    <body>
-        <header class="navbar sticky-top flex-md-nowrap">
-            <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
-                <a class="navbar-brand" href="index.html">
-                    <i class="bi-box"></i>
-                    BEE SIX CAKE
-                </a>
-            </div>
-        
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <form class="custom-form header-form ms-lg-3 ms-md-3 me-lg-auto me-md-auto order-2 order-lg-0 order-md-0" action="#" method="get" role="form">
-                <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
-            </form>
-        
-            <div class="navbar-nav me-lg-2">
-                <div class="nav-item text-nowrap d-flex align-items-center">
-                    <!-- Notifications Dropdown -->
-                    <div class="dropdown ps-3">
-                        <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi-bell"></i>
-                            <span class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
-                        </a>
-        
-                        <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
-                            <small>Notifications</small>
-                            <li class="notifications-block border-bottom pb-2 mb-2">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="notifications-icon-wrap bg-success">
-                                        <i class="notifications-icon bi-check-circle-fill"></i>
-                                    </div>
-                                    <div>
-                                        <span>Your account has been created successfully.</span>
-                                        <p>12 days ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="notifications-block border-bottom pb-2 mb-2">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="notifications-icon-wrap bg-info">
-                                        <i class="notifications-icon bi-folder"></i>
-                                    </div>
-                                    <div>
-                                        <span>Please check. We have sent a Daily report.</span>
-                                        <p>10 days ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="notifications-block">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="notifications-icon-wrap bg-danger">
-                                        <i class="notifications-icon bi-question-circle"></i>
-                                    </div>
-                                    <div>
-                                        <span>Account verification failed.</span>
-                                        <p>1 hour ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-        
-                    <!-- Social Media Dropdown -->
-                    <div class="dropdown ps-1">
-                        <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi-three-dots-vertical"></i>
-                        </a>
-        
-                        <div class="dropdown-menu dropdown-menu-social bg-white shadow">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-4">
-                                        <a class="dropdown-item text-center" href="#">
-                                            <img src="images/social/search.png" class="profile-image img-fluid" alt="Google">
-                                            <span class="d-block">Google</span>
-                                        </a>
-                                    </div>
-                                    <!-- More social media links here -->
+</head>
+
+<body>
+    <header class="navbar sticky-top flex-md-nowrap">
+        <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi-box"></i>
+                BEE SIX CAKE
+            </a>
+        </div>
+
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <form class="custom-form header-form ms-lg-3 ms-md-3 me-lg-auto me-md-auto order-2 order-lg-0 order-md-0"
+            action="#" method="get" role="form">
+            <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
+        </form>
+
+        <div class="navbar-nav me-lg-2">
+            <div class="nav-item text-nowrap d-flex align-items-center">
+                <!-- Notifications Dropdown -->
+                <div class="dropdown ps-3">
+                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi-bell"></i>
+                        <span
+                            class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
+                    </a>
+
+                    <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
+                        <small>Notifications</small>
+                        <li class="notifications-block border-bottom pb-2 mb-2">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="notifications-icon-wrap bg-success">
+                                    <i class="notifications-icon bi-check-circle-fill"></i>
                                 </div>
+                                <div>
+                                    <span>Your account has been created successfully.</span>
+                                    <p>12 days ago</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notifications-block border-bottom pb-2 mb-2">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="notifications-icon-wrap bg-info">
+                                    <i class="notifications-icon bi-folder"></i>
+                                </div>
+                                <div>
+                                    <span>Please check. We have sent a Daily report.</span>
+                                    <p>10 days ago</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notifications-block">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="notifications-icon-wrap bg-danger">
+                                    <i class="notifications-icon bi-question-circle"></i>
+                                </div>
+                                <div>
+                                    <span>Account verification failed.</span>
+                                    <p>1 hour ago</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Dropdown -->
+                <div class="dropdown ps-1">
+                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi-three-dots-vertical"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-social bg-white shadow">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/search.png" class="profile-image img-fluid"
+                                            alt="Google">
+                                        <span class="d-block">Google</span>
+                                    </a>
+                                </div>
+                                <!-- More social media links here -->
                             </div>
                         </div>
                     </div>
-        
-                    <!-- User Profile Dropdown -->
-                    <div class="dropdown px-3">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid" alt="User Profile">
-                        </a>
-                        <ul class="dropdown-menu bg-white shadow">
-                            <li>
-                                <div class="dropdown-menu-profile-thumb d-flex">
-                                    <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3" alt="User Profile">
-                                    <div class="d-flex flex-column">
-                                        <small>Thomas</small>
-                                        <a href="#">thomas@site.com</a>
-                                    </div>
+                </div>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown px-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid"
+                            alt="User Profile">
+                    </a>
+                    <ul class="dropdown-menu bg-white shadow">
+                        <li>
+                            <div class="dropdown-menu-profile-thumb d-flex">
+                                <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3"
+                                    alt="User Profile">
+                                <div class="d-flex flex-column">
+                                    <small>Thomas</small>
+                                    <a href="#">thomas@site.com</a>
                                 </div>
-                            </li>
-                            <!-- Profile and Settings Links -->
-                            <li>
-                                <a class="dropdown-item" href="profile.html">
-                                    <i class="bi-person me-2"></i>
-                                    Profile
-                                </a>
-                            </li>
-                            <!-- More profile options here -->
-                            <li class="border-top mt-3 pt-2 mx-4">
-                                <a class="dropdown-item ms-0 me-0" href="#">
-                                    <i class="bi-box-arrow-left me-2"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                        </li>
+                        <!-- Profile and Settings Links -->
+                        <li>
+                            <a class="dropdown-item" href="profile.html">
+                                <i class="bi-person me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <!-- More profile options here -->
+                        <li class="border-top mt-3 pt-2 mx-4">
+                            <a class="dropdown-item ms-0 me-0" href="#">
+                                <i class="bi-box-arrow-left me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </header>
-        
+        </div>
+    </header>
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Sidebar Menu -->
-                <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
-                    <div class="position-sticky py-4 px-3 sidebar-sticky">
-                        <ul class="nav flex-column h-100">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.html">
-                                    <i class="bi-house-fill me-2"></i>
-                                    Trang Chủ
-                                </a>
-                            </li>
-                            <!-- <li class="nav-item">
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Menu -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
+                <div class="position-sticky py-4 px-3 sidebar-sticky">
+                    <ul class="nav flex-column h-100">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="index.html">
+                                <i class="bi-house-fill me-2"></i>
+                                Trang Chủ
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
                                 <a class="nav-link" href="wallet.html">
                                     <i class="bi-wallet me-2"></i>
                                     My Wallet
                                 </a>
                             </li> -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="accounts.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Người Dùng
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="product-type.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Loại Sản Phẩm
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="product.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Sản Phẩm
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="wallet.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Đơn hàng
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Discount.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Khuyến Mãi
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="profile.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản lý doanh thu
-                                </a>
-                            </li>
-                           
-                            <li class="nav-item border-top mt-auto pt-2">
-                                <a class="nav-link" href="#">
-                                    <i class="bi-box-arrow-left me-2"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-        
-                <!-- Main Content -->
-                <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
-                    <div class="title-group mb-3">
-                        <h1 class="h2 mb-0">Quản Lý Đơn Hàng</h1>
-                    </div>
-        
-                    <!-- Tabs -->
-                    <div class="row my-4">
-                        <div class="col-12">
-                            <div class="custom-block bg-white">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
-                                    </li>
-                                </ul>
-        
-                                <div class="tab-content" id="myTabContent">
-                                    <!-- Edit Tab Content -->
-                                    <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
-                                        <form class="row g-3" ng-controller="formController">
-                                            <!-- Product Name -->
-                                            <div class="col-md-6">
-                                                <label for="product-name" class="form-label">ID </label>
-                                                <input type="text" id="product-name" ng-model="selectedProduct.nameproduct"  class="form-control" />
-                                            </div>
-        
-                                            
-        
-                                            <!-- Size -->
-                                            <div class="col-md-6">
-                                                <label for="size-input" class="form-label">Khách hàng</label>
-                                                <input type="text" id="size-input" ng-model="newSize.sizename" placeholder="" class="form-control" />
-                                            </div>
-                                          
-        
-                                         
-        
-                                            <!-- Quantity -->
-                                            <div class="col-md-6">
-                                                <label for="product-quantity" class="form-label">Ngày đặt hàng</label>
-                                                <input type="number" id="product-quantity" ng-model="newPrice.quantity" placeholder="" class="form-control" />
-                                            </div>
-        
-                                                <!-- Size -->
-                                                <div class="col-md-6">
-                                                    <label for="size-input" class="form-label">Số điện thoại</label>
-                                                    <input type="text" id="size-input" ng-model="newSize.sizename" placeholder="" class="form-control" />
-                                                </div>
-                                            <!-- Hide Status -->
-                                            <div class="col-md-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="product-hide" ng-model="selectedProduct.hide">
-                                                    <label class="form-check-label" for="product-hide">Ẩn</label>
-                                                </div>
-                                            </div>
-        
-                                            <!-- Note -->
-                                            <div class="col-md-12">
-                                                <label for="product-note" class="form-label">Địa chỉ</label>
-                                                <textarea id="product-note" ng-model="selectedProduct.note" class="form-control" placeholder=""></textarea>
-                                            </div>
-        
-                                          
-        
-                                            <!-- Actions -->
-                                            <div class="col-md-12">
-                                                <label for="">Trạng thái</label>
-                                               
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-primary">
-                                                        <input type="radio"> Chưa giao hàng
-                                                    </label>
-                                                </div>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-info">
-                                                        <input type="radio"> Đã giao hàng
-                                                    </label>
-                                                </div>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-danger">
-                                                        <input type="radio"> Đang giao hàng
-                                                    </label>
-                                                </div>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-warning">
-                                                        <input type="radio"> Đã hủy
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-        
-                                    <!-- List Tab Content -->
-                                    <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
-                                        <form class="custom-form password-form" action="#" method="post">
-                                            <div class="row my-4">
-                                                <div class="col-lg-12">
-                                                    <div class="custom-block bg-white">
-                                                        <div class="table-responsive">
-                                                            <table class="account-table table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>ID</th>
-                                                                        <th>Khách hàng</th>
-                                                                        <th>Số điện thoại</th>
-                                                                        <th>Ngày đặt hàng</th>
-                                                                        <th>Số điện thoại</th>
-                                                                        <th>Địa chỉ</th>
-                                                                        <th>Trạng thái</th>
-                                                                        <th class="text-end">Actions</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>01</td>
-                                                                        <td>Nguyễn Văn A</td>
-                                                                        <td>0325746177</td>
+                        <li class="nav-item">
+                            <a class="nav-link" href="accounts.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Người Dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="product-type.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Loại Sản Phẩm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="product.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Sản Phẩm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="wallet.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Đơn hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Discount.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Khuyến Mãi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">
+                                <i class="bi-person me-2"></i>
+                                Quản lý doanh thu
+                            </a>
+                        </li>
 
-                                                                        <td>15/05/2024</td>
-                                                                        <td>Cần thơ</td>
+                        <li class="nav-item border-top mt-auto pt-2">
+                            <a class="nav-link" href="#">
+                                <i class="bi-box-arrow-left me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-                                                                        <td>không có</td>
-                                                                        <td>đang giao hàng</td>
-                                                                       
-                                                                        <td class="text-end">
-                                                                            <button class="btn btn-sm btn-warning">Edit</button>
-                                                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>02</td>
-                                                                        <td>Nguyễn Văn B</td>
-                                                                        <td>0325746177</td>
+            <!-- Main Content -->
+            <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
+                <div class="title-group mb-3">
+                    <h1 class="h2 mb-0">Quản Lý Đơn Hàng</h1>
+                </div>
 
-                                                                        <td>15/05/2024</td>
-                                                                        <td>Cần thơ</td>
+                <!-- Tabs -->
+                <div class="row my-4" ng-app="myApp" ng-controller="OrderController">
+                    <div class="col-12">
+                        <div class="custom-block bg-white">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="edit-tab" data-bs-toggle="tab"
+                                        data-bs-target="#edit-tab-pane" type="button" role="tab"
+                                        aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="list-tab" data-bs-toggle="tab"
+                                        data-bs-target="#list-tab-pane" type="button" role="tab"
+                                        aria-controls="list-tab-pane" aria-selected="false">List</button>
+                                </li>
+                            </ul>
 
-                                                                        <td>không có</td>
-                                                                        <td>đang giao hàng</td>
-                                                                       
-                                                                        <td class="text-end">
-                                                                            <button class="btn btn-sm btn-warning">Edit</button>
-                                                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        <nav aria-label="Page navigation">
-                                                            <ul class="pagination justify-content-center mb-0">
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#" aria-label="Previous">Prev</a>
-                                                                </li>
-                                                                <li class="page-item active">
-                                                                    <a class="page-link" href="#">1</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#">2</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#">3</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#">4</a>
-                                                                </li>
-                                                                <li class="page-item">
-                                                                    <a class="page-link" href="#" aria-label="Next">Next</a>
-                                                                </li>
-                                                            </ul>
-                                                        </nav>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Edit Tab Content -->
+                                <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel"
+                                    aria-labelledby="edit-tab" tabindex="0">
+                                    <form class="row g-3">
+                                        <!-- Product Name -->
+                                        <div class="col-md-6">
+                                          <label for="product-id" class="form-label">ID </label>
+                                          <input type="text" id="product-id" ng-model="selectedOrder.idorder" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Customer -->
+                                        <div class="col-md-6">
+                                          <label for="customer-name" class="form-label">Khách hàng</label>
+                                          <input type="text" id="customer-name" ng-model="selectedOrder.account.fullname" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Order Date -->
+                                        <div class="col-md-6">
+                                          <label for="order-date" class="form-label">Ngày đặt hàng</label>
+                                          <input type="text" id="order-date" ng-model="selectedOrder.orderdate" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Phone Number -->
+                                        <div class="col-md-6">
+                                          <label for="phone-number" class="form-label">Số điện thoại</label>
+                                          <input type="text" id="phone-number" ng-model="selectedOrder.account.phonenumber" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Discount -->
+                                        <div class="col-md-6">
+                                          <label for="discount-code" class="form-label">Mã giảm giá</label>
+                                          <input type="text" id="discount-code" ng-model="selectedOrder.discount.discountcode" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Total Amount -->
+                                        <div class="col-md-6">
+                                          <label for="total-amount" class="form-label">Thành Tiền</label>
+                                          <input type="text" id="total-amount" ng-model="selectedOrder.totalamount" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Payment -->
+                                        <div class="col-md-5">
+                                          <label for="payment-method" class="form-label">Phương thức thanh toán</label>
+                                          <input type="text" id="payment-method" ng-model="selectedOrder.payment.paymentname" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Address -->
+                                        <div class="col-md-7">
+                                          <label for="order-address" class="form-label">Địa chỉ nhận hàng</label>
+                                          <input id="order-address" ng-model="selectedOrder.fullAddress" class="form-control" />
+                                        </div>
+                                      
+                                        <!-- Status -->
+                                        <div class="col-md-12">
+                                          <label for="">Trạng thái</label>
+                                          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                            <label class="btn btn-primary" ng-class="{'active': selectedOrder.status.idstatus == 1}">
+                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="1"> Đang Xác Nhận
+                                            </label>
+                                            <label class="btn btn-info" ng-class="{'active': selectedOrder.status.idstatus == 2}">
+                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="2"> Đang giao hàng
+                                            </label>
+                                            <label class="btn btn-warning" ng-class="{'active': selectedOrder.status.idstatus == 3}">
+                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="3"> Hoàn Thành
+                                            </label>
+                                            <label class="btn btn-danger" ng-class="{'active': selectedOrder.status.idstatus == 4}">
+                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="4"> Đã hủy
+                                            </label>
+                                          </div>
+                                          <button class="btn btn-primary" style="float: right;" ng-click="updateOrderStatus()">Cập nhật</button>
+                                        </div>
+                                      </form>
+                                      
+                                    
+
                                 </div>
+
+                                <!-- List Tab Content -->
+                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+                                    <form class="custom-form password-form" action="#" method="post">
+                                        <div class="row my-4">
+                                            <div class="col-lg-12">
+                                                <div class="custom-block bg-white">
+                                                    <div class="table-responsive">
+                                                        <table class="account-table table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Tên sản phẩm</th>
+                                                                    <th>Kích thước</th>
+                                                                    <th>Số lượng</th>
+                                                                    <th>Danh mục</th>
+                                                                    <th>Giá</th>
+                                                                    <th>Ghi chú</th>
+                                                                    <th>Ảnh</th>
+                                                                    <th class="text-end">Actions</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="product in products"> <!-- Sử dụng đúng tên biến "products" -->
+                                                                    <td>{{ product.productname }}</td>
+                                                                    <td>{{ product.size.sizename }}</td>
+                                                                    <td>{{ product.quantity }}</td>
+                                                                    <td>{{ product.category.namecategory }}</td>
+                                                                    <td>{{ product.price }}</td>
+                                                                    <td>{{ product.note || 'không có' }}</td>
+                                                                    <td>
+                                                                        <img ng-src="{{ product.img }}" alt="Ảnh sản phẩm" width="50" height="50">
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <button class="btn btn-sm btn-warning" ng-click="editProduct(product)">Edit</button>
+                                                                        <button class="btn btn-sm btn-danger" ng-click="confirmDelete(product.idproduct)">Delete</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <nav aria-label="Page navigation">
+                                                        <ul class="pagination justify-content-center mb-0">
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Previous">Prev</a>
+                                                            </li>
+                                                            <li class="page-item active">
+                                                                <a class="page-link" href="#">1</a>
+                                                            </li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#">2</a>
+                                                            </li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#">3</a>
+                                                            </li>
+                                                            <li class="page-item">
+                                                                <a class="page-link" href="#" aria-label="Next">Next</a>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
-                </main>
-            </div>
+                </div>
+
+            </main>
         </div>
-        
+    </div>
+    </main>
 
-                  
-                </main>
+    </div>
+    </div>
 
-            </div>
-        </div>
+    <!-- JAVASCRIPT FILES -->
+    <script src="../admin/js/jquery.min.js"></script>
+    <script src="../admin/js/bootstrap.bundle.min.js"></script>
+    <script src="../admin/js/custom.js"></script>
+    <script src="../admin/js/order.js"></script>
+    <!--    alo-->
+    <!--    alo1-->
+</body>
 
-        <!-- JAVASCRIPT FILES -->
-        <script src="../admin/js/jquery.min.js"></script>
-        <script src="../admin/js/bootstrap.bundle.min.js"></script>
-        <script src="../admin/js/custom.js"></script>
-<!--    alo-->
-<!--    alo1-->
-    </body>
 </html>
