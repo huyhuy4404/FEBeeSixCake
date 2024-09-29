@@ -29,8 +29,9 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/angular.min.js"></script>
+
+    <script src="js/angular-route.js"></script>
 
 
 
@@ -314,19 +315,28 @@
                                         <div class="col-md-12">
                                           <label for="">Trạng thái</label>
                                           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                            <label class="btn btn-primary" ng-class="{'active': selectedOrder.status.idstatus == 1}">
-                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="1"> Đang Xác Nhận
+                                            <label class="btn btn-primary"
+                                                ng-class="{'active': selectedOrder.status.idstatus == 1}">
+                                                <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                       ng-checked="selectedOrder.status.idstatus == 1" value="1" autocomplete="off" /> Đang Xác Nhận
                                             </label>
-                                            <label class="btn btn-info" ng-class="{'active': selectedOrder.status.idstatus == 2}">
-                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="2"> Đang giao hàng
+                                            <label class="btn btn-info"
+                                                ng-class="{'active': selectedOrder.status.idstatus == 2}">
+                                                <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                       ng-checked="selectedOrder.status.idstatus == 2" value="2" autocomplete="off" /> Đang giao hàng
                                             </label>
-                                            <label class="btn btn-warning" ng-class="{'active': selectedOrder.status.idstatus == 3}">
-                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="3"> Hoàn Thành
+                                            <label class="btn btn-warning"
+                                                ng-class="{'active': selectedOrder.status.idstatus == 3}">
+                                                <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                       ng-checked="selectedOrder.status.idstatus == 3" value="3" autocomplete="off" /> Hoàn Thành
                                             </label>
-                                            <label class="btn btn-danger" ng-class="{'active': selectedOrder.status.idstatus == 4}">
-                                              <input type="radio" ng-model="selectedOrder.status.idstatus" value="4"> Đã hủy
+                                            <label class="btn btn-danger"
+                                                ng-class="{'active': selectedOrder.status.idstatus == 4}">
+                                                <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                       ng-checked="selectedOrder.status.idstatus == 4" value="4" autocomplete="off" /> Đã hủy
                                             </label>
-                                          </div>
+                                        </div>
+                                        
                                           <button class="btn btn-primary" style="float: right;" ng-click="updateOrderStatus()">Cập nhật</button>
                                         </div>
                                       </form>
@@ -336,69 +346,41 @@
                                 </div>
 
                                 <!-- List Tab Content -->
-                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
-                                    <form class="custom-form password-form" action="#" method="post">
-                                        <div class="row my-4">
-                                            <div class="col-lg-12">
-                                                <div class="custom-block bg-white">
-                                                    <div class="table-responsive">
-                                                        <table class="account-table table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Tên sản phẩm</th>
-                                                                    <th>Kích thước</th>
-                                                                    <th>Số lượng</th>
-                                                                    <th>Danh mục</th>
-                                                                    <th>Giá</th>
-                                                                    <th>Ghi chú</th>
-                                                                    <th>Ảnh</th>
-                                                                    <th class="text-end">Actions</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="product in products"> <!-- Sử dụng đúng tên biến "products" -->
-                                                                    <td>{{ product.productname }}</td>
-                                                                    <td>{{ product.size.sizename }}</td>
-                                                                    <td>{{ product.quantity }}</td>
-                                                                    <td>{{ product.category.namecategory }}</td>
-                                                                    <td>{{ product.price }}</td>
-                                                                    <td>{{ product.note || 'không có' }}</td>
-                                                                    <td>
-                                                                        <img ng-src="{{ product.img }}" alt="Ảnh sản phẩm" width="50" height="50">
-                                                                    </td>
-                                                                    <td class="text-end">
-                                                                        <button class="btn btn-sm btn-warning" ng-click="editProduct(product)">Edit</button>
-                                                                        <button class="btn btn-sm btn-danger" ng-click="confirmDelete(product.idproduct)">Delete</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <nav aria-label="Page navigation">
-                                                        <ul class="pagination justify-content-center mb-0">
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#" aria-label="Previous">Prev</a>
-                                                            </li>
-                                                            <li class="page-item active">
-                                                                <a class="page-link" href="#">1</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#">2</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#">3</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#" aria-label="Next">Next</a>
-                                                            </li>
-                                                        </ul>
-                                                    </nav>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab"
+                                    tabindex="0">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                              <tr>
+                                                <th>ID Đơn Hàng</th>
+                                                <th>Khách Hàng</th>
+                                                <th>Số Điện Thoại</th>
+                                                <th>Địa Chỉ</th>
+                                                <th>Ngày Đặt Hàng</th>
+                                                <th>Tổng Tiền</th>
+                                                <th>Trạng Thái</th>
+                                                <th class="text-end">Hành Động</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              <tr ng-repeat="order in Orders">
+                                                <td>{{order.idorder}}</td>
+                                                <td>{{order.account.fullname}}</td>
+                                                <td>{{order.account.phonenumber}}</td>
+                                                <td>{{order.address.housenumber}}, {{order.address.roadname}}, {{order.address.ward}}, {{order.address.district}}, {{order.address.city}}</td>
+                                                <td>{{order.orderdate}}</td>
+                                                <td>{{order.totalamount}}</td>
+                                                <td>{{order.status.statusname}}</td>
+                                                <td class="text-end">
+                                                  <button class="btn btn-sm btn-warning" ng-click="editOrder(order)">Edit</button>
+                                                  <button class="btn btn-sm btn-danger" ng-click="deleteOrder(order.idorder)">Delete</button>
+                                                </td>
+                                              </tr>
+                                            </tbody>
+                                          </table>
+                                          
+                                    </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>

@@ -12,7 +12,10 @@
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
     <script src="../assets/js/app.js"></script>
+<<<<<<< HEAD
     <script src="../assets/js/order.js"></script>
+=======
+>>>>>>> thuan
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -33,7 +36,11 @@
     </style>
 </head>
 
+<<<<<<< HEAD
 <body ng-app="myApp" >
+=======
+<body ng-app="myApp">
+>>>>>>> thuan
     <div ng-include="'layout/header.html'"></div>
     <div class="order">
         <nav>
@@ -52,7 +59,11 @@
                         role="tab" aria-controls="Huy" aria-selected="false">Hủy</button>
             </div>
         </nav>
+<<<<<<< HEAD
         <div class="tab-content" ng-controller="CartController" id="nav-tabContent">
+=======
+        <div class="tab-content" id="nav-tabContent">
+>>>>>>> thuan
             <div class="container mt-4">
                 <h3 class="title text-center"><b>GIỎ HÀNG</b></h3>
                 
@@ -62,11 +73,16 @@
                             Giỏ hàng của bạn (<b class="cart-cnt">0</b> sản phẩm)
                         </span>
                         <span class="float-end" style="font-weight: bold; font-size: 16px;">
+<<<<<<< HEAD
                             Tổng tiền: <span style="color: #CC3300">{{ calculateTotal() }} VNĐ</span>
+=======
+                            Tổng tiền: <span style="color: #CC3300">0 VNĐ</span>
+>>>>>>> thuan
                         </span>
                     </h5>
                     <table class="table">
                         <tbody>
+<<<<<<< HEAD
                             <tr ng-repeat="product in products">
                                 <td style="width: 120px; padding: 10px 0;">
                                     <img ng-src="{{product.image}}" width="100%">
@@ -92,6 +108,33 @@
                             </tr>
                         </tbody>
                         
+=======
+                            <tr>
+                                <td style="width: 120px; padding: 10px 0;">
+                                    <img src="/static/images/products/sample.jpg" width="100%">
+                                </td>
+                                <td style="padding: 40px 0;">
+                                    <p style="font-size: 18px; font-weight: bold;">Tên sản phẩm</p>
+                                    <p style="color: gray;">SKU: 12345</p>
+                                </td>
+                                <td style="padding: 40px 0; font-size: 16px;">
+                                    <p style="text-align: left; font-weight: bold; color: #474c51;">1,000,000 VNĐ</p>
+                                </td>
+                                <td style="padding: 50px 0;">
+                                    <input id="num" value="1" type="number" min="1" style="width: 100px; height: 30px; font-size: 16px; border: 1px solid black;">
+                                </td>
+                                <td class="amt" style="padding: 55px 0; font-weight: bold; font-size: 16px;">
+                                    1,000,000 VNĐ
+                                </td>
+                                <td style="padding: 50px 0;">
+                                    <button class="btn btn-sm btn-warning btn-cart-remove">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <!-- Thêm các sản phẩm khác tại đây -->
+                        </tbody>
+>>>>>>> thuan
                     </table>
                     <hr />
                     <div class="text-center" style="font-size: 18px; padding-bottom: 30px">

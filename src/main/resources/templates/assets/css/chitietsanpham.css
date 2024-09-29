@@ -1,0 +1,230 @@
+.star i {
+    color: gray;
+    /* Màu mặc định của các ngôi sao */
+}
+
+.star.selected i {
+    color: gold;
+    /* Màu vàng khi được chọn */
+}
+
+.rate-star {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.rating-stars ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rating-stars li {
+    margin-right: 5px;
+}
+
+.text-rating {
+    margin-top: 15px;
+}
+
+/* Định dạng chung cho box-price */
+
+/* Định dạng cho giá hiện tại */
+.price-chitiet {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.price-chitiet .current-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d38450;
+    text-decoration: none;
+    /* Không gạch ngang */
+}
+
+/* Định dạng cho giá cũ */
+.price-chitiet .issale {
+    font-size: 18px;
+    color: #999;
+    margin-left: 10px;
+    display: none;
+    /* Ẩn giá cũ */
+}
+
+/* Ẩn phần trăm giảm giá */
+.price-chitiet .persale {
+    display: none;
+}
+
+/* Định dạng cho thông tin giá thị trường */
+.price-vince p {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0;
+}
+
+.price-vince span {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Định dạng chung cho các thành phần */
+.inner-load {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.box-add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.number-card {
+    display: flex;
+    align-items: center;
+}
+
+.number-card span {
+    margin-right: 10px;
+}
+
+.number-card input {
+    width: 60px;
+    padding: 5px;
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Định dạng cho các nút bấm */
+.bst {
+    display: flex;
+    gap: 10px;
+    /* Khoảng cách giữa các nút */
+}
+
+.bst .btn {
+    border: none;
+    background-color: #d38450;
+    color: white;
+    border-radius: 4px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bst .btn i {
+    margin-right: 5px;
+}
+
+.bst .btn:hover {
+    background-color: orange;
+}
+
+/* Định dạng cho nút trái tim */
+.yeuThich {
+    background-color: transparent;
+    /* Không có nền */
+    border: none;
+    /* Không có viền */
+    color: #888;
+    /* Màu xám cho icon */
+    font-size: 24px;
+    /* Kích thước icon */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: color 0.3s ease;
+    /* Hiệu ứng chuyển màu */
+}
+
+/* Trạng thái khi nút trái tim được chọn */
+.yeuThich.active {
+    color: #ff4757;
+    /* Màu đỏ khi được chọn */
+}
+
+.box-img-detail a img {
+    display: block;
+    margin: 30px auto;
+    height: auto;
+}
+
+
+.img-reponsive {
+    max-width: 100%;
+    height: auto;
+}
+
+.size-pd {
+    display: flex;
+    align-items: center;
+}
+
+.size-pd span {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+/* Style cho các lựa chọn kích cỡ */
+.size-options {
+    display: flex;
+    gap: 15px;
+}
+
+/* Ẩn input radio mặc định */
+.size-options input[type="radio"] {
+    display: none;
+}
+
+/* Định dạng các label để trông giống như button */
+.size-label {
+    padding: 4px 12px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Thay đổi màu sắc khi hover vào các lựa chọn */
+.size-label:hover {
+    background-color: #f0f0f0;
+}
+
+/* Khi radio được chọn, thay đổi màu của label tương ứng */
+input[type="radio"]:checked+.size-label {
+    background-color: #ff4081;
+    border-color: #ff4081;
+    color: white;
+}
+
+.size-button {
+    padding: 8px 16px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+}
+
+.size-button:hover {
+    background-color: orange;
+}
+
+.selected-size {
+    background-color: #d38450;
+    color: white;
+    border-color: #d38450;
+}
