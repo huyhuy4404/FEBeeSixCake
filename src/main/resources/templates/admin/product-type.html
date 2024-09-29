@@ -37,7 +37,7 @@ Bootstrap 5 Dashboard Admin Template
 -->
     </head>
     
-    <body ng-app="myApp">
+    <body ng-app="myApp" ng-Co>
         <header class="navbar sticky-top flex-md-nowrap">
             <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
                 <a class="navbar-brand" href="index.html">
@@ -281,55 +281,55 @@ Bootstrap 5 Dashboard Admin Template
                                     </li>
                                 </ul>
 
-                                <div class="tab-content" id="myTabContent" ng-controller="CategoryController">
-                                    <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-                                        <!-- Form sửa đổi -->
-                                        <form class="custom-form profile-form" action="#" method="post" role="form">
-                                            <p>ID:</p>
-                                            <input class="form-control" type="text" name="category-id" id="category-id" ng-model="selectedCategory.idcategory" readonly>
+                                    <div class="tab-content" id="myTabContent" ng-controller="CategoryController">
+                                        <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                            <!-- Form sửa đổi -->
+                                            <form class="custom-form profile-form" action="#" method="post" role="form">
+                                                <p>ID:</p>
+                                                <input class="form-control" type="text" name="category-id" id="category-id" ng-model="selectedCategory.idcategory" readonly>
 
-                                            <p>Tên Loại Sản Phẩm:</p>
-                                            <input class="form-control" type="text" name="category-name" id="category-name" placeholder="Nhập tên loại sản phẩm" ng-model="selectedCategory.categoryname">
+                                                <p>Tên Loại Sản Phẩm:</p>
+                                                <input class="form-control" type="text" name="category-name" id="category-name" placeholder="Nhập tên loại sản phẩm" ng-model="selectedCategory.categoryname">
 
-                                            <div class="d-flex justify-content-start mt-3">
-                                                <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="addCategory()">
-                                                    <i class="fas fa-plus"></i> Thêm
-                                                </button>
-                                                <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editCategory()">
-                                                    <i class="fas fa-edit"></i> Sửa
-                                                </button>
-                                                <!-- Xóa nút này -->
-                                                <button type="reset" class="btn btn-secondary ms-2" id="reset-btn" ng-click="resetForm()">
-                                                    <i class="fas fa-sync-alt"></i> Làm mới
-                                                </button>
+                                                <div class="d-flex justify-content-start mt-3">
+                                                    <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="addCategory()">
+                                                        <i class="fas fa-plus"></i> Thêm
+                                                    </button>
+                                                    <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editCategory()">
+                                                        <i class="fas fa-edit"></i> Sửa
+                                                    </button>
+                                                    <!-- Xóa nút này -->
+                                                    <button type="reset" class="btn btn-secondary ms-2" id="reset-btn" ng-click="resetForm()">
+                                                        <i class="fas fa-sync-alt"></i> Làm mới
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+                                            <div class="table-responsive">
+                                                <table class="account-table table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Tên Loại Sản Phẩm</th>
+                                                        <th class="text-end">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="category in categories">
+                                                        <td>{{category.idcategory}}</td>
+                                                        <td>{{category.categoryname}}</td>
+                                                        <td class="text-end">
+                                                            <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Edit</button>
+                                                            <button class="btn btn-sm btn-danger" ng-click="deleteCategory(category)">Delete</button>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
-                                        <div class="table-responsive">
-                                            <table class="account-table table">
-                                                <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Tên Loại Sản Phẩm</th>
-                                                    <th class="text-end">Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr ng-repeat="category in categories">
-                                                    <td>{{category.idcategory}}</td>
-                                                    <td>{{category.categoryname}}</td>
-                                                    <td class="text-end">
-                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Edit</button>
-                                                        <button class="btn btn-sm btn-danger" ng-click="deleteCategory(category)">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>

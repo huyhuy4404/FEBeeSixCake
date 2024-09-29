@@ -4,72 +4,72 @@ const categoryApi = "http://localhost:8080/beesixcake/api/category"; // API endp
 var app = angular.module('myApp', []);
 
 app.controller('CategoryController', function($scope, $http) {
-    $scope.categories = [];
-    $scope.selectedCategory = {}; // Đối tượng lưu trữ danh mục được chọn
-
-    // Hàm tải danh mục
-    function loadCategories() {
-        console.log("Tải lại danh sách danh mục...");
-        $http.get(allCategory)
+    // Lấy danh sách loại sản phẩm từ API
+    $scope.getCategories = function() {
+        $http.get('http://localhost:8080/beesixcake/api/category')
             .then(function(response) {
-                $scope.categories = response.data;
+                $scope.categories = response.data; // Lưu danh sách loại sản phẩm
             }, function(error) {
-                console.error("Lỗi khi gọi API", error);
+                console.log('Error fetching categories:', error);
             });
-    }
-
-    // Gọi hàm loadCategories khi khởi tạo
-    loadCategories();
-
-    // Chọn danh mục để sửa và chuyển đến tab sửa
-    $scope.goToEdit = function(category) {
-        $scope.selectedCategory = angular.copy(category); // Lưu thông tin danh mục
-        $('#profile-tab').tab('show'); // Chuyển sang tab EDIT
     };
 
-    // Thêm danh mục mới
+    // Thêm loại sản phẩm mới
     $scope.addCategory = function() {
-        $http.post(categoryApi, $scope.selectedCategory)
+        var newCategory = {
+            categoryname: $scope.selectedCategory.categoryname
+        };
+
+        $http.post('http://localhost:8080/beesixcake/api/category', newCategory)
             .then(function(response) {
-                $scope.categories.push(response.data); // Thêm danh mục mới vào danh sách
-                $scope.resetForm(); // Reset form
-                $('#password-tab').tab('show'); // Chuyển về tab LIST
+                alert('Thêm loại sản phẩm thành công!');
+                $scope.getCategories(); // Tải lại danh sách sau khi thêm
+                $scope.resetForm(); // Làm mới form
             }, function(error) {
-                console.error("Lỗi khi thêm danh mục", error);
+                console.log('Error adding category:', error);
             });
     };
 
-    // Sửa danh mục
+    // Chỉnh sửa loại sản phẩm
     $scope.editCategory = function() {
-        $http.put(categoryApi + '/' + $scope.selectedCategory.idcategory, $scope.selectedCategory)
+        var editedCategory = {
+            idcategory: $scope.selectedCategory.idcategory,
+            categoryname: $scope.selectedCategory.categoryname
+        };
+
+        $http.put('http://localhost:8080/beesixcake/api/category/' + editedCategory.idcategory, editedCategory)
             .then(function(response) {
-                var index = $scope.categories.findIndex(function(c) {
-                    return c.idcategory === $scope.selectedCategory.idcategory;
-                });
-                $scope.categories[index] = response.data; // Cập nhật danh mục
-                $scope.resetForm(); // Reset form
-                $('#password-tab').tab('show'); // Chuyển về tab LIST
+                alert('Sửa loại sản phẩm thành công!');
+                $scope.getCategories(); // Tải lại danh sách sau khi sửa
+                $scope.resetForm(); // Làm mới form
             }, function(error) {
-                console.error("Lỗi khi sửa danh mục", error);
+                console.log('Error editing category:', error);
             });
     };
 
-    // Xóa danh mục
+    // Xóa loại sản phẩm
     $scope.deleteCategory = function(category) {
-        if (confirm("Bạn có chắc chắn muốn xóa danh mục này?")) { // Xác nhận xóa
-            $http.delete(categoryApi + '/' + category.idcategory)
+        if (confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?')) {
+            $http.delete('http://localhost:8080/beesixcake/api/category/' + category.idcategory)
                 .then(function(response) {
-                    loadCategories(); // Tải lại danh sách sau khi xóa
-                    console.log("xóa ok");
+                    alert('Xóa loại sản phẩm thành công!');
+                    $scope.getCategories(); // Tải lại danh sách sau khi xóa
                 }, function(error) {
-                    loadCategories();
-                    console.error("Lỗi khi xóa danh mục", error);
+                    console.log('Error deleting category:', error);
                 });
         }
     };
 
-    // Reset form
+    // Đưa dữ liệu sản phẩm vào form để chỉnh sửa
+    $scope.goToEdit = function(category) {
+        $scope.selectedCategory = angular.copy(category);
+    };
+
+    // Làm mới form
     $scope.resetForm = function() {
         $scope.selectedCategory = {};
     };
+
+    // Khởi động: Tải danh sách loại sản phẩm ngay khi trang được tải
+    $scope.getCategories();
 });
