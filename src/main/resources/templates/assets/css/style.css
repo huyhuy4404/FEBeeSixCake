@@ -316,7 +316,7 @@ a {
   border-radius: 20px;
 }
 .account_form button:hover {
-  background: #242424;
+  background: #ffffff;
 }
 
 .login_submit label input[type="checkbox"] {
@@ -360,7 +360,7 @@ a {
 
 
 body {
-  background-color: #202124;
+  background-color: #ffffff;
   color: white;
 }
 
