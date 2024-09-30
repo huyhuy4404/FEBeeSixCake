@@ -1,27 +1,68 @@
-var app = angular.module('myApp', []);
-
 app.controller('CartController', ['$scope', '$http', function($scope, $http) {
-    $scope.products = [
-        {
-            id: 1,
-            name: "Sản phẩm 1",
-            sku: "SKU001",
-            price: 500000,
-            quantity: 1,
-            image: "images/product1.jpg" // Thay đổi đường dẫn hình ảnh
-        },
-        {
-            id: 2,
-            name: "Sản phẩm 2",
-            sku: "SKU002",
-            price: 300000,
-            quantity: 1,
-            image: "images/product2.jpg" // Thay đổi đường dẫn hình ảnh
-        }
-    ];
+    $scope.products = [];
     
-    $scope.totalPrice = 0;
+    // Hàm lấy dữ liệu từ API
+    $http.get('http://localhost:8080/beesixcake/api/productdetail')
+        .then(function(response) {
+            // Duyệt qua dữ liệu từ API
+            $scope.products = response.data.map(function(item) {
+                return {
+                    id: item.product.idproduct,
+                    name: item.product.productname,
+                    sku: "SKU" + item.idproductdetail, // Hoặc cách lấy mã SKU khác
+                    price: item.unitprice,
+                    quantity: 1, // Đặt mặc định là 1 hoặc sử dụng item.quantityinstock nếu cần
+                    image: "assets/img/" + item.product.im,
+                    description: item.product.description
+                };
+            });
+            $scope.calculateTotal();
+        })
+        .catch(function(error) {
+            console.error('Error fetching product details:', error);
+        });
 
+    $scope.totalPrice = 0;
+        $scope.placeOrder = function() {
+        const orderData = {
+            products: $scope.products.map(product => ({
+                idproduct: product.id, // ID sản phẩm
+                quantity: product.quantity // Số lượng sản phẩm
+            }))
+        };
+
+        $http.post('http://localhost:8080/beesixcake/api/order', orderData)
+            .then(function(response) {
+                // Xử lý khi đơn hàng được gửi thành công
+                alert('Đơn hàng đã được gửi thành công!');
+                $scope.clearCart(); // Xóa giỏ hàng nếu cần
+            })
+            .catch(function(error) {
+                // Xử lý khi có lỗi xảy ra
+                console.error('Lỗi khi gửi đơn hàng:', error);
+                alert('Có lỗi xảy ra khi gửi đơn hàng. Vui lòng thử lại.');
+            });
+    };
+    $scope.placeOrder = function() {
+        const orderData = {
+            products: $scope.products.map(product => ({
+                idproduct: product.id, // ID sản phẩm
+                quantity: product.quantity // Số lượng sản phẩm
+            }))
+        };
+
+        $http.post('http://localhost:8080/beesixcake/api/order', orderData)
+            .then(function(response) {
+                // Xử lý khi đơn hàng được gửi thành công
+                alert('Đơn hàng đã được gửi thành công!');
+                $scope.clearCart(); // Xóa giỏ hàng nếu cần
+            })
+            .catch(function(error) {
+                // Xử lý khi có lỗi xảy ra
+                console.error('Lỗi khi gửi đơn hàng:', error);
+                alert('Có lỗi xảy ra khi gửi đơn hàng. Vui lòng thử lại.');
+            });
+    };
     // Hàm tính tổng giá
     $scope.calculateTotal = function() {
         $scope.totalPrice = $scope.products.reduce(function(sum, product) {
