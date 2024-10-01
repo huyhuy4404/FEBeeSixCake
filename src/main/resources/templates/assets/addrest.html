@@ -28,7 +28,7 @@
     <div ng-include="'layout/menu.html'"></div>
 
     <div class="row my-4">
-        <div class="">
+        <div class="col">
             <div class="custom-block bg-white">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -38,108 +38,90 @@
                         <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
                     </li>
                 </ul>
-    
+
                 <div class="container my-4">
-                    <div class="row">
-                        <div class="col">
-                            <div class="custom-block bg-white p-4 rounded shadow-sm">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="address-tab" data-bs-toggle="tab" data-bs-target="#address-tab-pane" type="button" role="tab" aria-controls="address-tab-pane" aria-selected="true">Edit</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
-                                    </li>
-                                </ul>
-                
-                                <div class="tab-content" id="myTabContent">
-                                    <!-- Tab Sửa đổi thông tin địa chỉ -->
-                                    <div class="tab-pane fade show active" id="address-tab-pane" role="tabpanel" aria-labelledby="address-tab" tabindex="0">
-                                        <form class="custom-form profile-form" id="userAddressForm">
-                                            <!-- Trường số nhà -->
-                                            <div class="mb-3">
-                                                <label for="housenumber">Số nhà <span>*</span></label>
-                                                <input class="form-control" type="text" id="housenumber" ng-model="userAddress.housenumber" required>
-                                            </div>
-                                            <!-- Trường tên đường -->
-                                            <div class="mb-3">
-                                                <label for="roadname">Tên đường <span>*</span></label>
-                                                <input class="form-control" type="text" id="roadname" ng-model="userAddress.roadname" required>
-                                            </div>
-                                            <!-- Trường phường -->
-                                            <div class="mb-3">
-                                                <label for="ward">Phường <span>*</span></label>
-                                                <input class="form-control" type="text" id="ward" ng-model="userAddress.ward" required>
-                                            </div>
-                                            <!-- Trường quận -->
-                                            <div class="mb-3">
-                                                <label for="district">Quận <span>*</span></label>
-                                                <input class="form-control" type="text" id="district" ng-model="userAddress.district" required>
-                                            </div>
-                                            <!-- Trường thành phố -->
-                                            <div class="mb-3">
-                                                <label for="city">Thành phố <span>*</span></label>
-                                                <input class="form-control" type="text" id="city" ng-model="userAddress.city" required>
-                                            </div>
-                                            <div class="d-flex justify-content-start mt-3">
-                                                <button type="button" class="btn btn-primary me-2" ng-click="addAddress()" ng-show="!isEditMode">
-                                                    <i class="fas fa-plus"></i> Thêm
-                                                </button>
-                                                <button type="button" class="btn btn-warning me-2" ng-click="updateAddress()" >
-                                                    <i class="fas fa-edit"></i> Sửa
-                                                </button>
-                                                <button type="button" class="btn btn-danger me-2" ng-click="cancelEdit()">
-                                                    <i class="fas fa-times"></i> Xóa
-                                                </button>
-                                                <button type="reset" class="btn btn-secondary ms-2" id="reset-btn">
-                                                    <i class="fas fa-sync-alt"></i> Làm mới
-                                                </button>
-                                            </div>
-                                            
-                                            </div>
-                                        </form>
-                                    </div>
-                
-                                    <!-- Tab Danh sách thông tin địa chỉ -->
-                                    <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
-                                        <div class="table-responsive">
-                                            <table class="account-table table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Số nhà</th>
-                                                        <th>Tên đường</th>
-                                                        <th>Phường</th>
-                                                        <th>Quận</th>
-                                                        <th>Thành phố</th>
-                                                        <th class="text-end">Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr ng-repeat="address in userAddresses">
-                                                        <td>{{address.housenumber}}</td>
-                                                        <td>{{address.roadname}}</td>
-                                                        <td>{{address.ward}}</td>
-                                                        <td>{{address.district}}</td>
-                                                        <td>{{address.city}}</td>
-                                                        <td class="text-end">
-                                                            <button class="btn btn-sm btn-warning" ng-click="editAddress(address)">Edit</button>
-                                                            <button class="btn btn-sm btn-danger" ng-click="deleteAddress(address)">Delete</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                    <div class="tab-content" id="myTabContent">
+                        <!-- Tab Sửa đổi thông tin địa chỉ -->
+                        <div class="tab-pane fade show active" id="address-tab-pane" role="tabpanel" aria-labelledby="address-tab" tabindex="0">
+                            <form class="custom-form profile-form" id="userAddressForm">
+                                <!-- Trường số nhà -->
+                                <div class="mb-3">
+                                    <label for="housenumber">Số nhà <span>*</span></label>
+                                    <input class="form-control" type="text" id="housenumber" ng-model="userAddress.housenumber" required>
                                 </div>
+                                <!-- Trường tên đường -->
+                                <div class="mb-3">
+                                    <label for="roadname">Tên đường <span>*</span></label>
+                                    <input class="form-control" type="text" id="roadname" ng-model="userAddress.roadname" required>
+                                </div>
+                                <!-- Trường phường -->
+                                <div class="mb-3">
+                                    <label for="ward">Phường <span>*</span></label>
+                                    <input class="form-control" type="text" id="ward" ng-model="userAddress.ward" required>
+                                </div>
+                                <!-- Trường quận -->
+                                <div class="mb-3">
+                                    <label for="district">Quận <span>*</span></label>
+                                    <input class="form-control" type="text" id="district" ng-model="userAddress.district" required>
+                                </div>
+                                <!-- Trường thành phố -->
+                                <div class="mb-3">
+                                    <label for="city">Thành phố <span>*</span></label>
+                                    <input class="form-control" type="text" id="city" ng-model="userAddress.city" required>
+                                </div>
+                                <div class="d-flex justify-content-start mt-3">
+                                    <button type="button" class="btn btn-primary me-2" ng-click="addAddress()">
+                                        <i class="fas fa-plus"></i> Thêm
+                                    </button>
+                                    <button type="button" class="btn btn-warning me-2" ng-click="updateAddress()">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </button>
+                                    <button type="button" class="btn btn-danger me-2" ng-click="deleteAddress(userAddress)">
+                                        <i class="fas fa-times"></i> Xóa
+                                    </button>
+                                    <button type="reset" class="btn btn-secondary ms-2" id="reset-btn">
+                                        <i class="fas fa-sync-alt"></i> Làm mới
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                
+                        <!-- Tab Danh sách thông tin địa chỉ -->
+                        <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+                            <div class="table-responsive">
+                                <table class="account-table table">
+                                    <thead>
+                                        <tr>
+                                            <th>Số nhà</th>
+                                            <th>Tên đường</th>
+                                            <th>Phường</th>
+                                            <th>Quận</th>
+                                            <th>Thành phố</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="address in userAddresses">
+                                            <td>{{address.housenumber}}</td>
+                                            <td>{{address.roadname}}</td>
+                                            <td>{{address.ward}}</td>
+                                            <td>{{address.district}}</td>
+                                            <td>{{address.city}}</td>
+                                            <td class="text-end">
+                                                <button class="btn btn-sm btn-warning" ng-click="editAddress(address)">Sửa</button>
+                                                <button class="btn btn-sm btn-danger" ng-click="deleteAddress(address)">Xóa</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    
+                    </div>
                 </div>
                 
             </div>
         </div>
     </div>
-    
 
     <!-- Bao gồm footer -->
     <div ng-include="'layout/footer.html'"></div>

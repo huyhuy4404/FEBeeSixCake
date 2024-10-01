@@ -1,20 +1,18 @@
 var app = angular.module('myApp', []);
 
 app.controller('Controller', function($scope, $http) {
-    // Hàm để lấy thông tin tài khoản
+    // Hàm để lấy thông tin tài khoản đã đăng nhập từ localStorage
     $scope.getUserInfo = function() {
-        $http.get('http://localhost:8080/beesixcake/api/account')
-            .then(function(response) {
-                // Xử lý kết quả API trả về, lấy thông tin người dùng đầu tiên
-                if (response.data && response.data.length > 0) {
-                    $scope.user = response.data[0];  // Giả sử người dùng đã đăng nhập
-                } else {
-                    $scope.user = null;
-                }
-            }, function(error) {
-                console.error('Lỗi khi lấy thông tin người dùng:', error);
-            });
+        var loggedInUser = localStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+            // Parse lại thông tin người dùng đã đăng nhập từ localStorage
+            $scope.user = JSON.parse(loggedInUser);
+        } else {
+            // Nếu không có thông tin đăng nhập trong localStorage
+            $scope.user = null;
+        }
     };
+
 
     // Hàm cập nhật thông tin người dùng
     $scope.updateUserProfile = function () {
