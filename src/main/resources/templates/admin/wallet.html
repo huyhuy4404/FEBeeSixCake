@@ -265,7 +265,7 @@
                                     <form class="row g-3">
                                         <!-- Product Name -->
                                         <div class="col-md-6">
-                                          <label for="product-id" class="form-label">ID </label>
+                                          <label for="product-id" class="form-label">Mã đơn hàng </label>
                                           <input type="text" id="product-id" ng-model="selectedOrder.idorder" class="form-control" />
                                         </div>
                                       
@@ -295,7 +295,7 @@
                                       
                                         <!-- Total Amount -->
                                         <div class="col-md-6">
-                                          <label for="total-amount" class="form-label">Thành Tiền</label>
+                                          <label for="total-amount" class="form-label">Tổng Tiền</label>
                                           <input type="text" id="total-amount" ng-model="selectedOrder.totalamount" class="form-control" />
                                         </div>
                                       
@@ -352,7 +352,7 @@
                                         <table class="table">
                                             <thead>
                                               <tr>
-                                                <th>ID Đơn Hàng</th>
+                                                <th>Mã Đơn Hàng</th>
                                                 <th>Khách Hàng</th>
                                                 <th>Số Điện Thoại</th>
                                                 <th>Địa Chỉ</th>
@@ -372,8 +372,8 @@
                                                 <td>{{order.totalamount}}</td>
                                                 <td>{{order.status.statusname}}</td>
                                                 <td class="text-end">
-                                                  <button class="btn btn-sm btn-warning" ng-click="editOrder(order)">Edit</button>
-                                                  <button class="btn btn-sm btn-danger" ng-click="deleteOrder(order.idorder)">Delete</button>
+                                                  <button class="btn btn-sm btn-warning" ng-click="editOrder(order)">Chỉnh sửa</button>
+                                                  <button class="btn btn-sm btn-primary" ng-click="">Xem chi tiết</button>
                                                 </td>
                                               </tr>
                                             </tbody>

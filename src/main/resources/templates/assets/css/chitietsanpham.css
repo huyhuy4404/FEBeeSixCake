@@ -117,21 +117,30 @@
     border: none;
     background-color: #d38450;
     color: white;
-    border-radius: 4px;
     font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.bst .btn i {
-    margin-right: 5px;
-}
-
 .bst .btn:hover {
     background-color: orange;
 }
 
+.bst .tim{
+    border: none;
+    color: #ccc;
+    background-color: white !important;
+    font-size: 22px;
+}
+
+.bst .tim:hover{
+    color: orange;
+}
+
+.bst .tim:active{
+    color: #d38450;
+}
 /* Định dạng cho nút trái tim */
 .yeuThich {
     background-color: transparent;
