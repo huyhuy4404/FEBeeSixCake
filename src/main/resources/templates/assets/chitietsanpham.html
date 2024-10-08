@@ -1,153 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tên Sản Phẩm</title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../assets/css/chitietsanpham.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+    <link
+      rel="stylesheet"
+      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/chitietsanpham.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/app.js"></script>
     <script src="../assets/js/chitietsanpham.js"></script>
-    <style>
+    <style></style>
+  </head>
 
-
-    </style>
-</head>
-
-<body ng-app="myApp" ng-controller="ProductDetailController">
+  <body ng-app="myApp" ng-controller="ProductDetailController">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
 
-    <div class="container-fluid mx-4" style="margin-top: 55px; z-index: -1;">
-        <div style="font-size: 20px;">
-            <a href="index.html" style="color: #2e1d15;"><span>Trang Chủ</span></a>
-            <span class="fw-bold mx-2">/</span>
-            <a href="" style="color: #2e1d15;"><span>{{ product.category.categoryname }}</span></a>
-            <span class="fw-bold mx-2">/</span>
-            <span>{{ product.productname }}</span>
-        </div>
+    <div class="container-fluid mx-4" style="margin-top: 55px; z-index: -1">
+      <div style="font-size: 20px">
+        <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
+        <span class="fw-bold mx-2">/</span>
+        <a href="" style="color: #2e1d15"
+          ><span>{{ product.category.categoryname }}</span></a
+        >
+        <span class="fw-bold mx-2">/</span>
+        <span>{{ product.productname }}</span>
+      </div>
     </div>
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="row">
-                    <div class="col-lg-5">
-                        <div class="box-img-detail">
-                            <a href="">
-                                <img ng-src="{{product.img || 'https://via.placeholder.com/250x255'}}"
-                                    alt="{{product.productname}}" class="img-reponsive mt-0" width="350" height="360">
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-7">
-                        <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
-                        <div class="box-price" ng-if="productDetails.length">
-                            <div class="price-chitiet">
-                                <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
-                                <span class="current-price">{{selectedSizeDetail.unitprice | number : 0}}₫</span>
-                                <!-- Hiển thị giá gốc với ký hiệu ₫ sau, giả sử giá gốc cao hơn 10% -->
-                                <span class="issale">{{selectedSizeDetail.unitprice * 1.1 | number : 0}}₫</span>
-                                <span class="persale">- 10%</span>
-                            </div>
-
-                            <div class="price-vince">
-                                <!-- Hiển thị giá thị trường và số tiền tiết kiệm với ký hiệu ₫ sau -->
-                                <p>Giá thị trường: <span>{{selectedSizeDetail.unitprice * 1.1 | number : 0}}₫</span> -
-                                    Tiết kiệm:
-                                    <span>{{selectedSizeDetail.unitprice * 0.1 | number : 0}}₫</span> (<span
-                                        style="color: red;">- 10%</span>)
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="size-pd mt-3">
-                            <span>Kích cỡ: </span>
-                            <div class="size-options">
-                                <button ng-repeat="detail in productDetails"
-                                    ng-class="{'selected-size': selectedSize === detail.size.sizename}"
-                                    class="size-button" ng-click="selectSize(detail.size.sizename)">
-                                    {{detail.size.sizename}}
-                                </button>
-                            </div>
-
-                            <span class="QuantityInStock ms-4">Số lượng hiện có:
-                                <b>{{selectedSizeDetail.quantityinstock}}</b></span>
-                        </div>
-
-                        <hr>
-                        <div class="moTa">
-                            <p>{{ product.description }}</p>
-                        </div>
-
-                        <hr>
-                        <div class="inner-load">
-                            <div class="box-add">
-                                <div class="number-card">
-                                    <span>Số lượng:</span>
-                                    <input type="number" name="numberproduct" id="numberproduct" class="form-control"
-                                        value="1" min="1" max="{{selectedSizeDetail.quantityinstock}}"
-                                        ng-model="selectedQuantity">
-                                </div>
-                                <div class="bst">
-                                    <button type="button" class="btn btn-primary">
-                                        <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
-                                    </button>
-                                    <button type="button" class="btn btn-secondary">
-                                        Mua Nhanh
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger" ng-click="toggleHeart()">
-                                        <i class="bi bi-heart-fill"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="row">
+            <div class="col-lg-5">
+              <div class="box-img-detail">
+                <a href="">
+                  <img
+                    ng-src="{{product.img || 'https://via.placeholder.com/250x255'}}"
+                    alt="{{product.productname}}"
+                    class="img-reponsive mt-0"
+                    width="350"
+                    height="360"
+                  />
+                </a>
+              </div>
+            </div>
+            <div class="col-lg-7">
+              <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
+              <div class="box-price" ng-if="productDetails.length">
+                <div class="price-chitiet">
+                  <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
+                  <span class="current-price"
+                    >{{selectedSizeDetail.unitprice | number : 0}}₫</span
+                  >
+                  <!-- Hiển thị giá gốc với ký hiệu ₫ sau, giả sử giá gốc cao hơn 10% -->
+                  <span class="issale"
+                    >{{selectedSizeDetail.unitprice * 1.1 | number : 0}}₫</span
+                  >
+                  <span class="persale">- 10%</span>
                 </div>
 
-            </div>
-            <div class="col-lg-4">
-                <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%;">
-                    <h4 style="text-align: center;">Danh Mục Sản Phẩm</h4>
-                    <hr>
-                    <ul class="list-group">
-                        <li class="list-group-item" style="border: none;">
-                            Tên loại sản phẩm
-                            <span class="">(14)</span>
-                        </li>
-                    </ul>
+                <div class="price-vince">
+                  <!-- Hiển thị giá thị trường và số tiền tiết kiệm với ký hiệu ₫ sau -->
+                  <p>
+                    Giá thị trường:
+                    <span
+                      >{{selectedSizeDetail.unitprice * 1.1 | number :
+                      0}}₫</span
+                    >
+                    - Tiết kiệm:
+                    <span
+                      >{{selectedSizeDetail.unitprice * 0.1 | number :
+                      0}}₫</span
+                    >
+                    (<span style="color: red">- 10%</span>)
+                  </p>
+                </div>
+              </div>
+
+              <div class="size-pd mt-3">
+                <span>Kích cỡ: </span>
+                <div class="size-options">
+                  <button
+                    ng-repeat="detail in productDetails"
+                    ng-class="{'selected-size': selectedSize === detail.size.sizename}"
+                    class="size-button"
+                    ng-click="selectSize(detail.size.sizename)"
+                  >
+                    {{detail.size.sizename}}
+                  </button>
                 </div>
 
+                <span class="QuantityInStock ms-4"
+                  >Số lượng hiện có:
+                  <b>{{selectedSizeDetail.quantityinstock}}</b></span
+                >
+              </div>
+
+              <hr />
+              <div class="moTa">
+                <p>{{ product.description }}</p>
+              </div>
+
+              <hr />
+              <div class="inner-load">
+                <div class="box-add">
+                  <div class="number-card">
+                    <span>Số lượng:</span>
+                    <input
+                      type="number"
+                      name="numberproduct"
+                      id="numberproduct"
+                      class="form-control"
+                      value="1"
+                      min="1"
+                      max="{{selectedSizeDetail.quantityinstock}}"
+                      ng-model="selectedQuantity"
+                    />
+                  </div>
+                  <div class="bst">
+                    <button type="button" class="btn btn-primary">
+                      <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
+                    </button>
+                    <button type="button" class="btn btn-secondary">
+                      Mua Nhanh
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger"
+                      ng-click="toggleHeart()"
+                    >
+                      <i class="bi bi-heart-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+        <div class="col-lg-4">
+          <div
+            class="card-type mx-4 p-3"
+            style="border: 1px solid rgb(222, 226, 230); border-radius: 1%"
+          >
+            <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
+            <hr />
+            <ul class="list-group">
+              <li class="list-group-item" style="border: none">
+                Tên loại sản phẩm
+                <span class="">(14)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const ratingValue = parseFloat(document.getElementById('rating-value').textContent); // Lấy giá trị đánh giá từ text
-            const stars = document.querySelectorAll('#stars li');
+      document.addEventListener("DOMContentLoaded", function () {
+        const ratingValue = parseFloat(
+          document.getElementById("rating-value").textContent
+        ); // Lấy giá trị đánh giá từ text
+        const stars = document.querySelectorAll("#stars li");
 
-            // Đặt màu cho các ngôi sao dựa trên giá trị đánh giá
-            stars.forEach((star) => {
-                if (parseInt(star.getAttribute('data-value')) <= ratingValue) {
-                    star.classList.add('selected');
-                } else {
-                    star.classList.remove('selected');
-                }
-            });
+        // Đặt màu cho các ngôi sao dựa trên giá trị đánh giá
+        stars.forEach((star) => {
+          if (parseInt(star.getAttribute("data-value")) <= ratingValue) {
+            star.classList.add("selected");
+          } else {
+            star.classList.remove("selected");
+          }
         });
+      });
 
-        function toggleHeart(button) {
-            // Kiểm tra trạng thái của nút và đổi trạng thái
-            button.classList.toggle('active');
-        }
-
+      function toggleHeart(button) {
+        // Kiểm tra trạng thái của nút và đổi trạng thái
+        button.classList.toggle("active");
+      }
     </script>
     <script src="../assets/js/bootstrap.bundle.js"></script>
-</body>
-
+  </body>
 </html>
