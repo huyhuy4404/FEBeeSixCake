@@ -69,17 +69,21 @@
                         </a>
                     </div>
                 </div>
-                <div class="topContai mt-3 " style="width: 160px; height: 46px;">
-                    <span class="text-header-right dropdown-toggle fw-bold" style="font-size: 18px;" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i style="font-size: 28px;" class="bi bi-person-fill"></i> Tài khoản
+                <div class="topContai mt-3" style="width: 160px; height: 46px;">
+                    <span class="text-header-right dropdown-toggle fw-bold" style="font-size: 18px;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i style="font-size: 28px;" class="bi bi-person-fill"></i> 
+                        <span ng-if="!isLoggedIn">Tài khoản</span>
+                        <span ng-if="isLoggedIn">{{ loggedInUser.idaccount }}</span>
                     </span>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/login.html" data-lang="Tiếng Việt">Đăng nhập</a></li>
-                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/register.html" data-lang="English">Đăng ký</a></li>
-                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/Information.html" data-lang="English">Thông tin cá nhân</a></li>
+                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/login.html" data-lang="Tiếng Việt">Đăng nhập</a></li>
+                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/register.html" data-lang="English">Đăng ký</a></li>
+                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/Information.html" data-lang="English">Thông tin cá nhân</a></li>
+                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="#" ng-click="logout()">Đăng xuất</a></li>
                     </ul>
                 </div>
+                
+                
             </div>
         </div>
     </div>
