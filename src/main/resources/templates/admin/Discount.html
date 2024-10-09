@@ -15,7 +15,7 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
 
@@ -25,11 +25,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
     <!--
 
 Tooplate 2135 Mini Finance
@@ -41,7 +38,7 @@ Bootstrap 5 Dashboard Admin Template
 -->
 </head>
 
-<body ng-app="myApp" >
+<body ng-app="myApp" ng-Co>
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
@@ -62,7 +59,6 @@ Bootstrap 5 Dashboard Admin Template
 
         <div class="navbar-nav me-lg-2">
             <div class="nav-item text-nowrap d-flex align-items-center">
-                <!-- Notifications Dropdown -->
                 <div class="dropdown ps-3">
                     <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -75,35 +71,44 @@ Bootstrap 5 Dashboard Admin Template
 
                     <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
                         <small>Notifications</small>
+
                         <li class="notifications-block border-bottom pb-2 mb-2">
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="notifications-icon-wrap bg-success">
                                     <i class="notifications-icon bi-check-circle-fill"></i>
                                 </div>
+
                                 <div>
-                                    <span>Your account has been created successfully.</span>
+                                    <span>Your account has been created successfuly.</span>
+
                                     <p>12 days ago</p>
                                 </div>
                             </a>
                         </li>
+
                         <li class="notifications-block border-bottom pb-2 mb-2">
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="notifications-icon-wrap bg-info">
                                     <i class="notifications-icon bi-folder"></i>
                                 </div>
+
                                 <div>
                                     <span>Please check. We have sent a Daily report.</span>
+
                                     <p>10 days ago</p>
                                 </div>
                             </a>
                         </li>
+
                         <li class="notifications-block">
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <div class="notifications-icon-wrap bg-danger">
                                     <i class="notifications-icon bi-question-circle"></i>
                                 </div>
+
                                 <div>
                                     <span>Account verification failed.</span>
+
                                     <p>1 hour ago</p>
                                 </div>
                             </a>
@@ -111,7 +116,6 @@ Bootstrap 5 Dashboard Admin Template
                     </ul>
                 </div>
 
-                <!-- Social Media Dropdown -->
                 <div class="dropdown ps-1">
                     <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -123,59 +127,90 @@ Bootstrap 5 Dashboard Admin Template
                             <div class="row">
                                 <div class="col-lg-4 col-md-4 col-4">
                                     <a class="dropdown-item text-center" href="#">
-                                        <img src="images/social/search.png" class="profile-image img-fluid"
-                                            alt="Google">
+                                        <img src="images/social/search.png" class="profile-image img-fluid" alt="">
                                         <span class="d-block">Google</span>
                                     </a>
                                 </div>
-                                <!-- More social media links here -->
+
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/spotify.png" class="profile-image img-fluid" alt="">
+                                        <span class="d-block">Spotify</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/telegram.png" class="profile-image img-fluid" alt="">
+                                        <span class="d-block">Telegram</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/snapchat.png" class="profile-image img-fluid" alt="">
+                                        <span class="d-block">Snapchat</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/tiktok.png" class="profile-image img-fluid" alt="">
+                                        <span class="d-block">Tiktok</span>
+                                    </a>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/youtube.png" class="profile-image img-fluid" alt="">
+                                        <span class="d-block">Youtube</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- User Profile Dropdown -->
                 <div class="dropdown px-3">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid"
-                            alt="User Profile">
+                        <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid" alt="">
                     </a>
                     <ul class="dropdown-menu bg-white shadow">
                         <li>
                             <div class="dropdown-menu-profile-thumb d-flex">
                                 <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3"
-                                    alt="User Profile">
+                                    alt="">
+
                                 <div class="d-flex flex-column">
                                     <small>Thomas</small>
                                     <a href="#">thomas@site.com</a>
                                 </div>
                             </div>
                         </li>
-                        <!-- Profile and Settings Links -->
+
                         <li>
                             <a class="dropdown-item" href="profile.html">
                                 <i class="bi-person me-2"></i>
-                                Profile
+                                Quan li doanh thu
                             </a>
                         </li>
-                        <!-- More profile options here -->
-                        <li class="border-top mt-3 pt-2 mx-4">
-                            <a class="dropdown-item ms-0 me-0" href="#">
-                                <i class="bi-box-arrow-left me-2"></i>
-                                Logout
+                        <li>
+                            <a class="dropdown-item" href="product-type.html">
+                                <i class="bi-person me-2"></i>
+                                Loại Sản Phẩm
                             </a>
                         </li>
+
+
                     </ul>
                 </div>
             </div>
         </div>
     </header>
 
-
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar Menu -->
             <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
                 <div class="position-sticky py-4 px-3 sidebar-sticky">
                     <ul class="nav flex-column h-100">
@@ -183,7 +218,9 @@ Bootstrap 5 Dashboard Admin Template
                             <a class="nav-link active" aria-current="page" href="index.html">
                                 <i class="bi-house-fill me-2"></i>
                                 Trang Chủ
-                                <!-- <li class="nav-item">
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
                                 <a class="nav-link" href="wallet.html">
                                     <i class="bi-wallet me-2"></i>
                                     My Wallet
@@ -236,185 +273,166 @@ Bootstrap 5 Dashboard Admin Template
                 </div>
             </nav>
 
-            <!-- Main Content -->
             <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
                 <div class="title-group mb-3">
                     <h1 class="h2 mb-0">Quản Lý Khuyến Mãi</h1>
                 </div>
 
-                <!-- Tabs -->
                 <div class="row my-4">
-                    <div class="col-12">
+                    <div class="">
                         <div class="custom-block bg-white">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="edit-tab" data-bs-toggle="tab"
-                                        data-bs-target="#edit-tab-pane" type="button" role="tab"
-                                        aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
+                                    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#profile-tab-pane" type="button" role="tab"
+                                        aria-controls="profile-tab-pane" aria-selected="true">Edit</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="list-tab" data-bs-toggle="tab"
-                                        data-bs-target="#list-tab-pane" type="button" role="tab"
-                                        aria-controls="list-tab-pane" aria-selected="false">List</button>
+                                    <button class="nav-link" id="password-tab" data-bs-toggle="tab"
+                                        data-bs-target="#password-tab-pane" type="button" role="tab"
+                                        aria-controls="password-tab-pane" aria-selected="false">List</button>
                                 </li>
                             </ul>
 
-                            <div class="tab-content" id="myTabContent" >
-                                <!-- Edit Tab Content -->
-                                <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel"
-                                    aria-labelledby="edit-tab" tabindex="0">
-                                    <form class="row g-3" ng-controller="formController">
-                                        <!-- Product Name -->
-                                        <div class="col-md-6">
-                                            <label for="product-name" class="form-label">ID Giảm Giá</label>
-                                            <input type="text" id="product-name" ng-model="selectedProduct.nameproduct"
-                                                placeholder="ID " class="form-control" />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="product-name" class="form-label">Mã Giảm Giá</label>
-                                            <input type="text" id="product-name" ng-model="selectedProduct.nameproduct"
-                                                placeholder="Nhập mã giảm giá " class="form-control" />
-                                        </div>
+                            <div class="tab-content" id="myTabContent" ng-controller="discountsController">
+
+                                <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel"
+                                    aria-labelledby="profile-tab" tabindex="0">
+                                    <!-- Form sửa đổi -->
+                                    <!-- Product Name -->
+                                    <form class="custom-form profile-form" action="#" method="post" role="form">
+                                        <p>ID:</p>
+                                        <input class="form-control" type="text" name="Discounts-id" id="Discounts-id"
+                                            ng-model="selecteddiscount.iddiscount" readonly>
+
+                                        <p>Mã giảm giá:</p>
+                                        <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
+                                            placeholder="Mã giảm giá"
+                                            ng-model="selecteddiscount.discountcode">
+                                            <p>Phần trăm chiếc khấu:</p>
+
+                                            <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
+                                            placeholder="Phần trăm chiếc khấu"
+                                            ng-model="selecteddiscount.discountpercentage">
+                                            <p>Ngày bắt đầu:</p>
+
+                                            <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
+                                            placeholder="Ngày bắt đầu"
+                                            ng-model="selecteddiscount.startdate">
+                                            <p>Ngày kết thúc:</p>
+
+                                            <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
+                                            placeholder="Ngày kết thúc"
+                                            ng-model="selecteddiscount.enddate">
 
 
-                                        <!-- Category -->
-                                        <div class="col-md-6">
-                                            <label for="category-select" class="form-label">Phần Trăm Giảm</label>
-                                            <select class="form-select" id="category-select"
-                                                ng-model="selectedProduct.category"
-                                                ng-options="category as category.namecategory for category in categories">
-                                                <option value="">Giảm giá</option>
-                                                <option value="">10%</option>
-                                                <option value="">20%</option>
-                                                <option value="">30%</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- Size -->
-                                        <!-- Quantity -->
-                                        <div class="col-md-6">
-                                            <label for="product-date" class="form-label">Ngày bắt đầu</label>
-                                            <input type="date" id="product-date" ng-model="newPrice.selectedDate"
-                                                placeholder="Chọn ngày" class="form-control" />
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="product-date" class="form-label">Ngày kết thúc</label>
-                                            <input type="date" id="product-date" ng-model="newPrice.selectedDate"
-                                                placeholder="Chọn ngày" class="form-control" />
-                                        </div>
-
-
-
-                                        <!-- Hide Status -->
-                                        <div class="col-md-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="product-hide"
-                                                    ng-model="selectedProduct.hide">
-                                                <label class="form-check-label" for="product-hide">Ẩn</label>
-                                            </div>
-                                        </div>
-
-
-
-
-                                        <!-- Actions -->
-                                        <div class="col-md-12">
-                                            <button type="button" class="btn btn-primary" ng-click="addProduct()">
+                                        <div class="d-flex justify-content-start mt-3">
+                                            <button type="button" class="btn btn-primary me-2" id="add-btn"
+                                                ng-click="adddiscount()">
                                                 <i class="fas fa-plus"></i> Thêm
                                             </button>
-                                            <button type="button" class="btn btn-info" ng-click="updateProduct()">
-                                                <i class="fas fa-edit"></i> Cập nhật
+                                            <button type="button" class="btn btn-warning me-2" id="edit-btn"
+                                                ng-click="editdiscount()">
+                                                <i class="fas fa-edit"></i> Sửa
                                             </button>
-                                            <button type="button" class="btn btn-danger"
-                                                ng-click="confirmDelete(selectedProduct.idproduct)">
-                                                <i class="fas fa-trash-alt"></i> Xóa
-                                            </button>
-                                            <button type="button" class="btn btn-warning" ng-click="loadProducts()">
+                                            <button type="button" class="btn btn-danger me-2" id="edit-btn"
+                                            ng-click="deletediscount(category)">
+                                            <i class="fas fa-edit"></i> xóa
+                                        </button>
+                                            <!-- Xóa nút này -->
+                                            <button type="reset" class="btn btn-secondary ms-2" id="reset-btn"
+                                                ng-click="resetForm()">
                                                 <i class="fas fa-sync-alt"></i> Làm mới
                                             </button>
                                         </div>
                                     </form>
+                                  
+
+
+                                  
+
+                                    
+
+
+                                  
+
+
+
+
+                                    <!-- Actions
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary" ng-click="addProduct()">
+                                            <i class="fas fa-plus"></i> Thêm
+                                        </button>
+                                        <button type="button" class="btn btn-info" ng-click="updateProduct()">
+                                            <i class="fas fa-edit"></i> Cập nhật
+                                        </button>
+                                        <button type="button" class="btn btn-danger"
+                                            ng-click="confirmDelete(selectedProduct.idproduct)">
+                                            <i class="fas fa-trash-alt"></i> Xóa
+                                        </button>
+                                        <button type="button" class="btn btn-warning" ng-click="loadProducts()">
+                                            <i class="fas fa-sync-alt"></i> Làm mới
+                                        </button>
+                                    </div> -->
                                 </div>
 
-                                <!-- List Tab Content -->
-                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab"
-                                    tabindex="0" >
-                                    <form class="custom-form password-form" action="#" method="post"  ng-controller="discountsController">
-                                        <div class="row my-4">
-                                            <div class="col-lg-12">
-                                                <div class="custom-block bg-white">
-                                                    <div class="table-responsive">
-                                                        <table class="account-table table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Tên sản phẩm</th>
-                                                                    <th>Kích thước</th>
-                                                                    <th>Số lượng</th>
-                                                                    <th>Danh mục</th>
-                                                                    <th>Giá</th>
-                                                                    <th>Ghi chú</th>
-                                                                    <th>Ảnh</th>
-                                                                    <th class="text-end">Actions</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="item in Discounts">
-                                                                    <td>{{item.iddiscount}}</td>
-                                                                    <td>{{item.startdate}}</td>
-                                                                    <td class="text-end">
-                                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(item)">Edit</button>
-                                                                        <button class="btn btn-sm btn-danger" ng-click="deleteCategory(item)">Delete</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    
-                                                    <nav aria-label="Page navigation">
-                                                        <ul class="pagination justify-content-center mb-0">
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#"
-                                                                    aria-label="Previous">Prev</a>
-                                                            </li>
-                                                            <li class="page-item active">
-                                                                <a class="page-link" href="#">1</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#">2</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#">3</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#">4</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a class="page-link" href="#" aria-label="Next">Next</a>
-                                                            </li>
-                                                        </ul>
-                                                    </nav>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel"
+                                    aria-labelledby="password-tab" tabindex="0">
+                                    <div class="table-responsive">
+                                        <table class="account-table table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Mã giảm giá</th>
+                                                    <th>Phần trăm chiết khấu</th>
+                                                    <th>Ngày bắt đầu</th>
+                                                    <th>Ngày kết thúc</th>
+                                                    <th class="text-end">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="category in Discounts">
+                                                    <td>{{category.iddiscount}}</td>
+                                                    <td>{{category.discountcode}}</td>
+                                                    <td>{{category.discountpercentage}}</td>
+                                                    <td>{{category.startdate}}</td>
+                                                    <td>{{category.enddate}}</td>
+                                                    <td class="text-end">
+                                                        <button class="btn btn-sm btn-warning"
+                                                            ng-click="goToEdit(category)">Edit</button>
+                                                        <button class="btn btn-sm btn-danger"
+                                                            ng-click="deletediscount(category)">Delete</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+                <footer class="site-footer">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-lg-12 col-12">
+                                <p class="copyright-text">Copyright © Mini Finance 2048
+                                    - Design: <a rel="sponsored" href="https://www.tooplate.com"
+                                        target="_blank">Tooplate</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
             </main>
+
         </div>
     </div>
 
-
-
-    </main>
-
-    </div>
-    </div>
-
     <!-- JAVASCRIPT FILES -->
-
     <script src="../admin/js/Discounts.js"></script>
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
