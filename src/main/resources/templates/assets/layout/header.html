@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="topContai mt-3 " style="width: 160px; height: 46px;">
-                        <a href="DonHang.html">
+                        <a href="order.html">
                             <div class="row text-header-right">
                                 <div class="col-3">
                                     <div class="fs-4"><i style="font-size: 28px;" class="bi bi-box-fill"></i></div>
@@ -69,21 +69,18 @@
                         </a>
                     </div>
                 </div>
-                <div class="topContai mt-3" style="width: 160px; height: 46px;">
-                    <span class="text-header-right dropdown-toggle fw-bold" style="font-size: 18px;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i style="font-size: 28px;" class="bi bi-person-fill"></i> 
-                        <span ng-if="!isLoggedIn">Tài khoản</span>
-                        <span ng-if="isLoggedIn">{{ loggedInUser.idaccount }}</span>
+                <div class="topContai mt-3 " style="width: 160px; height: 46px;">
+                    <span class="text-header-right dropdown-toggle fw-bold" style="font-size: 18px;" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i style="font-size: 28px;" class="bi bi-person-fill"></i> Tài khoản
                     </span>
                     <ul class="dropdown-menu">
-                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/login.html" data-lang="Tiếng Việt">Đăng nhập</a></li>
-                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/register.html" data-lang="English">Đăng ký</a></li>
-                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/Information.html" data-lang="English">Thông tin cá nhân</a></li>
-                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="#" ng-click="logout()">Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/login.html" data-lang="Tiếng Việt">Đăng nhập</a></li>
+                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/register.html" data-lang="English">Đăng ký</a></li>
+                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/register.html" data-lang="English">Đổi mật khẩu</a></li>
+                        <li><a class="dropdown-item" href="/src/main/resources/templates/assets/changepassword.html" data-lang="English">Thông tin cá nhân</a></li>
                     </ul>
                 </div>
-                
-                
             </div>
         </div>
     </div>

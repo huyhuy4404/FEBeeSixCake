@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn Hàng</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/order1.js"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .order {
+            padding: 15px; /* Giảm padding */
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 15px; /* Giảm margin */
+        }
+
+        .cart-header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px; /* Giảm khoảng cách */
+        }
+
+        .table-order {
+            margin-top: 10px; /* Giảm khoảng cách */
+        }
+
+        .table th {
+            background-color: #d38450;
+            color: white;
+            text-align: center;
+        }
+
+        .table td {
+            text-align: center;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #CC3300;
+        }
+
+        .button-order {
+            margin-top: 10px; /* Giảm khoảng cách */
+            text-align: center;
+        }
+
+        .progress {
+            height: 10px;
+            margin-bottom: 5px; /* Giảm khoảng cách */
+        }
+
+        .progress-bar {
+            background-color: #d38450;
+        }
+
+        @media (max-width: 768px) {
+            .order {
+                padding: 10px;
+            }
+
+            .cart-header {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body ng-app="myApp">
+    <div ng-include="'layout/header.html'"></div>
+    <div class="container order" style="margin-left: 100px;">
+        <div class="row my-3"> <!-- Giảm khoảng cách -->
+            <div class="col-lg-3">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%;">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%;">
+                        <i class="bi bi-person-fill-check"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%;">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="progress">
+                    <div class="progress-bar" style="width: 100%;">
+                        <i class="bi bi-bag-check-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" ng-controller="CartController" id="nav-tabContent">
+            <div class="container mt-3"> <!-- Giảm khoảng cách -->
+                <h3 class="cart-header">Đơn HÀNG CỦA BẠN</h3>
+                <h5>
+                    Đơn HÀNG của bạn (<b class="cart-cnt">{{ products.length }}</b> sản phẩm)
+                    <span class="float-end total-price">
+                        Tổng tiền: {{ calculateTotal() }} VNĐ
+                    </span>
+                </h5>
+                <table class="table table-order">
+                    <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+
+                            <th>Tên Sản Phẩm</th>
+                            <th>Loại Sản Phẩm</th>
+                            <th>Kích cỡ</th>
+                            <th>Số Lượng</th>
+                            <th>Giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="product in products">
+                            <td>
+                                <img ng-src="{{product.img }}" alt="{{ product.img }}" style="width: 50px; height: auto;">
+                            </td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.categoryName }}</td>
+                            <td>{{ product.sz }}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td>{{ product.price }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="button-order">
+                    <a href="/src/main/resources/templates/assets/thanhtoan.html" class="btn btn-success">Thanh toán</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="Huy" role="tabpanel" aria-labelledby="Huy-tab" tabindex="0">
+            <div id="tab-6">
+                <img src="images/br-order.png" alt="" style="width: 300px;" class="my-3"> <!-- Giảm khoảng cách -->
+                <p class="fw-bold" style="font-size: 20px;">Hiện chưa có đơn hàng nào hủy!</p>
+                <a href="index.html">
+                    <button type="button" class="btn btn-primary fw-bold" style="font-size: 20px;">Tiếp tục mua hàng
+                        <i class="bi bi-caret-right-fill"></i>
+                    </button>
+                </a>
+            </div>
+            <div id="tab-06">
+                <table class="table table-order">
+                    <thead>
+                        <tr>
+                            <th>Hình</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Kích cỡ</th>
+                            <th>Số Lượng</th>
+                            <th>Giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="product in products">
+                            <td>
+                                <img src="{{product.image}}" alt="Product" class="img-responsive" width="100px">
+                            </td>
+                            <td>{{product.nameproduct}}</td>
+                            <td>{{product.size}}</td>
+                            <td>{{product.quantity}}</td>
+                            <td>{{product.price}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="ThongTinDonHang">
+                    <p class="ThanhTien">Thành tiền: {{ calculateTotal() }} VND</p>
+                    <div class="button-order">
+                        <a href="ChiTietDonHang.html">
+                            <button type="button" class="btn btn-primary chitiet">Chi tiết</button>
+                        </a>
+                        <button type="button" class="btn btn-danger huy">Hủy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="margin-top: -200px;">
+            <div class="row ThongtinCTDonHang" ng-controller="CartController">
+                <!-- <div class="col-lg-6">
+                    <h4 class="text-black fw-bold">THÔNG TIN NGƯỜI MUA HÀNG</h4>
+                    <p class="text-ctdh">Tên người mua: {{account.fullname}}</p>
+                    <p class="text-ctdh">Số điện thoại: {{account.phonenumber}}</p>
+                    <p class="text-ctdh">Địa chỉ: {{account.address}}</p>
+                </div> -->
+
+               
+                <!-- <div class="col-lg-6" ng-repeat="s in addresses" >
+                    <h4 class="text-black fw-bold">ĐỊA CHỈ NHẬN HÀNG</h4>
+                    <p class="text-ctdh">Tên người nhận: {{s.name}}</p>
+                    <p class="text-ctdh">Số điện thoại: {{s.phone}}</p>
+                    <p class="text-ctdh">Địa chỉ: {{s.DC}}</p>
+                </div>
+                <div class="col-lg-6 text-end">
+                  <h4 class="text-danger">Thành Tiền: {{ calculateTotal() }} VNĐ</h4>
+              </div> -->
+
+            </div>
+        </div>
+    </div>
+
+    <div class="gia-soc">
+        <div class="container-fluid">
+            <div class="row mb-5">
+                <div class="col-lg-3 mb-3" ng-repeat="item in products | limitTo: 8"> <!-- Giảm khoảng cách -->
+                    <div class="card" data-bs-toggle="modal" data-bs-target="#productModal{{item.idproduct}}">
+                        <img ng-src="images/{{item.img}}" class="card-img-top" alt="{{item.nameproduct}}" style="height: 300px;">
+                        <div class="card-body p-0">
+                            <hr>
+                            <p class="card-title mb-2">{{item.nameproduct}}</p> <!-- Giảm khoảng cách -->
+                            <div class="text-center">
+                                <button class="btn btn-sm btn-danger btn-add-to-cart mb-2">
+                                    Chi tiết sản phẩm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-include="'layout/footer.html'"></div>
+        <script src="../assets/js/bootstrap.bundle.js"></script>
+    </body>
+</html>
