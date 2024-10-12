@@ -11,7 +11,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/account.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
         .sanPham {
             background-color: #d38450;
@@ -30,7 +33,7 @@
     </style>
 </head>
 
-<body ng-app="myApp" ng-controller="LoginController">   
+<body ng-app="myApp">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
 
@@ -69,7 +72,7 @@
         </button>
     </div>
 
-    <div class="card mb-3 " style="border: none;  z-index: -1;">
+    <div class="card mb-3 " style="border: none;  z-index: -1;" ng-controller="discountsController">
         <div class="gia-soc" style="margin-top: 40px">
             <div class="sanPham">
                 <span class="textSanPham">Sản phẩm đang giảm giá</span>
@@ -79,130 +82,34 @@
             <div class="section-title wow fadeInDown text-center">
                 <h3 class="mt-3 mb-2">CƠ HỘI NGỌT NGÀO, SĂN BÁNH GIÁ SỐC!</h3>
             </div>
-            <div class=" row py-4" style="justify-content: center; justify-items: center; margin: 0 11% 0 11%;">
-                <div class="col-lg-3 ">
-                    <div class="pd-box " style="border: 1px solid rgb(222, 226, 230);width: 320px;">
+            <div class="row">
+                <div class="col-lg-3" ng-repeat="item in Products">
+                    <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px;">
                         <div class="box-images">
-                            <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                title="Son Dưỡng Mỡ Hươu Astrid">
-                                <img width="187px" height="208.875px"
-                                    src="https://adminbeauty.hvnet.vn/Upload/Files/avatar-sp-web11-1-recovered-recovered-recovered-recovered-recovered-recovered-14082019102417.jpg?width=350&amp;height=391&amp;v=15042020"
-                                    alt="Son Dưỡng Mỡ Hươu Astrid" class="img-reponsive lazy " style="">
+                            <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html" title="Son Dưỡng Mỡ Hươu Astrid">
+                                <img width="187px" height="208.875px" src="{{item.img}}" alt="Son Dưỡng Mỡ Hươu Astrid" class="img-reponsive lazy" style="">
                             </a>
-                            <button type="button" onclick="LikeThis(this, '6388')" class="btn-addlike"
-                                style="display: none;"><i class="fa fa-heart-o heart_new"></i></button>
+                            <button type="button" onclick="LikeThis(this, '6388')" class="btn-addlike" style="display: none;">
+                                <i class="fa fa-heart-o heart_new"></i>
+                            </button>
                         </div>
                         <div class="box-content">
                             <h3>
-                                <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                    title="Son Dưỡng Mỡ Hươu Astrid" class="tenTheSP">Son Dưỡng Mỡ Hươu Astrid</a>
+                                <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html" title="Son Dưỡng Mỡ Hươu Astrid" class="tenTheSP">{{item.productname}}</a>
                             </h3>
                             <div>
-                                <span class="price ">20,000₫</span>
-                                <span class="price-drop">39,000₫</span>
+                                <span class="price" ng-if="item.source === 'cart'">{{item.unitprice}}₫</span>
                             </div>
                             <div class="cd-content">
-                                <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03"
-                                    data-start="09-13-2024-21-28-03" data-active="true">
-                                    <div class="lof-labelexpired"> </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="pd-box " style="border: 1px solid rgb(222, 226, 230);width: 320px;">
-                        <div class="box-images">
-                            <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                title="Son Dưỡng Mỡ Hươu Astrid">
-                                <img width="187px" height="208.875px"
-                                    src="https://adminbeauty.hvnet.vn/Upload/Files/avatar-sp-web11-1-recovered-recovered-recovered-recovered-recovered-recovered-14082019102417.jpg?width=350&amp;height=391&amp;v=15042020"
-                                    alt="Son Dưỡng Mỡ Hươu Astrid" class="img-reponsive lazy " style="">
-                            </a>
-                            <button type="button" onclick="LikeThis(this, '6388')" class="btn-addlike"
-                                style="display: none;"><i class="fa fa-heart-o heart_new"></i></button>
-                            
-                        </div>
-                        <div class="box-content">
-                            <h3>
-                                <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                    title="Son Dưỡng Mỡ Hươu Astrid" class="tenTheSP">Son Dưỡng Mỡ Hươu Astrid</a>
-                            </h3>
-                            <div>
-                                <span class="price ">20,000₫</span>
-                                <span class="price-drop">39,000₫</span>
-                            </div>
-                            <div class="cd-content">
-                                <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03"
-                                    data-start="09-13-2024-21-28-03" data-active="true">
-                                    <div class="lof-labelexpired"> </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="pd-box " style="border: 1px solid rgb(222, 226, 230);width: 320px;">
-                        <div class="box-images">
-                            <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                title="Son Dưỡng Mỡ Hươu Astrid">
-                                <img width="187px" height="208.875px"
-                                    src="https://adminbeauty.hvnet.vn/Upload/Files/avatar-sp-web11-1-recovered-recovered-recovered-recovered-recovered-recovered-14082019102417.jpg?width=350&amp;height=391&amp;v=15042020"
-                                    alt="Son Dưỡng Mỡ Hươu Astrid" class="img-reponsive lazy " style="">
-                            </a>
-                            <button type="button" onclick="LikeThis(this, '6388')" class="btn-addlike"
-                                style="display: none;"><i class="fa fa-heart-o heart_new"></i></button>
-                        </div>
-                        <div class="box-content">
-                            <h3>
-                                <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                    title="Son Dưỡng Mỡ Hươu Astrid" class="tenTheSP">Son Dưỡng Mỡ Hươu Astrid</a>
-                            </h3>
-                            <div>
-                                <span class="price ">20,000₫</span>
-                                <span class="price-drop">39,000₫</span>
-                            </div>
-                            <div class="cd-content">
-                                <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03"
-                                    data-start="09-13-2024-21-28-03" data-active="true">
-                                    <div class="lof-labelexpired"> </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="pd-box " style="border: 1px solid rgb(222, 226, 230);width: 320px;">
-                        <div class="box-images">
-                            <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                title="Son Dưỡng Mỡ Hươu Astrid">
-                                <img width="187px" height="208.875px"
-                                    src="https://adminbeauty.hvnet.vn/Upload/Files/avatar-sp-web11-1-recovered-recovered-recovered-recovered-recovered-recovered-14082019102417.jpg?width=350&amp;height=391&amp;v=15042020"
-                                    alt="Son Dưỡng Mỡ Hươu Astrid" class="img-reponsive lazy " style="">
-                            </a>
-                            <button type="button" onclick="LikeThis(this, '6388')" class="btn-addlike"
-                                style="display: none;"><i class="fa fa-heart-o heart_new"></i></button>
-                            
-                        </div>
-                        <div class="box-content">
-                            <h3>
-                                <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html"
-                                    title="Son Dưỡng Mỡ Hươu Astrid" class="tenTheSP">Son Dưỡng Mỡ Hươu Astrid</a>
-                            </h3>
-                            <div>
-                                <span class="price ">20,000₫</span>
-                                <span class="price-drop">39,000₫</span>
-                            </div>
-                            <div class="cd-content">
-                                <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03"
-                                    data-start="09-13-2024-21-28-03" data-active="true">
-                                    <div class="lof-labelexpired"> </div>
+                                <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03" data-start="09-13-2024-21-28-03" data-active="true">
+                                    <div class="lof-labelexpired"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+          
             <!-- <div class="container-fluid" style="padding-left: 130px; padding-right: 130px;">
                 <div class="row mb-5">
                     <div class="col-lg-3 mb-4" ng-repeat="item in Bracelet">
@@ -247,6 +154,37 @@
             <div class="section-title wow fadeInDown text-center">
                 <h3 class="mt-3 mb-2">KHÁM PHÁ HƯƠNG VỊ MỚI, THƯỞNG THỨC MẪU BÁNH ĐỘC ĐÁO</h3>
             </div>
+            <div class="row">
+                <div class="col-lg-3" ng-repeat="item in Products">
+                    <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px;">
+                        <div class="box-images">
+                            <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html" title="Son Dưỡng Mỡ Hươu Astrid">
+                                <img width="187px" height="208.875px" src="{{item.img}}" alt="Son Dưỡng Mỡ Hươu Astrid" class="img-reponsive lazy" style="">
+                            </a>
+                            <button type="button" onclick="LikeThis(this, '6388')" class="btn-addlike" style="display: none;">
+                                <i class="fa fa-heart-o heart_new"></i>
+                            </button>
+                        </div>
+                        <div class="box-content">
+                            <h3>
+                                <a href="/son-duong-mo-huou-astrid-astrid-lip-balm-3gr-hong.html" title="Son Dưỡng Mỡ Hươu Astrid" class="tenTheSP">{{item.productname}}</a>
+                            </h3>
+                            <div>
+                                <span class="price" ng-if="item.source === 'cart'">{{item.unitprice}}₫</span> <a href="giohang.html"><img src="cart.png" alt="" style="width: 38px;"></a>
+                                <span class="cart-count">0</span>
+                            </div>
+                            
+                               
+                            <div class="cd-content">
+                                <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03" data-start="09-13-2024-21-28-03" data-active="true">
+                                    <div class="lof-labelexpired"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
             <div class="container-fluid" style="padding-left: 130px; padding-right: 130px;">
                 <div class="row mb-5">
                     <div class="col-lg-3 mb-4" ng-repeat="item in products | limitTo: 8">
@@ -266,6 +204,8 @@
                     </div>
                 </div>
             </div>
+            <script src="../assets/js/index.js"></script>
+
             <div ng-include="'layout/footer.html'"></div>
             <script src="../assets/js/bootstrap.bundle.js"></script>
 </body>
