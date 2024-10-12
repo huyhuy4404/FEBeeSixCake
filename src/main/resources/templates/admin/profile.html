@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +10,7 @@
 
     <title>Mini Finance Dashboard Template</title>
 
-    <!-- CSS FILES -->      
+    <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -18,6 +19,9 @@
     <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
     <link href="../admin/css/apexcharts.css" rel="stylesheet">
     <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <!--
     Tooplate 2135 Mini Finance
@@ -26,7 +30,7 @@
     -->
 </head>
 
-<body style="font-family: 'Roboto', sans-serif;">
+<body style="font-family: 'Roboto', sans-serif;" ng-app="myApp" >
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
@@ -35,25 +39,31 @@
             </a>
         </div>
 
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <form class="custom-form header-form ms-lg-3 ms-md-3 me-lg-auto me-md-auto order-2 order-lg-0 order-md-0" action="#" method="get" role="form">
+        <form class="custom-form header-form ms-lg-3 ms-md-3 me-lg-auto me-md-auto order-2 order-lg-0 order-md-0"
+            action="#" method="get" role="form">
             <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
         </form>
 
         <div class="navbar-nav me-lg-2">
             <div class="nav-item text-nowrap d-flex align-items-center">
                 <div class="dropdown ps-3">
-                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="navbarLightDropdownMenuLink">
+                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" id="navbarLightDropdownMenuLink">
                         <i class="bi-bell"></i>
-                        <span class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                        <span
+                            class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                             <span class="visually-hidden">New alerts</span>
                         </span>
                     </a>
 
-                    <ul class="dropdown-menu dropdown-menu-lg-end notifications-block-wrap bg-white shadow" aria-labelledby="navbarLightDropdownMenuLink">
+                    <ul class="dropdown-menu dropdown-menu-lg-end notifications-block-wrap bg-white shadow"
+                        aria-labelledby="navbarLightDropdownMenuLink">
                         <small>Notifications</small>
 
                         <li class="notifications-block border-bottom pb-2 mb-2">
@@ -95,7 +105,8 @@
                 </div>
 
                 <div class="dropdown ps-1">
-                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <i class="bi-three-dots-vertical"></i>
                     </a>
 
@@ -149,13 +160,15 @@
                 </div>
 
                 <div class="dropdown px-3">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid" alt="">
                     </a>
                     <ul class="dropdown-menu bg-white shadow">
                         <li>
                             <div class="dropdown-menu-profile-thumb d-flex">
-                                <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3" alt="">
+                                <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3"
+                                    alt="">
                                 <div class="d-flex flex-column">
                                     <small>Thomas</small>
                                     <a href="#">thomas@site.com</a>
@@ -204,7 +217,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="index.html">
                                 <i class="bi-house-fill me-2"></i>
-                             Trang Ch
+                                Trang Ch
                             </a>
                         </li>
                         <!-- <li class="nav-item">
@@ -246,7 +259,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="profile.html">
                                 <i class="bi-person me-2"></i>
-                                Quản Lý  Doanh Thu
+                                Quản Lý Doanh Thu
                             </a>
                         </li>
                         <!-- <li class="nav-item">
@@ -280,14 +293,14 @@
                     <h1 class="h2 mb-0">Tồn Kho Theo Loại</h1>
                     <!-- <small class="text-muted">Hello Thomas, welcome back!</small> -->
                 </div>
-                
+
                 <div class="row">
                     <div class="col-12">
                         <div class="custom-block">
                             <h5 class="mb-4"></h5>
                             <div id="pie-chart"></div>
                         </div>
-                
+
                         <div class="card">
                             <div class="card-header">
                                 Bảng hiển thị dữ liệu
@@ -305,34 +318,34 @@
                                             <th>Loại</th>
                                             <th>Số lượng</th>
                                             <th>Giá</th>
-                                            <th>Thấp nhất</th>
+                                            <!-- <th>Thấp nhất</th>
                                             <th>Cao nhất</th>
-                                            <th>Trung bình</th>
+                                            <th>Trung bình</th> -->
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>bánh kem size nhỏ</td>
-                                            <td>2</td>
-                                            <td>100$</td>
-                                            <td>5$</td>
-                                            <td>50$</td>
-                                            <td>50$</td>
-                                        </tr>
+                                    <tbody ng-controller="CartController">
+                                        <tbody ng-controller="CartController">
+                                            <tr ng-repeat="s in addresses">
+                                                <td>{{s.DC  }}</td>
+                                                <td>{{s.quantity}}</td>
+                                                <td>{{s.price}}$</td>
+                                            </tr>
+                                        </tbody>
                                         <tr>
                                             <td>bánh kem size to</td>
                                             <td>9</td>
                                             <td>100$</td>
-                                            <td>5$</td>
+                                            <!-- <td>5$</td>
                                             <td>50$</td>
+                                            <td>50$</td> -->
+                                        </tr>
+                                        <tr></tr>
+                                        <td>bánh kem size vừa</td>
+                                        <td>7</td>
+                                        <td>100$</td>
+                                        <!-- <td>5$</td>
                                             <td>50$</td>
-                                        </tr> <tr></tr>
-                                            <td>bánh kem size vừa</td>
-                                            <td>7</td>
-                                            <td>100$</td>
-                                            <td>5$</td>
-                                            <td>50$</td>
-                                            <td>50$</td>
+                                            <td>50$</td> -->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -340,13 +353,13 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <footer class="site-footer">
                     <div class="container">
                         <div class="row">
                             <div class="col-lg-12 col-12">
                                 <p class="copyright-text">
-                                    Copyright © Mini Finance 2048 - Design: 
+                                    Copyright © Mini Finance 2048 - Design:
                                     <a rel="sponsored" href="https://www.tooplate.com" target="_blank">Tooplate</a>
                                 </p>
                             </div>
@@ -362,6 +375,8 @@
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
     <script src="../admin/js/custom.js"></script>
+    <script src="../admin/js/revenue.js"></script>
+
 
     <script type="text/javascript">
         var options = {
@@ -442,5 +457,8 @@
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
     </script>
+    <script src="../admin/js/revenue.js"></script>
+
 </body>
+
 </html>
