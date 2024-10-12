@@ -6,6 +6,7 @@ app.controller('discountsController', function($scope, $http) {
         $http.get('http://localhost:8080/beesixcake/api/discount')
             .then(function(response) {
                 $scope.Discounts = response.data; // Lưu danh sách loại sản phẩm
+                
             }, function(error) {
                 console.log('Error fetching categories:', error);
             });

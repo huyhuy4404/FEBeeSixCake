@@ -1,70 +1,54 @@
-app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
-    $scope.products = [];
-    $scope.addresses = [];
-    $scope.account = {}; // Thêm biến để chứa thông tin người mua hàng
-    $scope.totalPrice = 0;
+var app = angular.module('myApp', []);
+app.controller('discountsController', function ($scope, $http) {
+    $scope.orderdetai = [];
+    $scope.filteredOrderDetails = []; // Biến để lưu dữ liệu đã lọc
+    $scope.searchYear = ""; // Biến để lưu giá trị tìm kiếm
 
-    // Lấy thông tin người mua hàng từ API (ví dụ)
-    $http.get('http://localhost:8080/beesixcake/api/account') // Thay đổi URL cho đúng
-        .then(function (response) {
-            $scope.account = response.data; // Giả sử dữ liệu trả về là đối tượng người mua
-        })
-        .catch(function (error) {
-            console.error('Error fetching buyer info:', error);
-        });
-
-    // Lấy dữ liệu từ API sản phẩm
-    $http.get('http://localhost:8080/beesixcake/api/productdetail')
-    .then(function (response) {
-        console.log(response.data);  // Kiểm tra dữ liệu ở đây
-        $scope.products = response.data.map(function (item) {
-            return {
-                id: item.product.category.categoryname,
-                name: item.product.productname,
-                img: item.product.img,
-                categoryName: item.product.category.categoryname,
-                sz: item.size.sizename,
-                price: item.unitprice,
-                quantity: item.quantityinstock,
-                description: item.product.description
-            };
-        });
-        console.log($scope.products);
-
-        $scope.calculateTotal();
-    })
-    .catch(function (error) {
-        console.error('Error fetching product details:', error);
-    });
-
-    // Lấy địa chỉ
-    $http.get('http://localhost:8080/beesixcake/api/address')
-        .then(function (response) {
-            $scope.addresses = response.data.map(function (item) {
-                return {
-                    phone: item.account.phonenumber,
-                    name: item.account.fullname,
-                    DC: item.city
-                };
+    // Hàm lấy dữ liệu từ API
+    $scope.getDiscounts = function () {
+        $http.get('http://localhost:8080/beesixcake/api/orderdetail')
+            .then(function (response) {
+                console.log(response.data); // Kiểm tra dữ liệu trả về
+                $scope.orderdetai = response.data.map(function (item) {
+                    var orderDate = new Date(item.order.orderdate);
+                    return {
+                        id: orderDate.getFullYear(), // Lấy năm từ orderdate
+                        name: item.productdetail.product.productname,
+                        categoryName: item.productdetail.product.category.categoryname,
+                        quantity: item.productdetail.quantityinstock,
+                        unitprice: item.productdetail.unitprice
+                    };
+                });
+                $scope.filteredOrderDetails = $scope.orderdetai; // Khởi tạo dữ liệu đã lọc
+                console.log($scope.orderdetai); // Kiểm tra dữ liệu đã chỉnh sửa
+            })
+            .catch(function (error) {
+                console.error('Error fetching product details:', error);
             });
-        })
-        .catch(function (error) {
-            console.error('Error fetching address details:', error);
-        });
+    };
 
-    // Hàm tính tổng giá
-    $scope.calculateTotal = function () {
-        $scope.totalPrice = $scope.products.reduce(function (sum, product) {
-            return sum + (product.price * product.quantity);
-        }, 0);
-        return $scope.totalPrice;
+    // Hàm kiểm tra xem mục có khớp với giá trị tìm kiếm không
+    $scope.isMatched = function (item) {
+        if (!$scope.searchYear) {
+            return true; // Nếu không có tìm kiếm, hiển thị tất cả
+        }
+        const matched = item.id.toString().includes($scope.searchYear);
+        console.log(`Kiểm tra ${item.id}: ${matched}`); // Kiểm tra kết quả
+        return matched; // Kiểm tra khớp với năm
+    };
+
+    // Hàm lọc dữ liệu theo năm
+    $scope.filterData = function () {
+        if (!$scope.searchYear) {
+            $scope.filteredOrderDetails = $scope.orderdetai; // Hiển thị tất cả nếu không có tìm kiếm
+        } else {
+            $scope.filteredOrderDetails = $scope.orderdetai.filter(function (item) {
+                return item.id.toString().includes($scope.searchYear); // Tìm kiếm theo năm
+            });
+        }
+        console.log($scope.filteredOrderDetails); // Kiểm tra kết quả lọc
     };
 
     // Gọi hàm để lấy dữ liệu
-    $scope.getCombinedData = function () {
-        // ...
-    };
-
-    // Gọi hàm để tính tổng ngay khi khởi động
-    $scope.getCombinedData();
-}]);
+    $scope.getDiscounts();
+});
