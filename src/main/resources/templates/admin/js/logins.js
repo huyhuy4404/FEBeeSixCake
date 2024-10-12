@@ -51,7 +51,7 @@ app.controller("LoginController", function ($scope, $http, $window, $timeout) {
 
               // Cập nhật giao diện
               $scope.updateAccountMenu();
-
+              
               // Chuyển hướng về trang chính ngay lập tức
               $window.location.href = "index.html"; // Hoặc sử dụng $timeout nếu cần delay
             }
