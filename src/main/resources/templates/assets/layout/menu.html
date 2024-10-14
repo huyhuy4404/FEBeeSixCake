@@ -89,3 +89,19 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+      var headerHeight = $('header').outerHeight(); // Chiều cao của header
+      var menu = $('.parent-menu'); // Chọn menu
+
+      $(window).scroll(function() {
+          if ($(this).scrollTop() > headerHeight) {
+              menu.addClass('sticky'); // Thêm class sticky khi cuộn qua header
+          } else {
+              menu.removeClass('sticky'); // Xóa class khi cuộn lên trên
+          }
+      });
+  });
+</script>
+
