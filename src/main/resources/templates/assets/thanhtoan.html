@@ -14,10 +14,76 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
+<<<<<<< HEAD
     <script src="../assets/js/account.js"></script>
+=======
+    <script src="../assets/js/thanhtoan.js"></script>
+    <style>
+      .thongTinND,
+      .thongTinSP {
+        border: 1px solid rgb(222, 226, 230);
+        border-radius: 5px;
+        padding: 15px 0 15px 15px;
+      }
+
+      .thongTinSP {
+        width: 1320px;
+        margin-left: -12px;
+      }
+
+      .titleThongTinND,
+      .titleThongTinSP {
+        font-weight: bold;
+        font-size: 22px;
+        color: #d38450;
+      }
+
+      .ten-NguoiDung,
+      .sdt-NguoiDung,
+      .thongTinDiaChi {
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .sp-ThanhToan td {
+        padding-top: 20px;
+      }
+
+      .btn-ThayDoi {
+        margin-top: 20px;
+        margin-right: 20px;
+      }
+
+      .btn-ThayDoi:hover {
+        color: white;
+        font-weight: bold;
+      }
+
+      .tong-TT {
+        line-height: 15px;
+        padding: 20px;
+        padding-left: 40px;
+        padding-right: 70px;
+      }
+
+      .tong-TT p {
+        font-size: 20px;
+      }
+
+      .tong-TT p span {
+        float: right;
+      }
+
+      .tongThanhTien {
+        font-size: 28px;
+        font-weight: bold;
+        color: red;
+      }
+    </style>
+>>>>>>> huy
   </head>
 
-  <body ng-app="myApp" ng-controller="LoginController">
+  <body ng-app="myApp">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
 
@@ -30,10 +96,16 @@
     </div>
     <div class="container mt-4">
       <div class="row mb-3">
-        <div class="col-lg-3 thongTinND">
+        <div class="col-lg-3 thongTinND" ng-controller="CheckoutController">
           <p class="titleThongTinND">Thông Tin Người Nhận</p>
-          <span class="ten-NguoiDung">User name</span> <br />
-          <span class="sdt-NguoiDung">Số điện thoại</span>
+          <p>
+            Họ tên khách hàng:<br />
+            {{fullname}}
+          </p>
+          <p>
+            Số điện thoại: <br />
+            {{phone}}
+          </p>
         </div>
         <div class="col-lg-9 thongTinND">
           <div class="row">
