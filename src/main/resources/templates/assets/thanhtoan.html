@@ -9,7 +9,8 @@
       rel="stylesheet"
       href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
     />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/thanhtoan.css" />
+    <link rel="stylesheet" href="../assets/css/thuan.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
@@ -79,7 +80,7 @@
   </head>
 
   <body ng-app="myApp">
-    <div ng-include="'layout/header.html'"></div>
+    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
     <div ng-include="'layout/menu.html'"></div>
 
     <div class="container-fluid mx-4" style="margin-top: 55px">

@@ -36,36 +36,45 @@ a {
 
 /* menu */
 .parent-menu {
-  background-color: white;
-  color: #2e1d15;
-  border-radius: 30px;
-  font-weight: bold;
-  position: fixed;
-  width: 90%;
-  font-size: 24px;
-  box-shadow: 0px 0px 6px 2px #555;
-
-}
-
-.menu div ul li a {
-  font-weight: bold;
-}
-
-.menu div div ul {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.menu-right {
-  float: right;
-  margin-right: 30px;
-}
-
-.menu-left {
-  float: left;
-  margin-left: 30px;
-}
+    background-color: white;
+    color: #2e1d15;
+    border-radius: 30px;
+    font-weight: bold;
+    position: absolute; /* Thay đổi từ fixed thành absolute */
+    width: 90%;
+    font-size: 24px;
+    box-shadow: 0px 0px 6px 2px #555;
+    transition: top 0.3s ease; /* Thêm hiệu ứng chuyển động */
+  }
+  
+  .parent-menu.sticky {
+    position: fixed; /* Đổi thành fixed khi cuộn */
+    top: 0; /* Giữ menu ở trên cùng */
+    left: 50%; /* Canh giữa menu */
+    transform: translateX(-50%); /* Điều chỉnh để trung tâm menu nằm ở giữa */
+    z-index: 1000; /* Đảm bảo menu nằm trên các thành phần khác */
+  }
+  
+  .menu div ul li a {
+    font-weight: bold;
+  }
+  
+  .menu div div ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .menu-right {
+    float: right;
+    margin-right: 30px;
+  }
+  
+  .menu-left {
+    float: left;
+    margin-left: 30px;
+  }
+  
 
 /* cart */
 .cart {
@@ -131,8 +140,8 @@ a {
 
 /* Slide */
 
-.slide{
-  z-index: -1;;
+.slide {
+  z-index: -1;
 }
 
 .carousel-control-prev:hover,
@@ -163,7 +172,6 @@ a {
 }
 
 /* Sản phẩm */
-
 .loc-sp {
   border: 1px solid rgb(222, 226, 230);
 }
@@ -257,105 +265,18 @@ a {
   font-size: 12px;
   color: #888;
 }
-/* CSS */
-/*contact page css end*/
-/* 19. login page css here */
-.account_form h2 {
-  font-size: 30px;
-  text-transform: capitalize;
-  color: #242424;
-  font-weight: 500;
-  line-height: 22px;
-  margin-bottom: 34px;
-}
-@media only screen and (max-width: 767px) {
-  .account_form h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-}
-.account_form form {
-  border: 1px solid #ddd;
-  padding: 23px 20px 29px;
-  border-radius: 5px;
-}
-.account_form label {
-  font-size: 15px;
-  font-weight: 400;
-  color: #242424;
-  cursor: pointer;
-  line-height: 12px;
-  margin-bottom: 12px;
-}
-.account_form label:hover {
-  color: #ff6a28;
-}
-.account_form input {
-  border: 1px solid #ddd;
-  height: 40px;
-  max-width: 100%;
-  padding: 0 20px;
-  background: none;
+
+.sanPham {
+  background-color: #d38450;
   width: 100%;
-}
-.account_form button {
-  background: #ff6a28;
-  border: 0;
-  color: #ffffff;
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 700;
-  height: 34px;
-  line-height: 21px;
-  padding: 5px 20px;
-  text-transform: uppercase;
-  cursor: pointer;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  margin-left: 20px;
-  border-radius: 20px;
-}
-.account_form button:hover {
-  background: #242424;
+  height: 65px;
+  margin-top: -10px;
+  font-weight: bold;
+  padding: 13px;
 }
 
-.login_submit label input[type="checkbox"] {
-  width: 15px;
-  height: 13px;
-  margin-right: 3px;
+.textSanPham {
+  color: #2e1d15;
+  text-align: left;
+  font-size: 26px;
 }
-
-.login_submit {
-  text-align: right;
-}
-.login_submit a {
-  font-size: 13px;
-  color: #ff6a28;
-  float: left;
-  line-height: 39px;
-}
-@media only screen and (max-width: 767px) {
-  .login_submit a {
-    float: none;
-    line-height: 18px;
-    display: block;
-    margin-bottom: 20px;
-  }
-}
-
-.customer_login {
-  padding-bottom: 59px;
-}
-
-.account_form p {
-  margin-bottom: 20px;
-}
-
-@media only screen and (max-width: 767px) {
-  .account_form.register {
-    margin-top: 57px;
-  }
-}
-
-
-
