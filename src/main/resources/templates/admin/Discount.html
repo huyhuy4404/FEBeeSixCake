@@ -296,87 +296,54 @@ Bootstrap 5 Dashboard Admin Template
 
                             <div class="tab-content" id="myTabContent" ng-controller="discountsController">
 
-                                <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel"
-                                    aria-labelledby="profile-tab" tabindex="0">
+                                <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                     <!-- Form sửa đổi -->
-                                    <!-- Product Name -->
                                     <form class="custom-form profile-form" action="#" method="post" role="form">
-                                        <p>ID:</p>
-                                        <input class="form-control" type="text" name="Discounts-id" id="Discounts-id"
-                                            ng-model="selecteddiscount.iddiscount" readonly>
-
-                                        <p>Mã giảm giá:</p>
-                                        <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
-                                            placeholder="Mã giảm giá"
-                                            ng-model="selecteddiscount.discountcode">
-                                            <p>Phần trăm chiếc khấu:</p>
-
-                                            <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
-                                            placeholder="Phần trăm chiếc khấu"
-                                            ng-model="selecteddiscount.discountpercentage">
-                                            <p>Ngày bắt đầu:</p>
-
-                                            <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
-                                            placeholder="Ngày bắt đầu"
-                                            ng-model="selecteddiscount.startdate">
-                                            <p>Ngày kết thúc:</p>
-
-                                            <input class="form-control" type="text" name="Discounts-name" id="Discounts-name"
-                                            placeholder="Ngày kết thúc"
-                                            ng-model="selecteddiscount.enddate">
-
-
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <p>ID:</p>
+                                                <input class="form-control" type="text" name="Discounts-id" id="Discounts-id" ng-model="selecteddiscount.iddiscount" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>Mã giảm giá:</p>
+                                                <input class="form-control" type="text" name="Discounts-name" id="Discounts-name" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <p>Phần trăm chiếc khấu:</p>
+                                                <input class="form-control" type="text" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm chiếc khấu" ng-model="selecteddiscount.discountpercentage">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>Ngày bắt đầu:</p>
+                                                <input class="form-control" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <p>Ngày kết thúc:</p>
+                                                <input class="form-control" type="date" name="Discounts-enddate" id="Discounts-enddate" ng-model="selecteddiscount.enddate">
+                                            </div>
+                                        </div>
+                                
                                         <div class="d-flex justify-content-start mt-3">
-                                            <button type="button" class="btn btn-primary me-2" id="add-btn"
-                                                ng-click="adddiscount()">
+                                            <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="adddiscount()">
                                                 <i class="fas fa-plus"></i> Thêm
                                             </button>
-                                            <button type="button" class="btn btn-warning me-2" id="edit-btn"
-                                                ng-click="editdiscount()">
+                                            <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editdiscount()">
                                                 <i class="fas fa-edit"></i> Sửa
                                             </button>
-                                            <button type="button" class="btn btn-danger me-2" id="edit-btn"
-                                            ng-click="deletediscount(category)">
-                                            <i class="fas fa-edit"></i> xóa
-                                        </button>
-                                            <!-- Xóa nút này -->
-                                            <button type="reset" class="btn btn-secondary ms-2" id="reset-btn"
-                                                ng-click="resetForm()">
+                                            <button type="button" class="btn btn-danger me-2" id="delete-btn" ng-click="deletediscount(selecteddiscount)">
+                                                <i class="fas fa-trash-alt"></i> Xóa
+                                            </button>
+                                            <button type="reset" class="btn btn-secondary ms-2" id="reset-btn" ng-click="resetForm()">
                                                 <i class="fas fa-sync-alt"></i> Làm mới
                                             </button>
                                         </div>
                                     </form>
-                                  
-
-
-                                  
-
-                                    
-
-
-                                  
-
-
-
-
-                                    <!-- Actions
-                                    <div class="col-md-12">
-                                        <button type="button" class="btn btn-primary" ng-click="addProduct()">
-                                            <i class="fas fa-plus"></i> Thêm
-                                        </button>
-                                        <button type="button" class="btn btn-info" ng-click="updateProduct()">
-                                            <i class="fas fa-edit"></i> Cập nhật
-                                        </button>
-                                        <button type="button" class="btn btn-danger"
-                                            ng-click="confirmDelete(selectedProduct.idproduct)">
-                                            <i class="fas fa-trash-alt"></i> Xóa
-                                        </button>
-                                        <button type="button" class="btn btn-warning" ng-click="loadProducts()">
-                                            <i class="fas fa-sync-alt"></i> Làm mới
-                                        </button>
-                                    </div> -->
                                 </div>
-
                                 <div class="tab-pane fade" id="password-tab-pane" role="tabpanel"
                                     aria-labelledby="password-tab" tabindex="0">
                                     <div class="table-responsive">
