@@ -1,31 +1,33 @@
-
-<header class="container-fluid parent-header" ng-app="myApp" ng-controller="LanguageController">
+<header class="container-fluid parent-header">
     <div class="row">
         <div class="col-md-6 header-left">
             <div class="Notification me-3 ps-3">
-                <a class="text-header-left" href=""><i class="bi bi-bell-fill"></i> {{ translations.notification }}</a>
+                <a class="text-header-left" href=""><i class="bi bi-bell-fill"></i> Thông
+                    báo</a>
             </div>
             <div class="love me-3">
-                <a class="text-header-left" href="#"><i class="bi bi-heart-fill"></i> {{ translations.favorite }} </a>
+                <a class="text-header-left" href="#"><i class="bi bi-heart-fill"></i> Yêu
+                    thích </a>
             </div>
             <div class="map me-3">
                 <a class="text-header-left" href="https://maps.app.goo.gl/v9WaZ4dhJUMYh8jz5"><i
-                        class="bi bi-map-fill"></i>{{ translations.mapAddress }}</a>
+                        class="bi bi-map-fill"></i> Địa chỉ trên
+                    map</a>
             </div>
             <div id="languageDropdown1" class="language nav-item dropdown">
                 <span class="text-header-left dropdown-toggle" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-                    <i class="bi bi-globe"></i> {{ currentLanguage }}
+                    <i class="bi bi-globe"></i> Tiếng Việt
                 </span>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark1">
-                    <li><a class="dropdown-item" href="#"  ng-click="changeLanguage('Tiếng Việt')" data-lang="Tiếng Việt">Tiếng Việt</a></li>
-                    <li><a class="dropdown-item" href="#" ng-click="changeLanguage('English')" data-lang="English">English</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="Tiếng Việt">Tiếng Việt</a></li>
+                    <li><a class="dropdown-item" href="#" data-lang="English">English</a></li>
                 </ul>
             </div>
         </div>
         <div class="col-md-6">
             <div class="row" style="margin-left: 100px;">
-                <div class="col-md-3"> 
+                <div class="col-md-3">
                     <div class="topContai mt-3 ms-3" style="width: 156px; height: 46px;">
                         <div class="row text-header-right">
                             <div class="col-3 ">
