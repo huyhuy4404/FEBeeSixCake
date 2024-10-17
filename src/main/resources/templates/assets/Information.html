@@ -1,91 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="../assets/css/thuan.css" />
+    <link rel="stylesheet" href="../assets/css/phat.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <link rel="stylesheet" href="assets/css/plugins.css" />
+    <script src="../assets/js/Information.js"></script>
+  </head>
+  <body ng-app="myApp" ng-controller="Controller">
+    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+    <div ng-include="'layout/menu.html'"></div>
+    <br><br>
+    <div class="container" style="margin-left: 500px;">
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="Information">
+                    <h2>Thông tin cá nhân</h2>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home</title>
-  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
-  <link rel="stylesheet" href="../assets/css/hau.css">
-  <link rel="stylesheet" href="../assets/css/thuan.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="../assets/js/angular.min.js"></script>
-  <script src="../assets/js/angular-route.js"></script>
-  <script src="../assets/js/account.js"></script>
-  <link rel="stylesheet" href="assets/css/plugins.css" />
-</head>
+                    <!-- Form cập nhật thông tin người dùng -->
+                    <form id="userProfileForm" ng-submit="updateUserProfile()">
+                        <p>
+                            <label>Họ và tên <span>*</span></label>
+                            <input type="text" ng-model="user.fullname" required />
+                        </p>
+                        <p>
+                            <label>Email <span>*</span></label>
+                            <input type="email" ng-model="user.email" required />
+                        </p>
+                        <p>
+                            <label>Số điện thoại <span>*</span></label>
+                            <input type="text" ng-model="user.phonenumber" required pattern="^\d{10,15}$"
+                                title="Số điện thoại phải từ 10 đến 15 chữ số" />
+                        </p>
+                        <p>
+                            <label>Tên đăng nhập <span>*</span></label>
+                            <input type="text" ng-model="user.idaccount" readonly />
+                        </p>
 
-<body ng-app="myApp" ng-controller="LoginController">
-  <div ng-include="'layout/header.html'"></div>
-  <div ng-include="'layout/menu.html'"></div>
+                        <!-- Khung chứa các nút -->
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Cập nhật thông tin
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" ng-click="logout()" class="btn btn-secondary btn-block">
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        </div>
+                    </form>
 
-  <div class="customer_login"></div>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-4 col-md-4"></div>
-      <div class="col-lg-4 col-md-4">
-        <div class="account_form">
-          <h2>Thông tin cá nhân</h2>
-
-          <!-- Kiểm tra nếu có người dùng đã đăng nhập -->
-          <div ng-if="isLoggedIn">
-            <form id="userProfileForm" ng-submit="updateUserProfile()">
-              <p>
-                <label>Họ và tên <span>*</span></label>
-                <input type="text" ng-model="loggedInUser.fullname" required />
-              </p>
-              <p>
-                <label>Email <span>*</span></label>
-                <input type="email" ng-model="loggedInUser.email" required />
-              </p>
-              <p>
-                <label>Số điện thoại <span>*</span></label>
-                <input type="text" ng-model="loggedInUser.phonenumber" required pattern="^\d{10,15}$"
-                  title="Số điện thoại phải từ 10 đến 15 chữ số" />
-              </p>
-              <p>
-                <label>Tên đăng nhập <span>*</span></label>
-                <input type="text" ng-model="loggedInUser.idaccount" readonly />
-              </p>
-
-              <div class="login_submit">
-                <button type="submit">Cập nhật thông tin</button>
-                <button type="button" ng-click="logout()" class="btn btn-secondary">
-                  Đăng xuất
-                </button>
-              </div>
-            </form>
-            <div ng-if="updateSuccess" class="alert alert-success mt-2">
-              Cập nhật thông tin thành công!
+                    <!-- Thông báo cập nhật thành công -->
+                    <div ng-if="updateSuccess" class="alert alert-success mt-2">
+                        Cập nhật thông tin thành công!
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- Nếu không có người dùng đăng nhập, hiển thị thông báo -->
-          <div ng-if="!isLoggedIn">
-            <p>Chưa có người dùng nào đăng nhập.</p>
-            <a href="login.html">Đăng nhập ngay</a>
-          </div>
         </div>
-      </div>
-      <div class="col-lg-4 col-md-4"></div>
     </div>
 
-    <div ng-if="isLoggedIn" class="text-center p-4 shadow-sm rounded" style="border: 1px solid #e0e0e0">
-      <h2 class="mb-3">
-        Xin chào, <strong>{{loggedInUser.idaccount}}</strong>!
-      </h2>
-      <p class="text">Bạn đã đăng nhập thành công.</p>
-      <div class="my-4">
-        <a href="DoiMatKhau.html" class="btn btn-outline-primary mx-2">Đổi mật khẩu</a>
-        <a href="forgot-password.html" class="btn btn-outline-secondary mx-2">Quên mật khẩu</a>
-      </div>
-    </div>
-  </div>
-
-  <div ng-include="'layout/footer.html'"></div>
-  <script src="../assets/js/bootstrap.bundle.js"></script>
-  </div>
+    <script src="../assets/js/bootstrap.bundle.js"></script>
 </body>
 
+  
 </html>
+<div ng-include="'layout/footer.html'"></div>
+
+    
