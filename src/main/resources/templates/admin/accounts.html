@@ -37,6 +37,23 @@ https://www.tooplate.com/view/2135-mini-finance
 Bootstrap 5 Dashboard Admin Template
 
 -->
+<style>
+    .notification {
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.notification.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+</style>
     </head>
     
     <body  >
@@ -233,7 +250,8 @@ Bootstrap 5 Dashboard Admin Template
                     <div class="title-group mb-3">
                         <h1 class="h2 mb-0">Quản Lý Người Dùng</h1>
                     </div>
-                
+                    <div class="notification" ng-if="message">{{ message }}</div>
+                    <div class="notification error" ng-if="errorMessage">{{ errorMessage }}</div>
                     <div class="row my-4">
                         <div class="col-12">
                             <div class="custom-block bg-white">
@@ -286,7 +304,7 @@ Bootstrap 5 Dashboard Admin Template
                                                     <label class="form-check-label" for="product-hide">Trạng thái</label>
                                                 </div>
                                             </div>
-                
+                                           
                                             <div class="col-md-12">
                                                 <button type="button" class="btn btn-primary" ng-click="addUser()">
                                                     <i class="fas fa-plus"></i> Thêm

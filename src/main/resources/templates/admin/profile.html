@@ -275,42 +275,44 @@
                 <div class="title-group mb-4">
                     <h1 class="h2 mb-0">Tồn Kho Theo Loại</h1>
                 </div>
-
                 <div class="row" ng-controller="discountsController">
                     <div class="col-12">
                         <div class="custom-block">
                             <div id="pie-chart"></div>
                         </div>
-
+                        
                         <div class="card">
                             <div class="card-header">
                                 Bảng hiển thị dữ liệu
                             </div>
-                           
-                            <div class="card-body" >
+                            <div class="card-body">
                                 <div class="row mb-3">
-                                    <div class="col-sm-4">
-                                        <label for="year-input">Tìm kiếm theo năm</label>
-                                        <input id="year-input" class="form-control" type="text" ng-model="searchYear" ng-change="filterData()" placeholder="Nhập năm">
+                                    <div class="col-sm-6">
+                                        <label for="start-date">Ngày Bắt Đầu</label>
+                                        <input id="start-date" class="form-control" type="date" ng-model="startDate" ng-change="filterData()">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="end-date">Ngày Kết Thúc</label>
+                                        <input id="end-date" class="form-control" type="date" ng-model="endDate" ng-change="filterData()">
                                     </div>
                                 </div>
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Năm</th>
+                                            <th>Ngày tạo</th>
                                             <th>Loại Sản Phẩm</th>
                                             <th>Số lượng</th>
                                             <th>Giá</th>
                                         </tr>
                                     </thead>
-                                    <tbody > 
-                                        <tr ng-repeat="items in orderdetai" >
-                                            <td>{{items.id}}</td>
-                                            <td>{{items.categoryName}}</td>
-                                            <td>{{items.quantity}}</td>
-                                            <td>{{items.unitprice}}</td>
+                                    <tbody>
+                                        <tr ng-repeat="item in filteredOrderDetails">
+                                            <td>{{item.date}}</td>
+                                            <td>{{item.categoryName}}</td>
+                                            <td>{{item.quantity}}</td>
+                                            <td>{{item.unitprice}}</td>
                                         </tr>
-                                        <tr ng-if="orderdetai.length === 0">
+                                        <tr ng-if="filteredOrderDetails.length === 0">
                                             <td colspan="4">Không có dữ liệu</td>
                                         </tr>
                                     </tbody>
@@ -319,7 +321,6 @@
                         </div>
                     </div>
                 </div>
-
                 <footer class="site-footer">
                     <!-- Footer omitted for brevity -->
                 </footer>
@@ -330,63 +331,8 @@
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
+    <script src="../admin/js/revenue.js"></script>
 
-    <script type="text/javascript">
-        var app = angular.module('myApp', []);
-        app.controller('discountsController', function($scope, $http) {
-            $scope.orderdetai = [];
-
-            $scope.getDiscounts = function() {
-                $http.get('http://localhost:8080/beesixcake/api/orderdetail')
-                .then(function(response) {
-                    $scope.orderdetai = response.data.map(function(item) {
-                        var orderDate = new Date(item.order.orderdate);
-                        return {
-                            id: orderDate.getFullYear(),
-                            name: item.productdetail.product.productname,
-                            img: item.productdetail.product.img,
-                            categoryName: item.productdetail.product.category.categoryname,
-                            sz: item.productdetail.size.sizename,
-                            price: item.unitprice,
-                            quantity: item.productdetail.quantityinstock,
-                            unitprice: item.productdetail.unitprice,
-                            description: item.productdetail.product.description
-                        };
-                    });
-                    $scope.renderChart(); // Vẽ biểu đồ
-                })
-                .catch(function(error) {
-                    console.error('Error fetching product details:', error);
-                });
-            };
-
-            $scope.renderChart = function() {
-                var options = {
-                    series: $scope.orderdetai.map(item => item.quantity), // Số lượng sản phẩm
-                    chart: {
-                        width: 380,
-                        type: 'pie',
-                    },
-                    labels: $scope.orderdetai.map(item => item.name), // Tên sản phẩm
-                    responsive: [{
-                        breakpoint: 480,
-                        options: {
-                            chart: {
-                                width: 200
-                            },
-                            legend: {
-                                position: 'bottom'
-                            }
-                        }
-                    }]
-                };
-
-                var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
-                chart.render();
-            };
-
-            $scope.getDiscounts(); // Gọi hàm để lấy dữ liệu
-        });
-    </script>
+ 
 </body>
 </html>

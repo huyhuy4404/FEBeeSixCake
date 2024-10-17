@@ -56,39 +56,7 @@
 
   <div class="card mb-3" style="border: none">
     <!-- Sản phẩm giảm giá -->
-    <div class="gia-soc">
-      <div class="sanPham">
-        <span class="textSanPham">Sản phẩm đang giảm giá</span>
-        <span style="float: right; font-size: 18px; padding: 8px">
-          <a href="SanPhamSaleFull.html" style="color: #fff">Xem tất cả</a>
-        </span>
-      </div>
-      <div class="section-title wow fadeInDown text-center">
-        <h3 class="mt-3 mb-2">CƠ HỘI NGỌT NGÀO, SĂN BÁNH GIÁ SỐC!</h3>
-      </div>
-      <div class="row py-4" style="justify-content: center; margin: 0 11%;"ng-repeat="item in DiscountedProducts">
-        <div class="col-lg-3" ng-repeat="item in DiscountedProducts">
-          <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
-            <div class="box-images">
-              <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
-                <img ng-src="../assets/img/{{item.img}}" style="width: 100%; height: auto;">
-              </a>
-            </div>
-            <div class="box-content">
-              <h3>
-                <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}" class="tenTheSP">{{item.productname}}</a>
-              </h3>
-              <div>
-                <span class="original-price" ng-if="item.discount > 0" style="text-decoration: line-through;">
-                  {{item.unitprice}}₫
-                </span>
-                <span class="discounted-price">{{item.discountedPrice}}₫</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+ 
   
     <!-- Sản phẩm mới -->
     <div class="gia-soc">
@@ -106,7 +74,7 @@
           <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
             <div class="box-images">
               <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
-                <img ng-src="../assets/img/{{item.img}}" style="width: 100%; height: auto;">
+                <img width="187px" height="208.875px" ng-src="{{item.img}}" alt="{{item.productname}}" class="img-responsive lazy" />
               </a>
             </div>
             <div class="box-content">
