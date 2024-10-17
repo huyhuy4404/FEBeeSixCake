@@ -23,7 +23,7 @@ app.controller('discountsController', function($scope, $http) {
 
         $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
             .then(function(response) {
-                alert('Thêm loại sản phẩm thành công!');
+                alert('Thêm loại khuyến mãi thành công!');
                 $scope.getDiscounts(); // Tải lại danh sách sau khi thêm
                 $scope.resetForm(); // Làm mới form
             }, function(error) {
@@ -42,7 +42,7 @@ app.controller('discountsController', function($scope, $http) {
 
         $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
             .then(function(response) {
-                alert('Sửa loại sản phẩm thành công!');
+                alert('Sửa loại khuyến mãi thành công!');
                 $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
                 $scope.resetForm(); // Làm mới form
             }, function(error) {
@@ -54,7 +54,7 @@ app.controller('discountsController', function($scope, $http) {
         if (confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?')) {
             $http.delete('http://localhost:8080/beesixcake/api/discount/' + discount.iddiscount)
                 .then(function(response) {
-                    alert('Xóa loại sản phẩm thành công!');
+                    alert('Xóa loại khuyến mãi thành công!');
                     $scope.getDiscounts(); // Tải lại danh sách sau khi xóa
                 }, function(error) {
                     console.log('Error deleting category:', error);
