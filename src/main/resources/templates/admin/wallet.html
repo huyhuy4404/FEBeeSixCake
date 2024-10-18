@@ -471,18 +471,26 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="detail in order.details">
+                                                <!-- Hình ảnh sản phẩm -->
                                                 <td class="table-cell">
-                                                    <img ng-src="{{detail.product.imageUrl}}"
+                                                    <img ng-src="{{detail.product.img}}"
                                                         alt="{{detail.product.name}}" class="product-image">
                                                 </td>
-                                                <td class="table-cell">{{detail.product.name}}</td>
+                                                <!-- Tên sản phẩm -->
+                                                <td class="table-cell">{{detail.product.productname}}</td>
+                                                <!-- Số lượng -->
                                                 <td class="table-cell">{{detail.quantity}}</td>
-                                                <td class="table-cell">{{detail.size}}</td>
-                                                <td class="table-cell">{{detail.price | currency}}</td>
+                                                <!-- Kích thước (Hiển thị chỉ tên kích thước) -->
+                                                <td class="table-cell">{{detail.size.sizename}}</td>
+                                                <!-- Giá sản phẩm -->
+                                                <td class="table-cell">{{detail.productdetail.unitprice | currency}}</td>
+                                                <!-- Phí vận chuyển (shippingFee) -->
                                                 <td class="table-cell">{{order.shippingFee | currency}}</td>
+                                                <!-- Giảm giá (discount) -->
                                                 <td class="table-cell">{{detail.discount | currency}}</td>
                                             </tr>
                                         </tbody>
+                                        
                                     </table>
                                 </div>
                                 <div class="modal-footer">
