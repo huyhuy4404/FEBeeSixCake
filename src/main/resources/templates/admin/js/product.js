@@ -80,7 +80,7 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
     };
 
     // Hàm thêm sản phẩm
-    // Hàm thêm sản phẩm
+
     $scope.addProduct = function () {
         var fd = new FormData();
 
@@ -125,7 +125,6 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
     };
 
 
-    // Edit product
     $scope.editProduct = function (product) {
         // Sao chép dữ liệu của sản phẩm đã chọn
         $scope.selectedProduct = angular.copy(product);
@@ -168,7 +167,11 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
     
         // Kích hoạt chế độ chỉnh sửa
         $scope.isEditMode = true;
+    
+        // Chuyển hướng sang trang khác để chỉnh sửa sản phẩm
+        $location.path('/edit-product/' + $scope.selectedProduct.idproduct);
     };
+    
     
     // Trong hàm updateProduct
     $scope.updateProduct = function () {
@@ -225,24 +228,38 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
 
 
     // Delete product
-    $scope.confirmDelete = function (id) {
-        // Xác nhận xóa sản phẩm
-        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-            // Gửi yêu cầu xóa đến API
-            $http.delete('http://localhost:8080/beesixcake/api/productdetail/' + id)
-                .then(function (response) {
-                    // Nếu thành công, tải lại danh sách sản phẩm
-                    $scope.loadProducts();
-                    $scope.message = "Xóa sản phẩm thành công!";
-                    $scope.messageType = 'success';
-                }, function (error) {
-                    // Nếu thất bại, hiển thị thông báo lỗi
-                    console.error('Error deleting product:', error);
-                    $scope.message = "Xóa sản phẩm thất bại. Vui lòng thử lại.";
-                    $scope.messageType = 'error';
-                });
-        }
-    };
+// Hàm xóa sản phẩm
+$scope.deleteProduct = function (idproduct) {
+    if (!idproduct) {
+        console.error("Không tìm thấy idproduct, không thể xóa.");
+        return;
+    }
+
+    // Hiển thị cảnh báo để xác nhận người dùng trước khi xóa
+    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+        // Gửi yêu cầu xóa chi tiết sản phẩm trước
+        $http.delete('http://localhost:8080/beesixcake/api/productdetail/' + $scope.selectedProduct.productDetailId)
+            .then(function (response) {
+                console.log("Chi tiết sản phẩm đã được xóa thành công:", response.data);
+
+                // Sau khi xóa chi tiết sản phẩm, xóa sản phẩm
+                return $http.delete('http://localhost:8080/beesixcake/api/product/' + idproduct);
+            })
+            .then(function (response) {
+                console.log("Sản phẩm đã được xóa thành công:", response.data);
+                $scope.loadProducts(); // Tải lại danh sách sản phẩm
+                $scope.selectedProduct = {}; // Đặt lại form
+                $scope.message = "Sản phẩm và chi tiết sản phẩm đã được xóa thành công!";
+                $scope.messageType = 'success';
+                $scope.isEditMode = false; // Thoát khỏi chế độ chỉnh sửa
+            })
+            .catch(function (error) {
+                console.error('Lỗi khi xóa sản phẩm hoặc chi tiết sản phẩm:', error);
+                $scope.message = "Xóa sản phẩm hoặc chi tiết sản phẩm thất bại. Vui lòng thử lại.";
+                $scope.messageType = 'error';
+            });
+    }
+};
 
     // Initial load
     $scope.loadProducts();
