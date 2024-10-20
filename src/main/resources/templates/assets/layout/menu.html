@@ -20,14 +20,14 @@
                   Sản Phẩm
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
-                  <li ng-repeat="item in DiscountedProducts">
-                      <a class="dropdown-item" ng-href="SanPham.html#/{{item.idcategory}}"
-                          ng-click="getProductsByCategory(item.idcategory)">
-                          {{item.category}}
+                  <li ng-repeat="item in Products">
+                      <a class="dropdown-item" ng-click="filterProducts(item.categoryname)" ng-href="SanPham.html#/{{item.idcategory}}">
+                          {{item.categoryname}}
                       </a>
                   </li>
               </ul>
           </div>
+      </li>
       </li>
       </ul>
 

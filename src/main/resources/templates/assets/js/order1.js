@@ -5,7 +5,7 @@ app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
     $scope.totalPrice = 0;
 
     // Hàm định dạng tiền tệ
-   
+
     $scope.formatCurrency = function (amount) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
@@ -33,7 +33,7 @@ app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
                     description: item.product.description // Mô tả sản phẩm
                 };
             });
-            
+
             $scope.calculateTotal(); // Tính tổng giá sau khi lấy sản phẩm
         })
         .catch(function (error) {
@@ -67,7 +67,14 @@ app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
     $scope.getCombinedData = function () {
         // Chưa có nội dung, có thể sử dụng để gọi API khác nếu cần
     };
-
+     $scope.goToProduct = function (productId) {
+    if (productId) {
+      var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
+      window.location.href = url;
+    } else {
+      console.log("Product ID is not valid.");
+    }
+  };
     // Gọi hàm để tính tổng ngay khi khởi động
     $scope.getCombinedData();
 }]);

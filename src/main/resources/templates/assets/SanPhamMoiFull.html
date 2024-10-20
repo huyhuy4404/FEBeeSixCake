@@ -61,35 +61,33 @@
     <!-- Sản phẩm mới -->
     <div class="gia-soc">
       <div class="sanPham">
-        <span class="textSanPham">Sản phẩm mới</span>
-        <span style="float: right; font-size: 18px; padding: 8px">
-          <a href="SanPhamMoiFull.html" style="color: #fff">Xem tất cả</a>
-        </span>
+          <span class="textSanPham">Sản phẩm mới</span>
+          <span style="float: right; font-size: 18px; padding: 8px">
+              <a href="SanPhamMoiFull.html" style="color: #fff">Xem tất cả</a>
+          </span>
       </div>
-      <div class="section-title wow fadeInDown text-center">
-        <h3 class="mt-3 mb-2">KHÁM PHÁ HƯƠNG VỊ MỚI, THƯỞNG THỨC MẪU BÁNH ĐỘC ĐÁO</h3>
+      <div class="row py-2" style="justify-content: center; margin: 0 5%; margin-top: 30px;">
+          <h4>Tất cả sản phẩm:</h4>
+          <div class="col-lg-3" style="margin-top: 30px;" ng-repeat="item in Products | limitTo: 20 track by item.idproduct">
+              <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
+                  <div class="box-images">
+                      <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
+                          <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: auto;">
+                      </a>
+                  </div>
+                  <div class="box-content">
+                      <h3>
+                          <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}"
+                             class="tenTheSP">{{item.productname}}</a>
+                      </h3>
+                      <div>
+                          <span class="price">{{ formatCurrency(item.unitprice) }}</span> <!-- Định dạng giá sản phẩm -->
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-      <div class="row py-2" style="justify-content: center; margin: 0 11%;">
-        <h4>Tất cả sản phẩm:</h4>
-        <div class="col-lg-3" ng-repeat="item in Products | limitTo: 8 track by item.idproduct"> <!-- Sử dụng limitTo -->
-            <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
-                <div class="box-images">
-                    <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
-                        <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: auto;">
-                    </a>
-                </div>
-                <div class="box-content">
-                    <h3>
-                        <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}"
-                           class="tenTheSP">{{item.productname}}</a>
-                    </h3>
-                    <div>
-                        <span class="price">{{item.unitprice}}₫</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
   </div>
   <div ng-include="'layout/footer.html'"></div>
   <script src="../assets/js/bootstrap.bundle.js"></script>

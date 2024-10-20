@@ -10,44 +10,65 @@ app.controller("discountsController", function ($scope, $http) {
   // Lấy dữ liệu từ hai API và kết hợp chúng
   $scope.getProducts = function () {
     $http.get('http://localhost:8080/beesixcake/api/productdetail')
-        .then(function (response) {
-            // Kiểm tra dữ liệu từ API
-            console.log('Product Detail Response:', response.data);
-            
-            // Kiểm tra xem dữ liệu có hợp lệ không
-            if (!Array.isArray(response.data)) {
-                console.error("Dữ liệu không phải mảng!");
-                return;
-            }
+      .then(function (response) {
+        // Kiểm tra dữ liệu từ API
+        console.log('Product Detail Response:', response.data);
 
-            // Lưu tất cả sản phẩm
-            $scope.Products = response.data.map(item => ({
-                idproduct: item.product.idproduct,
-                productname: item.product.productname,
-                img: item.product.img,
-                unitprice: item.unitprice,
-                isactive: item.product.isactive // Lưu trạng thái isactive
-            }));
+        // Kiểm tra xem dữ liệu có hợp lệ không
+        if (!Array.isArray(response.data)) {
+          console.error("Dữ liệu không phải mảng!");
+          return;
+        }
 
-            // Lưu sản phẩm có isactive là true
-            $scope.ActiveProducts = $scope.Products.filter(item => item.isactive);
+        // Lưu tất cả sản phẩm
+        $scope.Products = response.data.map(item => ({
+          idproduct: item.product.idproduct,
+          productname: item.product.productname,
+          img: item.product.img,
+          unitprice: item.unitprice,
+          isactive: item.product.isactive, // Lưu trạng thái isactive
+          categoryname: item.product.category.categoryname
+        }));
 
-            // Kiểm tra sản phẩm
-            console.log('All Products:', $scope.Products);
-            console.log('Active Products:', $scope.ActiveProducts);
-        })
-        .catch(function (error) {
-            console.error("Error fetching data:", error);
-        });
+        // Lưu sản phẩm có isactive là true
+        $scope.ActiveProducts = $scope.Products.filter(item => item.isactive);
+
+        // Kiểm tra sản phẩm
+        console.log('All Products:', $scope.Products);
+        console.log('Active Products:', $scope.ActiveProducts);
+      })
+      .catch(function (error) {
+        console.error("Error fetching data:", error);
+      });
+  };
+  $scope.formatCurrency = function (amount) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
+  // Hàm lọc sản phẩm theo tên loại
+  $scope.filterProducts = function (categoryName, startingLetter) {
+    if (categoryName === 'Bánh') {
+        // Lọc các sản phẩm có categoryname chứa 'Bánh' và productname bắt đầu bằng ký tự cụ thể
+        $scope.FilteredProducts = $scope.ActiveProducts.filter(product =>
+            product.categoryname.includes("Bánh") && product.productname.startsWith(startingLetter)
+        );
+    } else {
+        // Nếu không phải loại 'Bánh', lọc theo tên loại đã chọn
+        $scope.FilteredProducts = $scope.ActiveProducts.filter(product => product.categoryname === categoryName);
+    }
+
+    // Kiểm tra danh sách sản phẩm đã lọc
+    console.log('Filtered Products:', $scope.FilteredProducts);
+};
+  
+
   // Hàm chuyển hướng đến trang chi tiết sản phẩm
   $scope.goToProduct = function (productId) {
-      if (productId) {
-          var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
-          window.location.href = url;
-      } else {
-          console.log("Product ID is not valid.");
-      }
+    if (productId) {
+      var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
+      window.location.href = url;
+    } else {
+      console.log("Product ID is not valid.");
+    }
   };
 
   // Gọi hàm để lấy dữ liệu
@@ -77,6 +98,42 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
     $scope.isLoggedIn = !!localStorage.getItem("loggedInUser");
   };
 
+  $scope.changePassword = function () {
+    // Reset thông báo lỗi và thành công
+    $scope.changePasswordError = "";
+    $scope.changePasswordSuccess = "";
+
+    // Kiểm tra mật khẩu hiện tại
+    if ($scope.user.currentPassword !== $scope.loggedInUser.password) {
+      $scope.changePasswordError = "Mật khẩu hiện tại không đúng!";
+      return;
+    }
+
+    // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+    if ($scope.user.newPassword !== $scope.user.confirmPassword) {
+      $scope.changePasswordError = "Mật khẩu mới và xác nhận mật khẩu không khớp!";
+      return;
+    }
+
+    // Gửi yêu cầu PUT để cập nhật mật khẩu
+    var updatedAccount = {
+      ...$scope.loggedInUser,
+      password: $scope.user.newPassword // Cập nhật mật khẩu mới
+    };
+
+    $http.put("http://localhost:8080/beesixcake/api/account/" + updatedAccount.idaccount, updatedAccount)
+      .then(function (response) {
+        // Cập nhật thông tin trong localStorage
+        localStorage.setItem("loggedInUser", JSON.stringify(updatedAccount));
+        $scope.changePasswordSuccess = "Đổi mật khẩu thành công!";
+        $scope.loggedInUser.password = $scope.user.newPassword; // Cập nhật mật khẩu trong phiên làm việc
+      })
+      .catch(function (error) {
+        // Xử lý lỗi từ API
+        $scope.changePasswordError = "Lỗi khi cập nhật mật khẩu. Vui lòng thử lại.";
+        console.error("Error:", error);
+      });
+  };
   // Phương thức đăng nhập
   $scope.login = function () {
     if (!$scope.isLoggedIn) {
