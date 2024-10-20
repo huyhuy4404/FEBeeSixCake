@@ -4,62 +4,54 @@ app.controller("discountsController", function ($scope, $http) {
   // Khởi tạo mảng để chứa sản phẩm
   $scope.Products = [];
   $scope.CartItems = [];
-  $scope.DiscountedProducts = []; // Mảng để chứa sản phẩm đang giảm giá
-  $scope.NewProducts = []; // Mảng để chứa sản phẩm mới
+  $scope.DiscountedProducts = [];
+  $scope.NewProducts = [];
 
   // Lấy dữ liệu từ hai API và kết hợp chúng
-  $scope.getCombinedData = function () {
-    var productsApi = $http.get('http://localhost:8080/beesixcake/api/orderdetail');
-    var cartItemsApi = $http.get('http://localhost:8080/beesixcake/api/productdetail');
+  $scope.getProducts = function () {
+    $http.get('http://localhost:8080/beesixcake/api/productdetail')
+        .then(function (response) {
+            // Kiểm tra dữ liệu từ API
+            console.log('Product Detail Response:', response.data);
+            
+            // Kiểm tra xem dữ liệu có hợp lệ không
+            if (!Array.isArray(response.data)) {
+                console.error("Dữ liệu không phải mảng!");
+                return;
+            }
 
-    // Sử dụng Promise.all để gọi đồng thời và kết hợp dữ liệu
-    Promise.all([productsApi, cartItemsApi])
-    .then(function (responses) {
-        var productsData = responses[0].data.map(item => {
-            var originalPrice = item.productdetail.unitprice; // Lưu giá gốc
-            var discountAmount = item.order.discount ? item.order.discount.discountpercentage : 0;
-            var discountedPrice = originalPrice - (originalPrice * (discountAmount / 100)); // Tính giá đã giảm
+            // Lưu tất cả sản phẩm
+            $scope.Products = response.data.map(item => ({
+                idproduct: item.product.idproduct,
+                productname: item.product.productname,
+                img: item.product.img,
+                unitprice: item.unitprice,
+                isactive: item.product.isactive // Lưu trạng thái isactive
+            }));
 
-            return {
-                ...item.productdetail.product,
-                unitprice: originalPrice,
-                discount: discountAmount,
-                discountedPrice: discountedPrice, // Thêm giá đã giảm
-                img: item.productdetail.product.img,
-                category: item.productdetail.product.category ? item.productdetail.product.category.categoryname : 'Chưa xác định',
-                isactive: item.productdetail.product.isactive // Thêm thuộc tính isactive
-            };
+            // Lưu sản phẩm có isactive là true
+            $scope.ActiveProducts = $scope.Products.filter(item => item.isactive);
+
+            // Kiểm tra sản phẩm
+            console.log('All Products:', $scope.Products);
+            console.log('Active Products:', $scope.ActiveProducts);
+        })
+        .catch(function (error) {
+            console.error("Error fetching data:", error);
         });
-
-        // Lọc sản phẩm đang giảm giá và có isactive là true
-        $scope.DiscountedProducts = productsData.filter(product => product.discount > 0 && product.isactive);
-        
-        // Lọc sản phẩm mới (giả sử có thuộc tính isNew) và có isactive là true
-        $scope.NewProducts = productsData.filter(product =>  product.isactive);
-           // Lưu tất cả sản phẩm vào mảng
-          // Lưu tất cả sản phẩm vào mảng
-        $scope.Products = productsData.filter(product => product.isactive); // Sản phẩm đang hoạt động
-        // Cập nhật view
-        $scope.$apply(); // Cập nhật view
-        
-    }).catch(function (error) {
-        console.error("Error fetching data:", error);
-    });
 };
-
   // Hàm chuyển hướng đến trang chi tiết sản phẩm
   $scope.goToProduct = function (productId) {
-    if (productId) {
-      // Kiểm tra productId
-      var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
-      window.location.href = url;
-    } else {
-      console.log("Product ID is not valid.");
-    }
+      if (productId) {
+          var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
+          window.location.href = url;
+      } else {
+          console.log("Product ID is not valid.");
+      }
   };
 
   // Gọi hàm để lấy dữ liệu
-  $scope.getCombinedData();
+  $scope.getProducts();
 });
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {

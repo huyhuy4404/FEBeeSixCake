@@ -298,7 +298,7 @@ Bootstrap 5 Dashboard Admin Template
 
                                 <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                     <!-- Form sửa đổi -->
-                                    <form class="custom-form profile-form" action="#" method="post" role="form">
+                                    <form name="discountForm" class="custom-form profile-form" novalidate>
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>ID:</p>
@@ -306,33 +306,52 @@ Bootstrap 5 Dashboard Admin Template
                                             </div>
                                             <div class="col-md-6">
                                                 <p>Mã giảm giá:</p>
-                                                <input class="form-control" type="text" name="Discounts-name" id="Discounts-name" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode">
+                                                <input class="form-control" type="text" name="Discounts-code" id="Discounts-code" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode" required>
+                                                <div ng-show="discountForm['Discounts-code'].$touched && discountForm['Discounts-code'].$invalid" class="text-danger">
+                                                    Mã giảm giá là bắt buộc.
+                                                </div>
                                             </div>
                                         </div>
-                                        
+                            
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <p>Phần trăm chiếc khấu:</p>
-                                                <input class="form-control" type="text" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm chiếc khấu" ng-model="selecteddiscount.discountpercentage">
+                                                <p>Phần trăm giảm giá:</p>
+                                                <input class="form-control" type="number" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm chiết khấu" ng-model="selecteddiscount.discountpercentage" min="0" max="100" required>
+                                                <div ng-show="discountForm['Discounts-percentage'].$touched && discountForm['Discounts-percentage'].$invalid" class="text-danger">
+                                                    Phần trăm chiết khấu là bắt buộc và phải từ 0 đến 100.
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <p>Ngày bắt đầu:</p>
-                                                <input class="form-control" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate">
+                                                <input class="form-control" type="" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate" required>
+                                                <div ng-show="discountForm['Discounts-startdate'].$touched && discountForm['Discounts-startdate'].$invalid" class="text-danger">
+                                                    Ngày bắt đầu là bắt buộc.
+                                                </div>
                                             </div>
                                         </div>
-                                        
+                            
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Ngày kết thúc:</p>
-                                                <input class="form-control" type="date" name="Discounts-enddate" id="Discounts-enddate" ng-model="selecteddiscount.enddate">
+                                                <input class="form-control" type="" name="Discounts-enddate" id="Discounts-enddate" ng-model="selecteddiscount.enddate" required>
+                                                <div ng-show="discountForm['Discounts-enddate'].$touched && discountForm['Discounts-enddate'].$invalid" class="text-danger">
+                                                    Ngày kết thúc là bắt buộc.
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>Giá thấp nhất:</p>
+                                                <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Giá thấp nhất" required>
+                                                <div ng-show="discountForm['lowestPrice'].$touched && discountForm['lowestPrice'].$invalid" class="text-danger">
+                                                    Giá thấp nhất là bắt buộc.
+                                                </div>
                                             </div>
                                         </div>
-                                
+                            
                                         <div class="d-flex justify-content-start mt-3">
-                                            <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="adddiscount()">
+                                            <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="adddiscount()" ng-disabled="discountForm.$invalid">
                                                 <i class="fas fa-plus"></i> Thêm
                                             </button>
-                                            <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editdiscount()">
+                                            <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editdiscount()" ng-disabled="discountForm.$invalid">
                                                 <i class="fas fa-edit"></i> Sửa
                                             </button>
                                             <button type="button" class="btn btn-danger me-2" id="delete-btn" ng-click="deletediscount(selecteddiscount)">
@@ -344,8 +363,8 @@ Bootstrap 5 Dashboard Admin Template
                                         </div>
                                     </form>
                                 </div>
-                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel"
-                                    aria-labelledby="password-tab" tabindex="0">
+                            
+                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
                                     <div class="table-responsive">
                                         <table class="account-table table">
                                             <thead>
@@ -355,6 +374,7 @@ Bootstrap 5 Dashboard Admin Template
                                                     <th>Phần trăm chiết khấu</th>
                                                     <th>Ngày bắt đầu</th>
                                                     <th>Ngày kết thúc</th>
+                                                    <th>Giá thấp nhất</th>
                                                     <th class="text-end">Actions</th>
                                                 </tr>
                                             </thead>
@@ -365,11 +385,10 @@ Bootstrap 5 Dashboard Admin Template
                                                     <td>{{category.discountpercentage}}</td>
                                                     <td>{{category.startdate}}</td>
                                                     <td>{{category.enddate}}</td>
+                                                    <td>{{category.lowestprice}}</td>
                                                     <td class="text-end">
-                                                        <button class="btn btn-sm btn-warning"
-                                                            ng-click="goToEdit(category)">Edit</button>
-                                                        <button class="btn btn-sm btn-danger"
-                                                            ng-click="deletediscount(category)">Delete</button>
+                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Edit</button>
+                                                        <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Delete</button>
                                                     </td>
                                                 </tr>
                                             </tbody>

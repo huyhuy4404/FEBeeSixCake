@@ -18,12 +18,13 @@ app.controller('discountsController', function($scope, $http) {
             discountcode: $scope.selecteddiscount.discountcode,
             discountpercentage: $scope.selecteddiscount.discountpercentage,
             startdate: $scope.selecteddiscount.startdate,
-            enddate: $scope.selecteddiscount.enddate
+            enddate: $scope.selecteddiscount.enddate,
+            lowestprice: $scope.selecteddiscount.lowestprice // Thêm giá thấp nhất
         };
 
         $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
             .then(function(response) {
-                alert('Thêm loại khuyến mãi thành công!');
+                alert('Thêm  khuyến mãi thành công!');
                 $scope.getDiscounts(); // Tải lại danh sách sau khi thêm
                 $scope.resetForm(); // Làm mới form
             }, function(error) {
@@ -37,12 +38,14 @@ app.controller('discountsController', function($scope, $http) {
             discountcode: $scope.selecteddiscount.discountcode,
             discountpercentage: $scope.selecteddiscount.discountpercentage,
             startdate: $scope.selecteddiscount.startdate,
-            enddate: $scope.selecteddiscount.enddate
+            enddate: $scope.selecteddiscount.enddate,
+            lowestprice: $scope.selecteddiscount.lowestprice // Thêm giá thấp nhất
+
         };
 
         $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
             .then(function(response) {
-                alert('Sửa loại khuyến mãi thành công!');
+                alert('Sửa  khuyến mãi thành công!');
                 $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
                 $scope.resetForm(); // Làm mới form
             }, function(error) {
@@ -51,10 +54,10 @@ app.controller('discountsController', function($scope, $http) {
     };
 
     $scope.deletediscount = function(discount) {
-        if (confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này?')) {
+        if (confirm('Bạn có chắc chắn muốn xóa khuyến mãi  này?')) {
             $http.delete('http://localhost:8080/beesixcake/api/discount/' + discount.iddiscount)
                 .then(function(response) {
-                    alert('Xóa loại khuyến mãi thành công!');
+                    alert('Xóa  khuyến mãi thành công!');
                     $scope.getDiscounts(); // Tải lại danh sách sau khi xóa
                 }, function(error) {
                     console.log('Error deleting category:', error);

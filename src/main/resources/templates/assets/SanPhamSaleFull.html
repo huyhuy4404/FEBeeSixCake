@@ -67,26 +67,26 @@
         <h3 class="mt-3 mb-2">CƠ HỘI NGỌT NGÀO, SĂN BÁNH GIÁ SỐC!</h3>
       </div>
       <div class="row py-4" style="justify-content: center; margin: 0 11%;">
-        <div class="col-lg-3" ng-repeat="item in DiscountedProducts">
-          <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
-            <div class="box-images">
-              <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
-                <img width="187px" height="208.875px" ng-src="{{item.img}}" alt="{{item.productname}}" class="img-responsive lazy" />
-              </a>
-            </div>
-            <div class="box-content">
-              <h3>
-                <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}" class="tenTheSP">{{item.productname}}</a>
-              </h3>
-              <div>
-                <span class="original-price" ng-if="item.discount > 0" style="text-decoration: line-through;">
-                  {{item.unitprice}}₫
-                </span>
-                <span class="discounted-price">{{item.discountedPrice}}₫</span>
+        <div class="row py-4" style="justify-content: center; margin: 0 11%;">
+          <h4>Tất cả sản phẩm:</h4>
+          <div class="col-lg-3" ng-repeat="item in Products | limitTo: 4 track by item.idproduct"> <!-- Sử dụng limitTo -->
+              <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
+                  <div class="box-images">
+                      <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
+                          <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: auto;">
+                      </a>
+                  </div>
+                  <div class="box-content">
+                      <h3>
+                          <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}"
+                             class="tenTheSP">{{item.productname}}</a>
+                      </h3>
+                      <div>
+                          <span class="price">{{item.unitprice}}₫</span>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
       </div>
     </div>
   
