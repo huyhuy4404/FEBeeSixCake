@@ -74,8 +74,34 @@ a {
     float: left;
     margin-left: 30px;
   }
-  
 
+  
+  /* footer */
+  footer{
+    padding-right: 30px; 
+    padding-left: 50px;
+    background-color: #f8f9fa;
+  }
+
+  footer div div .list-unstyled{
+    padding-left: 20px ;
+  }
+
+  .pt-title{
+    font-size: 22px;
+    color: #d38450;
+    padding-top: 10px;
+    font-weight: bold;
+  }
+
+  .ft-icon{
+    margin-bottom: 10px;
+  }
+
+  .ft-icon i{
+    font-size: 16px;
+    color: #d38450;
+  }
 /* cart */
 .cart {
   font-size: 1.5rem;
