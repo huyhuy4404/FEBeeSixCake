@@ -1,13 +1,18 @@
 app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
     $scope.products = [];
     $scope.addresses = [];
-    $scope.account = {}; // Thêm biến để chứa thông tin người mua hàng
+    $scope.account = {}; // Thông tin người mua hàng
     $scope.totalPrice = 0;
 
-    // Lấy thông tin người mua hàng từ API (ví dụ)
+    // Hàm định dạng tiền tệ
+
+    $scope.formatCurrency = function (amount) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
+    // Lấy thông tin người mua hàng từ API
     $http.get('http://localhost:8080/beesixcake/api/account') // Thay đổi URL cho đúng
         .then(function (response) {
-            $scope.account = response.data; // Giả sử dữ liệu trả về là đối tượng người mua
+            $scope.account = response.data; // Dữ liệu trả về là đối tượng người mua
         })
         .catch(function (error) {
             console.error('Error fetching buyer info:', error);
@@ -18,17 +23,18 @@ app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
         .then(function (response) {
             $scope.products = response.data.map(function (item) {
                 return {
-                    id: item.product.categoryname,
-                    name: item.product.productname,
-                    img: item.product.img,
-                    categoryName: item.product.category.categoryname,
-                    sz: item.size.sizename,
-                    price: item.unitprice,
-                    quantity: item.quantityinstock,
-                    description: item.product.description
+                    id: item.product.idproduct, // ID sản phẩm
+                    name: item.product.productname, // Tên sản phẩm
+                    img: item.product.img, // Hình ảnh sản phẩm
+                    categoryName: item.product.category.categoryname, // Tên loại sản phẩm
+                    sz: item.size.sizename, // Kích cỡ
+                    price: item.unitprice, // Giá sản phẩm
+                    quantity: item.quantityinstock, // Số lượng trong kho
+                    description: item.product.description // Mô tả sản phẩm
                 };
             });
-            $scope.calculateTotal();
+
+            $scope.calculateTotal(); // Tính tổng giá sau khi lấy sản phẩm
         })
         .catch(function (error) {
             console.error('Error fetching product details:', error);
@@ -39,9 +45,9 @@ app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
         .then(function (response) {
             $scope.addresses = response.data.map(function (item) {
                 return {
-                    phone: item.account.phonenumber,
-                    name: item.account.fullname,
-                    DC: item.city
+                    phone: item.account.phonenumber, // Số điện thoại
+                    name: item.account.fullname, // Tên người nhận
+                    DC: item.city // Địa chỉ
                 };
             });
         })
@@ -52,16 +58,23 @@ app.controller('CartController', ['$scope', '$http', function ($scope, $http) {
     // Hàm tính tổng giá
     $scope.calculateTotal = function () {
         $scope.totalPrice = $scope.products.reduce(function (sum, product) {
-            return sum + (product.price * product.quantity);
+            return sum + (product.price * product.quantity); // Tính tổng giá
         }, 0);
         return $scope.totalPrice;
     };
 
     // Gọi hàm để lấy dữ liệu
     $scope.getCombinedData = function () {
-        // ...
+        // Chưa có nội dung, có thể sử dụng để gọi API khác nếu cần
     };
-
+     $scope.goToProduct = function (productId) {
+    if (productId) {
+      var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
+      window.location.href = url;
+    } else {
+      console.log("Product ID is not valid.");
+    }
+  };
     // Gọi hàm để tính tổng ngay khi khởi động
     $scope.getCombinedData();
 }]);

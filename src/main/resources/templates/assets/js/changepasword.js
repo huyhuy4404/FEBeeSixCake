@@ -32,7 +32,7 @@ app.controller('ChangePasswordController', function($scope, $http, $window) {
                 alert('Đổi mật khẩu thành công!');
                 $scope.user.password = $scope.user.newPassword; // Lưu lại mật khẩu mới
                 localStorage.setItem('loggedInUser', JSON.stringify($scope.user));
-                $window.location.href = 'DangNhap.html'; // Chuyển đến trang đăng nhập
+                $window.location.href = 'login.html'; // Chuyển đến trang đăng nhập
             }).catch(function(error) {
                 // Xử lý khi đổi mật khẩu thất bại
                 console.error('Lỗi:', error);
