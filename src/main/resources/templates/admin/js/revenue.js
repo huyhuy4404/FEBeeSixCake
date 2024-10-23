@@ -1,10 +1,12 @@
 var app = angular.module('myApp', []);
+
 app.controller('discountsController', function($scope, $http) {
     $scope.orderdetai = [];
     $scope.filteredOrderDetails = []; // Biến để lưu dữ liệu đã lọc
     $scope.startDate = null; // Ngày bắt đầu
     $scope.endDate = null; // Ngày kết thúc
 
+    // Hàm lấy dữ liệu giảm giá
     $scope.getDiscounts = function() {
         $http.get('http://localhost:8080/beesixcake/api/orderdetail')
         .then(function(response) {
@@ -31,6 +33,7 @@ app.controller('discountsController', function($scope, $http) {
         });
     };
 
+    // Hàm lọc dữ liệu theo ngày
     $scope.filterData = function() {
         $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
             var itemDate = new Date(item.date);
@@ -61,6 +64,7 @@ app.controller('discountsController', function($scope, $http) {
         $scope.renderChart();
     };
 
+    // Hàm vẽ biểu đồ
     $scope.renderChart = function() {
         // Nếu không có dữ liệu, không vẽ biểu đồ
         if ($scope.filteredOrderDetails.length === 0) {
@@ -92,5 +96,11 @@ app.controller('discountsController', function($scope, $http) {
         chart.render();
     };
 
-    $scope.getDiscounts(); // Gọi hàm để lấy dữ liệu
+    // Hàm định dạng tiền tệ
+    $scope.formatCurrency = function(amount) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
+
+    // Gọi hàm để lấy dữ liệu
+    $scope.getDiscounts();
 });
