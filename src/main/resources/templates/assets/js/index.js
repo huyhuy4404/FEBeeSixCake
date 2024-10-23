@@ -6,69 +6,88 @@ app.controller("discountsController", function ($scope, $http) {
   $scope.CartItems = [];
   $scope.DiscountedProducts = [];
   $scope.NewProducts = [];
+  $scope.ActiveProducts = [];
+  $scope.FilteredProducts = []; // Khởi tạo mảng để chứa sản phẩm đã lọc
+  $scope.selectedCategory = '';
 
-  // Lấy dữ liệu từ hai API và kết hợp chúng
+  // Lấy dữ liệu từ API
   $scope.getProducts = function () {
-    $http.get('http://localhost:8080/beesixcake/api/productdetail')
-      .then(function (response) {
-        // Kiểm tra dữ liệu từ API
-        console.log('Product Detail Response:', response.data);
+      $http.get('http://localhost:8080/beesixcake/api/productdetail')
+          .then(function (response) {
+              // Kiểm tra dữ liệu từ API
+              console.log('Product Detail Response:', response.data);
 
-        // Kiểm tra xem dữ liệu có hợp lệ không
-        if (!Array.isArray(response.data)) {
-          console.error("Dữ liệu không phải mảng!");
-          return;
-        }
+              // Kiểm tra xem dữ liệu có hợp lệ không
+              if (!Array.isArray(response.data)) {
+                  console.error("Dữ liệu không phải mảng!");
+                  return;
+              }
 
-        // Lưu tất cả sản phẩm
-        $scope.Products = response.data.map(item => ({
-          idproduct: item.product.idproduct,
-          productname: item.product.productname,
-          img: item.product.img,
-          unitprice: item.unitprice,
-          isactive: item.product.isactive, // Lưu trạng thái isactive
-          categoryname: item.product.category.categoryname
-        }));
+              // Lưu tất cả sản phẩm
+              $scope.Products = response.data.map(item => ({
+                  idproduct: item.product.idproduct,
+                  productname: item.product.productname,
+                  img: item.product.img,
+                  unitprice: item.unitprice,
+                  isactive: item.product.isactive,
+                  categoryname: item.product.category.categoryname
+              }));
 
-        // Lưu sản phẩm có isactive là true
-        $scope.ActiveProducts = $scope.Products.filter(item => item.isactive);
+              // Lưu sản phẩm có isactive là true
+              $scope.ActiveProducts = $scope.Products.filter(item => item.isactive);
 
-        // Kiểm tra sản phẩm
-        console.log('All Products:', $scope.Products);
-        console.log('Active Products:', $scope.ActiveProducts);
-      })
-      .catch(function (error) {
-        console.error("Error fetching data:", error);
-      });
+              // Kiểm tra sản phẩm
+              console.log('All Products:', $scope.Products);
+              console.log('Active Products:', $scope.ActiveProducts);
+          })
+          .catch(function (error) {
+              console.error("Error fetching data:", error);
+          });
+          $scope.filterProducts = function (categoryName) {
+            // Lưu tên loại sản phẩm để hiển thị
+            $scope.selectedCategory = categoryName;
+    
+            // Lọc sản phẩm theo loại
+            $scope.filteredProducts = $scope.Products.filter(function (product) {
+                return product.categoryname === categoryName;
+            });
+    
+            // Chuyển hướng đến trang sản phẩm
+            window.location.href = 'SanPham.html#/' + categoryName;
+        };
   };
-  $scope.formatCurrency = function (amount) {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-};
-  // Hàm lọc sản phẩm theo tên loại
-  $scope.filterProducts = function (categoryName, startingLetter) {
-    if (categoryName === 'Bánh') {
-        // Lọc các sản phẩm có categoryname chứa 'Bánh' và productname bắt đầu bằng ký tự cụ thể
-        $scope.FilteredProducts = $scope.ActiveProducts.filter(product =>
-            product.categoryname.includes("Bánh") && product.productname.startsWith(startingLetter)
-        );
-    } else {
-        // Nếu không phải loại 'Bánh', lọc theo tên loại đã chọn
-        $scope.FilteredProducts = $scope.ActiveProducts.filter(product => product.categoryname === categoryName);
-    }
 
-    // Kiểm tra danh sách sản phẩm đã lọc
-    console.log('Filtered Products:', $scope.FilteredProducts);
-};
-  
+  // Hàm lọc sản phẩm theo loại
+  // $scope.filterProducts = function (categoryName, startingLetter) {
+  //     $scope.selectedCategory = categoryName; // Lưu tên loại sản phẩm đã chọn
+
+  //     if (categoryName === 'Bánh') {
+  //         // Lọc các sản phẩm có categoryname chứa 'Bánh' và productname bắt đầu bằng ký tự cụ thể
+  //         $scope.FilteredProducts = $scope.ActiveProducts.filter(product =>
+  //             product.categoryname.includes("Bánh") && product.productname.startsWith(startingLetter)
+  //         );
+  //     } else {
+  //         // Nếu không phải loại 'Bánh', lọc theo tên loại đã chọn
+  //         $scope.FilteredProducts = $scope.ActiveProducts.filter(product => product.categoryname === categoryName);
+  //     }
+
+  //     // Kiểm tra danh sách sản phẩm đã lọc
+  //     console.log('Filtered Products:', $scope.FilteredProducts);
+  // };
 
   // Hàm chuyển hướng đến trang chi tiết sản phẩm
   $scope.goToProduct = function (productId) {
-    if (productId) {
-      var url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
-      window.location.href = url;
-    } else {
-      console.log("Product ID is not valid.");
-    }
+      if (productId) {
+          const url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
+          window.location.href = url;
+      } else {
+          console.log("Product ID is not valid.");
+      }
+  };
+
+  // Hàm định dạng tiền tệ
+  $scope.formatCurrency = function (amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
   };
 
   // Gọi hàm để lấy dữ liệu

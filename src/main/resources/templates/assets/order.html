@@ -110,10 +110,14 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="product in products">
+                            <!-- Có thể bao gồm hình ảnh sản phẩm -->
                             <!-- <td>
-                                <img ng-src="{{product.img }}" alt="{{ product.img }}" style="width: 50px; height: auto;">
+                                <img ng-src="{{product.img}}" alt="{{product.name}}" style="width: 50px; height: auto;">
                             </td> -->
-                            <td>{{ product.name }}</td>
+                          
+                            <td ng-click="goToProduct(product.id)" title="{{product.name}}">
+                                {{ product.name }}
+                            </td>
                             <td>{{ product.categoryName }}</td>
                             <td>{{ product.sz }}</td>
                             <td>{{ product.quantity }}</td>
