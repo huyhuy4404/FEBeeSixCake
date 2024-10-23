@@ -261,6 +261,31 @@ $scope.deleteProduct = function (idproduct) {
     }
 };
 
+
+$scope.selectedSizes = [];  // Lưu các size đã chọn
+
+$scope.updateSelectedSizes = function() {
+    // Reset lại các kích thước đã chọn
+    $scope.selectedSizes = [];
+
+    // Duyệt qua các size để kiểm tra size nào được chọn
+    angular.forEach($scope.sizes, function(size) {
+        if (size.selected) {
+            // Nếu size được chọn thì thêm vào danh sách
+            $scope.selectedSizes.push({
+                size: size,
+                quantity: '',
+                price: '',
+                discount: false,  // Thêm giảm giá nếu cần
+                note: '',
+                image: ''
+            });
+        }
+    });
+};
+
+
+
     // Initial load
     $scope.loadProducts();
     $scope.loadCategories();

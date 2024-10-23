@@ -247,201 +247,134 @@
             <!-- Main Content -->
             <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
                 <div class="title-group mb-3">
-                    <h1 class="h2 mb-0">Quản Lý Sản Phẩm</h1>
+                    <h1 class="h2 mb-0">Quản Lý Size</h1>
                 </div>
 
                 <!-- Tabs -->
-                <div class="row my-4" ng-app="myApp" ng-controller="ProController">
+                <div class="row my-4" ng-app="myApp" ng-controller="SizeController">
                     <div class="col-12">
                         <div class="custom-block bg-white">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="edit-tab" data-bs-toggle="tab"
-                                        data-bs-target="#edit-tab-pane" type="button" role="tab"
-                                        aria-controls="edit-tab-pane" aria-selected="true">
+                                    <button class="nav-link active" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true">
                                         <i class="fas fa-edit"></i> Chỉnh sửa
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="list-tab" data-bs-toggle="tab"
-                                        data-bs-target="#list-tab-pane" type="button" role="tab"
-                                        aria-controls="list-tab-pane" aria-selected="false">
+                                    <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">
                                         <i class="fas fa-list"></i> Danh sách
                                     </button>
                                 </li>
                             </ul>
-
+                
                             <div class="tab-content" id="myTabContent">
                                 <!-- Nội dung Tab Chỉnh sửa -->
-                                <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel"
-                                    aria-labelledby="edit-tab" tabindex="0">
+                                <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
                                     <form class="row g-3 needs-validation" novalidate>
                                         <!-- Hiển thị thông báo -->
-                                        <div ng-if="message" class="alert"
-                                            ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}"
-                                            role="alert">
+                                        <div ng-if="message" class="alert" ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" role="alert">
                                             {{ message }}
                                         </div>
-
-                                        <!-- Tên sản phẩm -->
+                
+                                        <!-- ID Size -->
                                         <div class="col-md-6">
-                                            <label for="product-name" class="form-label">Tên sản phẩm</label>
-                                            <input type="text" id="product-name" ng-model="selectedProduct.productname"
-                                                placeholder="Nhập tên sản phẩm" class="form-control" required />
-                                            <div class="invalid-feedback">Vui lòng nhập tên sản phẩm.</div>
+                                            <label for="size-id" class="form-label">ID Size</label>
+                                            <input type="text" id="size-id" ng-model="selectedSize.idsize" placeholder="" class="form-control" required readonly />
                                         </div>
-
-                                        <!-- Danh Mục -->
+                
+                                        <!-- Kích thước -->
                                         <div class="col-md-6">
-                                            <label for="category-select" class="form-label">Danh Mục</label>
-                                            <select class="form-select" id="category-select"
-                                                ng-model="selectedProduct.category"
-                                                ng-options="category as category.categoryname for category in categories track by category.idcategory">
-                                                <option value="" selected>Chọn danh mục</option>
-                                                <!-- Giá trị mặc định -->
-                                            </select>
-                                            <div class="invalid-feedback" ng-show="!selectedProduct.category">
-                                                Vui lòng chọn danh mục.
-                                            </div>
+                                            <label for="size-name" class="form-label">Kích Thước</label>
+                                            <input type="text" id="size-name" ng-model="selectedSize.sizename" class="form-control" placeholder="Nhập kích thước" />
                                         </div>
-
-                                        <!-- Kích Thước -->
-                                        
-                                        
-<!-- Kích Thước -->
-<div class="col-md-6">
-    <label for="size-input" class="form-label">Kích Thước</label>
-    <div ng-repeat="size in sizes">
-        <div class="form-check">
-            <input type="checkbox" 
-                   class="form-check-input" 
-                   id="size-{{size.idsize}}" 
-                   ng-model="size.selected" 
-                   ng-change="updateSelectedSizes()">
-            <label class="form-check-label" for="size-{{size.idsize}}">
-                {{ size.sizename }}
-            </label>
-        </div>
-    </div>
-</div>
-
-<!-- Sinh ra các trường thông tin mới cho mỗi kích thước được chọn -->
-<div ng-repeat="selectedSize in selectedSizes" class="col-12">
-    <h5>{{ selectedSize.size.sizename }}</h5>
-
-    <!-- Số lượng -->
-    <div class="col-md-6">
-        <label for="quantity-{{selectedSize.size.idsize}}" class="form-label">Số lượng</label>
-        <input type="number" id="quantity-{{selectedSize.size.idsize}}" ng-model="selectedSize.quantity"
-            placeholder="Nhập số lượng" class="form-control" required />
-        <div class="invalid-feedback">Vui lòng nhập số lượng.</div>
-    </div>
-
-    <!-- Giá -->
-    <div class="col-md-6">
-        <label for="price-{{selectedSize.size.idsize}}" class="form-label">Giá</label>
-        <input type="number" id="price-{{selectedSize.size.idsize}}" ng-model="selectedSize.price"
-            placeholder="Nhập giá" class="form-control" required />
-        <div class="invalid-feedback">Vui lòng nhập giá.</div>
-    </div>
-
-    <!-- Giảm giá -->
-    <!-- <div class="col-md-6">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="discount-{{selectedSize.size.idsize}}"
-                ng-model="selectedSize.discount">
-            <label class="form-check-label" for="discount-{{selectedSize.size.idsize}}">Giảm giá</label>
-        </div>
-    </div> -->
-
-    <!-- Ghi chú -->
-    <div class="col-md-12">
-        <label for="note-{{selectedSize.size.idsize}}" class="form-label">Ghi Chú</label>
-        <textarea id="note-{{selectedSize.size.idsize}}" ng-model="selectedSize.note"
-            class="form-control" placeholder="Nhập ghi chú"></textarea>
-    </div>
-
-    <!-- Ảnh -->
-    <div class="col-md-12">
-        <label for="image-{{selectedSize.size.idsize}}" class="form-label">Ảnh</label>
-        <input class="form-control" type="file" id="image-{{selectedSize.size.idsize}}"
-            onchange="angular.element(this).scope().uploadImage(this.files[0], $index)" />
-        <img id="preview-{{selectedSize.size.idsize}}" ng-src="{{selectedSize.image}}"
-            alt="Xem trước ảnh" width="100" style="margin-top: 10px;" />
-    </div>
-</div>
-
-
-
-                                      
-
+                
                                         <!-- Hành động -->
                                         <div class="col-md-12">
-                                            <button type="button" class="btn btn-primary" ng-click="addProduct()"
-                                                ng-show="!isEditMode">
+                                            <button type="button" class="btn btn-primary" ng-click="addSize()" ng-show="!isEditMode">
                                                 <i class="fas fa-plus"></i> Thêm
                                             </button>
                                             <!-- Nút Cập nhật -->
-                                            <button type="button" class="btn btn-info" ng-click="updateProduct()"
-                                                ng-show="isEditMode">
+                                            <button type="button" class="btn btn-info" ng-click="updateSize()" ng-show="isEditMode">
                                                 <i class="fas fa-edit"></i> Cập nhật
                                             </button>
-
-                                            <button type="button" class="btn btn-danger" 
-                                            ng-click="deleteProduct(selectedProduct.idproduct)" 
-                                            ng-show="isEditMode">
-                                        <i class="fas fa-trash-alt"></i> Xóa
-                                    </button>
-                                    
-                                            <button type="button" class="btn btn-warning" ng-click="loadProducts()">
+                                            <!-- Nút Xóa -->
+                                            <button type="button" class="btn btn-danger" ng-click="deleteSize(selectedSize.idsize)" ng-show="isEditMode">
+                                                <i class="fas fa-trash-alt"></i> Xóa
+                                            </button>
+                                            <!-- Nút Làm mới -->
+                                            <button type="button" class="btn btn-warning" ng-click="loadSizes()">
                                                 <i class="fas fa-sync-alt"></i> Làm mới
                                             </button>
                                         </div>
-
-
                                     </form>
                                 </div>
+                
 
+
+
+                                <!-- <div class="container mt-5">
+                                    <h1>Danh sách các mục</h1>
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Mục 1
+                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                Xóa
+                                            </button>
+                                        </li>
+                                       
+                                    </ul>
+                                </div><div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Bạn có chắc chắn muốn xóa mục này không?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <button type="button" class="btn btn-danger">Xóa</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+
+
+
+
+
+
+
+
+                                
                                 <!-- Nội dung Tab Danh sách -->
-                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab"
-                                    tabindex="0">
+                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
                                     <div class="custom-block bg-white">
                                         <div class="table-responsive">
                                             <table class="account-table table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Tên sản phẩm</th>
+                                                        <th>ID Size</th>
                                                         <th>Kích thước</th>
-                                                        <th>Số lượng</th>
-                                                        <th>Danh mục</th>
-                                                        <th>Giá</th>
-                                                        <th>Ghi chú</th>
-                                                        <th>Ảnh</th>
                                                         <th class="text-end">Hành động</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody ng-if="Products.length > 0">
-                                                    <tr ng-repeat="product in Products">
-                                                        <td>{{ product.product.productname }}</td>
-                                                        <td>{{ product.size.sizename }}</td>
-                                                        <td>{{ product.quantityinstock }}</td>
-                                                        <td>{{ product.product.category.categoryname }}</td>
-                                                        <td>{{ product.unitprice | currency }}</td>
-                                                        <td>{{ product.product.description || 'không có' }}</td>
-                                                        <td>
-                                                            <img src="../admin/images/{{product.product.img}}"
-                                                                alt="Ảnh sản phẩm" width="50" height="50">
-                                                        </td>
+                                                <tbody ng-if="Sizes.length > 0">
+                                                    <tr ng-repeat="size in Sizes">
+                                                        <td>{{ size.idsize }}</td>
+                                                        <td>{{ size.sizename }}</td>
                                                         <td class="text-end">
-                                                            <button class="btn btn-sm btn-warning" ng-click="editProduct(product)">Chỉnh sửa</button>
-                                                            <button class="btn btn-sm btn-danger" ng-click="confirmDelete(product.idproductdetail)">Xóa</button>
+                                                            <button class="btn btn-sm btn-warning" ng-click="editSize(size)">Chỉnh sửa</button>
+                                                            <button class="btn btn-sm btn-danger" ng-click="deleteSize(size.idsize)">Xóa</button>
                                                         </td>
-                                                        
                                                     </tr>
                                                 </tbody>
-                                                <tbody ng-if="Products.length == 0">
+                                                <tbody ng-if="Sizes.length == 0">
                                                     <tr>
-                                                        <td colspan="8" class="text-center">Không có sản phẩm nào.</td>
+                                                        <td colspan="3" class="text-center">Không có kích thước nào.</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -467,11 +400,11 @@
                                         </nav>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+                
 
 
 
@@ -496,7 +429,7 @@
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/custom.js"></script>
-    <script src="../admin/js/product.js"></script>
+    <script src="../admin/js/size.js"></script>
 
 </body>
 
