@@ -1,4 +1,4 @@
-var app = angular.module("myApp", ["ngRoute"]);
+var app = angular.module("order", ["ngRoute"]);
 app.controller("CartController", [
   "$scope",
   "$http",
