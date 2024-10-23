@@ -8,11 +8,13 @@ app.controller("OrderController", function ($scope, $http) {
     $http({
       method: "GET",
       url: API + "/order",
-    }).then(function (response) {
-      $scope.Orders = response.data;
-    }).catch(function (error) {
-      console.error("Có lỗi xảy ra khi lấy danh sách đơn hàng: ", error);
-    });
+    })
+      .then(function (response) {
+        $scope.Orders = response.data;
+      })
+      .catch(function (error) {
+        console.error("Có lỗi xảy ra khi lấy danh sách đơn hàng: ", error);
+      });
   };
 
   $scope.refreshOrders();
@@ -133,63 +135,68 @@ app.controller("OrderController", function ($scope, $http) {
   };
 
   // Gọi chi tiết đơn hàng khi người dùng nhấp vào nút "Chi Tiết"
-$scope.showOrderDetails = function (order) {
-  // Gọi API để lấy chi tiết đơn hàng và các sản phẩm
-  $scope.getOrderDetails(order.idorder);
+  $scope.showOrderDetails = function (order) {
+    // Gọi API để lấy chi tiết đơn hàng
+    $scope.getOrderDetails(order.idorder);
 
-  // Hiển thị modal sau khi lấy xong dữ liệu
-  var modal = new bootstrap.Modal(
-      document.getElementById("modal-" + order.idorder)
-  );
-  modal.show();
-};
+    $scope.selectedOrder = angular.copy(order);
+    var modalElement = document.getElementById(
+      "modal-" + $scope.selectedOrder.idorder
+    );
+    var modal = new bootstrap.Modal(modalElement);
+    modal.show();
+  };
 
-// Hàm lấy chi tiết đơn hàng và thông tin chi tiết sản phẩm
-$scope.getOrderDetails = function (orderId) {
-  $http({
+  // Hàm lấy chi tiết đơn hàng và sản phẩm
+  $scope.getOrderDetails = function (orderId) {
+    $http({
       method: "GET",
-      url: API + "/orderdetail?orderId=" + orderId,  // Chú ý gọi đúng API chi tiết đơn hàng
-  })
-  .then(function (response) {
-      const order = $scope.Orders.find((o) => o.idorder === orderId);
-      if (order) {
-          // Gán chi tiết đơn hàng vào order (bao gồm các sản phẩm)
+      url: API + "/orderdetail?orderId=" + orderId,
+    })
+      .then(function (response) {
+        console.log(response.data); // Kiểm tra dữ liệu nhận được
+        const order = $scope.Orders.find((o) => o.idorder === orderId);
+        if (order) {
           order.details = response.data;
-
-          // Duyệt qua từng chi tiết sản phẩm trong đơn hàng để lấy chi tiết sản phẩm
           order.details.forEach((detail) => {
-              // Lấy thông tin chi tiết sản phẩm từ productdetail
-              detail.product = detail.productdetail.product;
-              detail.size = detail.productdetail.size;
-
-              // Gán đường dẫn ảnh sản phẩm
-              if (detail.product) {
-                  detail.product.img = `http://127.0.0.1:5500/src/main/resources/templates/assets/${detail.product.img}`; // Đường dẫn đến ảnh sản phẩm
-              }
-
-              // Kiểm tra xem product có tồn tại không, nếu không có thì gọi API lấy chi tiết sản phẩm (trong trường hợp productdetail không có thông tin)
-              if (!detail.product) {
-                  $http({
-                      method: "GET",
-                      url: API + `/product/${detail.productdetail.idproduct}`
-                  })
-                  .then(function (productResponse) {
-                      // Gán thông tin chi tiết sản phẩm vào detail
-                      detail.product = productResponse.data;
-
-                      // Gán đường dẫn cho ảnh
-                      detail.product.img = `http://127.0.0.1:5500/src/main/resources/templates/assets/${detail.product.img}`; // Đường dẫn đến ảnh sản phẩm
-                  })
-                  .catch(function (error) {
-                      console.error("Có lỗi xảy ra khi lấy thông tin sản phẩm: ", error);
-                  });
-              }
+            detail.product = detail.productdetail.product;
+            detail.size = detail.productdetail.size;
+  
+            // Gán đường dẫn ảnh mới
+            if (detail.product) {
+              detail.product.img = `https://5ck6jg.csb.app/anh/${detail.product.img}`;
+            }
+  
+            if (!detail.product) {
+              $http({
+                method: "GET",
+                url: API + `/product/${detail.productdetail.idproduct}`,
+              })
+                .then(function (productResponse) {
+                  detail.product = productResponse.data;
+                  detail.product.img = `https://5ck6jg.csb.app/anh/${detail.product.img}`;
+                })
+                .catch(function (error) {
+                  console.error(
+                    "Có lỗi xảy ra khi lấy thông tin sản phẩm: ",
+                    error
+                  );
+                });
+            }
+  
+            // Định dạng giá thành VNĐ
+            if (detail.product && detail.product.price) {
+              detail.product.priceFormatted = new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+              }).format(detail.product.price);
+            }
           });
-      }
-  })
-  .catch(function (error) {
-      console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng: ", error);
-  });
-};
-
+        }
+      })
+      .catch(function (error) {
+        console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng: ", error);
+      });
+  };
+  
 });

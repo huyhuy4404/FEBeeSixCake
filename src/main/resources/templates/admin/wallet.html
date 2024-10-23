@@ -483,18 +483,18 @@
                                                 <!-- Kích thước (Hiển thị chỉ tên kích thước) -->
                                                 <td class="table-cell">{{detail.size.sizename}}</td>
                                                 <!-- Giá sản phẩm -->
-                                                <td class="table-cell">{{detail.productdetail.unitprice | currency}}</td>
+                                                <td class="table-cell">{{detail.productdetail.unitprice}}</td>
                                                 <!-- Phí vận chuyển (shippingFee) -->
-                                                <td class="table-cell">{{order.shippingFee | currency}}</td>
+                                                <td class="table-cell">{{order.shippingFee}}</td>
                                                 <!-- Giảm giá (discount) -->
-                                                <td class="table-cell">{{detail.discount | currency}}</td>
+                                                <td class="table-cell">{{detail.discount}}</td>
                                             </tr>
                                         </tbody>
                                         
                                     </table>
                                 </div>
                                 <div class="modal-footer">
-                                    <h5 class="total-amount">Tổng Tiền: {{order.totalamount | currency}} VNĐ</h5>
+                                    <h5 class="total-amount">Tổng Tiền: {{order.totalamount}} VNĐ</h5>
                                 </div>
                             </div>
                         </div>
