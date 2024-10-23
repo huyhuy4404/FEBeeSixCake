@@ -211,6 +211,12 @@ Bootstrap 5 Dashboard Admin Template
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="size.html">
+                                    <i class="bi-person me-2"></i>
+                                    Quản Lý Size
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="product.html">
                                     <i class="bi-person me-2"></i>
                                     Quản Lý Sản Phẩm
@@ -269,58 +275,54 @@ Bootstrap 5 Dashboard Admin Template
                                         <form class="row g-3">
                                             <div class="col-md-6">
                                                 <label for="product-name" class="form-label">Tên tài khoản</label>
-                                                <input type="text" id="product-name" ng-model="selectedUser.idaccount" placeholder="Nhập tên tài khoản" class="form-control" />
+                                                <input type="text" id="product-name" ng-model="selectedUser.idaccount" placeholder="Nhập tên tài khoản" class="form-control" readonly />
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="product-password" class="form-label">Mật khẩu</label>
-                                                <input type="password" id="product-password" ng-model="selectedUser.password" placeholder="Nhập mật khẩu" class="form-control" />
+                                                <input type="password" id="product-password" ng-model="selectedUser.password" placeholder="Nhập mật khẩu" class="form-control" readonly />
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="product-fullname" class="form-label">Họ và tên</label>
-                                                <input type="text" id="product-fullname" ng-model="selectedUser.fullname" placeholder="Nhập họ và tên" class="form-control" />
+                                                <input type="text" id="product-fullname" ng-model="selectedUser.fullname" placeholder="Nhập họ và tên" class="form-control" readonly />
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="product-email" class="form-label">Email</label>
-                                                <input type="email" id="product-email" ng-model="selectedUser.email" placeholder="Nhập Email" class="form-control" />
+                                                <input type="email" id="product-email" ng-model="selectedUser.email" placeholder="Nhập Email" class="form-control" readonly />
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="product-phone" class="form-label">Số điện thoại</label>
-                                                <input type="text" id="product-phone" ng-model="selectedUser.phonenumber" placeholder="Số điện thoại" class="form-control" />
+                                                <input type="text" id="product-phone" ng-model="selectedUser.phonenumber" placeholder="Số điện thoại" class="form-control" readonly />
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="user-role" class="form-label">Chức vụ</label>
                                                 <div>
                                                     <label>
-                                                        <input type="radio" id="user-role-admin" name="userRole" ng-model="selectedUser.idrole" value="1" /> Admin
+                                                        <input type="radio" id="user-role-admin" name="userRole" ng-model="selectedUser.idrole" value="1" disabled /> Admin
                                                     </label>
                                                     <label>
-                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedUser.idrole" value="2" /> Tài khoản thường
+                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedUser.idrole" value="2" disabled /> User
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="product-hide" ng-model="selectedUser.active">
-                                                    <label class="form-check-label" for="product-hide">Trạng thái</label>
-                                                </div>
+                                                <label class="form-label">Trạng thái</label>
+                                                <label class="form-control">
+                                                    {{selectedUser.active ? 'Đã kích hoạt' : 'Chưa kích hoạt'}}
+                                                </label>
                                             </div>
-                                           
+                                
                                             <div class="col-md-12">
-                                                <button type="button" class="btn btn-primary" ng-click="addUser()">
-                                                    <i class="fas fa-plus"></i> Thêm
+                                                <button type="button" class="btn btn-success" ng-click="unlockAccount(selectedUser.idaccount)" ng-disabled="selectedUser.active">
+                                                    <i class="fas fa-unlock-alt"></i> Mở khóa tài khoản
                                                 </button>
-                                                <button type="button" class="btn btn-info" ng-click="updateUser()">
-                                                    <i class="fas fa-edit"></i> Cập nhật
-                                                </button>
-                                                <button type="button" class="btn btn-danger" ng-click="deleteUser(selectedUser.idaccount)">
-                                                    <i class="fas fa-trash-alt"></i> Xóa
-                                                </button>
-                                                <button type="button" class="btn btn-warning" ng-click="resetForm()">
-                                                    <i class="fas fa-sync-alt"></i> Làm mới
+                                                <button type="button" class="btn btn-danger" ng-click="lockAccount(selectedUser.idaccount)" ng-disabled="!selectedUser.active">
+                                                    <i class="fas fa-lock"></i> Khóa tài khoản
                                                 </button>
                                             </div>
                                         </form>
                                     </div>
+                                </div>
+                                
                 
                                     <!-- List Tab Content -->
 <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
