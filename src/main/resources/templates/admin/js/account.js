@@ -23,7 +23,7 @@ app.controller("UserController", function($scope, $http) {
             });
     };
 
-    //Hàm thêm người dùng
+    // Hàm thêm người dùng
     $scope.addUser = function() {
         $http.post("http://localhost:8080/beesixcake/api/account", $scope.selectedUser)
             .then(function(response) {
@@ -90,58 +90,42 @@ app.controller("UserController", function($scope, $http) {
             active: false
         };
     };
+
     // Hàm mở khóa tài khoản
-$scope.unlockAccount = function (idaccount) {
-    // Cập nhật trường active thành true
-    $scope.selectedUser.active = true;
+    $scope.unlockAccount = function (idaccount) {
+        // Cập nhật trường active thành true
+        $scope.selectedUser.active = true;
 
-    $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, $scope.selectedUser)
-    .then(function (response) {
-        alert("Tài khoản đã được mở khóa!");
+        $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, $scope.selectedUser)
+        .then(function (response) {
+            alert("Tài khoản đã được mở khóa!");
 
-        // Cập nhật lại trạng thái người dùng trong giao diện
-        $scope.selectedUser = response.data; // Cập nhật dữ liệu người dùng từ phản hồi API
-        $scope.loadAccounts(); // Tải lại danh sách tài khoản
-    })
-    .catch(function (error) {
-        console.error("Error unlocking account:", error);
-        console.error("Response data:", error.data); // Kiểm tra phản hồi lỗi
-        alert("Không thể mở khóa tài khoản. Vui lòng thử lại.");
-    });
-};
+            // Cập nhật lại trạng thái người dùng trong giao diện
+            $scope.loadUsers(); // Tải lại danh sách người dùng
+        })
+        .catch(function (error) {
+            console.error("Error unlocking account:", error);
+            alert("Không thể mở khóa tài khoản. Vui lòng thử lại.");
+        });
+    };
 
-// Hàm khóa tài khoản
-$scope.lockAccount = function (idaccount) {
-    // Cập nhật trường active thành false
-    $scope.selectedUser.active = false;
+    // Hàm khóa tài khoản
+    $scope.lockAccount = function (idaccount) {
+        // Cập nhật trường active thành false
+        $scope.selectedUser.active = false;
 
-    $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, $scope.selectedUser)
-    .then(function (response) {
-        alert("Tài khoản đã bị khóa!");
+        $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, $scope.selectedUser)
+        .then(function (response) {
+            alert("Tài khoản đã bị khóa!");
 
-        // Cập nhật lại trạng thái người dùng trong giao diện
-        $scope.selectedUser = response.data; // Cập nhật dữ liệu người dùng từ phản hồi API
-        $scope.loadAccounts(); // Tải lại danh sách tài khoản
-    })
-    .catch(function (error) {
-        console.error("Error locking account:", error);
-        alert("Không thể khóa tài khoản. Vui lòng thử lại.");
-    });
-};
-
-// Hàm tải lại danh sách tài khoản
-$scope.loadAccounts = function() {
-    $http.get("http://localhost:8080/beesixcake/api/account")
-    .then(function (response) {
-        $scope.accounts = response.data; // Cập nhật danh sách tài khoản
-    })
-    .catch(function (error) {
-        console.error("Error loading accounts:", error);
-        alert("Không thể tải danh sách tài khoản. Vui lòng thử lại.");
-    });
-};
-
-
+            // Cập nhật lại trạng thái người dùng trong giao diện
+            $scope.loadUsers(); // Tải lại danh sách người dùng
+        })
+        .catch(function (error) {
+            console.error("Error locking account:", error);
+            alert("Không thể khóa tài khoản. Vui lòng thử lại.");
+        });
+    };
 
     // Tải danh sách người dùng khi controller khởi tạo
     $scope.loadUsers();

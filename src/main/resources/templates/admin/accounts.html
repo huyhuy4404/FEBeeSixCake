@@ -256,22 +256,23 @@ Bootstrap 5 Dashboard Admin Template
                     <div class="title-group mb-3">
                         <h1 class="h2 mb-0">Quản Lý Người Dùng</h1>
                     </div>
-                    <div class="notification" ng-if="message">{{ message }}</div>
-                    <div class="notification error" ng-if="errorMessage">{{ errorMessage }}</div>
+                    <!-- <div class="notification" ng-if="message">{{ message }}</div>
+                    <div class="notification error" ng-if="errorMessage">{{ errorMessage }}</div> -->
                     <div class="row my-4">
                         <div class="col-12">
                             <div class="custom-block bg-white">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
+                                        <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
+                                        <button class="nav-link " id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
                                     </li>
+                                    
                                 </ul>
                 
                                 <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
+                                    <div class="tab-pane fade " id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
                                         <form class="row g-3">
                                             <div class="col-md-6">
                                                 <label for="product-name" class="form-label">Tên tài khoản</label>
@@ -325,7 +326,7 @@ Bootstrap 5 Dashboard Admin Template
                                 
                 
                                     <!-- List Tab Content -->
-<div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+<div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
     <form class="password-form" action="#" method="post">
         <div class="row my-4">
             <div class="col-lg-12">
@@ -352,7 +353,7 @@ Bootstrap 5 Dashboard Admin Template
                                     <td>{{ user.idrole === 1 ? 'Admin' : 'Người dùng' }}</td>
                                     <td>{{ user.active ? 'Đang hoạt động' : 'Không hoạt động' }}</td>
                                     <td class="text-end">
-                                        <button type="button" class="btn btn-sm btn-warning" ng-click="editUser(user)">Sửa</button>
+                                        <button type="button" class="btn btn-sm btn-warning" ng-click="editUser(user)">Xem chi tiết</button>
                                         <button type="button" class="btn btn-sm btn-danger" ng-click="deleteUser(user.idaccount)">Xóa</button>
                                     </td>
                                 </tr>
