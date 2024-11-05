@@ -83,7 +83,7 @@
     </style>
 </head>
 
-<body ng-app="myApp">
+<body ng-app="myApp" ng-controller="CheckLogin">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
     <div class="container order" style="margin-left: 100px;">
@@ -102,7 +102,7 @@
                     <thead>
                         <tr>
                             <th>Tên Sản Phẩm</th>
-                            <th>Loại Sản Phẩm</th>
+                            <!-- <th>Loại Sản Phẩm</th> -->
                             <th>Kích cỡ</th>
                             <th>Số Lượng</th>
                             <th>Giá</th>
@@ -118,7 +118,7 @@
                             <td ng-click="goToProduct(product.id)" title="{{product.name}}">
                                 {{ product.name }}
                             </td>
-                            <td>{{ product.categoryName }}</td>
+                            <!-- <td>{{ product.categoryName }}</td> -->
                             <td>{{ product.sz }}</td>
                             <td>{{ product.quantity }}</td>
                             <td>{{ formatCurrency(product.price) }}</td> <!-- Định dạng giá sản phẩm -->
