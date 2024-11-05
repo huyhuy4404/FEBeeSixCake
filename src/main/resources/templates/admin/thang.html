@@ -168,48 +168,56 @@
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
                             <div class="custom-block">
-                                <div id="pie-chart"></div>
-                            </div>
-                            
-                            <div class="card">
-                                <div class="card-header">
-                                    Bảng hiển thị dữ liệu
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-sm-6">
-                                            <label for="start-date">Ngày Bắt Đầu</label>
-                                            <input id="start-date" class="form-control" type="date" ng-model="startDate" ng-change="filterData()">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label for="end-date">Ngày Kết Thúc</label>
-                                            <input id="end-date" class="form-control" type="date" ng-model="endDate" ng-change="filterData()">
-                                        </div>
+                               
+                                <div class="card">
+                                    <div class="card-header">
+                                        Bảng hiển thị dữ liệu
                                     </div>
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Ngày tạo</th>
-                                                <th>Loại Sản Phẩm</th>
-                                                <th>Số lượng</th>
-                                                <th>Giá</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="item in filteredOrderDetails">
-                                                <td>{{item.date}}</td>
-                                                <td>{{item.categoryName}}</td>
-                                                <td>{{item.quantity}}</td>
-                                                <td>{{formatCurrency(item.unitprice)}}</td> <!-- Định dạng tiền tệ -->
-                                            </tr>
-                                            <tr ng-if="filteredOrderDetails.length === 0">
-                                                <td colspan="4">Không có dữ liệu</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <button ng-click="exportToExcel()" class="btn btn-success">Xuất Excel</button>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="month-select">Chọn Tháng</label>
+                                            <select id="month-select" class="form-control" ng-model="selectedMonth" ng-change="filterData()">
+                                                <option value="">-- Chọn tháng --</option>
+                                                <option ng-repeat="month in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]" value="{{month}}">
+                                                    Tháng {{month}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ngày tạo</th>
+                                                    <th>Loại Sản Phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in filteredOrderDetails">
+                                                    <td>{{item.date}}</td>
+                                                    <td>{{item.categoryName}}</td>
+                                                    <td>{{item.quantity}}</td>
+                                                    <td>{{formatCurrency(item.unitprice)}}</td> <!-- Định dạng tiền tệ -->
+                                                </tr>
+                                                <tr ng-if="filteredOrderDetails.length === 0">
+                                                    <td colspan="4">Không có dữ liệu cho tháng đã chọn.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                                
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        Thống kê theo tháng
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="monthly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
+                                    </div>
+                                </div>
+                             
+                                
+                               
                         </div>
                     </div>
                     <footer class="site-footer">
@@ -223,7 +231,7 @@
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
-    <script src="../admin/js/revenue.js"></script>
+    <script src="../admin/js/thang.js"></script>
 
 </body>
 </html>

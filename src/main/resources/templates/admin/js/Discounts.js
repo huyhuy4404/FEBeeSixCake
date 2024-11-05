@@ -13,45 +13,45 @@ app.controller('discountsController', function($scope, $http) {
     };
         // Đưa dữ liệu sản phẩm vào form để chỉnh sửa
 // // Thêm loại sản phẩm mới
-    $scope.adddiscount = function() {
-        var newdiscount = {
-            discountcode: $scope.selecteddiscount.discountcode,
-            discountpercentage: $scope.selecteddiscount.discountpercentage,
-            startdate: $scope.selecteddiscount.startdate,
-            enddate: $scope.selecteddiscount.enddate,
-            lowestprice: $scope.selecteddiscount.lowestprice // Thêm giá thấp nhất
-        };
-
-        $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
-            .then(function(response) {
-                alert('Thêm  khuyến mãi thành công!');
-                $scope.getDiscounts(); // Tải lại danh sách sau khi thêm
-                $scope.resetForm(); // Làm mới form
-            }, function(error) {
-                console.log('Error adding discount:', error);
-            });
+$scope.adddiscount = function() {
+    var newdiscount = {
+        discountcode: $scope.selecteddiscount.discountcode,
+        discountpercentage: $scope.selecteddiscount.discountpercentage,
+        startdate: $scope.selecteddiscount.startdate,
+        enddate: $scope.selecteddiscount.enddate,
+        lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
     };
-    // Chỉnh sửa loại sản phẩm
-    $scope.editdiscount = function() {
-        var editeddiscount = {
-            iddiscount: $scope.selecteddiscount.iddiscount,
-            discountcode: $scope.selecteddiscount.discountcode,
-            discountpercentage: $scope.selecteddiscount.discountpercentage,
-            startdate: $scope.selecteddiscount.startdate,
-            enddate: $scope.selecteddiscount.enddate,
-            lowestprice: $scope.selecteddiscount.lowestprice // Thêm giá thấp nhất
 
-        };
+    $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
+        .then(function(response) {
+            alert('Thêm khuyến mãi thành công!');
+            $scope.getDiscounts(); // Tải lại danh sách sau khi thêm
+            $scope.resetForm(); // Làm mới form
+        }, function(error) {
+            console.log('Error adding discount:', error);
+        });
+};
 
-        $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
-            .then(function(response) {
-                alert('Sửa  khuyến mãi thành công!');
-                $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
-                $scope.resetForm(); // Làm mới form
-            }, function(error) {
-                console.log('Error editing category:', error);
-            });
+// Chỉnh sửa loại sản phẩm
+$scope.editdiscount = function() {
+    var editeddiscount = {
+        iddiscount: $scope.selecteddiscount.iddiscount,
+        discountcode: $scope.selecteddiscount.discountcode,
+        discountpercentage: $scope.selecteddiscount.discountpercentage,
+        startdate: $scope.selecteddiscount.startdate,
+        enddate: $scope.selecteddiscount.enddate,
+        lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
     };
+
+    $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
+        .then(function(response) {
+            alert('Sửa khuyến mãi thành công!');
+            $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
+            $scope.resetForm(); // Làm mới form
+        }, function(error) {
+            console.log('Error editing category:', error);
+        });
+};
 
     $scope.deletediscount = function(discount) {
         if (confirm('Bạn có chắc chắn muốn xóa khuyến mãi  này?')) {
