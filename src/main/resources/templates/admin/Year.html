@@ -145,23 +145,28 @@
                                     Quản Lý Khuyến Mãi
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="profile.html">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu
+                                    Quản Lý Doanh Thu
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="quy.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu theo quý
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="thang.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu theo năm
-                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="quy.html">
+                                             Doanh Thu theo Quý
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="thang.html">
+                                             Doanh Thu theo Tháng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="Year.html">
+                                             Doanh Thu theo Năm
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item border-top mt-auto pt-2">
                                 <a class="nav-link" href="#">
@@ -209,7 +214,7 @@
                                                     <td>Năm {{item.year}}</td> <!-- Hiển thị năm -->
                                                     <td>{{item.categoryName}}</td>
                                                     <td>{{item.quantity}}</td>
-                                                    <td>{{formatCurrency(item.unitprice)}}</td> <!-- Định dạng tiền tệ -->
+                                                    <td>{{formatCurrency(item.quantity * item.unitprice)}} </td> <!-- Tính tổng tiền và định dạng -->
                                                 </tr>
                                                 <tr ng-if="filteredOrderDetails.length === 0">
                                                     <td colspan="4">Không có dữ liệu cho năm đã chọn.</td>

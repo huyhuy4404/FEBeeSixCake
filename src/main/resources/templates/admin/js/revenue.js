@@ -35,6 +35,7 @@ app.controller('discountsController', function($scope, $http) {
 
     // Hàm xuất dữ liệu ra Excel
     $scope.exportToExcel = function() {
+        
         const worksheet = XLSX.utils.json_to_sheet($scope.filteredOrderDetails.map(item => ({
             'Ngày tạo': item.date,
             'Loại Sản Phẩm': item.categoryName,

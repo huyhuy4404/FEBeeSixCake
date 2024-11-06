@@ -16,7 +16,15 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
+
         }
+        .nav-item.dropdown .dropdown-menu {
+    display: none; /* Ẩn menu xổ xuống mặc định */
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block; /* Hiện menu khi hover */
+}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -145,23 +153,23 @@
                                     Quản Lý Khuyến Mãi
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="profile.html">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu
+                                    Quản Lý Doanh Thu
                                 </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="quy.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu theo quý
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="thang.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu theo năm
-                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="quy.html">
+                                            Quản Lý Doanh Thu theo Quý
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="thang.html">
+                                            Quản Lý Doanh Thu theo Năm
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item border-top mt-auto pt-2">
                                 <a class="nav-link" href="#">
@@ -212,7 +220,7 @@
                                                 <td>{{item.date}}</td>
                                                 <td>{{item.categoryName}}</td>
                                                 <td>{{item.quantity}}</td>
-                                                <td>{{formatCurrency(item.unitprice)}}</td> <!-- Định dạng tiền tệ -->
+                                                <td>{{formatCurrency(item.quantity * item.unitprice)}} </td> <!-- Tính tổng tiền và định dạng -->
                                             </tr>
                                             <tr ng-if="filteredOrderDetails.length === 0">
                                                 <td colspan="4">Không có dữ liệu</td>
