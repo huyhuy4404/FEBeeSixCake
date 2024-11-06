@@ -169,16 +169,10 @@ app.controller('AddressController', function($scope, $http) {
     };
     $scope.editAddress = function(address) {
         $scope.newAddress = angular.copy(address); // Sao chép thông tin địa chỉ đã chọn vào newAddress
-        // Chuyển đến tab "Edit" bằng Bootstrap
-        var editTab = new bootstrap.Tab(document.getElementById("edit-tab"));
-        editTab.show(); // Hiển thị tab chỉnh sửa
     };
-    
-    
-
     $scope.updateAddress = function() {
         if ($scope.loggedInUser) {
-            // Gán idaccount của người dùng đã đăng nhập và các thông tin khác
+            // Gán idaccount của người dùng đã đăng nhập
             var updatedAddressData = {
                 idaddress: $scope.newAddress.idaddress, // Lấy idaddress từ địa chỉ đã chọn
                 housenumber: $scope.newAddress.housenumber,
@@ -187,19 +181,17 @@ app.controller('AddressController', function($scope, $http) {
                 district: $scope.newAddress.district,
                 city: $scope.newAddress.city,
                 account: {
-                    idaccount: $scope.loggedInUser.idaccount, // Gán idaccount từ người dùng đã đăng nhập
-                 
+                    idaccount: $scope.loggedInUser.idaccount // Gán idaccount từ người dùng đã đăng nhập
                 }
             };
     
             console.log("Địa chỉ cập nhật:", updatedAddressData); // Ghi log địa chỉ cập nhật
     
             // Gửi yêu cầu PUT đến API để cập nhật địa chỉ
-            $http.put('http://localhost:8080/beesixcake/api/address/' + updatedAddressData.idaddress, updatedAddressData)
+            $http.put('http://localhost:8080/beesixcake/api/address/', updatedAddressData)
                 .then(function(response) {
                     $scope.addSuccess = "Cập nhật địa chỉ thành công!";
-                    $scope.addError = "";
-                    // Reset lại form sau khi cập nhật thành công
+                    $scope.addError = ""; 
                     $scope.newAddress = { 
                         housenumber: '',
                         roadname: '',
@@ -210,7 +202,7 @@ app.controller('AddressController', function($scope, $http) {
                     $scope.loadUserAddresses(); // Tải lại danh sách địa chỉ của người dùng
                 })
                 .catch(function(error) {
-                    // Xử lý lỗi nếu có từ API
+                    // Ghi log lỗi chi tiết
                     if (error.data) {
                         console.error("Lỗi khi cập nhật địa chỉ:", error.data); // Ghi log dữ liệu lỗi
                         if (error.data.message) {
@@ -228,39 +220,26 @@ app.controller('AddressController', function($scope, $http) {
             $scope.addError = "Vui lòng đăng nhập để cập nhật địa chỉ.";
         }
     };
-    
-    $scope.deleteAddress = function(idaddress) {
-        if (confirm("Bạn có chắc chắn muốn xóa địa chỉ này không?")) {
-            // Gửi yêu cầu DELETE đến API để xóa địa chỉ dựa trên idaddress
-            $http.delete('http://localhost:8080/beesixcake/api/address/' + idaddress)
-                .then(function(response) {
-                    // Kiểm tra phản hồi từ API sau khi xóa thành công
-                    if (response.data && response.data.message === "Xóa địa chỉ thành công.") {
-                        $scope.deleteSuccess = response.data.message;
-                        $scope.deleteError = "";
-    
-                        // Xóa địa chỉ khỏi danh sách hiện tại trên giao diện mà không cần tải lại toàn bộ
-                        $scope.userAddresses = $scope.userAddresses.filter(function(address) {
-                            return address.idaddress !== idaddress;
-                        });
-                    }
-                })
-                .catch(function(error) {
-                    // Xử lý lỗi nếu có từ API
-                    if (error.data) {
-                        console.error("Lỗi khi xóa địa chỉ:", error.data); // Ghi log lỗi
-                        if (error.data.message) {
-                            $scope.deleteError = error.data.message; // Hiển thị thông báo lỗi từ server
-                        } else {
-                            $scope.deleteError = "Đã xảy ra lỗi không xác định."; // Thông báo lỗi chung
-                        }
-                    } else {
-                        console.error("Lỗi không có dữ liệu:", error); // Ghi log nếu không có dữ liệu lỗi
-                        $scope.deleteError = "Lỗi kết nối đến máy chủ."; // Thông báo lỗi kết nối
-                    }
-                    $scope.deleteSuccess = ""; // Reset thông báo thành công
-                });
+    $scope.setDefaultAddress = function(address) {
+        // Kiểm tra nếu địa chỉ này đã là mặc định rồi thì không làm gì cả
+        if (address.isDefault) {
+            return;
         }
+    
+        // Cập nhật địa chỉ mặc định cho người dùng
+        // Gửi yêu cầu API để thay đổi trạng thái địa chỉ mặc định
+        var defaultAddress = angular.copy(address);
+        defaultAddress.isDefault = true;
+    
+        // Gửi yêu cầu API cập nhật địa chỉ mặc định
+        AddressService.setDefaultAddress(defaultAddress).then(function(response) {
+            // Cập nhật lại danh sách địa chỉ sau khi thay đổi
+            $scope.userAddresses.forEach(function(addr) {
+                addr.isDefault = (addr.idaddress === address.idaddress) ? true : false;
+            });
+        }, function(error) {
+            console.error('Lỗi khi đặt địa chỉ mặc định:', error);
+        });
     };
     
     
