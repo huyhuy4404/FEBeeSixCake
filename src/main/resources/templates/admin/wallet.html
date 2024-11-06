@@ -331,82 +331,16 @@
                         <div class="custom-block bg-white">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="edit-tab" data-bs-toggle="tab"
-                                        data-bs-target="#edit-tab-pane" type="button" role="tab"
-                                        aria-controls="edit-tab-pane" aria-selected="true">Chỉnh Sửa</button>
+                                    <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="true">Danh Sách Đơn Hàng</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="list-tab" data-bs-toggle="tab"
-                                        data-bs-target="#list-tab-pane" type="button" role="tab"
-                                        aria-controls="list-tab-pane" aria-selected="false">Danh Sách Đơn Hàng</button>
+                                    <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="false">Chỉnh Sửa</button>
                                 </li>
                             </ul>
-
+                        
                             <div class="tab-content" id="myTabContent">
-                                <!-- Edit Tab Content -->
-                                <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel"
-                                    aria-labelledby="edit-tab" tabindex="0">
-                                    <form class="row g-3">
-                                        <!-- Hiển thị thông báo -->
-                                        <div ng-if="message" class="alert"
-                                            ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}"
-                                            role="alert">
-                                            {{ message }}
-                                        </div>
-
-                                        <div class="col-md-6 border border-secondary rounded-start" style="padding: 10px 30px; margin: auto;">
-                                            <h6 class="text-center py-2">Thông tin khách hàng</h6>
-                                            <p class="fw-bold">Tên Khách hàng: <span style="float: right; font-weight: normal; padding-right: 20px;">{{ selectedOrder.account.fullname }}</span></p>
-                                            <p class="fw-bold">Số điện thoại: <span style="float: right; font-weight: normal; padding-right: 20px;">{{ selectedOrder.account.phonenumber }}</span></p>
-                                            <p class="fw-bold">Địa chỉ: <span style="float: right; font-weight: normal; padding-right: 20px;">{{ selectedOrder.fullAddress }}</span></p>
-                                        </div>
-                                        <div class="col-md-6 border border border-start-0 border-secondary rounded-end" style="padding: 10px 30px; margin: auto;">
-                                            <h6 class="text-center py-2">Thông tin đơn hàng</h6>
-                                            <p class="fw-bold">Thời gian đặt hàng: <span style="float: right; font-weight: normal; padding-right: 20px;">{{ selectedOrder.orderdate | date:'HH:mm:ss dd-MM-yyyy' }}</span></p>
-                                            <p class="fw-bold">Phương thức thanh toán: <span style="float: right; font-weight: normal; padding-right: 20px;">{{ selectedOrder.payment.paymentname }}</span></p>
-                                            <p class="fw-bold">Mã giảm giá: <span style="float: right; font-weight: normal; padding-right: 20px;">{{ selectedOrder.discount.discountcode }}</span></p>
-                                        </div>
-                                        <h5 class="fw-bold">Tổng tiền đơn hàng: {{ selectedOrder.totalamount }}VNĐ</h5>
-
-                                        <!-- Trạng thái đơn hàng -->
-                                        <div class="col-md-12">
-                                            <p class="fw-bold pb-2">Trạng thái đơn hàng</p>
-                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                <label class="btn btn-primary"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 1}">
-                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 1" value="1"
-                                                        autocomplete="off" /> Đang Xác Nhận
-                                                </label>
-                                                <label class="btn btn-info"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 2}">
-                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 2" value="2"
-                                                        autocomplete="off" /> Đang Giao Hàng
-                                                </label>
-                                                <label class="btn btn-warning"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 3}">
-                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 3" value="3"
-                                                        autocomplete="off" /> Hoàn Thành
-                                                </label>
-                                                <label class="btn btn-danger"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 4}">
-                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 4" value="4"
-                                                        autocomplete="off" /> Đã Hủy
-                                                </label>
-                                            </div>
-
-                                            <button class="btn btn-primary" style="float: right;"
-                                                ng-click="updateOrderStatus()">Cập nhật</button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <!-- List Tab Content -->
-                                <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab"
-                                    tabindex="0">
+                                <!-- Danh Sách Đơn Hàng Tab -->
+                                <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
                                     <div class="table-responsive">
                                         <table class="table">
                                             <thead>
@@ -423,31 +357,78 @@
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="order in Orders">
-                                                    <td>{{order.idorder}}</td>
-                                                    <td>{{order.account.fullname}}</td>
-                                                    <td>{{order.account.phonenumber}}</td>
-                                                    <td>{{order.address.housenumber}}, {{order.address.roadname}},
-                                                        {{order.address.ward}}, {{order.address.district}},
-                                                        {{order.address.city}}</td>
-                                                    <td>{{order.orderdate | date:'HH:mm:ss dd-MM-yyyy'}}</td>
-                                                    <td>{{order.totalamount}}</td>
-                                                    <td>{{order.status.statusname}}</td>
+                                                    <td>{{ order.idorder }}</td> <!-- Sửa idOrder thành idorder -->
+                                                    <td>{{ order.account.fullname }}</td>
+                                                    <td>{{ order.account.phonenumber }}</td>
+                                                    <td>{{ order.addressdetail }}</td>
+                                                    <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
+                                                    <td>{{ totalSummary[order.idorder] | currency }}</td> <!-- Sửa idOrder thành idorder -->
+                                                    <td>{{ order.status.statusname }}</td>
                                                     <td class="text-end">
-                                                        <button class="btn btn-sm btn-warning"
-                                                            ng-click="editOrder(order)">Chỉnh Sửa</button>
-                                                        <button type="button" class="btn btn-primary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modal-{{order.idorder}}"
-                                                            ng-click="showOrderDetails(order)">Chi Tiết</button>
-
+                                                        <button class="btn btn-sm btn-warning" ng-click="editOrder(order)">Chỉnh Sửa</button>
+                                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-{{order.idorder}}" ng-click="showOrderDetails(order)">Chi Tiết</button>
                                                     </td>
                                                 </tr>
+                                                
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
+                        
+                                <!-- Chỉnh Sửa Tab -->
+                                <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
+                                    <form class="row g-3">
+                                        <!-- Hiển thị thông báo -->
+                                        <div ng-if="message" class="alert" ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" role="alert">
+                                            {{ message }}
+                                        </div>
+                        
+                                        <!-- Thông tin khách hàng -->
+                                        <div class="col-md-6 border border-secondary rounded-start p-3 mx-auto">
+                                            <h6 class="text-center py-2">Thông tin khách hàng</h6>
+                                            <p class="fw-bold">Tên Khách hàng: <span class="float-end fw-normal">{{ selectedOrder.account.fullname }}</span></p>
+                                            <p class="fw-bold">Số điện thoại: <span class="float-end fw-normal">{{ selectedOrder.account.phonenumber }}</span></p>
+                                            <p class="fw-bold">Địa chỉ: <span class="float-end fw-normal">{{ selectedOrder.fullAddress }}</span></p>
+                                        </div>
+                        
+                                        <!-- Thông tin đơn hàng -->
+                                        <div class="col-md-6 border border-start-0 border-secondary rounded-end p-3 mx-auto">
+                                            <h6 class="text-center py-2">Thông tin đơn hàng</h6>
+                                            <p class="fw-bold">Thời gian đặt hàng: <span class="float-end fw-normal">{{ selectedOrder.orderdate | date:'HH:mm:ss dd-MM-yyyy' }}</span></p>
+                                            <p class="fw-bold">Phương thức thanh toán: <span class="float-end fw-normal">{{ selectedOrder.payment.paymentname }}</span></p>
+                                            <p class="fw-bold">Mã giảm giá: <span class="float-end fw-normal">{{ selectedOrder.discount.discountcode }}</span></p>
+                                        </div>
+                        
+                                        <!-- Tổng tiền -->
+                                        <h5 class="fw-bold">Tổng tiền đơn hàng: {{ selectedOrder.totalamount | currency:'VND ' }}</h5>
+                        
+                                        <!-- Trạng thái đơn hàng -->
+                                        <div class="col-md-12">
+                                            <p class="fw-bold pb-2">Trạng thái đơn hàng</p>
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-primary" ng-class="{'active': selectedOrder.status.idstatus == 1}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus" ng-checked="selectedOrder.status.idstatus == 1" value="1" autocomplete="off" /> Đang Xác Nhận
+                                                </label>
+                                                <label class="btn btn-info" ng-class="{'active': selectedOrder.status.idstatus == 2}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus" ng-checked="selectedOrder.status.idstatus == 2" value="2" autocomplete="off" /> Đang Giao Hàng
+                                                </label>
+                                                <label class="btn btn-warning" ng-class="{'active': selectedOrder.status.idstatus == 3}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus" ng-checked="selectedOrder.status.idstatus == 3" value="3" autocomplete="off" /> Hoàn Thành
+                                                </label>
+                                                <label class="btn btn-danger" ng-class="{'active': selectedOrder.status.idstatus == 4}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus" ng-checked="selectedOrder.status.idstatus == 4" value="4" autocomplete="off" /> Đã Hủy
+                                                </label>
+                                            </div>
+                        
+                                            <button class="btn btn-primary float-end" ng-click="updateOrderStatus()">Cập nhật</button>
+                                        </div>
+                                    </form>
+                                </div>
+                        
                             </div>
                         </div>
+                        
+
                     </div>
                     <!-- Modal -->
                     <div class="modal fade" id="modal-{{order.idorder}}" tabindex="-1"
@@ -479,8 +460,8 @@
                                             <tr ng-repeat="detail in order.details">
                                                 <!-- Hình ảnh sản phẩm -->
                                                 <td class="table-cell">
-                                                    <img ng-src="{{detail.product.img}}"
-                                                        alt="{{detail.product.name}}" class="product-image">
+                                                    <img ng-src="{{detail.product.img}}" alt="{{detail.product.name}}"
+                                                        class="product-image">
                                                 </td>
                                                 <!-- Tên sản phẩm -->
                                                 <td class="table-cell">{{detail.product.productname}}</td>
@@ -496,7 +477,7 @@
                                                 <td class="table-cell">{{detail.discount}}</td>
                                             </tr>
                                         </tbody>
-                                        
+
                                     </table>
                                 </div>
                                 <div class="modal-footer">

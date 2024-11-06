@@ -36,37 +36,41 @@
           <div class="col-lg-5">
             <div class="box-img-detail">
               <a href="">
-                <img ng-src="{{product.img || 'https://via.placeholder.com/250x255'}}" alt="{{product.productname}}"
-                  class="img-reponsive mt-0" width="350" height="360" />
+                <img ng-src="{{product.img}}" alt="{{product.productname}}"
+                  class="img-reponsive mt-0" style="width: 340px; height: 350px;">
               </a>
             </div>
           </div>
           <div class="col-lg-7">
             <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
+            <div class="danhgia">
+              <b>5.0</b>
+              <div class="rating">
+                <label class="active">★</label>
+                <label class="active">★</label>
+                <label class="active">★</label>
+                <label class="active">★</label>
+                <label class="active">★</label>
+              </div>
+              <span>|  số lươt đánh giá</span>
+            </div>
+
             <div class="box-price" ng-if="productDetails.length">
               <div class="price-chitiet">
                 <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
                 <span class="current-price">{{selectedSizeDetail.unitprice | number : 0}}₫</span>
-                <!-- Hiển thị giá gốc với ký hiệu ₫ sau, giả sử giá gốc cao hơn 10% -->
-                <span class="issale">{{selectedSizeDetail.unitprice * 1.1 | number : 0}}₫</span>
-                <span class="persale">- 10%</span>
-              </div>
-
-              <div class="price-vince">
-                <!-- Hiển thị giá thị trường và số tiền tiết kiệm với ký hiệu ₫ sau -->
-                <p>
-                  Giá thị trường:
-                  <span>{{selectedSizeDetail.unitprice * 1.1 | number :
-                    0}}₫</span>
-                  - Tiết kiệm:
-                  <span>{{selectedSizeDetail.unitprice * 0.1 | number :
-                    0}}₫</span>
-                  (<span style="color: red">- 10%</span>)
-                </p>
               </div>
             </div>
-
-            <div class="size-pd mt-3">
+            <div>
+              <span class="QuantityInStock">Số lượng hiện có:
+                <b>{{selectedSizeDetail.quantityinstock}}</b></span>
+              <span class="QuantityInStock ms-4">Số lượng yêu thích:
+                <b>1</b></span>
+                <button type="button" class="btn btn-yt" ng-click="toggleHeart()" ng-class="{'active': isActive}">
+                  <i class="bi bi-heart-fill"></i>
+                </button>
+            </div>
+            <div class="size-pd">
               <span>Kích cỡ: </span>
               <div class="size-options">
                 <button ng-repeat="detail in productDetails"
@@ -75,17 +79,10 @@
                   {{detail.size.sizename}}
                 </button>
               </div>
-
-              <span class="QuantityInStock ms-4">Số lượng hiện có:
-                <b>{{selectedSizeDetail.quantityinstock}}</b></span>
             </div>
-
-            <hr />
-            <div class="moTa">
-              <p>{{ product.description }}</p>
+            <div class="moTa mt-3">
+              <textarea rows="5" readonly>{{ product.description }}</textarea>
             </div>
-
-            <hr />
             <div class="inner-load">
               <div class="box-add">
                 <div class="number-card">
@@ -93,15 +90,12 @@
                   <input type="number" name="numberproduct" id="numberproduct" class="form-control" value="1" min="1"
                     max="{{selectedSizeDetail.quantityinstock}}" ng-model="selectedQuantity" />
                 </div>
-                <div class="bst">
-                  <button type="button" class="btn btn-primary">
+                <div class="btn-chitietsanpham">
+                  <button type="button" class="btn btn-primary me-2">
                     <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
                   </button>
                   <button type="button" class="btn btn-secondary">
                     Mua Nhanh
-                  </button>
-                  <button type="button" class="btn btn-outline-danger" ng-click="toggleHeart()">
-                    <i class="bi bi-heart-fill"></i>
                   </button>
                 </div>
               </div>
@@ -122,24 +116,12 @@
         </div>
       </div>
     </div>
+    <div>
+      <span class="textSanPham">Sản phẩm Tương tự</span>
+    </div>
   </div>
+  <div ng-include="'layout/footer.html'"></div>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const ratingValue = parseFloat(
-        document.getElementById("rating-value").textContent
-      ); // Lấy giá trị đánh giá từ text
-      const stars = document.querySelectorAll("#stars li");
-
-      // Đặt màu cho các ngôi sao dựa trên giá trị đánh giá
-      stars.forEach((star) => {
-        if (parseInt(star.getAttribute("data-value")) <= ratingValue) {
-          star.classList.add("selected");
-        } else {
-          star.classList.remove("selected");
-        }
-      });
-    });
-
     function toggleHeart(button) {
       // Kiểm tra trạng thái của nút và đổi trạng thái
       button.classList.toggle("active");

@@ -17,13 +17,43 @@ app.controller("OrderController", function ($scope, $http) {
       });
   };
 
+  // Lấy chi tiết đơn hàng
+  $scope.refreshOrderDetails = function () {
+    $http({
+      method: "GET",
+      url: API + "/orderdetail",
+    })
+      .then(function (response) {
+        $scope.OrderDetails = response.data;
+      })
+      .catch(function (error) {
+        console.error("Có lỗi xảy ra khi lấy danh sách chi tiết đơn hàng: ", error);
+      });
+  };
+
+  // Lấy giảm giá
+  $scope.refreshOrderDetails = function () {
+    $http({
+      method: "GET",
+      url: API + "/discount",
+    })
+      .then(function (response) {
+        $scope.Discounts = response.data;
+      })
+      .catch(function (error) {
+        console.error("Có lỗi xảy ra khi lấy danh sách chi tiết đơn hàng: ", error);
+      });
+  };
+
+  // Gọi hàm lấy danh sách đơn hàng và chi tiết khi controller được khởi tạo
   $scope.refreshOrders();
+  $scope.refreshOrderDetails();
 
   // Chọn đơn hàng để chỉnh sửa
   $scope.editOrder = function (order) {
     $scope.selectedOrder = angular.copy(order);
     $scope.originalStatus = angular.copy(order.status.idstatus);
-    $scope.selectedOrder.fullAddress = `${order.address.housenumber}, ${order.address.roadname}, ${order.address.ward}, ${order.address.district}, ${order.address.city}`;
+    $scope.selectedOrder.addressdetail = `${order.address.housenumber}, ${order.address.roadname}, ${order.address.ward}, ${order.address.district}, ${order.address.city}`;
 
     // Gọi hàm để lấy chi tiết đơn hàng
     $scope.getOrderDetails(order.idorder);
@@ -40,8 +70,7 @@ app.controller("OrderController", function ($scope, $http) {
     if (oldStatus == 1 && newStatus != 2 && newStatus != 4) {
       return {
         isValid: false,
-        message:
-          "Trạng thái Đang xác nhận chỉ có thể chuyển sang Đang giao hàng hoặc Đã hủy.",
+        message: "Trạng thái Đang xác nhận chỉ có thể chuyển sang Đang giao hàng hoặc Đã hủy.",
       };
     }
     if (oldStatus == 2 && newStatus == 1) {
@@ -53,14 +82,10 @@ app.controller("OrderController", function ($scope, $http) {
     if (oldStatus == 3 && (newStatus == 1 || newStatus == 2)) {
       return {
         isValid: false,
-        message:
-          "Trạng thái Đã hoàn thành không thể quay lại Đang xác nhận hoặc Đang giao hàng.",
+        message: "Trạng thái Đã hoàn thành không thể quay lại Đang xác nhận hoặc Đang giao hàng.",
       };
     }
-    if (
-      oldStatus == 4 &&
-      (newStatus == 1 || newStatus == 2 || newStatus == 3)
-    ) {
+    if (oldStatus == 4 && (newStatus == 1 || newStatus == 2 || newStatus == 3)) {
       return {
         isValid: false,
         message: "Trạng thái Đã hủy không thể chuyển về các trạng thái khác.",
@@ -77,8 +102,7 @@ app.controller("OrderController", function ($scope, $http) {
     // Kiểm tra điều kiện trước khi cập nhật
     var validationResult = isValidStatusChange(oldStatus, newStatus);
     if (!validationResult.isValid) {
-      $scope.message =
-        "Cập nhật trạng thái không thành công: " + validationResult.message;
+      $scope.message = "Cập nhật trạng thái không thành công: " + validationResult.message;
       $scope.messageType = "error";
       return;
     }
@@ -102,7 +126,7 @@ app.controller("OrderController", function ($scope, $http) {
       .then(function (response) {
         $scope.message = "Cập nhật trạng thái thành công!";
         $scope.messageType = "success";
-        $scope.refreshOrders();
+        $scope.refreshOrders(); // Refresh orders after status update
       })
       .catch(function (error) {
         $scope.message = "Có lỗi xảy ra khi cập nhật trạng thái!";
@@ -119,84 +143,65 @@ app.controller("OrderController", function ($scope, $http) {
     var hours = ("0" + date.getHours()).slice(-2);
     var minutes = ("0" + date.getMinutes()).slice(-2);
     var seconds = ("0" + date.getSeconds()).slice(-2);
-    return (
-      day +
-      "-" +
-      month +
-      "-" +
-      year +
-      " " +
-      hours +
-      ":" +
-      minutes +
-      ":" +
-      seconds
-    );
+    return day + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds;
   };
 
-  // Gọi chi tiết đơn hàng khi người dùng nhấp vào nút "Chi Tiết"
-  $scope.showOrderDetails = function (order) {
-    // Gọi API để lấy chi tiết đơn hàng
-    $scope.getOrderDetails(order.idorder);
-
-    $scope.selectedOrder = angular.copy(order);
-    var modalElement = document.getElementById(
-      "modal-" + $scope.selectedOrder.idorder
-    );
-    var modal = new bootstrap.Modal(modalElement);
-    modal.show();
-  };
-
-  // Hàm lấy chi tiết đơn hàng và sản phẩm
-  $scope.getOrderDetails = function (orderId) {
-    $http({
-      method: "GET",
-      url: API + "/orderdetail?orderId=" + orderId,
-    })
-      .then(function (response) {
-        console.log(response.data); // Kiểm tra dữ liệu nhận được
-        const order = $scope.Orders.find((o) => o.idorder === orderId);
+  // Tính tổng tiền của đơn hàng
+  $scope.calculateTotalForOrders = function(orderIds) {
+    let totalOrderSummary = {};  // Đối tượng lưu tổng tiền của các đơn hàng
+    
+    // Duyệt qua từng orderId trong mảng orderIds
+    angular.forEach(orderIds, function(orderId) {
+        let order = $scope.Orders.find(order => order.idorder === orderId);
+    
         if (order) {
-          order.details = response.data;
-          order.details.forEach((detail) => {
-            detail.product = detail.productdetail.product;
-            detail.size = detail.productdetail.size;
-  
-            // Gán đường dẫn ảnh mới
-            if (detail.product) {
-              detail.product.img = `https://5ck6jg.csb.app/anh/${detail.product.img}`;
-            }
-  
-            if (!detail.product) {
-              $http({
-                method: "GET",
-                url: API + `/product/${detail.productdetail.idproduct}`,
-              })
-                .then(function (productResponse) {
-                  detail.product = productResponse.data;
-                  detail.product.img = `https://5ck6jg.csb.app/anh/${detail.product.img}`;
-                })
-                .catch(function (error) {
-                  console.error(
-                    "Có lỗi xảy ra khi lấy thông tin sản phẩm: ",
-                    error
-                  );
+            let totalOrderDetail = 0;  // Biến lưu tổng tiền của đơn hàng theo chi tiết
+    
+            // Kiểm tra xem OrderDetails có phải là mảng hay không
+            if (Array.isArray($scope.OrderDetails)) {
+                // Lọc các chi tiết của đơn hàng theo idOrder
+                let orderDetailsForThisOrder = $scope.OrderDetails.filter(function(detail) {
+                    return detail.idorder === orderId;
                 });
+
+                // Kiểm tra có bao nhiêu chi tiết trong đơn hàng này
+                console.log("Các chi tiết đơn hàng cho orderId " + orderId + ":", orderDetailsForThisOrder);
+    
+                // Duyệt qua các chi tiết của đơn hàng
+                angular.forEach(orderDetailsForThisOrder, function(detail) {
+                    if (detail.productdetail && detail.productdetail.unitprice) {
+                        // Tính tổng tiền của chi tiết đơn hàng: unitprice * quantity
+                        let detailTotal = detail.productdetail.unitprice * detail.quantity;
+                        totalOrderDetail += detailTotal;  // Cộng vào tổng tiền của đơn hàng
+                    } else {
+                        console.error('Unit price is undefined for product ID:', detail.productdetail.product.idproduct);
+                    }
+                });
+            } else {
+                console.error('OrderDetails is not an array or is undefined');
             }
-  
-            // Định dạng giá thành VNĐ
-            if (detail.product && detail.product.price) {
-              detail.product.priceFormatted = new Intl.NumberFormat('vi-VN', {
-                style: 'currency',
-                currency: 'VND',
-              }).format(detail.product.price);
-            }
-          });
+    
+            // Lấy phí vận chuyển, nếu không có thì mặc định là 0
+            let shipFee = order.shipfee || 0;
+    
+            // Lấy giảm giá (LowestPrice), nếu không có thì mặc định là 0
+            let discountAmount = order.discount && order.discount.LowestPrice ? order.discount.LowestPrice : 0;
+    
+            // Tính tổng tiền cuối cùng của đơn hàng
+            let totalOrder = totalOrderDetail + shipFee - discountAmount;
+    
+            // Lưu tổng tiền của đơn hàng vào đối tượng summary với key là idorder
+            totalOrderSummary[orderId] = totalOrder;
+        } else {
+            console.error('Không tìm thấy đơn hàng với idOrder:', orderId);
         }
-      })
-      .catch(function (error) {
-        console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng: ", error);
-      });
-  };
-  
+    });
+    
+    // Hiển thị tổng tiền của tất cả các đơn hàng trong console
+    console.log("Tổng tiền cho từng đơn hàng:", totalOrderSummary);
+    return totalOrderSummary;  // Trả về đối tượng chứa tổng tiền của các đơn hàng
+};
+console.log('Tổng tiền chi tiết cho đơn hàng ' + 2 + ':', totalOrderDetail);
+
+
 });
