@@ -202,5 +202,4 @@ app.controller("OrderController", function ($scope, $http) {
     return totalOrderSummary;  // Trả về đối tượng chứa tổng tiền của các đơn hàng
 };
 
-
 });
