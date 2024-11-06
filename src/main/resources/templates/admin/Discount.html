@@ -391,7 +391,7 @@ Bootstrap 5 Dashboard Admin Template
                                                     <td>{{category.discountpercentage}}</td>
                                                     <td>{{category.startdate}}</td>
                                                     <td>{{category.enddate}}</td>
-                                                    <td>{{category.lowestprice}}</td>
+                                                    <td>{{category.lowestprice | currency:'₫'}}</td>
                                                     <td class="text-end">
                                                         <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Edit</button>
                                                         <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Delete</button>
