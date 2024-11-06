@@ -83,24 +83,24 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
 
     $scope.addProduct = function () {
         var fd = new FormData();
-
+    
         // Kiểm tra và gán giá trị cho isactive
         $scope.selectedProduct.isactive = $scope.selectedProduct.isactive !== false;
-
+    
         // Thêm thông tin sản phẩm
         fd.append('productname', $scope.selectedProduct.productname);
-        fd.append('img', $scope.selectedProduct.img); // Chỉ lưu tên tệp
+        fd.append('img', $scope.selectedProduct.img); // Chỉ lưu tên tệp, không phải toàn bộ đường dẫn
         fd.append('description', $scope.selectedProduct.description);
         fd.append('isactive', $scope.selectedProduct.isactive); // Chuyển đổi kiểu nếu cần
         fd.append('category.idcategory', $scope.selectedProduct.category.idcategory);
-
+    
         // Gửi form data đến API để thêm sản phẩm
         $http.post('http://localhost:8080/beesixcake/api/product', fd, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined } // Để trình duyệt tự động thiết lập Content-Type
         }).then(function (response) {
             console.log("Sản phẩm đã được thêm thành công:", response.data);
-
+    
             // Thêm thông tin chi tiết sản phẩm vào ProductDetail
             var productDetail = {
                 unitprice: $scope.selectedProduct.unitprice,
@@ -108,7 +108,7 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
                 product: { idproduct: response.data.idproduct }, // ID sản phẩm vừa thêm
                 size: { idsize: $scope.selectedProduct.size.idsize } // ID kích thước
             };
-
+    
             // Gửi yêu cầu thêm ProductDetail
             return $http.post('http://localhost:8080/beesixcake/api/productdetail', productDetail);
         }).then(function (response) {
@@ -123,6 +123,7 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
             $scope.messageType = 'error';
         });
     };
+    
 
 
     $scope.editProduct = function (product) {
