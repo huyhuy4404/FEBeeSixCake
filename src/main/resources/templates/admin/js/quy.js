@@ -3,6 +3,7 @@ var app = angular.module('myApp', []);
 app.controller('discountsController', function($scope, $http) {
     $scope.orderdetai = [];
     $scope.filteredOrderDetails = []; // Biến để lưu dữ liệu đã lọc
+    $scope.quarterlyStats = []; // Thống kê theo quý
     $scope.startDate = null; // Ngày bắt đầu
     $scope.endDate = null; // Ngày kết thúc
 
@@ -15,6 +16,8 @@ app.controller('discountsController', function($scope, $http) {
                 var orderDate = new Date(item.order.orderdate);
                 return {
                     date: orderDate.toISOString().split('T')[0], // Lưu ngày theo định dạng YYYY-MM-DD
+                    month: orderDate.getMonth() + 1, // Tháng (1-12)
+                    year: orderDate.getFullYear(), // Năm
                     name: item.productdetail.product.productname,
                     img: item.productdetail.product.img,
                     categoryName: item.productdetail.product.category.categoryname,
@@ -26,6 +29,7 @@ app.controller('discountsController', function($scope, $http) {
                 };
             });
             $scope.filteredOrderDetails = $scope.orderdetai; // Khởi tạo dữ liệu đã lọc
+            $scope.calculateQuarterlyStats(); // Tính toán thống kê theo quý
             $scope.renderChart(); // Vẽ biểu đồ ngay khi dữ liệu được lấy
         })
         .catch(function(error) {
@@ -33,9 +37,28 @@ app.controller('discountsController', function($scope, $http) {
         });
     };
 
+    // Hàm tính toán thống kê theo quý
+    $scope.calculateQuarterlyStats = function() {
+        $scope.quarterlyStats = [];
+
+        // Nhóm dữ liệu theo quý
+        $scope.filteredOrderDetails.forEach(function(item) {
+            var quarter = Math.ceil(item.month / 3); // Tính quý
+            var year = item.year;
+
+            // Tạo hoặc cập nhật đối tượng thống kê cho quý
+            var stat = $scope.quarterlyStats.find(s => s.quarter === quarter && s.year === year);
+            if (!stat) {
+                stat = { quarter: quarter, year: year, totalQuantity: 0, totalRevenue: 0 };
+                $scope.quarterlyStats.push(stat);
+            }
+            stat.totalQuantity += item.quantity;
+            stat.totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
+        });
+    };
+
     // Hàm xuất dữ liệu ra Excel
     $scope.exportToExcel = function() {
-        
         const worksheet = XLSX.utils.json_to_sheet($scope.filteredOrderDetails.map(item => ({
             'Ngày tạo': item.date,
             'Loại Sản Phẩm': item.categoryName,
@@ -77,6 +100,8 @@ app.controller('discountsController', function($scope, $http) {
             }
         });
 
+        // Tính toán thống kê theo quý sau khi lọc dữ liệu
+        $scope.calculateQuarterlyStats();
         // Cập nhật biểu đồ sau khi lọc dữ liệu
         $scope.renderChart();
     };
@@ -84,23 +109,35 @@ app.controller('discountsController', function($scope, $http) {
     // Hàm vẽ biểu đồ
     $scope.renderChart = function() {
         // Nếu không có dữ liệu, không vẽ biểu đồ
-        if ($scope.filteredOrderDetails.length === 0) {
-            document.getElementById("pie-chart").innerHTML = ""; // Xóa biểu đồ nếu không có dữ liệu
+        if ($scope.quarterlyStats.length === 0) {
+            document.getElementById("bar-chart").innerHTML = ""; // Xóa biểu đồ nếu không có dữ liệu
             return;
         }
-
+    
         var options = {
-            series: $scope.filteredOrderDetails.map(item => item.quantity), // Số lượng sản phẩm
+            series: [{
+                name: 'Tổng Số Lượng',
+                data: $scope.quarterlyStats.map(stat => stat.totalQuantity), // Tổng số lượng cho từng quý
+            }],
             chart: {
-                width: 380,
-                type: 'pie',
+                type: 'bar', // Đặt loại biểu đồ là cột
+                height: 300,
+                width: 300 // Chiều rộng toàn bộ biểu đồ
             },
-            labels: $scope.filteredOrderDetails.map(item => item.name), // Tên sản phẩm
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '50%', // Đặt chiều rộng cột, bạn có thể điều chỉnh giá trị này
+                }
+            },
+            xaxis: {
+                categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`), // Tên quý
+            },
             responsive: [{
                 breakpoint: 480,
                 options: {
                     chart: {
-                        width: 200
+                        width: 200,
                     },
                     legend: {
                         position: 'bottom'
@@ -108,8 +145,8 @@ app.controller('discountsController', function($scope, $http) {
                 }
             }]
         };
-
-        var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
+    
+        var chart = new ApexCharts(document.querySelector("#bar-chart"), options);
         chart.render();
     };
 

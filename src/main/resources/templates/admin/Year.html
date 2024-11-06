@@ -16,15 +16,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-
         }
-        .nav-item.dropdown .dropdown-menu {
-    display: none; /* Ẩn menu xổ xuống mặc định */
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block; /* Hiện menu khi hover */
-}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -161,12 +153,17 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
                                         <a class="dropdown-item" href="quy.html">
-                                            Quản Lý Doanh Thu theo Quý
+                                             Doanh Thu theo Quý
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="thang.html">
-                                            Quản Lý Doanh Thu theo Năm
+                                             Doanh Thu theo Tháng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="Year.html">
+                                             Doanh Thu theo Năm
                                         </a>
                                     </li>
                                 </ul>
@@ -183,53 +180,54 @@
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Tồn Kho Theo Loại</h1>
+                        <h1 class="h2 mb-0">Tồn Kho Theo năm</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
                             <div class="custom-block">
-                                <div id="pie-chart"></div>
-                            </div>
-                            
-                            <div class="card">
-                                <div class="card-header">
-                                    Bảng hiển thị dữ liệu
-                                </div>
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-sm-6">
-                                            <label for="start-date">Ngày Bắt Đầu</label>
-                                            <input id="start-date" class="form-control" type="date" ng-model="startDate" ng-change="filterData()">
+                                <div class="card">
+                                    <div class="">
+                                        <div class="card-header">
+                                            Thống kê theo năm
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="end-date">Ngày Kết Thúc</label>
-                                            <input id="end-date" class="form-control" type="date" ng-model="endDate" ng-change="filterData()">
+                                        <div class="card-body">
+                                            <div id="yearly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo năm -->
                                         </div>
                                     </div>
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Ngày tạo</th>
-                                                <th>Loại Sản Phẩm</th>
-                                                <th>Số lượng</th>
-                                                <th>Giá</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="item in filteredOrderDetails">
-                                                <td>{{item.date}}</td>
-                                                <td>{{item.categoryName}}</td>
-                                                <td>{{item.quantity}}</td>
-                                                <td>{{formatCurrency(item.quantity * item.unitprice)}} </td> <!-- Tính tổng tiền và định dạng -->
-                                            </tr>
-                                            <tr ng-if="filteredOrderDetails.length === 0">
-                                                <td colspan="4">Không có dữ liệu</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <button ng-click="exportToExcel()" class="btn btn-success">Xuất Excel</button>
+                                
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="year-input">Nhập Năm</label>
+                                            <input type="number" id="year-input" class="form-control" ng-model="selectedYear" ng-change="filterDataByYear()" placeholder="Nhập năm (ví dụ: 2024)" min="2021">
+                                        </div>
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Năm</th>
+                                                    <th>Loại Sản Phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in filteredOrderDetails">
+                                                    <td>Năm {{item.year}}</td> <!-- Hiển thị năm -->
+                                                    <td>{{item.categoryName}}</td>
+                                                    <td>{{item.quantity}}</td>
+                                                    <td>{{formatCurrency(item.quantity * item.unitprice)}} </td> <!-- Tính tổng tiền và định dạng -->
+                                                </tr>
+                                                <tr ng-if="filteredOrderDetails.length === 0">
+                                                    <td colspan="4">Không có dữ liệu cho năm đã chọn.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
+                                
+                              
+                             
+                                
+                               
                         </div>
                     </div>
                     <footer class="site-footer">
@@ -243,7 +241,7 @@
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
-    <script src="../admin/js/revenue.js"></script>
+    <script src="../admin/js/Year.js"></script>
 
 </body>
 </html>

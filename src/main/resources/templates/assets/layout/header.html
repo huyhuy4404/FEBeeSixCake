@@ -79,8 +79,15 @@
                         <li ng-if="!isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/login.html" data-lang="Tiếng Việt">Đăng nhập</a></li>
                         <li ng-if="!isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/register.html" data-lang="English">Đăng ký</a></li>
                         <li ng-if="isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/Information.html" data-lang="English">Thông tin cá nhân</a></li>
+<<<<<<< HEAD
                         <li ng-if="isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/addrest.html" data-lang="English">Địa chỉ</a></li>
                         <li ng-if="isLoggedIn"><a class="dropdown-item" href="/src/main/resources/templates/assets/changepassword.html" ng-click="logout()">Đổi mật khẩu</a></li>
+=======
+                       
+                        <li ng-if="isLoggedIn">
+                            <a class="dropdown-item" href="/src/main/resources/templates/assets/changepassword.html">Đổi mật khẩu</a>
+                        </li>                       
+>>>>>>> doan
                         <li ng-if="isLoggedIn"><a class="dropdown-item" href="#" ng-click="logout()">Đăng xuất</a></li>
                     </ul>
                 </div>
