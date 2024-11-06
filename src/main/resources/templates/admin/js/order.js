@@ -201,7 +201,6 @@ app.controller("OrderController", function ($scope, $http) {
     console.log("Tổng tiền cho từng đơn hàng:", totalOrderSummary);
     return totalOrderSummary;  // Trả về đối tượng chứa tổng tiền của các đơn hàng
 };
-console.log('Tổng tiền chi tiết cho đơn hàng ' + 2 + ':', totalOrderDetail);
 
 
 });
