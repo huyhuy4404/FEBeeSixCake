@@ -151,6 +151,18 @@
                                     Quản Lý doanh thu
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="quy.html">
+                                    <i class="bi-person me-2"></i>
+                                    Quản Lý doanh thu theo quý
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="thang.html">
+                                    <i class="bi-person me-2"></i>
+                                    Quản Lý doanh thu theo năm
+                                </a>
+                            </li>
                             <li class="nav-item border-top mt-auto pt-2">
                                 <a class="nav-link" href="#">
                                     <i class="bi-box-arrow-left me-2"></i>
@@ -170,23 +182,24 @@
                             <div class="custom-block">
                                
                                 <div class="card">
-                                    <div class="card-header">
-                                        Bảng hiển thị dữ liệu
+                                    <div class="">
+                                        <div class="card-header">
+                                            Thống kê theo tháng
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="monthly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
+                                        </div>
                                     </div>
+                                
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="month-select">Chọn Tháng</label>
-                                            <select id="month-select" class="form-control" ng-model="selectedMonth" ng-change="filterData()">
-                                                <option value="">-- Chọn tháng --</option>
-                                                <option ng-repeat="month in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]" value="{{month}}">
-                                                    Tháng {{month}}
-                                                </option>
-                                            </select>
+                                            <label for="month-input">Nhập Tháng</label>
+                                            <input type="number" id="month-input" class="form-control" ng-model="selectedMonth" ng-change="filterData()" placeholder="Nhập tháng (1-12)" min="1" max="12">
                                         </div>
                                         <table class="table table-hover table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th>Ngày tạo</th>
+                                                    <th>Tháng</th>
                                                     <th>Loại Sản Phẩm</th>
                                                     <th>Số lượng</th>
                                                     <th>Giá</th>
@@ -194,7 +207,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="item in filteredOrderDetails">
-                                                    <td>{{item.date}}</td>
+                                                    <td>Tháng {{item.month}}</td> <!-- Hiển thị tháng -->
                                                     <td>{{item.categoryName}}</td>
                                                     <td>{{item.quantity}}</td>
                                                     <td>{{formatCurrency(item.unitprice)}}</td> <!-- Định dạng tiền tệ -->
@@ -207,14 +220,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="card mt-4">
-                                    <div class="card-header">
-                                        Thống kê theo tháng
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="monthly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
-                                    </div>
-                                </div>
+                              
                              
                                 
                                
