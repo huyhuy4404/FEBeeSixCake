@@ -1,114 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/hau.css">
-    <link rel="stylesheet" href="../assets/css/thuan.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
-    <link rel="stylesheet" href="css/style.css">
+    <link
+      rel="stylesheet"
+      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../assets/css/hau.css" />
+    <link rel="stylesheet" href="../assets/css/thuan.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
 
-</head>
-
-<body ng-app="order" ng-controller="CheckLogin">
-
+  <body ng-app="order" ng-controller="CheckLogin">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
     <div class="order" ng-controller="CartController">
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="TatCa-tab" data-bs-toggle="tab" data-bs-target="#TatCa"
-                    type="button" role="tab" aria-controls="TatCa" aria-selected="true">Tất cả</button>
-                <button class="nav-link" id="ChoXacNhan-tab" data-bs-toggle="tab" data-bs-target="#ChoXacNhan"
-                    type="button" role="tab" aria-controls="ChoXacNhan" aria-selected="false">Chờ xác nhận</button>
-                <button class="nav-link" id="ChoVanChuyen-tab" data-bs-toggle="tab" data-bs-target="#ChoVanChuyen"
-                    type="button" role="tab" aria-controls="ChoVanChuyen" aria-selected="false">Chờ vận chuyển</button>
-                <button class="nav-link" id="ChoGiaoHang-tab" data-bs-toggle="tab" data-bs-target="#ChoGiaoHang"
-                    type="button" role="tab" aria-controls="ChoGiaoHang" aria-selected="false">Chờ giao hàng</button>
-                <button class="nav-link" id="HoanThanh-tab" data-bs-toggle="tab" data-bs-target="#HoanThanh"
-                    type="button" role="tab" aria-controls="HoanThanh" aria-selected="false">Hoàn thành</button>
-                <button class="nav-link" id="Huy-tab" data-bs-toggle="tab" data-bs-target="#Huy" type="button"
-                    role="tab" aria-controls="Huy" aria-selected="false">Hủy</button>
-            </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="container mt-4">
-                <h3 class="cart-header">GIỎ HÀNG CỦA BẠN</h3>
-                <h5>
-                    Giỏ hàng của bạn (<b class="cart-cnt">{{ products.length }}</b> sản phẩm)
-                    <span class="float-end" style="font-weight: bold; font-size: 16px;">
-                        Tổng tiền: <span style="color: #CC3300">{{ calculateTotal() }} VNĐ</span>
-                    </span>
+      <div class="container mt-4">
+        <h3 class="cart-header">GIỎ HÀNG CỦA BẠN</h3>
+        <h5>
+          Giỏ hàng của bạn (<b class="cart-cnt">{{ products.length }}</b> sản
+          phẩm)
+          <span class="float-end" style="font-weight: bold; font-size: 16px">
+            Tổng tiền:
+            <span style="color: #cc3300">{{ calculateTotal() }} VNĐ</span>
+          </span>
+        </h5>
+        <table class="table cart-table">
+          <thead>
+            <tr>
+              <th style="width: 5%; text-align: center">Chọn</th>
+              <th style="width: 15%; text-align: center">Ảnh</th>
+              <th style="width: 25%; text-align: left">Tên Sản Phẩm</th>
+              <th style="width: 10%; text-align: right">Giá</th>
+              <th style="width: 10%; text-align: center">Số Lượng</th>
+              <th style="width: 10%; text-align: right">Tổng Tiền</th>
+              <th style="width: 5%; text-align: center">Xóa</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="product in products">
+              <td style="text-align: center; vertical-align: middle">
+                <input type="checkbox" ng-model="product.selected" />
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <img
+                  ng-src="../assets/img/{{ product.image }}"
+                  style="width: 80px; height: auto"
+                />
+              </td>
+              <td style="vertical-align: middle">
+                <p style="font-size: 18px; font-weight: bold">
+                  {{ product.name }}
+                </p>
+              </td>
+              <td style="text-align: right; vertical-align: middle">
+                <p style="font-weight: bold">{{ product.price }} VNĐ</p>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <input
+                  type="number"
+                  ng-model="product.quantity"
+                  min="1"
+                  ng-change="calculateTotal()"
+                  style="
+                    width: 60px;
+                    height: 40px;
+                    font-size: 16px;
+                    text-align: center;
+                  "
+                />
+              </td>
+              <td style="text-align: right; vertical-align: middle">
+                {{ product.price * product.quantity }} VNĐ
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <button
+                  class="btn btn-sm btn-danger"
+                  ng-click="removeFromCart(product)"
+                  style="font-size: 16px; padding: 10px"
+                >
+                  <i class="bi bi-trash"></i> Xóa
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Modal thông báo -->
+        <div
+          class="modal fade"
+          id="confirmationModal"
+          tabindex="-1"
+          aria-labelledby="confirmationModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">
+                  Thông báo
                 </h5>
-                <table class="table cart-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%; text-align: center;">Chọn</th> <!-- Cột chọn có chiều rộng cố định -->
-                            <th style="width: 15%; text-align: center;">Ảnh</th> <!-- Cột ảnh -->
-                            <th style="width: 20%; text-align: left;">Tên Sản Phẩm</th> <!-- Cột tên sản phẩm -->
-                            <th style="width: 25%; text-align: left;">Mô tả</th> <!-- Cột mô tả -->
-                            <th style="width: 10%; text-align: right;">Giá</th> <!-- Cột giá -->
-                            <th style="width: 10%; text-align: center;">Số Lượng</th> <!-- Cột số lượng -->
-                            <th style="width: 10%; text-align: right;">Tổng Tiền</th> <!-- Cột tổng tiền -->
-                            <th style="width: 5%; text-align: center;">Xóa</th> <!-- Cột xóa -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="product in products">
-                            <td style="text-align: center; vertical-align: middle;"> <!-- Căn giữa checkbox -->
-                                <input type="checkbox" ng-model="product.selected" />
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;"> <!-- Căn giữa ảnh -->
-                                <img ng-src="../assets/img/{{product.image}}" style="width: 80px; height: auto;">
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <p style="font-size: 18px; font-weight: bold;">{{product.name}}</p>
-                                <p style="color: gray;">SKU: {{product.id}}</p>
-                            </td>
-                            <td style="vertical-align: middle;">
-                                <p>{{product.description}}</p>
-                            </td>
-                            <td style="text-align: right; vertical-align: middle;">
-                                <p style="font-weight: bold;">{{product.price}} VNĐ</p>
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <input type="number" ng-model="product.quantity" min="1"
-                                    style="width: 60px; height: 40px; font-size: 16px; text-align: center;">
-                            </td>
-                            <td style="text-align: right; font-weight: bold; vertical-align: middle;">
-                                {{product.price * product.quantity}} VNĐ
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;">
-                                <button class="btn btn-sm btn-danger" ng-click="removeFromCart($index)" style="font-size: 16px; padding: 10px;">
-                                    <i class="bi bi-trash"></i> Xóa
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <hr />
-                <div class="text-center">
-                    <button class="btn btn-lg btn-warning" ng-click="clearCart()">Xóa giỏ hàng</button>
-                    <a href="/home" class="btn btn-lg btn-primary">Tiếp tục mua hàng</a>
-                    <a href="/src/main/resources/templates/assets/thanhtoan.html" class="btn btn-lg btn-success">Đặt hàng</a>
-                    <!-- Nút đặt hàng -->
-                    
-
-                </div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                Bạn có chắc chắn muốn xóa sản phẩm này không?
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  ng-click="confirmRemove()"
+                >
+                  Xóa
+                </button>
+              </div>
             </div>
+          </div>
         </div>
+
+        <hr />
+        <div class="text-center">
+          <button class="btn btn-lg btn-warning" ng-click="clearCart()">
+            Xóa giỏ hàng
+          </button>
+          <a href="/home" class="btn btn-lg btn-primary">Tiếp tục mua hàng</a>
+          <a href="/thanhtoan.html" class="btn btn-lg btn-success">Đặt hàng</a>
+        </div>
+      </div>
     </div>
+
     <div ng-include="'layout/footer.html'"></div>
     <script src="../assets/js/bootstrap.bundle.js"></script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
     <script src="../assets/js/order.js"></script>
-
-</body>
-
+  </body>
 </html>
