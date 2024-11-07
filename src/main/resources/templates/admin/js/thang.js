@@ -68,20 +68,33 @@ $scope.filterData = function() {
 // Hàm tính toán thống kê theo tháng
 $scope.calculateMonthlyStats = function() {
     $scope.monthlyStats = [];
-    
-    // Nhóm dữ liệu theo tháng
+
+    // Nhóm dữ liệu theo tháng và loại sản phẩm
+    const statsMap = {}; // Đối tượng chứa thông tin thống kê
+
     $scope.filteredOrderDetails.forEach(function(item) {
         var monthYear = `${item.year}-${item.month < 10 ? '0' + item.month : item.month}`; // Định dạng "YYYY-MM"
-        
-        // Tạo hoặc cập nhật đối tượng thống kê cho tháng
-        var stat = $scope.monthlyStats.find(s => s.monthYear === monthYear);
-        if (!stat) {
-            stat = { monthYear: monthYear, totalQuantity: 0, totalRevenue: 0 };
-            $scope.monthlyStats.push(stat);
+        var categoryName = item.categoryName; // Lấy tên loại sản phẩm
+
+        // Tạo key cho mỗi loại sản phẩm trong tháng
+        var key = `${monthYear}-${categoryName}`;
+
+        if (!statsMap[key]) {
+            statsMap[key] = {
+                monthYear: monthYear,
+                categoryName: categoryName,
+                totalQuantity: 0,
+                totalRevenue: 0
+            };
         }
-        stat.totalQuantity += item.quantity;
-        stat.totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
+
+        // Cộng dồn số lượng và doanh thu cho loại sản phẩm
+        statsMap[key].totalQuantity += item.quantity; // Cộng dồn số lượng
+        statsMap[key].totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
     });
+
+    // Chuyển đổi đối tượng thành mảng để lưu vào monthlyStats
+    $scope.monthlyStats = Object.values(statsMap);
 
     console.log('Monthly Stats after calculation:', $scope.monthlyStats); // Kiểm tra thống kê sau khi tính toán
 };

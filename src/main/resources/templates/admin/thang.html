@@ -211,13 +211,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="item in filteredOrderDetails">
-                                                    <td>Tháng {{item.month}}</td> <!-- Hiển thị tháng -->
-                                                    <td>{{item.categoryName}}</td>
-                                                    <td>{{item.quantity}}</td>
-                                                    <td>{{formatCurrency(item.quantity * item.unitprice)}} </td> <!-- Tính tổng tiền và định dạng -->
+                                                <tr ng-repeat="stat in monthlyStats" ng-if="stat.totalQuantity > 0">
+                                                    <td>Tháng {{stat.monthYear}}</td> <!-- Hiển thị tháng -->
+                                                    <td>{{stat.categoryName}}</td>
+                                                    <td>{{stat.totalQuantity}}</td>
+                                                    <td>{{formatCurrency(stat.totalRevenue)}} </td> <!-- Tính tổng tiền và định dạng -->
                                                 </tr>
-                                                <tr ng-if="filteredOrderDetails.length === 0">
+                                                <tr ng-if="monthlyStats.length === 0">
                                                     <td colspan="4">Không có dữ liệu cho tháng đã chọn.</td>
                                                 </tr>
                                             </tbody>
