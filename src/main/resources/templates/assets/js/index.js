@@ -3,11 +3,13 @@ var app = angular.module("myApp", []);
 app.controller("discountsController", function ($scope, $http) {
   // Khởi tạo mảng để chứa sản phẩm
   $scope.Products = [];
+  $scope.category = [];
   $scope.CartItems = [];
   $scope.DiscountedProducts = [];
   $scope.NewProducts = [];
   $scope.ActiveProducts = [];
   $scope.FilteredProducts = []; // Khởi tạo mảng để chứa sản phẩm đã lọc
+  $scope.filcategoryname = [];
   $scope.selectedCategory = '';
 
   // Lấy dữ liệu từ API
@@ -56,6 +58,45 @@ app.controller("discountsController", function ($scope, $http) {
             window.location.href = 'SanPham.html#/' + categoryName;
         };
   };
+  $scope.getCategories = function () {
+    $http.get('http://localhost:8080/beesixcake/api/categories') // Thay đổi URL thành địa chỉ API danh mục
+        .then(function (response) {
+            // Kiểm tra dữ liệu từ API
+            console.log('Category Response:', response.data);
+
+            // Kiểm tra xem dữ liệu có hợp lệ không
+            if (!Array.isArray(response.data)) {
+                console.error("Dữ liệu không phải mảng!");
+                return;
+            }
+
+            // Lưu tất cả danh mục
+            $scope.categories = response.data.map(item => ({
+                idcategory: item.idcategory,
+                categoryname: item.categoryname
+            }));
+
+            // Kiểm tra danh mục
+            console.log('All Categories:', $scope.categories);
+        })
+        .catch(function (error) {
+            console.error("Error fetching categories:", error);
+        });
+};
+
+// Hàm lọc sản phẩm theo danh mục
+$scope.filterProducts = function (categoryName) {
+    // Lọc sản phẩm theo categoryname
+    $scope.FilteredProducts = $scope.Products.filter(function (product) {
+        return product.categoryname === categoryName;
+    });
+
+    // Kiểm tra danh sách sản phẩm đã lọc
+    console.log('Filtered Products:', $scope.FilteredProducts);
+};
+
+
+  
 
   // Hàm lọc sản phẩm theo loại
   // $scope.filterProducts = function (categoryName, startingLetter) {
@@ -92,6 +133,7 @@ app.controller("discountsController", function ($scope, $http) {
 
   // Gọi hàm để lấy dữ liệu
   $scope.getProducts();
+  $scope.getCategories();
 });
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
