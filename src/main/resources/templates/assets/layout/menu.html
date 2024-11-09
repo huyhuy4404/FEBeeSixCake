@@ -20,9 +20,9 @@
                   Sản Phẩm
               </a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
-                  <li ng-repeat="item in Products">
+                  <li ng-repeat="item in category"> <!-- Sửa đổi từ Products thành category -->
                       <a class="dropdown-item" ng-click="filterProducts(item.categoryname)">
-                          {{item.categoryname}}
+                          {{item.categoryname}} <!-- Hiển thị tên danh mục -->
                       </a>
                   </li>
               </ul>
