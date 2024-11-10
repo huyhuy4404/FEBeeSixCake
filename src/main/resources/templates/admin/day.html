@@ -20,7 +20,7 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
 </head>
 
@@ -180,43 +180,50 @@
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Doanh thu theo quý</h1>
+                        <h1 class="h2 mb-0">Doanh thu theo tháng</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
                             <div class="custom-block">
-                                <div id="bar-chart"></div>                            </div>
-                            
-                            <div class="card mt-4">
-                                <div class="card-header">
-                                    Doanh thu theo quý
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Năm</th>
-                                                <th>Quý</th>
-                                                <th>Tổng Số Lượng</th>
-                                                <th>Tổng Doanh Thu</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="stat in quarterlyStats">
-                                                <td>{{stat.year}}</td>
-                                                <td>{{stat.quarter}}</td>
-                                                <td>{{stat.totalQuantity}}</td>
-                                                <td>{{formatCurrency(stat.totalRevenue)}}</td>
-                                            </tr>
-                                            <tr ng-if="quarterlyStats.length === 0">
-                                                <td colspan="4">Không có dữ liệu thống kê</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="card">
+                                    <div class="">
+                                        <div class="card-header">
+                                            Doanh thu theo tháng
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="monthly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="month-input">Nhập Tháng</label>
+                                            <input type="number" id="month-input" class="form-control" ng-model="selectedMonth" ng-change="filterData()" placeholder="Nhập tháng (1-12)" min="1" max="12">
+                                        </div>
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tháng</th>
+                                                    <th>Loại Sản Phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Giá</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="stat in monthlyStats" ng-if="stat.totalQuantity > 0">
+                                                    <td>Tháng {{stat.monthYear}}</td> <!-- Hiển thị tháng -->
+                                                    <td>{{stat.categoryName}}</td>
+                                                    <td>{{stat.totalQuantity}}</td>
+                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tính tổng tiền và định dạng -->
+                                                </tr>
+                                                <tr ng-if="monthlyStats.length === 0">
+                                                    <td colspan="4">Không có dữ liệu cho tháng đã chọn.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <footer class="site-footer">
                         <!-- Footer omitted for brevity -->
                     </footer>
@@ -228,7 +235,7 @@
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
-    <script src="../admin/js/quy.js"></script>
+    <script src="../admin/js/day.js"></script>
 
 </body>
 </html>

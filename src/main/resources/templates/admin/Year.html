@@ -180,7 +180,7 @@
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Tồn Kho Theo năm</h1>
+                        <h1 class="h2 mb-0">Doanh thu Theo năm</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
@@ -188,39 +188,44 @@
                                 <div class="card">
                                     <div class="">
                                         <div class="card-header">
-                                            Thống kê theo năm
+                                            Doanh thu theo năm
                                         </div>
                                         <div class="card-body">
                                             <div id="yearly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo năm -->
                                         </div>
                                     </div>
                                 
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label for="year-input">Nhập Năm</label>
-                                            <input type="number" id="year-input" class="form-control" ng-model="selectedYear" ng-change="filterDataByYear()" placeholder="Nhập năm (ví dụ: 2024)" min="2021">
-                                        </div>
+                                    <div ng-app="myApp" ng-controller="discountsController">
+                                        <select ng-model="selectedYear" ng-change="filterDataByYear()">
+                                            <option value="">Chọn Năm</option>
+                                            <option ng-repeat="year in years" value="{{year}}">{{year}}</option>
+                                        </select>
+                                    
                                         <table class="table table-hover table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Năm</th>
-                                                    <th>Loại Sản Phẩm</th>
+                                                    <th>Tên Sản Phẩm</th>
                                                     <th>Số lượng</th>
                                                     <th>Giá</th>
+                                                    <th>Trạng Thái Thanh Toán</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="stat in yearlyStats">
-                                                    <td>Năm {{stat.year}}</td> <!-- Hiển thị năm -->
-                                                    <td>{{stat.categoryName}}</td>
-                                                    <td>{{stat.totalQuantity}}</td>
-                                                    <td>{{formatCurrency(stat.totalRevenue)}} </td> <!-- Tính tổng tiền và định dạng -->
+                                                <tr ng-repeat="item in yearlyStats">
+                                                    <td>{{item.year}}</td>
+                                                    <td>{{item.productName}}</td>
+                                                    <td>{{item.totalQuantity}}</td>
+                                                    <td>{{formatCurrency(item.totalRevenue)}}</td>
+                                                    <td>Đã thanh toán</td>
                                                 </tr>
                                                 <tr ng-if="yearlyStats.length === 0">
-                                                    <td colspan="4">Không có dữ liệu cho năm đã chọn.</td>
+                                                    <td colspan="5">Không có dữ liệu cho năm đã chọn hoặc sản phẩm chưa thanh toán.</td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    
+                                        <div id="yearly-bar-chart"></div> <!-- Biểu đồ doanh thu -->
                                     </div>
                                 </div>
                                 

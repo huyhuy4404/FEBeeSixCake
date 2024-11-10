@@ -180,7 +180,7 @@
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Thống kê theo tháng</h1>
+                        <h1 class="h2 mb-0">Doanh thu theo tháng</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
@@ -189,7 +189,7 @@
                                 <div class="card">
                                     <div class="">
                                         <div class="card-header">
-                                            Thống kê theo tháng
+                                            Doanh thu theo tháng
                                         </div>
                                         <div class="card-body">
                                             <div id="monthly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
@@ -215,7 +215,7 @@
                                                     <td>Tháng {{stat.monthYear}}</td> <!-- Hiển thị tháng -->
                                                     <td>{{stat.categoryName}}</td>
                                                     <td>{{stat.totalQuantity}}</td>
-                                                    <td>{{formatCurrency(stat.totalRevenue)}} </td> <!-- Tính tổng tiền và định dạng -->
+                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tính tổng tiền và định dạng -->
                                                 </tr>
                                                 <tr ng-if="monthlyStats.length === 0">
                                                     <td colspan="4">Không có dữ liệu cho tháng đã chọn.</td>
