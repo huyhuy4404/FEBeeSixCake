@@ -44,6 +44,7 @@ app.controller("CartController", [
                   image: item.productdetail.product.img,
                   idproductdetail: productDetailId,
                   size: item.productdetail.size,
+                  selected: false,
                 };
               }
             });
@@ -61,14 +62,38 @@ app.controller("CartController", [
       .catch(function (error) {
         console.error("Lỗi khi lấy giỏ hàng:", error);
       });
+    $scope.validateQuantity = function (product) {
+      if (isNaN(product.quantity) || product.quantity < 1) {
+        product.quantity = 1; // Đặt lại giá trị về 1 nếu không hợp lệ
+      }
+      $scope.calculateTotal(); // Tính lại tổng giỏ hàng
+    };
+    $scope.increaseQuantity = function (product) {
+      product.quantity += 1; // Tăng số lượng lên 1
+      $scope.calculateTotal(); // Tính lại tổng tiền
+    };
 
+    $scope.decreaseQuantity = function (product) {
+      if (product.quantity > 1) {
+        product.quantity -= 1; // Giảm số lượng xuống 1 (tối thiểu là 1)
+        $scope.calculateTotal(); // Tính lại tổng tiền
+      }
+    };
     // Tính tổng giá trị giỏ hàng
     $scope.calculateTotal = function () {
       $scope.totalPrice = $scope.products.reduce(function (sum, product) {
         return sum + product.price * product.quantity;
       }, 0);
     };
-
+    $scope.calculateSelectedTotal = function () {
+      const selectedTotal = $scope.products.reduce(function (sum, product) {
+        if (product.selected) {
+          return sum + product.price * product.quantity;
+        }
+        return sum;
+      }, 0);
+      return selectedTotal;
+    };
     // Đặt hàng
     $scope.placeOrder = function () {
       const orderData = {

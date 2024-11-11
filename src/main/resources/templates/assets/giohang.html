@@ -26,7 +26,9 @@
           phẩm)
           <span class="float-end" style="font-weight: bold; font-size: 16px">
             Tổng tiền:
-            <span style="color: #cc3300">{{ calculateTotal() }} VNĐ</span>
+            <span style="color: #cc3300" id="selectedTotal"
+              >{{ calculateSelectedTotal() | number:0 }} VNĐ</span
+            >
           </span>
         </h5>
         <table class="table cart-table">
@@ -64,14 +66,22 @@
                 </p>
               </td>
               <td style="text-align: right; vertical-align: middle">
-                <p style="font-weight: bold">{{ product.price }} VNĐ</p>
+                <p style="font-weight: bold">
+                  {{ product.price | number:0 }} VNĐ
+                </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
+                <button
+                  class="btn btn-sm btn-secondary"
+                  ng-click="decreaseQuantity(product)"
+                  style="font-size: 16px"
+                >
+                  -
+                </button>
                 <input
-                  type="number"
+                  type="text"
                   ng-model="product.quantity"
-                  min="1"
-                  ng-change="calculateTotal()"
+                  ng-blur="validateQuantity(product)"
                   style="
                     width: 60px;
                     height: 40px;
@@ -79,9 +89,18 @@
                     text-align: center;
                   "
                 />
+                <button
+                  class="btn btn-sm btn-secondary"
+                  ng-click="increaseQuantity(product)"
+                  style="font-size: 16px"
+                >
+                  +
+                </button>
               </td>
               <td style="text-align: right; vertical-align: middle">
-                {{ product.price * product.quantity }} VNĐ
+                <p style="font-weight: bold">
+                  {{ (product.price * product.quantity) | number:0 }} VNĐ
+                </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
                 <button
