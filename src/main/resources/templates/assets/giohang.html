@@ -34,7 +34,8 @@
             <tr>
               <th style="width: 5%; text-align: center">Chọn</th>
               <th style="width: 15%; text-align: center">Ảnh</th>
-              <th style="width: 25%; text-align: left">Tên Sản Phẩm</th>
+              <th style="width: 10%; text-align: left">Tên Sản Phẩm</th>
+              <th style="width: 10%; text-align: right">Kích thước</th>
               <th style="width: 10%; text-align: right">Giá</th>
               <th style="width: 10%; text-align: center">Số Lượng</th>
               <th style="width: 10%; text-align: right">Tổng Tiền</th>
@@ -55,6 +56,11 @@
               <td style="vertical-align: middle">
                 <p style="font-size: 18px; font-weight: bold">
                   {{ product.name }}
+                </p>
+              </td>
+              <td style="text-align: center; vertical-align: middle">
+                <p style="font-size: 18px; font-weight: bold">
+                  {{ product.size.sizename }}
                 </p>
               </td>
               <td style="text-align: right; vertical-align: middle">
@@ -135,9 +141,6 @@
 
         <hr />
         <div class="text-center">
-          <button class="btn btn-lg btn-warning" ng-click="clearCart()">
-            Xóa giỏ hàng
-          </button>
           <a href="/home" class="btn btn-lg btn-primary">Tiếp tục mua hàng</a>
           <a href="/thanhtoan.html" class="btn btn-lg btn-success">Đặt hàng</a>
         </div>
