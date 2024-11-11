@@ -49,6 +49,7 @@ app.controller("CartController", [
                   selected: false,
                   idcartitem: item.idcartitem || "Chưa có idcartitem",
                   cartItems: [item],
+                  stockQuantity: item.productdetail.quantityinstock,
                 };
               }
             });
@@ -61,6 +62,7 @@ app.controller("CartController", [
                 console.log(
                   `idcartitem: ${cartItem.idcartitem}, Tên sản phẩm: ${cartItem.productdetail.product.productname}, Sản phẩm này có cùng idproductdetail: ${productDetail.idproductdetail}`
                 );
+                console.log(`Tồn kho: ${productDetail.quantityinstock}`);
               });
             });
             // Tính tổng giá trị đơn hàng
