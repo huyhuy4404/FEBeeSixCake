@@ -31,10 +31,12 @@ app.controller("CartController", [
           .then(function (cartItemsResponse) {
             // Nhóm sản phẩm theo productdetail.idproductdetail
             const groupedProducts = {};
+
             cartItemsResponse.data.forEach(function (item) {
               const productDetailId = item.productdetail.idproductdetail;
               if (groupedProducts[productDetailId]) {
                 groupedProducts[productDetailId].quantity += item.quantity;
+                groupedProducts[productDetailId].cartItems.push(item);
               } else {
                 groupedProducts[productDetailId] = {
                   id: item.productdetail.product.idproduct,
@@ -45,13 +47,22 @@ app.controller("CartController", [
                   idproductdetail: productDetailId,
                   size: item.productdetail.size,
                   selected: false,
+                  idcartitem: item.idcartitem || "Chưa có idcartitem",
+                  cartItems: [item],
                 };
               }
             });
 
             // Chuyển groupedProducts thành mảng để hiển thị
             $scope.products = Object.values(groupedProducts);
-
+            $scope.products.forEach((product) => {
+              product.cartItems.forEach((cartItem) => {
+                const productDetail = cartItem.productdetail;
+                console.log(
+                  `idcartitem: ${cartItem.idcartitem}, Tên sản phẩm: ${cartItem.productdetail.product.productname}, Sản phẩm này có cùng idproductdetail: ${productDetail.idproductdetail}`
+                );
+              });
+            });
             // Tính tổng giá trị đơn hàng
             $scope.calculateTotal();
           })
