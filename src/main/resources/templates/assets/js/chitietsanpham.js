@@ -38,10 +38,38 @@ app.controller("ProductDetailController", function ($scope, $http) {
           $scope.productDetails.find((detail) => detail.size.idsize === 1) ||
           $scope.productDetails[0];
         $scope.selectedSize = $scope.selectedSizeDetail.size.sizename;
-        $scope.selectedQuantity = 1;
+        $scope.quantity = 1;
+        $scope.maxQuantity = $scope.selectedSizeDetail.quantityinstock;
       })
       .catch(function (error) {
         console.error("Error fetching product details:", error);
+      });
+
+    // Lấy tất cả sản phẩm để tính số lượng theo từng idcategory
+    $http
+      .get(`${API}/product`)
+      .then(function (response) {
+        const products = response.data;
+
+        // Đếm số lượng sản phẩm cho mỗi idcategory và lấy tên category
+        $scope.categories = products.reduce((acc, product) => {
+          const category = acc.find(
+            (cat) => cat.idcategory === product.category.idcategory
+          );
+          if (category) {
+            category.count += 1;
+          } else {
+            acc.push({
+              idcategory: product.category.idcategory,
+              categoryname: product.category.categoryname,
+              count: 1,
+            });
+          }
+          return acc;
+        }, []);
+      })
+      .catch(function (error) {
+        console.error("Error fetching categories:", error);
       });
   } else {
     console.error("Product ID is missing from the URL");
@@ -53,11 +81,37 @@ app.controller("ProductDetailController", function ($scope, $http) {
     $scope.selectedSizeDetail = $scope.productDetails.find(
       (detail) => detail.size.sizename === sizename
     );
+    $scope.maxQuantity = $scope.selectedSizeDetail.quantityinstock || 1;
+    $scope.quantity = 1; // Đặt lại số lượng về 1 khi thay đổi kích cỡ
   };
 
-  //yeuthich
+  // Yêu thích (toggle heart icon)
   $scope.isActive = false; // Khởi tạo biến trạng thái
   $scope.toggleHeart = function () {
     $scope.isActive = !$scope.isActive; // Đảo ngược trạng thái khi nhấn nút
+  };
+
+  // Giảm số lượng sản phẩm
+  $scope.decreaseQuantity = function () {
+    if ($scope.quantity > 1) {
+      $scope.quantity--;
+    }
+  };
+
+  // Tăng số lượng sản phẩm
+  $scope.increaseQuantity = function () {
+    if ($scope.quantity < $scope.maxQuantity) {
+      $scope.quantity++;
+    }
+  };
+
+  // Cập nhật số lượng sản phẩm khi người dùng thay đổi giá trị
+  $scope.updateQuantity = function () {
+    $scope.quantity = parseInt($scope.quantity);
+    if ($scope.quantity > $scope.maxQuantity) {
+      $scope.quantity = $scope.maxQuantity;
+    } else if ($scope.quantity < 1) {
+      $scope.quantity = 1;
+    }
   };
 });

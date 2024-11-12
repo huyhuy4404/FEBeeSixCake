@@ -33,17 +33,17 @@
     <div class="row">
       <div class="col-lg-8">
         <div class="row">
-          <div class="col-lg-5">
+          <div class="col-lg-6">
             <div class="box-img-detail">
               <a href="">
                 <img ng-src="{{product.img}}" alt="{{product.productname}}"
-                  class="img-reponsive mt-0" style="width: 340px; height: 350px;">
+                  class="img-reponsive mt-0" style="width: 340px; height: 350px; margin-bottom: 0px;">
               </a>
             </div>
           </div>
-          <div class="col-lg-7">
+          <div class="col-lg-6">
             <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
-            <div class="danhgia">
+            <div class="danhgia text-chitietsp">
               <b>5.0</b>
               <div class="rating">
                 <label class="active">★</label>
@@ -61,35 +61,41 @@
                 <span class="current-price">{{selectedSizeDetail.unitprice | number : 0}}₫</span>
               </div>
             </div>
-            <div>
-              <span class="QuantityInStock">Số lượng hiện có:
+            <div class="">
+              <span class="QuantityInStock text-chitietsp">Số lượng hiện có:
                 <b>{{selectedSizeDetail.quantityinstock}}</b></span>
-              <span class="QuantityInStock ms-4">Số lượng yêu thích:
+              <span class="QuantityInStock text-chitietsp ms-4">Số lượng yêu thích:
                 <b>1</b></span>
                 <button type="button" class="btn btn-yt" ng-click="toggleHeart()" ng-class="{'active': isActive}">
                   <i class="bi bi-heart-fill"></i>
                 </button>
             </div>
-            <div class="size-pd">
-              <span>Kích cỡ: </span>
+            <div class="size-pd text-chitietsp mt-1">
+              <span class="text-chitietsp">Kích cỡ: </span>
               <div class="size-options">
-                <button ng-repeat="detail in productDetails"
+                <button ng-repeat="detail in productDetails" style="width: 50px; font-weight: bold"
                   ng-class="{'selected-size': selectedSize === detail.size.sizename}" class="size-button"
                   ng-click="selectSize(detail.size.sizename)">
                   {{detail.size.sizename}}
                 </button>
               </div>
             </div>
-            <div class="moTa mt-3">
-              <textarea rows="5" readonly>{{ product.description }}</textarea>
+            <div class="number-card text-chitietsp mt-3">
+              <span>Số lượng:</span>
+                <div class="buttons_added">
+                  <button class="minus is-form" type="button" ng-click="decreaseQuantity()">
+                    <i class="bi bi-dash-lg"></i>
+                  </button>
+                  
+                  <input aria-label="quantity" class="input-qty" max="{{maxQuantity}}" min="1" ng-model="quantity" name="quantity" type="number">
+                  
+                  <button class="plus is-form" type="button" ng-click="increaseQuantity()">
+                    <i class="bi bi-plus-lg"></i>
+                  </button>
+              </div>  
             </div>
-            <div class="inner-load">
+            <div class="inner-load mt-3 ps-0">
               <div class="box-add">
-                <div class="number-card">
-                  <span>Số lượng:</span>
-                  <input type="number" name="numberproduct" id="numberproduct" class="form-control" value="1" min="1"
-                    max="{{selectedSizeDetail.quantityinstock}}" ng-model="selectedQuantity" />
-                </div>
                 <div class="btn-chitietsanpham">
                   <button type="button" class="btn btn-primary me-2">
                     <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
@@ -101,6 +107,10 @@
               </div>
             </div>
           </div>
+          <div class="moTa mt-3" style="padding-left: 50px;">
+            <span class="text-chitietsp">Mô tả:</span>
+            <textarea rows="5" readonly>{{ product.description }}</textarea>
+          </div>
         </div>
       </div>
       <div class="col-lg-4">
@@ -108,9 +118,9 @@
           <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
           <hr />
           <ul class="list-group">
-            <li class="list-group-item" style="border: none">
-              Tên loại sản phẩm
-              <span class="">(14)</span>
+            <li class="list-group-item" style="border: none" ng-repeat="category in categories">
+              {{ category.categoryname }}
+              <span class="">({{ category.count }})</span>
             </li>
           </ul>
         </div>
