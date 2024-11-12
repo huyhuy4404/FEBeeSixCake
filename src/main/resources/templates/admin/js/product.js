@@ -64,22 +64,20 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
             });
     };
 
-    // Add new product
+    // Upload image and display preview
     $scope.uploadImage = function (file) {
         if (file) {
-            // Chỉ lưu tên tệp
             $scope.selectedProduct.img = file.name; // Lưu tên tệp
             var reader = new FileReader();
             reader.onload = function (event) {
                 $scope.$apply(function () {
-                    $scope.selectedProduct.imgPreview = event.target.result; // Để xem trước ảnh
+                    $scope.selectedProduct.imgPreview = event.target.result; // Hiển thị ảnh xem trước
                 });
             };
             reader.readAsDataURL(file);
         }
     };
 
-    // Hàm thêm sản phẩm
     // Hàm thêm sản phẩm
     $scope.addProduct = function () {
         var fd = new FormData();
@@ -94,6 +92,41 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
         fd.append('isactive', $scope.selectedProduct.isactive); // Chuyển đổi kiểu nếu cần
         fd.append('category.idcategory', $scope.selectedProduct.category.idcategory);
 
+        // Kiểm tra kích thước và đơn giá
+        if (!$scope.selectedProduct.size || !$scope.selectedProduct.size.unitprice) {
+            console.error("Lỗi: Đơn giá và kích thước sản phẩm chưa được chọn.");
+            $scope.message = "Vui lòng chọn kích thước và đơn giá cho sản phẩm.";
+            $scope.messageType = 'error';
+            return;
+        }
+
+        // Kiểm tra số lượng tồn kho cho từng kích thước
+        var quantity = 0;
+        if (Array.isArray($scope.selectedProduct.sizes)) {
+            $scope.selectedProduct.sizes.forEach(function (size) {
+                if (size.quantity) {
+                    quantity += parseFloat(size.quantity); // Cộng tổng số lượng cho tất cả các kích thước
+                }
+            });
+        } else {
+            console.error("Lỗi: sizes không phải là mảng hoặc chưa được khởi tạo.");
+            $scope.message = "Dữ liệu kích thước không hợp lệ.";
+            $scope.messageType = 'error';
+            return;
+        }
+
+        console.log("Số lượng tồn kho kiểm tra:", quantity); // Debug tại đây
+
+        if (quantity <= 0 || isNaN(quantity)) {
+            console.error("Lỗi: Số lượng tồn kho sản phẩm chưa được chọn hoặc không hợp lệ.");
+            $scope.message = "Vui lòng chọn số lượng tồn kho hợp lệ cho sản phẩm.";
+            $scope.messageType = 'error';
+            return;
+        }
+
+        console.log("Số lượng tồn kho hợp lệ:", quantity);
+        fd.append('quantityinstock', quantity);
+
         // Gửi form data đến API để thêm sản phẩm
         $http.post('http://localhost:8080/beesixcake/api/product', fd, {
             transformRequest: angular.identity,
@@ -101,22 +134,48 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
         }).then(function (response) {
             console.log("Sản phẩm đã được thêm thành công:", response.data);
 
-            // Thêm thông tin chi tiết sản phẩm vào ProductDetail
-            var productDetail = {
-                unitprice: $scope.selectedProduct.unitprice,
-                quantityinstock: $scope.selectedProduct.quantityinstock,
-                product: { idproduct: response.data.idproduct }, // ID sản phẩm vừa thêm
-                size: { idsize: $scope.selectedProduct.size.idsize } // ID kích thước
-            };
+            // Thêm chi tiết sản phẩm cho từng kích thước đã chọn
+            var productDetailPromises = [];
 
-            // Gửi yêu cầu thêm ProductDetail
-            return $http.post('http://localhost:8080/beesixcake/api/productdetail', productDetail);
-        }).then(function (response) {
-            console.log("Chi tiết sản phẩm đã được thêm thành công:", response.data);
+            // Nếu có nhiều kích thước được chọn
+            if (Array.isArray($scope.selectedProduct.sizes) && $scope.selectedProduct.sizes.length > 0) {
+                $scope.selectedProduct.sizes.forEach(function (size) {
+                    var productDetail = {
+                        unitprice: size.unitprice,  // Đảm bảo dùng giá của kích thước
+                        quantityinstock: size.quantity,  // Sử dụng số lượng của kích thước
+                        product: { idproduct: response.data.idproduct }, // ID sản phẩm vừa thêm
+                        size: { idsize: size.idsize } // ID kích thước
+                    };
+
+                    // Thực hiện thêm chi tiết sản phẩm vào API
+                    productDetailPromises.push(
+                        $http.post('http://localhost:8080/beesixcake/api/productdetail', productDetail)
+                    );
+                });
+            }
+            // Nếu chỉ có một kích thước, thêm chi tiết sản phẩm
+            else {
+                var productDetail = {
+                    unitprice: $scope.selectedProduct.size.unitprice,
+                    quantityinstock: quantity, // Sử dụng số lượng tổng
+                    product: { idproduct: response.data.idproduct }, // ID sản phẩm vừa thêm
+                    size: { idsize: $scope.selectedProduct.size.idsize } // ID kích thước
+                };
+
+                productDetailPromises.push(
+                    $http.post('http://localhost:8080/beesixcake/api/productdetail', productDetail)
+                );
+            }
+
+            // Chờ tất cả các promise được xử lý (thêm chi tiết sản phẩm)
+            return Promise.all(productDetailPromises);
+        }).then(function (responses) {
+            console.log("Chi tiết sản phẩm đã được thêm thành công:", responses);
             $scope.loadProducts(); // Tải lại danh sách sản phẩm
             $scope.selectedProduct = {}; // Đặt lại form
             $scope.message = "Thêm sản phẩm và chi tiết sản phẩm thành công!";
             $scope.messageType = 'success';
+
         }).catch(function (error) {
             console.error('Lỗi khi thêm sản phẩm hoặc chi tiết sản phẩm:', error);
             $scope.message = "Thêm sản phẩm hoặc chi tiết sản phẩm thất bại. Vui lòng thử lại.";
@@ -124,7 +183,40 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
         });
     };
 
+    // Hàm log thông tin kích thước khi người dùng chọn
+    $scope.logSelectedSize = function(size) {
+        if (size.isSelected) {
+            console.log("Kích thước đã chọn:", size.idsize);
+            if (size.unitprice !== undefined && size.unitprice !== null) {
+                console.log("Đơn giá của kích thước này:", size.unitprice);
+            } else {
+                console.log("Chưa có giá cho kích thước này.");
+            }
+            $scope.selectedProduct.size = size;
+        } else {
+            console.log("Kích thước bỏ chọn:", size.idsize);
+            $scope.selectedProduct.size = null; // Xóa size nếu bỏ chọn
+        }
+    };
 
+    // Hàm log thay đổi giá khi người dùng nhập
+    $scope.logPriceChange = function(size) {
+        if (size.unitprice !== undefined && size.unitprice !== null) {
+            console.log("Đơn giá của kích thước " + size.sizename + " là:", size.unitprice);
+        }
+    };
+    
+
+    $scope.logQuantityChange = function(size) {
+        if (size.quantity !== undefined && size.quantity !== null) {
+            console.log("Số lượng của kích thước " + size.sizename + " là: " + size.quantity);
+        } else {
+            console.log("Chưa có số lượng cho kích thước " + size.sizename);
+        }
+    };
+    
+    
+    
     // Edit product
     $scope.editProduct = function (product) {
         // Sao chép dữ liệu của sản phẩm đã chọn

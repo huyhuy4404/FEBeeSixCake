@@ -1,0 +1,23 @@
+{
+    "Tiếng Việt": {
+      "notification": "Thông báo",
+      "favorite": "Yêu thích",
+      "mapAddress": "Địa chỉ trên bản đồ",
+      "login": "Đăng nhập",
+      "register": "Đăng ký",
+      "account": "Tài khoản",
+      "profile": "Thông tin cá nhân",
+      "logout": "Đăng xuất"
+    },
+    "English": {
+      "notification": "Notification",
+      "favorite": "Favorites",
+      "mapAddress": "Map Address",
+      "login": "Login",
+      "register": "Register",
+      "account": "Account",
+      "profile": "Profile",
+      "logout": "Logout"
+    }
+  }
+  

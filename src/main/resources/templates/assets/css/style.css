@@ -1,0 +1,361 @@
+body {
+  font-family: roboto;
+  color: #2e1d15;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* header */
+.parent-header {
+  background-color: #d38450;
+  color: white;
+  padding-top: 5px;
+  padding-bottom: 40px;
+}
+
+.text-header-left,
+.text-header-right {
+  color: white;
+  text-decoration: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  font-size: 19px;
+}
+
+.Notification,
+.love,
+.map,
+.language {
+  margin-right: 15px;
+}
+
+/* menu */
+.parent-menu {
+  background-color: white;
+  color: #2e1d15;
+  border-radius: 30px;
+  font-weight: bold;
+  position: fixed;
+  width: 90%;
+  font-size: 24px;
+  box-shadow: 0px 0px 6px 2px #555;
+
+}
+
+.menu div ul li a {
+  font-weight: bold;
+}
+
+.menu div div ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-right {
+  float: right;
+  margin-right: 30px;
+}
+
+.menu-left {
+  float: left;
+  margin-left: 30px;
+}
+
+/* cart */
+.cart {
+  font-size: 1.5rem;
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 60%;
+  padding: 2px 7px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* Tìm kiếm */
+.SPTimKiem {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  /* Đặt sản phẩm bắt đầu từ bên trái */
+  gap: 15px;
+  /* Khoảng cách giữa các sản phẩm */
+  padding: 10px;
+  /* Thêm khoảng cách giữa các sản phẩm và rìa modal */
+}
+
+.cart-item-timkiem {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  width: 250px;
+  /* Đặt độ rộng cho sản phẩm */
+}
+
+.cart-image img {
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.cart-details h5 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.cart-details p {
+  margin: 5px 0 0;
+  color: #555;
+}
+
+#exampleModal .modal-dialog {
+  margin: 0 auto; /* Giữ modal ở giữa theo chiều ngang */
+  top: 17%; /* Đặt modal cách phía trên một khoảng */
+  position: absolute; /* Định vị tuyệt đối để có thể tùy chỉnh vị trí */
+  right: 5%;
+}
+
+/* Slide */
+
+.slide{
+  z-index: -1;;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  border-color: #df3138; /* Khi hover, viền chuyển thành màu đỏ */
+}
+
+.prev-icon,
+.next-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgb(222, 226, 230); /* Viền xung quanh biểu tượng */
+  border-radius: 50%; /* Bo tròn biểu tượng bên trong */
+  font-size: 26px;
+  padding: 10px; /* Giảm padding để phù hợp với kích thước border */
+  width: 50px; /* Tăng kích thước để chứa icon và border */
+  height: 50px;
+  margin-top: 60px;
+  color: #fff;
+}
+
+.prev-icon:hover,
+.next-icon:hover {
+  background-color: #d38450; /* Biểu tượng đổi màu khi hover */
+  border-color: #d38450; /* Đổi màu viền khi hover */
+  color: white; /* Đổi màu icon khi hover */
+}
+
+/* Sản phẩm */
+
+.loc-sp {
+  border: 1px solid rgb(222, 226, 230);
+}
+
+.loc-sp.active {
+  color: white;
+  background-color: #d38450;
+}
+
+.tenTheSP {
+  font-size: 14px;
+  color: #2e1d15;
+}
+
+.pd-box {
+  border: 1px solid rgb(222, 226, 230);
+  width: 195px;
+  border-radius: 10px;
+  /* Bo góc cho thẻ sản phẩm */
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  /* Hiệu ứng khi hover */
+}
+
+.pd-box:hover {
+  box-shadow: 0px 0px 4px 2px #d38450;
+  /* Hiệu ứng đổ bóng khi hover */
+}
+
+.box-images img {
+  border-radius: 10px 10px 0 0;
+  /* Bo góc phần hình ảnh */
+  width: 100%;
+  height: auto;
+  /* Hình ảnh tự điều chỉnh kích thước */
+  transition: transform 0.3s ease;
+}
+
+.box-images img:hover {
+  transform: scale(1.05);
+}
+
+.sale-off {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: red;
+  color: white;
+  padding: 5px;
+  font-size: 12px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.box-content {
+  padding: 15px;
+  text-align: center;
+}
+
+.box-content h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.box-content h3 a {
+  text-decoration: none;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.price-drop {
+  color: red;
+  font-size: 14px;
+  margin-right: 10px;
+  text-decoration: line-through;
+}
+
+.price {
+  color: green;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.timer-view {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #888;
+}
+/* CSS */
+/*contact page css end*/
+/* 19. login page css here */
+.account_form h2 {
+  font-size: 30px;
+  text-transform: capitalize;
+  color: #242424;
+  font-weight: 500;
+  line-height: 22px;
+  margin-bottom: 34px;
+}
+@media only screen and (max-width: 767px) {
+  .account_form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}
+.account_form form {
+  border: 1px solid #ddd;
+  padding: 23px 20px 29px;
+  border-radius: 5px;
+}
+.account_form label {
+  font-size: 15px;
+  font-weight: 400;
+  color: #242424;
+  cursor: pointer;
+  line-height: 12px;
+  margin-bottom: 12px;
+}
+.account_form label:hover {
+  color: #ff6a28;
+}
+.account_form input {
+  border: 1px solid #ddd;
+  height: 40px;
+  max-width: 100%;
+  padding: 0 20px;
+  background: none;
+  width: 100%;
+}
+.account_form button {
+  background: #ff6a28;
+  border: 0;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  height: 34px;
+  line-height: 21px;
+  padding: 5px 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  margin-left: 20px;
+  border-radius: 20px;
+}
+.account_form button:hover {
+  background: #242424;
+}
+
+.login_submit label input[type="checkbox"] {
+  width: 15px;
+  height: 13px;
+  margin-right: 3px;
+}
+
+.login_submit {
+  text-align: right;
+}
+.login_submit a {
+  font-size: 13px;
+  color: #ff6a28;
+  float: left;
+  line-height: 39px;
+}
+@media only screen and (max-width: 767px) {
+  .login_submit a {
+    float: none;
+    line-height: 18px;
+    display: block;
+    margin-bottom: 20px;
+  }
+}
+
+.customer_login {
+  padding-bottom: 59px;
+}
+
+.account_form p {
+  margin-bottom: 20px;
+}
+
+@media only screen and (max-width: 767px) {
+  .account_form.register {
+    margin-top: 57px;
+  }
+}
+
+
+

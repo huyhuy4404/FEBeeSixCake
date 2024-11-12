@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/thuan.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/address.js"></script>
+
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="assets/css/plugins.css">
+</head>
+<body ng-app="myApp" ng-controller="AddressController">
+    <!-- Bao gồm header và menu -->
+    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+    <div ng-include="'layout/menu.html'"></div>
+   
+
+    <div class="row my-4">
+        <div class="col">       
+            <div class="bg-white rounded-3 shadow-lg p-4">
+                <ul class="nav nav-pills d-flex w-200" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane"
+                            type="button" role="tab" aria-controls="list-tab-pane" aria-selected="true">
+                            Danh sách địa chỉ
+                        </button>
+                    </li>
+                    <li class="nav-item ms-2" role="presentation">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addressModal">
+                            Thêm địa chỉ
+                        </button>
+                    </li>
+                </ul>
+                <div class="container my-4" ng-controller="AddressController">
+                    <div class="tab-content" id="myTabContent">
+                        <!-- Modal Thêm/Sửa địa chỉ -->
+                        <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title" id="addressModalLabel">{{ isEditing ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ' }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="custom-form profile-form" id="userAddressForm">
+                                            <div class="mb-3">
+                                                <label for="housenumber">Số nhà</label>
+                                                <input class="form-control" type="text" id="housenumber" ng-model="newAddress.housenumber" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="roadname">Tên đường</label>
+                                                <input class="form-control" type="text" id="roadname" ng-model="newAddress.roadname" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="district">Quận/Huyện</label>
+                                                <select class="form-select" id="district" ng-model="newAddress.district" ng-change="updateWards()" required>
+                                                    <option ng-repeat="district in districts" value="{{district.name}}">
+                                                        {{district.name}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="ward">Phường/Xã</label>
+                                                <select class="form-select" id="ward" ng-model="newAddress.ward" required>
+                                                    <option ng-repeat="ward in wards" value="{{ward}}">{{ward}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="city">Thành phố</label>
+                                                <select class="form-select" id="city" ng-model="newAddress.city" required>
+                                                    <option value="Cần Thơ">Cần Thơ</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <button type="button" class="btn btn-primary w-100" ng-click="saveAddress()"
+                                                    ng-disabled="!newAddress.housenumber || !newAddress.roadname || !newAddress.ward || !newAddress.district || !newAddress.city">
+                                                    {{ isEditing ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ' }}
+                                                </button>
+                                            </div>
+                                            <!-- Nút làm mới -->
+                                            <div class="mb-3">
+                                                <button type="button" class="btn btn-secondary w-100" ng-click="resetForm()">Làm mới</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Xác nhận Xóa -->
+                        <div id="deleteConfirmationModal" class="modal fade" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-danger text-white">
+                                        <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+                                        <button type="button" class="btn-close" ng-click="closeDeleteModal()" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Bạn có chắc chắn muốn xóa địa chỉ này không?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" ng-click="confirmDelete()">Xóa</button>
+                                        <button type="button" class="btn btn-secondary" ng-click="closeDeleteModal()">Hủy</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Danh sách địa chỉ -->
+                        <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Số nhà</th>
+                                            <th>Tên đường</th>
+                                            <th>Quận</th>
+                                            <th>Phường</th>
+                                            <th>Thành phố</th>
+                                            <th>Thiết lập địa chi</th>
+                                            <th class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="address in userAddresses">
+                                            <td>{{address.housenumber}}</td>
+                                            <td>{{address.roadname}}</td>
+                                            <td>{{address.district}}</td>
+                                            <td>{{address.ward}}</td>
+                                            <td>{{address.city}}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-primary" ng-click="setAsDefault(address)"
+                                                        ng-disabled="address.isDefault">
+                                                    {{ address.isDefault ? "Địa chỉ mặc định" : "Đặt làm địa chỉ mặc định" }}
+                                                </button>
+                                            </td>
+                                            
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-warning" ng-click="editAddress(address)">
+                                                    <i class="bi bi-pencil"></i> Sửa
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" ng-click="openDeleteModal(address)">
+                                                    <i class="bi bi-trash"></i> Xóa
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nút Thêm địa chỉ ở vị trí cũ -->
+   
+
+    <!-- Bao gồm footer -->
+    <div ng-include="'layout/footer.html'"></div>
+
+    <!-- Bao gồm các tập tin JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+
+
+
+
+
+
+</html>
