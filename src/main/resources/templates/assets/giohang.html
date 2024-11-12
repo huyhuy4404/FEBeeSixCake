@@ -20,6 +20,7 @@
     <div ng-include="'layout/menu.html'"></div>
     <div class="order" ng-controller="CartController">
       <div class="container mt-4">
+        <br />
         <h3 class="cart-header">GIỎ HÀNG CỦA BẠN</h3>
         <h5>
           Giỏ hàng của bạn (<b class="cart-cnt">{{ products.length }}</b> sản
@@ -37,7 +38,7 @@
               <th style="width: 5%; text-align: center">Chọn</th>
               <th style="width: 15%; text-align: center">Ảnh</th>
               <th style="width: 10%; text-align: left">Tên Sản Phẩm</th>
-              <th style="width: 10%; text-align: right">Kích thước</th>
+              <th style="width: 8%; text-align: right">Kích thước</th>
               <th style="width: 10%; text-align: right">Giá</th>
               <th style="width: 10%; text-align: center">Số Lượng</th>
               <th style="width: 10%; text-align: right">Tổng Tiền</th>
@@ -62,7 +63,7 @@
               </td>
               <td style="text-align: center; vertical-align: middle">
                 <p style="font-size: 18px; font-weight: bold">
-                  {{ product.size.sizename }}
+                  {{ product.size.sizename }} - Tổng: {{product.stockQuantity}}
                 </p>
               </td>
               <td style="text-align: right; vertical-align: middle">
@@ -97,9 +98,11 @@
                   +
                 </button>
               </td>
+
               <td style="text-align: right; vertical-align: middle">
                 <p style="font-weight: bold">
-                  {{ (product.price * product.quantity) | number:0 }} VNĐ
+                  {{ product.outOfStock ? 'Vượt quá số lượng' : (product.price *
+                  product.quantity | number:0) + ' VNĐ' }}
                 </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
@@ -115,6 +118,48 @@
           </tbody>
         </table>
         <!-- Modal thông báo -->
+        <div
+          class="modal fade"
+          id="exceedStockModal"
+          tabindex="-1"
+          aria-labelledby="exceedStockModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exceedStockModalLabel">
+                  Thông báo
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                Số lượng đã vượt quá số lượng trong kho.
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="stockModal"
+          tabindex="-1"
+          aria-labelledby="stockModalLabel"
+          aria-hidden="true"
+        ></div>
         <div
           class="modal fade"
           id="confirmationModal"
@@ -141,7 +186,7 @@
               <div class="modal-footer">
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  class="btn btn-primary"
                   data-bs-dismiss="modal"
                 >
                   Hủy

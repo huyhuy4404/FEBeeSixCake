@@ -4,9 +4,11 @@ var app = angular.module("order", ["ngRoute"]);
 app.controller("CartController", [
   "$scope",
   "$http",
-  function ($scope, $http) {
+  "$timeout",
+  function ($scope, $http, $timeout) {
     $scope.products = []; // Dữ liệu giỏ hàng
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    let updateTimeout = null;
 
     // Kiểm tra người dùng đã đăng nhập chưa
     if (!loggedInUser) {
@@ -21,7 +23,7 @@ app.controller("CartController", [
       )
       .then(function (response) {
         const idShoppingCart = response.data[0].idshoppingcart;
-        console.log(idShoppingCart);
+        console.log("idShoppingCart:", idShoppingCart);
 
         // Lấy các sản phẩm trong giỏ hàng
         $http
@@ -50,6 +52,7 @@ app.controller("CartController", [
                   idcartitem: item.idcartitem || "Chưa có idcartitem",
                   cartItems: [item],
                   stockQuantity: item.productdetail.quantityinstock,
+                  idShoppingCart: idShoppingCart,
                 };
               }
             });
@@ -75,59 +78,149 @@ app.controller("CartController", [
       .catch(function (error) {
         console.error("Lỗi khi lấy giỏ hàng:", error);
       });
-    $scope.validateQuantity = function (product) {
-      if (isNaN(product.quantity) || product.quantity < 1) {
-        product.quantity = 1; // Đặt lại giá trị về 1 nếu không hợp lệ
+    $scope.updateQuantityInDatabase = function (product) {
+      if (updateTimeout) {
+        $timeout.cancel(updateTimeout); // Hủy bỏ timeout nếu người dùng tiếp tục thay đổi
       }
-      $scope.calculateTotal(); // Tính lại tổng giỏ hàng
-    };
-    $scope.increaseQuantity = function (product) {
-      product.quantity += 1; // Tăng số lượng lên 1
-      $scope.calculateTotal(); // Tính lại tổng tiền
+
+      // Kiểm tra các thuộc tính cần thiết
+      if (
+        !product.idcartitem ||
+        !product.quantity ||
+        !product.idShoppingCart ||
+        !product.idproductdetail
+      ) {
+        console.error(
+          "Thiếu idcartitem, quantity, idShoppingCart, hoặc idproductdetail:",
+          product
+        );
+        return;
+      }
+
+      // Tạo payload theo cấu trúc API yêu cầu, chỉ thay đổi quantity, các giá trị khác giữ nguyên
+      const payload = {
+        idcartitem: product.idcartitem,
+        quantity: product.quantity, // Cập nhật quantity
+        productdetail: {
+          idproductdetail: product.idproductdetail,
+          unitprice: product.price || 0, // Giữ nguyên hoặc đặt giá trị mặc định
+          quantityinstock: product.stockQuantity || 0,
+          product: {
+            idproduct: product.id, // Giữ nguyên ID sản phẩm
+            productname: product.name,
+            img: product.image,
+            description: product.description || "string", // Thêm mô tả nếu có
+            isactive: true, // Giữ trạng thái mặc định
+            category: {
+              idcategory: product.categoryId || 0, // Giữ nguyên ID category nếu có
+              categoryname: product.categoryName || "string",
+            },
+          },
+          size: {
+            idsize: product.size.idsize || 0,
+            sizename: product.size.sizename || "string",
+          },
+        },
+        shoppingcart: {
+          idshoppingcart: product.idShoppingCart, // Thêm idShoppingCart
+          account: {
+            idaccount: product.accountId || "string",
+            password: product.password || "string",
+            fullname: product.fullname || "string",
+            email: product.email || "string",
+            phonenumber: product.phonenumber || "string",
+            active: true,
+            idrole: product.roleId || 0,
+          },
+        },
+      };
+
+      // Log payload để kiểm tra trước khi gửi
+      console.log("Cập nhật số lượng với payload:", payload);
+
+      // Đặt timeout để cập nhật sau khi người dùng dừng thay đổi trong 3 giây
+      updateTimeout = $timeout(function () {
+        $http
+          .put(
+            `http://localhost:8080/beesixcake/api/cartitems/${product.idcartitem}`,
+            payload
+          )
+          .then(function (response) {
+            console.log("Cập nhật số lượng thành công:", response.data);
+          })
+          .catch(function (error) {
+            console.error("Lỗi khi cập nhật số lượng:", error); // Log chi tiết lỗi
+            console.error("Thông tin lỗi:", error.data); // Thêm thông tin từ máy chủ nếu có
+          });
+      }, 3000); // Đợi 3 giây
     };
 
-    $scope.decreaseQuantity = function (product) {
-      if (product.quantity > 1) {
-        product.quantity -= 1; // Giảm số lượng xuống 1 (tối thiểu là 1)
-        $scope.calculateTotal(); // Tính lại tổng tiền
+    $scope.increaseQuantity = function (product) {
+      if (product.quantity < product.stockQuantity) {
+        product.quantity += 1;
+        product.outOfStock = false; // Đặt lại trạng thái hết hàng nếu số lượng hợp lệ
+      } else {
+        $("#exceedStockModal").modal("show");
       }
+      $scope.calculateTotal();
+
+      // Cập nhật số lượng hiển thị và gọi update sau 3 giây nếu không thay đổi
+      console.log("Số lượng hiện tại của sản phẩm:", product.quantity);
+      $scope.updateQuantityInDatabase(product);
     };
-    // Tính tổng giá trị giỏ hàng
+    // Kiểm tra và điều chỉnh số lượng sản phẩm nhập tay
+    $scope.validateQuantity = function (product) {
+      if (isNaN(product.quantity) || product.quantity < 1) {
+        product.quantity = 1;
+      } else if (product.quantity > product.stockQuantity) {
+        product.quantity = product.stockQuantity;
+        $("#exceedStockModal").modal("show");
+      }
+
+      product.outOfStock = product.quantity > product.stockQuantity;
+      $scope.calculateTotal();
+
+      // Cập nhật số lượng hiển thị và gọi update sau 3 giây nếu không thay đổi
+      console.log("Số lượng hiện tại của sản phẩm:", product.quantity);
+      $scope.updateQuantityInDatabase(product);
+    };
+    // Tính tổng giá trị giỏ hàng, đánh dấu hết hàng nếu số lượng vượt quá tồn kho
     $scope.calculateTotal = function () {
       $scope.totalPrice = $scope.products.reduce(function (sum, product) {
-        return sum + product.price * product.quantity;
-      }, 0);
-    };
-    $scope.calculateSelectedTotal = function () {
-      const selectedTotal = $scope.products.reduce(function (sum, product) {
-        if (product.selected) {
+        if (product.quantity > product.stockQuantity) {
+          product.outOfStock = true; // Đánh dấu sản phẩm là "Hết hàng"
+        } else {
+          product.outOfStock = false;
           return sum + product.price * product.quantity;
         }
         return sum;
       }, 0);
-      return selectedTotal;
-    };
-    // Đặt hàng
-    $scope.placeOrder = function () {
-      const orderData = {
-        products: $scope.products.map((product) => ({
-          idproduct: product.id,
-          quantity: product.quantity,
-        })),
-      };
-
-      $http
-        .post("http://localhost:8080/beesixcake/api/order", orderData)
-        .then(function (response) {
-          alert("Đơn hàng đã được gửi thành công!");
-          $scope.clearCart(); // Xóa giỏ hàng sau khi đặt hàng
-        })
-        .catch(function (error) {
-          console.error("Lỗi khi gửi đơn hàng:", error);
-          alert("Có lỗi xảy ra khi gửi đơn hàng. Vui lòng thử lại.");
-        });
     };
 
+    $scope.calculateSelectedTotal = function () {
+      return $scope.products.reduce(function (sum, product) {
+        if (product.selected) {
+          if (product.quantity <= product.stockQuantity) {
+            product.outOfStock = false;
+            return sum + product.price * product.quantity;
+          } else {
+            product.outOfStock = true;
+          }
+        }
+        return sum;
+      }, 0);
+    };
+    $scope.decreaseQuantity = function (product) {
+      if (product.quantity > 1) {
+        product.quantity -= 1;
+        product.outOfStock = product.quantity > product.stockQuantity;
+        $scope.calculateTotal();
+      }
+
+      // Cập nhật số lượng hiển thị và gọi update sau 3 giây nếu không thay đổi
+      console.log("Số lượng hiện tại của sản phẩm:", product.quantity);
+      $scope.updateQuantityInDatabase(product);
+    };
     // Biến để lưu sản phẩm cần xóa
     $scope.productToRemove = null;
 
