@@ -46,19 +46,31 @@ app.controller('discountsController', function($scope, $http) {
     $scope.calculateYearlyStats = function() {
         $scope.yearlyStats = [];
     
-        // Nhóm dữ liệu theo năm
+        const statsMap = {}; // Đối tượng chứa thông tin thống kê
+    
         $scope.filteredOrderDetails.forEach(function(item) {
             var year = item.year; // Lấy năm
-            
-            // Tạo hoặc cập nhật đối tượng thống kê cho năm
-            var stat = $scope.yearlyStats.find(s => s.year === year);
-            if (!stat) {
-                stat = { year: year, totalQuantity: 0, totalRevenue: 0 };
-                $scope.yearlyStats.push(stat);
+            var categoryName = item.categoryName; // Lấy tên loại sản phẩm
+    
+            // Tạo key cho mỗi loại sản phẩm trong năm
+            var key = `${year}-${categoryName}`;
+    
+            if (!statsMap[key]) {
+                statsMap[key] = {
+                    year: year,
+                    categoryName: categoryName,
+                    totalQuantity: 0,
+                    totalRevenue: 0
+                };
             }
-            stat.totalQuantity += item.quantity;
-            stat.totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
+    
+            // Cộng dồn số lượng và doanh thu cho loại sản phẩm
+            statsMap[key].totalQuantity += item.quantity; // Cộng dồn số lượng
+            statsMap[key].totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
         });
+    
+        // Chuyển đổi đối tượng thành mảng để lưu vào yearlyStats
+        $scope.yearlyStats = Object.values(statsMap);
     
         console.log($scope.yearlyStats); // Kiểm tra thống kê sau khi tính toán
     };

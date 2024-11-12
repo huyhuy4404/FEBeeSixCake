@@ -210,13 +210,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="item in filteredOrderDetails">
-                                                    <td>Năm {{item.year}}</td> <!-- Hiển thị năm -->
-                                                    <td>{{item.categoryName}}</td>
-                                                    <td>{{item.quantity}}</td>
-                                                    <td>{{formatCurrency(item.quantity * item.unitprice)}} </td> <!-- Tính tổng tiền và định dạng -->
+                                                <tr ng-repeat="stat in yearlyStats">
+                                                    <td>Năm {{stat.year}}</td> <!-- Hiển thị năm -->
+                                                    <td>{{stat.categoryName}}</td>
+                                                    <td>{{stat.totalQuantity}}</td>
+                                                    <td>{{formatCurrency(stat.totalRevenue)}} </td> <!-- Tính tổng tiền và định dạng -->
                                                 </tr>
-                                                <tr ng-if="filteredOrderDetails.length === 0">
+                                                <tr ng-if="yearlyStats.length === 0">
                                                     <td colspan="4">Không có dữ liệu cho năm đã chọn.</td>
                                                 </tr>
                                             </tbody>

@@ -3,6 +3,7 @@ var app = angular.module('myApp', []);
 app.controller('discountsController', function($scope, $http) {
     $scope.orderdetai = [];
     $scope.filteredOrderDetails = []; // Biến để lưu dữ liệu đã lọc
+    $scope.groupedOrderDetails = []; // Biến để lưu dữ liệu đã nhóm
     $scope.startDate = null; // Ngày bắt đầu
     $scope.endDate = null; // Ngày kết thúc
 
@@ -26,6 +27,7 @@ app.controller('discountsController', function($scope, $http) {
                 };
             });
             $scope.filteredOrderDetails = $scope.orderdetai; // Khởi tạo dữ liệu đã lọc
+            $scope.groupData(); // Nhóm dữ liệu ngay khi dữ liệu được lấy
             $scope.renderChart(); // Vẽ biểu đồ ngay khi dữ liệu được lấy
         })
         .catch(function(error) {
@@ -33,14 +35,46 @@ app.controller('discountsController', function($scope, $http) {
         });
     };
 
+    // Hàm nhóm dữ liệu theo ngày và loại sản phẩm
+    $scope.groupData = function() {
+        $scope.groupedOrderDetails = [];
+
+        const statsMap = {}; // Đối tượng chứa thông tin thống kê
+
+        $scope.filteredOrderDetails.forEach(function(item) {
+            var date = item.date; // Lấy ngày
+            var categoryName = item.categoryName; // Lấy tên loại sản phẩm
+
+            // Tạo key cho mỗi loại sản phẩm trong ngày
+            var key = `${date}-${categoryName}`;
+
+            if (!statsMap[key]) {
+                statsMap[key] = {
+                    date: date,
+                    categoryName: categoryName,
+                    totalQuantity: 0,
+                    totalRevenue: 0
+                };
+            }
+
+            // Cộng dồn số lượng và doanh thu cho loại sản phẩm
+            statsMap[key].totalQuantity += item.quantity; // Cộng dồn số lượng
+            statsMap[key].totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
+        });
+
+        // Chuyển đổi đối tượng thành mảng để lưu vào groupedOrderDetails
+        $scope.groupedOrderDetails = Object.values(statsMap);
+
+        console.log($scope.groupedOrderDetails); // Kiểm tra thống kê sau khi tính toán
+    };
+
     // Hàm xuất dữ liệu ra Excel
     $scope.exportToExcel = function() {
-        
-        const worksheet = XLSX.utils.json_to_sheet($scope.filteredOrderDetails.map(item => ({
+        const worksheet = XLSX.utils.json_to_sheet($scope.groupedOrderDetails.map(item => ({
             'Ngày tạo': item.date,
             'Loại Sản Phẩm': item.categoryName,
-            'Số lượng': item.quantity,
-            'Giá': item.unitprice
+            'Số lượng': item.totalQuantity,
+            'Giá': item.totalRevenue
         })));
 
         const workbook = XLSX.utils.book_new();
@@ -77,6 +111,9 @@ app.controller('discountsController', function($scope, $http) {
             }
         });
 
+        // Nhóm dữ liệu sau khi lọc
+        $scope.groupData();
+        
         // Cập nhật biểu đồ sau khi lọc dữ liệu
         $scope.renderChart();
     };
@@ -84,18 +121,18 @@ app.controller('discountsController', function($scope, $http) {
     // Hàm vẽ biểu đồ
     $scope.renderChart = function() {
         // Nếu không có dữ liệu, không vẽ biểu đồ
-        if ($scope.filteredOrderDetails.length === 0) {
+        if ($scope.groupedOrderDetails.length === 0) {
             document.getElementById("pie-chart").innerHTML = ""; // Xóa biểu đồ nếu không có dữ liệu
             return;
         }
 
         var options = {
-            series: $scope.filteredOrderDetails.map(item => item.quantity), // Số lượng sản phẩm
+            series: $scope.groupedOrderDetails.map(item => item.totalQuantity), // Số lượng sản phẩm
             chart: {
                 width: 380,
                 type: 'pie',
             },
-            labels: $scope.filteredOrderDetails.map(item => item.name), // Tên sản phẩm
+            labels: $scope.groupedOrderDetails.map(item => item.categoryName), // Tên sản phẩm
             responsive: [{
                 breakpoint: 480,
                 options: {
