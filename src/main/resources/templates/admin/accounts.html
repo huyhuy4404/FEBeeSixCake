@@ -301,14 +301,14 @@ Bootstrap 5 Dashboard Admin Template
                                                         <input type="radio" id="user-role-admin" name="userRole" ng-model="selectedUser.idrole" value="1" disabled /> Admin
                                                     </label>
                                                     <label>
-                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedUser.idrole" value="2" disabled /> User
+                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedUser.idrole" value="2" disabled /> Khách hàng
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="form-label">Trạng thái</label>
                                                 <label class="form-control">
-                                                    {{selectedUser.active ? 'Đã kích hoạt' : 'Chưa kích hoạt'}}
+                                                    {{selectedUser.active ? 'Đang hoạt động' : 'Không hoạt động'}}
                                                 </label>
                                             </div>
                                 
@@ -354,7 +354,7 @@ Bootstrap 5 Dashboard Admin Template
                                     <td>{{ user.active ? 'Đang hoạt động' : 'Không hoạt động' }}</td>
                                     <td class="text-end">
                                         <button type="button" class="btn btn-sm btn-warning" ng-click="editUser(user)">Xem chi tiết</button>
-                                        <button type="button" class="btn btn-sm btn-danger" ng-click="deleteUser(user.idaccount)">Xóa</button>
+                                       
                                     </td>
                                 </tr>
                             </tbody>
