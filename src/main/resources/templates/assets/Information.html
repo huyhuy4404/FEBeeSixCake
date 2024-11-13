@@ -19,6 +19,7 @@
   <body ng-app="myApp" ng-controller="Controller">
     <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
     <div ng-include="'layout/menu.html'"></div>
+<<<<<<< HEAD
   
     <div class="container d-flex justify-content-center my-5">
       <div class="col-lg-6">
@@ -58,13 +59,74 @@
           </div>
         </div>
       </div>
+=======
+    <br><br>
+    <div class="container" style="margin-left: 500px;">
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="Information">
+                    <h2>Thông tin cá nhân</h2>
+
+                    <!-- Form cập nhật thông tin người dùng -->
+                    <form id="userProfileForm" ng-submit="updateUserProfile()">
+                        <p>
+                            <label>Họ và tên <span>*</span></label>
+                            <input type="text" ng-model="user.fullname" required />
+                        </p>
+                        <p>
+                            <label>Email <span>*</span></label>
+                            <input type="email" ng-model="user.email" required />
+                        </p>
+                        <p>
+                            <label>Số điện thoại <span>*</span></label>
+                            <input type="text" ng-model="user.phonenumber" required pattern="^\d{10,15}$"
+                                title="Số điện thoại phải từ 10 đến 15 chữ số" />
+                        </p>
+                        <p>
+                            <label>Tên đăng nhập <span>*</span></label>
+                            <input type="text" ng-model="user.idaccount" readonly />
+                        </p>
+
+                        <!-- Khung chứa các nút -->
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Cập nhật thông tin
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button type="button" ng-click="logout()" class="btn btn-secondary btn-block">
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Thông báo cập nhật thành công -->
+                    <div ng-if="updateSuccess" class="alert alert-success mt-2">
+                        Cập nhật thông tin thành công!
+                    </div>
+                </div>
+            </div>
+        </div>
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
     </div>
   
     <script src="../assets/js/bootstrap.bundle.js"></script>
   </body>
   
 
+<<<<<<< HEAD
   
 </html>
 <div ng-include="'layout/footer.html'"></div>
+=======
+    <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
+
+  
+</html>
+<div ng-include="'layout/footer.html'"></div>
+
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
     

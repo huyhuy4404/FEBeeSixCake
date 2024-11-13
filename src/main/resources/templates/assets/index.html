@@ -1,284 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/hau.css" />
-    <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/index.js"></script>
-  </head>
 
-  <body ng-app="myApp">
-    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
-    <div ng-include="'layout/menu.html'"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/hau.css" />
+  <link rel="stylesheet" href="../assets/css/thuan.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../assets/js/angular.min.js"></script>
+  <script src="../assets/js/angular-route.js"></script>
+  <script src="../assets/js/index.js"></script>
+</head>
 
-    <div
-      id="carouselExampleIndicators"
-      class="carousel slide"
-      data-bs-ride="carousel"
-      data-bs-interval="2000"
-    >
-      <div class="carousel-indicators">
-        <button
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide-to="0"
-          class="active"
-          aria-current="true"
-          aria-label="Slide 1"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide-to="1"
-          aria-label="Slide 2"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide-to="2"
-          aria-label="Slide 3"
-        ></button>
-        <button
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide-to="3"
-          aria-label="Slide 4"
-        ></button>
-      </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="benner1.png" class="d-block w-100" style="height: 565px" />
-        </div>
-        <div class="carousel-item">
-          <img src="benner2.png" class="d-block w-100" style="height: 565px" />
-        </div>
-        <div class="carousel-item">
-          <img src="benner3.png" class="d-block w-100" style="height: 565px" />
-        </div>
-        <div class="carousel-item">
-          <img src="benner4.png" class="d-block w-100" style="height: 565px" />
-        </div>
-      </div>
-      <button
-        class="carousel-control-prev"
-        type="button"
-        data-bs-target="#carouselExampleIndicators"
-        data-bs-slide="prev"
-      >
-        <i class="bi bi-chevron-left prev-icon"></i>
-      </button>
-      <button
-        class="carousel-control-next"
-        type="button"
-        data-bs-target="#carouselExampleIndicators"
-        data-bs-slide="next"
-      >
-        <i class="bi bi-chevron-right next-icon"></i>
-      </button>
+<body ng-app="myApp" ng-controller="discountsController">
+  <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+  <div ng-include="'layout/menu.html'"></div>
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+        aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+        aria-label="Slide 3"></button>
     </div>
-
-    <div
-      class="card mb-3"
-      style="border: none"
-      ng-controller="discountsController"
-    >
-      <div class="gia-soc" style="margin-top: 40px">
-        <div class="sanPham">
-          <span class="textSanPham">Sản phẩm đang giảm giá</span>
-          <span style="float: right; font-size: 18px; padding: 8px">
-            <a href="SanPhamSaleFull.html" style="color: #fff">
-              Xem tất cả</a
-            ></span
-          >
-        </div>
-        <div class="section-title wow fadeInDown text-center">
-          <h3 class="mt-3 mb-2">CƠ HỘI NGỌT NGÀO, SĂN BÁNH GIÁ SỐC!</h3>
-        </div>
-        <div
-          class="row py-4"
-          style="
-            justify-content: center;
-            justify-items: center;
-            margin: 0 11% 0 11%;
-          "
-        >
-          <div class="col-lg-3" ng-repeat="item in Products">
-            <div
-              class="pd-box"
-              style="border: 1px solid rgb(222, 226, 230); width: 320px"
-            >
-              <div class="box-images">
-                <!-- Sử dụng ng-click để gọi hàm goToProduct -->
-                <a
-                  ng-click="goToProduct(item.idproduct)"
-                  title="{{item.productname}}"
-                >
-                  <img
-                    width="187px"
-                    height="208.875px"
-                    ng-src="{{item.img}}"
-                    alt="{{item.productname}}"
-                    class="img-reponsive lazy"
-                  />
-                </a>
-                <button
-                  type="button"
-                  onclick="LikeThis(this, '6388')"
-                  class="btn-addlike"
-                  style="display: none"
-                >
-                  <i class="fa fa-heart-o heart_new"></i>
-                </button>
-              </div>
-              <div class="box-content">
-                <h3>
-                  <a
-                    href="javascript:void(0);"
-                    ng-click="goToProduct(item.idproduct)"
-                    title="{{item.productname}}"
-                    class="tenTheSP"
-                    >{{item.productname}}</a
-                  >
-                </h3>
-                <div>
-                  <span class="price" ng-if="item.source === 'cart'"
-                    >{{item.unitprice}}₫</span
-                  >
-                </div>
-                <div class="cd-content">
-                  <div
-                    class="timer-view"
-                    data-countdown="countdown"
-                    data-date="09-13-2024-21-28-03"
-                    data-start="09-13-2024-21-28-03"
-                    data-active="true"
-                  >
-                    <div class="lof-labelexpired"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="https://5ck6jg.csb.app/anh/benner1.png" class="d-block w-100" style="height: 565px" />
       </div>
+      <div class="carousel-item">
+        <img src="https://5ck6jg.csb.app/anh/benner2.png" class="d-block w-100" style="height: 565px" />
+      </div>
+      <div class="carousel-item">
+        <img src="https://5ck6jg.csb.app/anh/benner3.png" class="d-block w-100" style="height: 565px" />
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="prev">
+      <i class="bi bi-chevron-left prev-icon"></i>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+      data-bs-slide="next">
+      <i class="bi bi-chevron-right next-icon"></i>
+    </button>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <i class="bi bi-chevron-left prev-icon"></i>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <i class="bi bi-chevron-right next-icon"></i>
+  </button>
+  </div>
 
-      <div class="gia-soc">
-        <div class="sanPham">
-          <span class="textSanPham">Sản phẩm mới</span>
-          <span style="float: right; font-size: 18px; padding: 8px">
-            <a href="SanPhamMoiFull.html" style="color: #fff">
-              Xem tất cả</a
-            ></span
-          >
-        </div>
-        <div class="section-title wow fadeInDown text-center">
-          <h3 class="mt-3 mb-2">
-            KHÁM PHÁ HƯƠNG VỊ MỚI, THƯỞNG THỨC MẪU BÁNH ĐỘC ĐÁO
-          </h3>
-        </div>
-        <div
-          class="row py-4"
-          style="
-            justify-content: center;
-            justify-items: center;
-            margin: 0 11% 0 11%;
-          "
-        >
-          <div class="col-lg-3" ng-repeat="item in Products">
-            <div
-              class="pd-box"
-              style="border: 1px solid rgb(222, 226, 230); width: 320px"
-            >
-              <div class="box-images">
-                <!-- Sửa thành ng-click để gọi hàm chuyển hướng khi click vào -->
-                <a
-                  href=""
-                  ng-click="goToProduct(item.idproduct)"
-                  title="{{item.productname}}"
-                >
-                  <img
-                    width="187px"
-                    height="208.875px"
-                    ng-src="{{item.img}}"
-                    alt="{{item.productname}}"
-                    class="img-reponsive lazy"
-                  />
-                </a>
-                <button
-                  type="button"
-                  onclick="LikeThis(this, '6388')"
-                  class="btn-addlike"
-                  style="display: none"
-                >
-                  <i class="fa fa-heart-o heart_new"></i>
-                </button>
-              </div>
-              <div class="box-content">
-                <h3>
-                  <a
-                    href=""
-                    ng-click="goToProduct(item.idproduct)"
-                    title="{{item.productname}}"
-                    class="tenTheSP"
-                    >{{item.productname}}</a
-                  >
-                </h3>
-                <div>
-                  <span class="price" ng-if="item.source === 'cart'"
-                    >{{item.unitprice}}₫</span
-                  >
-                </div>
-              </div>
+  <div class="card mb-3" style="border: none">
+    <!-- Sản phẩm giảm giá -->
+    <div class="gia-soc">
+      <div class="sanPham">
+        <span class="textSanPham">Sản phẩm đang Hot</span>
+        <span style="float: right; font-size: 18px; padding: 8px">
+          <a href="SanPhamSaleFull.html" style="color: #fff">Xem tất cả</a>
+        </span>
+      </div>
+      <div class="section-title wow fadeInDown text-center">
+        <h3 class="mt-3 mb-2">CƠ HỘI NGỌT NGÀO, SĂN BÁNH GIÁ SỐC!</h3>
+      </div>
+      <div class="row py-4" style="justify-content: center; margin: 0 5%;">
+        <h4>Tất cả sản phẩm:</h4>
+        <div class="col-lg-3" ng-repeat="item in Products | limitTo: 4 track by item.idproduct">
+          <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
+            <div class="box-images">
+              <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
+                <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: 300px;">
+              </a>
             </div>
-          </div>
-        </div>
-
-        <div
-          class="container-fluid"
-          style="padding-left: 130px; padding-right: 130px"
-        >
-          <div class="row mb-5">
-            <div
-              class="col-lg-3 mb-4"
-              ng-repeat="item in products | limitTo: 8"
-            >
-              <div
-                class="card"
-                data-bs-toggle="modal"
-                data-bs-target="#productModal{{item.idproduct}}"
-              >
-                <img
-                  ng-src="images/{{item.img}}"
-                  class="card-img-top"
-                  alt="{{item.nameproduct}}"
-                  style="height: 300px"
-                />
-                <div class="card-body p-0">
-                  <hr />
-                  <p class="card-title mb-3">{{item.nameproduct}}</p>
-                  <div class="pull-center text-center">
-                    <button class="btn btn-sm btn-danger btn-add-to-cart mb-3">
-                      Chi tiết sản phẩm
-                    </button>
-                  </div>
-                </div>
+            <div class="box-content">
+              <h3>
+                <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}"
+                  class="tenTheSP">{{item.productname}}</a>
+              </h3>
+              <div>
+                <span class="price">{{ formatCurrency(item.unitprice) }}</span> <!-- Định dạng giá sản phẩm -->
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div ng-include="'layout/footer.html'"></div>
-    <script src="../assets/js/bootstrap.bundle.js"></script>
-  </body>
+
+    <div class="gia-soc">
+      <div class="sanPham">
+        <span style="margin-left: 10px;" class="textSanPham">Sản phẩm mới</span>
+        <span style="float: right; font-size: 18px; padding: 8px">
+          <a href="SanPhamMoiFull.html" style="color: #fff">Xem tất cả</a>
+        </span>
+      </div>
+      <div class="row py-2" style="justify-content: center; margin: 0 5%; margin-top: 30px;">
+        <h4>Tất cả sản phẩm:</h4>
+        <div class="col-lg-3" style="margin-top: 30px;"
+          ng-repeat="item in Products | limitTo: 8 track by item.idproduct">
+          <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
+            <div class="box-images">
+              <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
+                <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: 300px;">
+              </a>
+            </div>
+            <div class="box-content">
+              <h3>
+                <a href="javascript:void(0);" ng-click="goToProduct(item.idproduct)" title="{{item.productname}}"
+                  class="tenTheSP">{{item.productname}}</a>
+              </h3>
+              <div>
+                <span class="price">{{ formatCurrency(item.unitprice) }}</span> <!-- Định dạng giá sản phẩm -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div ng-include="'layout/footer.html'"></div>
+  <script src="../assets/js/bootstrap.bundle.js"></script>
+  <script src="../assets/js/index.js"></script>
+
+</body>
+
 </html>

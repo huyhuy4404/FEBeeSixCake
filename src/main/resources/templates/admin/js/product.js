@@ -79,18 +79,23 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
     };
 
     // Hàm thêm sản phẩm
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
     $scope.addProduct = function () {
         var fd = new FormData();
-
+    
         // Kiểm tra và gán giá trị cho isactive
         $scope.selectedProduct.isactive = $scope.selectedProduct.isactive !== false;
-
+    
         // Thêm thông tin sản phẩm
         fd.append('productname', $scope.selectedProduct.productname);
-        fd.append('img', $scope.selectedProduct.img); // Chỉ lưu tên tệp
+        fd.append('img', $scope.selectedProduct.img); // Chỉ lưu tên tệp, không phải toàn bộ đường dẫn
         fd.append('description', $scope.selectedProduct.description);
         fd.append('isactive', $scope.selectedProduct.isactive); // Chuyển đổi kiểu nếu cần
         fd.append('category.idcategory', $scope.selectedProduct.category.idcategory);
+<<<<<<< HEAD
 
         // Kiểm tra kích thước và đơn giá
         if (!$scope.selectedProduct.size || !$scope.selectedProduct.size.unitprice) {
@@ -127,12 +132,16 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
         console.log("Số lượng tồn kho hợp lệ:", quantity);
         fd.append('quantityinstock', quantity);
 
+=======
+    
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
         // Gửi form data đến API để thêm sản phẩm
         $http.post('http://localhost:8080/beesixcake/api/product', fd, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined } // Để trình duyệt tự động thiết lập Content-Type
         }).then(function (response) {
             console.log("Sản phẩm đã được thêm thành công:", response.data);
+<<<<<<< HEAD
 
             // Thêm chi tiết sản phẩm cho từng kích thước đã chọn
             var productDetailPromises = [];
@@ -171,6 +180,21 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
             return Promise.all(productDetailPromises);
         }).then(function (responses) {
             console.log("Chi tiết sản phẩm đã được thêm thành công:", responses);
+=======
+    
+            // Thêm thông tin chi tiết sản phẩm vào ProductDetail
+            var productDetail = {
+                unitprice: $scope.selectedProduct.unitprice,
+                quantityinstock: $scope.selectedProduct.quantityinstock,
+                product: { idproduct: response.data.idproduct }, // ID sản phẩm vừa thêm
+                size: { idsize: $scope.selectedProduct.size.idsize } // ID kích thước
+            };
+    
+            // Gửi yêu cầu thêm ProductDetail
+            return $http.post('http://localhost:8080/beesixcake/api/productdetail', productDetail);
+        }).then(function (response) {
+            console.log("Chi tiết sản phẩm đã được thêm thành công:", response.data);
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
             $scope.loadProducts(); // Tải lại danh sách sản phẩm
             $scope.selectedProduct = {}; // Đặt lại form
             $scope.message = "Thêm sản phẩm và chi tiết sản phẩm thành công!";
@@ -182,6 +206,7 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
             $scope.messageType = 'error';
         });
     };
+    
 
     // Hàm log thông tin kích thước khi người dùng chọn
     $scope.logSelectedSize = function(size) {
@@ -199,6 +224,7 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
         }
     };
 
+<<<<<<< HEAD
     // Hàm log thay đổi giá khi người dùng nhập
     $scope.logPriceChange = function(size) {
         if (size.unitprice !== undefined && size.unitprice !== null) {
@@ -218,6 +244,8 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
     
     
     // Edit product
+=======
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
     $scope.editProduct = function (product) {
         // Sao chép dữ liệu của sản phẩm đã chọn
         $scope.selectedProduct = angular.copy(product);
@@ -260,7 +288,11 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
     
         // Kích hoạt chế độ chỉnh sửa
         $scope.isEditMode = true;
+    
+        // Chuyển hướng sang trang khác để chỉnh sửa sản phẩm
+        $location.path('/edit-product/' + $scope.selectedProduct.idproduct);
     };
+    
     
     // Trong hàm updateProduct
     $scope.updateProduct = function () {
@@ -317,24 +349,63 @@ app.controller('ProController', ['$scope', '$http', function ($scope, $http) {
 
 
     // Delete product
-    $scope.confirmDelete = function (id) {
-        // Xác nhận xóa sản phẩm
-        if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-            // Gửi yêu cầu xóa đến API
-            $http.delete('http://localhost:8080/beesixcake/api/productdetail/' + id)
-                .then(function (response) {
-                    // Nếu thành công, tải lại danh sách sản phẩm
-                    $scope.loadProducts();
-                    $scope.message = "Xóa sản phẩm thành công!";
-                    $scope.messageType = 'success';
-                }, function (error) {
-                    // Nếu thất bại, hiển thị thông báo lỗi
-                    console.error('Error deleting product:', error);
-                    $scope.message = "Xóa sản phẩm thất bại. Vui lòng thử lại.";
-                    $scope.messageType = 'error';
-                });
+// Hàm xóa sản phẩm
+$scope.deleteProduct = function (idproduct) {
+    if (!idproduct) {
+        console.error("Không tìm thấy idproduct, không thể xóa.");
+        return;
+    }
+
+    // Hiển thị cảnh báo để xác nhận người dùng trước khi xóa
+    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+        // Gửi yêu cầu xóa chi tiết sản phẩm trước
+        $http.delete('http://localhost:8080/beesixcake/api/productdetail/' + $scope.selectedProduct.productDetailId)
+            .then(function (response) {
+                console.log("Chi tiết sản phẩm đã được xóa thành công:", response.data);
+
+                // Sau khi xóa chi tiết sản phẩm, xóa sản phẩm
+                return $http.delete('http://localhost:8080/beesixcake/api/product/' + idproduct);
+            })
+            .then(function (response) {
+                console.log("Sản phẩm đã được xóa thành công:", response.data);
+                $scope.loadProducts(); // Tải lại danh sách sản phẩm
+                $scope.selectedProduct = {}; // Đặt lại form
+                $scope.message = "Sản phẩm và chi tiết sản phẩm đã được xóa thành công!";
+                $scope.messageType = 'success';
+                $scope.isEditMode = false; // Thoát khỏi chế độ chỉnh sửa
+            })
+            .catch(function (error) {
+                console.error('Lỗi khi xóa sản phẩm hoặc chi tiết sản phẩm:', error);
+                $scope.message = "Xóa sản phẩm hoặc chi tiết sản phẩm thất bại. Vui lòng thử lại.";
+                $scope.messageType = 'error';
+            });
+    }
+};
+
+
+$scope.selectedSizes = [];  // Lưu các size đã chọn
+
+$scope.updateSelectedSizes = function() {
+    // Reset lại các kích thước đã chọn
+    $scope.selectedSizes = [];
+
+    // Duyệt qua các size để kiểm tra size nào được chọn
+    angular.forEach($scope.sizes, function(size) {
+        if (size.selected) {
+            // Nếu size được chọn thì thêm vào danh sách
+            $scope.selectedSizes.push({
+                size: size,
+                quantity: '',
+                price: '',
+                discount: false,  // Thêm giảm giá nếu cần
+                note: '',
+                image: ''
+            });
         }
-    };
+    });
+};
+
+
 
     // Initial load
     $scope.loadProducts();

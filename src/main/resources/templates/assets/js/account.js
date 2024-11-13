@@ -60,6 +60,7 @@ app.controller("LoginController", function ($scope, $http, $window, $timeout) {
             $scope.loginError = "Tên người dùng hoặc mật khẩu không đúng!";
           }
         })
+        
         .catch(function (error) {
           // Xử lý lỗi từ API
           $scope.loginError = "Lỗi khi kết nối đến máy chủ. Vui lòng thử lại.";

@@ -1,5 +1,9 @@
 var app = angular.module('myApp', []);
+<<<<<<< HEAD
 app.controller("CheckLogin", function ($scope, $http, $window) {
+=======
+app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
     // Khởi tạo thông tin người dùng và trạng thái đăng nhập
     $scope.isLoggedIn = false;
     $scope.user = {
@@ -80,7 +84,10 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
     };
   });
+<<<<<<< HEAD
   
+=======
+>>>>>>> 25a6119be2d6279d4d3c00b3b5cf72d75d00ec3f
 app.controller('Controller', function($scope, $http) {
     // Hàm để lấy thông tin tài khoản đã đăng nhập từ localStorage
     $scope.getUserInfo = function() {

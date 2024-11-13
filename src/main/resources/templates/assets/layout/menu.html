@@ -16,19 +16,20 @@
 
         <li class="nav-item">
           <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Sản Phẩm
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
-              <li ng-repeat="item in categorys">
-                <a class="dropdown-item" ng-href="SanPham.html#/{{item.idcategory}}"
-                  ng-click="getProductsByCategory(item.idcategory)">
-                  {{item.namecategory}}
-                </a>
-              </li>
-            </ul>
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Sản Phẩm
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
+                  <li ng-repeat="item in Products">
+                      <a class="dropdown-item" ng-click="filterProducts(item.categoryname)">
+                          {{item.categoryname}}
+                      </a>
+                  </li>
+              </ul>
           </div>
-        </li>
+      </li>
+      </li>
+      </li>
       </ul>
 
       <ul class="navbar-nav menu-right">
@@ -42,7 +43,7 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="">Đơn Hàng</a>
+          <a class="nav-link" href="order.html">Đơn Hàng</a>
         </li>
 
         <li class="nav-item fs-4 position-relative pt-1 pe-3">
