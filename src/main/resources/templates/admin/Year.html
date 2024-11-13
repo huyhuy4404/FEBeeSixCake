@@ -205,22 +205,20 @@
                                             <thead>
                                                 <tr>
                                                     <th>Năm</th>
-                                                    <th>Tên Sản Phẩm</th>
-                                                    <th>Số lượng</th>
-                                                    <th>Giá</th>
-                                                    <th>Trạng Thái Thanh Toán</th>
+                                                    <th>Tổng Đơn Hàng</th>
+                                                    <th>Số Lượng Đơn Hàng</th>
+                                                    <th>Tổng Tiền</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="item in yearlyStats">
-                                                    <td>{{item.year}}</td>
-                                                    <td>{{item.productName}}</td>
-                                                    <td>{{item.totalQuantity}}</td>
-                                                    <td>{{formatCurrency(item.totalRevenue)}}</td>
-                                                    <td>Đã thanh toán</td>
+                                                <tr ng-repeat="stat in yearlyStats" ng-if="stat.totalOrders > 0">
+                                                    <td>{{stat.year}}</td>
+                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
+                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng -->
+                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tổng tiền -->
                                                 </tr>
                                                 <tr ng-if="yearlyStats.length === 0">
-                                                    <td colspan="5">Không có dữ liệu cho năm đã chọn hoặc sản phẩm chưa thanh toán.</td>
+                                                    <td colspan="4">Không có dữ liệu cho năm đã chọn.</td>
                                                 </tr>
                                             </tbody>
                                         </table>

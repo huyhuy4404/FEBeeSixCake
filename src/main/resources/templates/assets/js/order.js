@@ -27,7 +27,7 @@ app.controller("CartController", [
               quantity: item.quantity,
               image: item.productdetail.product.img,
               idproductdetail: productDetailId,
-            };
+            };  
           }
         });
 

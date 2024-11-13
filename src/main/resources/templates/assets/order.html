@@ -87,140 +87,64 @@
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
     <div class="container order" style="margin-left: 100px;">
-      
-
-        <div class="tab-content" ng-controller="CartController" id="nav-tabContent">
-            <div class="container mt-3"> <!-- Giảm khoảng cách -->
+        <div class="tab-content" ng-controller="OrderController" id="nav-tabContent">
+            <div class="container mt-3">
                 <h3 class="cart-header">Đơn HÀNG CỦA BẠN</h3>
                 <h5>
                     Đơn HÀNG của bạn (<b class="cart-cnt">{{ products.length }}</b> sản phẩm)
                     <span class="float-end total-price">
-                        Tổng tiền: {{ formatCurrency(calculateTotal()) }} <!-- Định dạng tổng tiền -->
+                        Tổng tiền: {{ formatCurrency(calculateTotal()) }}
                     </span>
                 </h5>
-                <table class="table table-order">
-                    <thead>
-                        <tr>
-                            <th>Tên Sản Phẩm</th>
-                            <!-- <th>Loại Sản Phẩm</th> -->
-                            <th>Kích cỡ</th>
-                            <th>Số Lượng</th>
-                            <th>Giá</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="product in products">
-                            <!-- Có thể bao gồm hình ảnh sản phẩm -->
-                            <!-- <td>
-                                <img ng-src="{{product.img}}" alt="{{product.name}}" style="width: 50px; height: auto;">
-                            </td> -->
-                          
-                            <td ng-click="goToProduct(product.id)" title="{{product.name}}">
-                                {{ product.name }}
-                            </td>
-                            <!-- <td>{{ product.categoryName }}</td> -->
-                            <td>{{ product.sz }}</td>
-                            <td>{{ product.quantity }}</td>
-                            <td>{{ formatCurrency(product.price) }}</td> <!-- Định dạng giá sản phẩm -->
-                        </tr>
-                    </tbody>
-                </table>
-        
-                <!-- <div class="button-order">
-                    <a href="/src/main/resources/templates/assets/thanhtoan.html" class="btn btn-success">Thanh toán</a>
-                </div> -->
-            </div>
-        </div>
 
-        <div class="tab-pane fade" id="Huy" role="tabpanel" aria-labelledby="Huy-tab" tabindex="0">
-            <div id="tab-6">
-                <img src="images/br-order.png" alt="" style="width: 300px;" class="my-3"> <!-- Giảm khoảng cách -->
-                <p class="fw-bold" style="font-size: 20px;">Hiện chưa có đơn hàng nào hủy!</p>
-                <a href="index.html">
-                    <button type="button" class="btn btn-primary fw-bold" style="font-size: 20px;">Tiếp tục mua hàng
-                        <i class="bi bi-caret-right-fill"></i>
-                    </button>
-                </a>
-            </div>
-            <div id="tab-06">
-                <table class="table table-order">
+                <div ng-if="loading">Đang tải đơn hàng...</div>
+                <div ng-if="!loading && products.length === 0">Không tìm thấy đơn hàng.</div>
+                <table class="table table-order" ng-if="!loading && products.length > 0">
                     <thead>
                         <tr>
-                            <th>Hình</th>
+                            <th>
+                            </th>
+                            <th>ID</th>
                             <th>Tên Sản Phẩm</th>
                             <th>Kích cỡ</th>
                             <th>Số Lượng</th>
                             <th>Giá</th>
+                            <th>Ngày Đặt Hàng</th>
+                            <th>Địa Chỉ Giao Hàng</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="product in products">
+                        <tr ng-repeat="order in products">
                             <td>
-                                <img src="{{product.image}}" alt="Product" class="img-responsive" width="100px">
                             </td>
-                            <td>{{product.nameproduct}}</td>
-                            <td>{{product.size}}</td>
-                            <td>{{product.quantity}}</td>
-                            <td>{{ formatCurrency(product.price) }}</td> <!-- Định dạng giá sản phẩm -->
+                            <td>{{ order.order.idorder }}</td>
+                            <td>{{ order.productdetail.product.productname }}</td>
+                            <td>{{ order.productdetail.size.sizename }}</td>
+                            <td>{{ order.quantity }}</td>
+                            <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                            <td>{{ order.order.orderdate | date:'short' }}</td>
+                            <td>{{ order.order.addressdetail }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">Hủy</button>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="ThongTinDonHang">
-                    <p class="ThanhTien">Thành tiền: {{ formatCurrency(calculateTotal()) }} VND</p> <!-- Định dạng tổng tiền -->
-                    <div class="button-order">
-                        <a href="ChiTietDonHang.html">
-                            <button type="button" class="btn btn-primary chitiet">Chi tiết</button>
-                        </a>
-                        <button type="button" class="btn btn-danger huy">Hủy</button>
-                    </div>
+                
+                <div class="total-price" ng-if="!loading && products.length > 0">
+                    Tổng tiền: {{ formatCurrency(calculateTotal()) }}
                 </div>
-            </div>
-        </div>
-
-        <div class="container" style="margin-top: -200px;">
-            <div class="row ThongtinCTDonHang" ng-controller="CartController">
-                <!-- <div class="col-lg-6">
-                    <h4 class="text-black fw-bold">THÔNG TIN NGƯỜI MUA HÀNG</h4>
-                    <p class="text-ctdh">Tên người mua: {{account.fullname}}</p>
-                    <p class="text-ctdh">Số điện thoại: {{account.phonenumber}}</p>
-                    <p class="text-ctdh">Địa chỉ: {{account.address}}</p>
-                </div> -->
-
+                
                
-                <!-- <div class="col-lg-6" ng-repeat="s in addresses" >
-                    <h4 class="text-black fw-bold">ĐỊA CHỈ NHẬN HÀNG</h4>
-                    <p class="text-ctdh">Tên người nhận: {{s.name}}</p>
-                    <p class="text-ctdh">Số điện thoại: {{s.phone}}</p>
-                    <p class="text-ctdh">Địa chỉ: {{s.DC}}</p>
-                </div>
-                <div class="col-lg-6 text-end">
-                  <h4 class="text-danger">Thành Tiền: {{ calculateTotal() }} VNĐ</h4>
-              </div> -->
-
-            </div>
         </div>
     </div>
 
-    <div class="gia-soc">
-        <div class="container-fluid">
-            <div class="row mb-5">
-                <div class="col-lg-3 mb-3" ng-repeat="item in products | limitTo: 8"> <!-- Giảm khoảng cách -->
-                    <div class="card" data-bs-toggle="modal" data-bs-target="#productModal{{item.idproduct}}">
-                        <img ng-src="images/{{item.img}}" class="card-img-top" alt="{{item.nameproduct}}" style="height: 300px;">
-                        <div class="card-body p-0">
-                            <hr>
-                            <p class="card-title mb-2">{{item.nameproduct}}</p> <!-- Giảm khoảng cách -->
-                            <div class="text-center">
-                                <button class="btn btn-sm btn-danger btn-add-to-cart mb-2">
-                                    Chi tiết sản phẩm
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div ng-include="'layout/footer.html'"></div>
-        <script src="../assets/js/bootstrap.bundle.js"></script>
-    </body>
+    <div ng-include="'layout/footer.html'"></div>
+    <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
 </html>

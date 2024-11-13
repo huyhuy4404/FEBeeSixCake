@@ -205,16 +205,16 @@
                                             <thead>
                                                 <tr>
                                                     <th>Tháng</th>
-                                                    <th>Loại Sản Phẩm</th>
-                                                    <th>Số lượng</th>
-                                                    <th>Giá</th>
+                                                    <th>Tổng Đơn Hàng</th>
+                                                    <th>Số lượng Đơn Hàng</th>
+                                                    <th>Tổng Tiền</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="stat in monthlyStats" ng-if="stat.totalQuantity > 0">
+                                                <tr ng-repeat="stat in monthlyStats" ng-if="stat.totalOrders > 0">
                                                     <td>Tháng {{stat.monthYear}}</td> <!-- Hiển thị tháng -->
-                                                    <td>{{stat.categoryName}}</td>
-                                                    <td>{{stat.totalQuantity}}</td>
+                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
+                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng, có thể thay đổi nếu cần -->
                                                     <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tính tổng tiền và định dạng -->
                                                 </tr>
                                                 <tr ng-if="monthlyStats.length === 0">

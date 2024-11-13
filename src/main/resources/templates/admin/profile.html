@@ -202,16 +202,16 @@
                                             <tr>
                                                 <th>Loại Sản Phẩm</th>
                                                 <th>Số Lượng Tồn Kho</th>
-                                                <th>Giá</th>
-                                                <th>Giá Trị Tồn Kho</th>
+                                                <!-- <th>Giá</th>
+                                                <th>Giá Trị Tồn Kho</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="stat in groupedOrderDetails">
                                                 <td>{{stat.categoryName}}</td> <!-- Loại sản phẩm -->
                                                 <td>{{stat.totalQuantity}}</td> <!-- Số lượng tồn kho -->
-                                                <td>{{formatCurrency(stat.price)}}</td> <!-- Giá -->
-                                                <td>{{formatCurrency(stat.totalQuantity * stat.price)}}</td> <!-- Giá trị tồn kho -->
+                                                <!-- <td>{{formatCurrency(stat.price)}}</td> Giá -->
+                                                <!-- <td>{{formatCurrency(stat.totalQuantity * stat.price)}}</td> Giá trị tồn kho -->
                                             </tr>
                                             <tr ng-if="groupedOrderDetails.length === 0">
                                                 <td colspan="4">Không có dữ liệu</td>

@@ -19,13 +19,13 @@ app.controller('discountsController', function($scope, $http) {
         });
     };
 
-    // Hàm lấy dữ liệu giảm giá
+    // Hàm lấy dữ liệu đơn hàng từ API mới
     $scope.getDiscounts = function() {
-        $http.get('http://localhost:8080/beesixcake/api/orderdetail')
+        $http.get('http://localhost:8080/beesixcake/api/order')
         .then(function(response) {  
             console.log(response.data); // Kiểm tra dữ liệu nhận được
             $scope.orderdetai = response.data.map(function(item) {
-                var orderDate = new Date(item.order.orderdate); // Lấy ngày từ orderdate
+                var orderDate = new Date(item.orderdate); // Lấy ngày từ orderdate
                 var month = orderDate.getMonth() + 1; // Tháng (1-12)
                 var year = orderDate.getFullYear(); // Năm
 
@@ -33,15 +33,13 @@ app.controller('discountsController', function($scope, $http) {
                     date: orderDate.toISOString().split('T')[0], // Lưu ngày theo định dạng YYYY-MM-DD
                     month: month, // Lưu tháng
                     year: year, // Lưu năm
-                    name: item.productdetail.product.productname,
-                    img: item.productdetail.product.img,
-                    categoryName: item.productdetail.product.category.categoryname,
-                    sz: item.productdetail.size.sizename,
-                    price: item.unitprice,
-                    quantity: item.quantity, // Số lượng đã đặt
-                    unitprice: item.productdetail.unitprice,
-                    description: item.productdetail.product.description,
-                    statusId: item.order.idstatuspay // Lưu ID trạng thái thanh toán
+                    // Thông tin đơn hàng
+                    addressDetail: item.addressdetail,
+                    shipFee: item.shipfee,
+                    total: item.total,
+                    account: item.account.fullname, // Tên người dùng
+                    paymentMethod: item.payment.paymentname, // Phương thức thanh toán
+                    statusId: item.idstatuspay, // Lưu ID trạng thái thanh toán
                 };
             });
             $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2); // Chỉ giữ sản phẩm đã thanh toán
@@ -49,7 +47,7 @@ app.controller('discountsController', function($scope, $http) {
             $scope.renderMonthlyChart(); // Vẽ biểu đồ ngay khi dữ liệu được lấy
         })
         .catch(function(error) {
-            console.error('Error fetching product details:', error);
+            console.error('Error fetching order details:', error);
         });
     };
 
@@ -79,28 +77,23 @@ app.controller('discountsController', function($scope, $http) {
     $scope.calculateMonthlyStats = function() {
         $scope.monthlyStats = [];
 
-        // Nhóm dữ liệu theo tháng và loại sản phẩm
+        // Nhóm dữ liệu theo tháng
         const statsMap = {}; // Đối tượng chứa thông tin thống kê
 
         $scope.filteredOrderDetails.forEach(function(item) {
             var monthYear = `${item.year}-${item.month < 10 ? '0' + item.month : item.month}`; // Định dạng "YYYY-MM"
-            var categoryName = item.categoryName; // Lấy tên loại sản phẩm
 
-            // Tạo key cho mỗi loại sản phẩm trong tháng
-            var key = `${monthYear}-${categoryName}`;
-
-            if (!statsMap[key]) {
-                statsMap[key] = {
+            if (!statsMap[monthYear]) {
+                statsMap[monthYear] = {
                     monthYear: monthYear,
-                    categoryName: categoryName,
-                    totalQuantity: 0,
+                    totalOrders: 0,
                     totalRevenue: 0
                 };
             }
 
-            // Cộng dồn số lượng và doanh thu cho loại sản phẩm
-            statsMap[key].totalQuantity += item.quantity; // Cộng dồn số lượng
-            statsMap[key].totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
+            // Cộng dồn số lượng và doanh thu cho đơn hàng
+            statsMap[monthYear].totalOrders += 1; // Mỗi đơn hàng là một order
+            statsMap[monthYear].totalRevenue += item.total; // Tổng doanh thu từ total
         });
 
         // Chuyển đổi đối tượng thành mảng để lưu vào monthlyStats
@@ -122,8 +115,8 @@ app.controller('discountsController', function($scope, $http) {
 
         var options = {
             series: [{
-                name: 'Tổng Số Lượng',
-                data: $scope.monthlyStats.map(stat => stat.totalQuantity),
+                name: 'Tổng Đơn Hàng',
+                data: $scope.monthlyStats.map(stat => stat.totalOrders),
             }],
             chart: {
                 type: 'bar',
@@ -163,5 +156,5 @@ app.controller('discountsController', function($scope, $http) {
 
     // Gọi hàm để lấy dữ liệu
     $scope.getStatusPayments(); // Gọi hàm lấy trạng thái thanh toán
-    $scope.getDiscounts(); // Gọi hàm lấy dữ liệu giảm giá
+    $scope.getDiscounts(); // Gọi hàm lấy dữ liệu đơn hàng
 });
