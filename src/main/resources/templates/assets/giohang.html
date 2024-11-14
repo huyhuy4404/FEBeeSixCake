@@ -20,13 +20,16 @@
     <div ng-include="'layout/menu.html'"></div>
     <div class="order" ng-controller="CartController">
       <div class="container mt-4">
+        <br />
         <h3 class="cart-header">GIỎ HÀNG CỦA BẠN</h3>
         <h5>
           Giỏ hàng của bạn (<b class="cart-cnt">{{ products.length }}</b> sản
           phẩm)
           <span class="float-end" style="font-weight: bold; font-size: 16px">
             Tổng tiền:
-            <span style="color: #cc3300">{{ calculateTotal() }} VNĐ</span>
+            <span style="color: #cc3300" id="selectedTotal"
+              >{{ calculateSelectedTotal() | number:0 }} VNĐ</span
+            >
           </span>
         </h5>
         <table class="table cart-table">
@@ -34,7 +37,8 @@
             <tr>
               <th style="width: 5%; text-align: center">Chọn</th>
               <th style="width: 15%; text-align: center">Ảnh</th>
-              <th style="width: 25%; text-align: left">Tên Sản Phẩm</th>
+              <th style="width: 10%; text-align: left">Tên Sản Phẩm</th>
+              <th style="width: 8%; text-align: right">Kích thước</th>
               <th style="width: 10%; text-align: right">Giá</th>
               <th style="width: 10%; text-align: center">Số Lượng</th>
               <th style="width: 10%; text-align: right">Tổng Tiền</th>
@@ -57,15 +61,28 @@
                   {{ product.name }}
                 </p>
               </td>
+              <td style="text-align: center; vertical-align: middle">
+                <p style="font-size: 18px; font-weight: bold">
+                  {{ product.size.sizename }} - Tổng: {{product.stockQuantity}}
+                </p>
+              </td>
               <td style="text-align: right; vertical-align: middle">
-                <p style="font-weight: bold">{{ product.price }} VNĐ</p>
+                <p style="font-weight: bold">
+                  {{ product.price | number:0 }} VNĐ
+                </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
+                <button
+                  class="btn btn-sm btn-secondary"
+                  ng-click="decreaseQuantity(product)"
+                  style="font-size: 16px"
+                >
+                  -
+                </button>
                 <input
-                  type="number"
+                  type="text"
                   ng-model="product.quantity"
-                  min="1"
-                  ng-change="calculateTotal()"
+                  ng-blur="validateQuantity(product)"
                   style="
                     width: 60px;
                     height: 40px;
@@ -73,9 +90,20 @@
                     text-align: center;
                   "
                 />
+                <button
+                  class="btn btn-sm btn-secondary"
+                  ng-click="increaseQuantity(product)"
+                  style="font-size: 16px"
+                >
+                  +
+                </button>
               </td>
+
               <td style="text-align: right; vertical-align: middle">
-                {{ product.price * product.quantity }} VNĐ
+                <p style="font-weight: bold">
+                  {{ product.outOfStock ? 'Vượt quá số lượng' : (product.price *
+                  product.quantity | number:0) + ' VNĐ' }}
+                </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
                 <button
@@ -90,6 +118,48 @@
           </tbody>
         </table>
         <!-- Modal thông báo -->
+        <div
+          class="modal fade"
+          id="exceedStockModal"
+          tabindex="-1"
+          aria-labelledby="exceedStockModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exceedStockModalLabel">
+                  Thông báo
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                Số lượng đã vượt quá số lượng trong kho.
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="stockModal"
+          tabindex="-1"
+          aria-labelledby="stockModalLabel"
+          aria-hidden="true"
+        ></div>
         <div
           class="modal fade"
           id="confirmationModal"
@@ -116,7 +186,7 @@
               <div class="modal-footer">
                 <button
                   type="button"
-                  class="btn btn-secondary"
+                  class="btn btn-primary"
                   data-bs-dismiss="modal"
                 >
                   Hủy
@@ -135,9 +205,6 @@
 
         <hr />
         <div class="text-center">
-          <button class="btn btn-lg btn-warning" ng-click="clearCart()">
-            Xóa giỏ hàng
-          </button>
           <a href="/home" class="btn btn-lg btn-primary">Tiếp tục mua hàng</a>
           <a href="/thanhtoan.html" class="btn btn-lg btn-success">Đặt hàng</a>
         </div>

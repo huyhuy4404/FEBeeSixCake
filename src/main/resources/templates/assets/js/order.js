@@ -1,86 +1,237 @@
 var app = angular.module("order", ["ngRoute"]);
 
+// Controller cho giỏ hàng
 app.controller("CartController", [
   "$scope",
   "$http",
-  function ($scope, $http) {
-    $scope.products = [];
+  "$timeout",
+  function ($scope, $http, $timeout) {
+    $scope.products = []; // Dữ liệu giỏ hàng
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    let updateTimeout = null;
 
-    // Hàm lấy dữ liệu từ API
+    // Kiểm tra người dùng đã đăng nhập chưa
+    if (!loggedInUser) {
+      console.log("Bạn cần đăng nhập.");
+      return;
+    }
+
+    // Lấy idShoppingCart của người dùng
     $http
-      .get("http://localhost:8080/beesixcake/api/cartitems/shoppingcart/1")
+      .get(
+        `http://localhost:8080/beesixcake/api/shoppingcart/account/${loggedInUser.idaccount}`
+      )
       .then(function (response) {
-        // Duyệt qua dữ liệu từ API và nhóm sản phẩm theo productdetail.idproductdetail
-        const groupedProducts = {};
+        const idShoppingCart = response.data[0].idshoppingcart;
+        console.log("idShoppingCart:", idShoppingCart);
 
-        response.data.forEach(function (item) {
-          const productDetailId = item.productdetail.idproductdetail;
-          if (groupedProducts[productDetailId]) {
-            // Nếu sản phẩm đã tồn tại trong nhóm, cộng thêm số lượng
-            groupedProducts[productDetailId].quantity += item.quantity;
-          } else {
-            // Nếu chưa tồn tại trong nhóm, thêm mới
-            groupedProducts[productDetailId] = {
-              id: item.productdetail.product.idproduct,
-              name: item.productdetail.product.productname,
-              price: item.productdetail.unitprice,
-              quantity: item.quantity,
-              image: item.productdetail.product.img,
-              idproductdetail: productDetailId,
-            };
-          }
-        });
+        // Lấy các sản phẩm trong giỏ hàng
+        $http
+          .get(
+            `http://localhost:8080/beesixcake/api/cartitems/shoppingcart/${idShoppingCart}`
+          )
+          .then(function (cartItemsResponse) {
+            // Nhóm sản phẩm theo productdetail.idproductdetail
+            const groupedProducts = {};
 
-        // Chuyển đổi groupedProducts thành mảng để dễ dàng hiển thị
-        $scope.products = Object.values(groupedProducts);
+            cartItemsResponse.data.forEach(function (item) {
+              const productDetailId = item.productdetail.idproductdetail;
+              if (groupedProducts[productDetailId]) {
+                groupedProducts[productDetailId].quantity += item.quantity;
+                groupedProducts[productDetailId].cartItems.push(item);
+              } else {
+                groupedProducts[productDetailId] = {
+                  id: item.productdetail.product.idproduct,
+                  name: item.productdetail.product.productname,
+                  price: item.productdetail.unitprice,
+                  quantity: item.quantity,
+                  image: item.productdetail.product.img,
+                  idproductdetail: productDetailId,
+                  size: item.productdetail.size,
+                  selected: false,
+                  idcartitem: item.idcartitem || "Chưa có idcartitem",
+                  cartItems: [item],
+                  stockQuantity: item.productdetail.quantityinstock,
+                  idShoppingCart: idShoppingCart,
+                };
+              }
+            });
 
-        // Tính tổng giá
-        $scope.calculateTotal();
+            // Chuyển groupedProducts thành mảng để hiển thị
+            $scope.products = Object.values(groupedProducts);
+            $scope.products.forEach((product) => {
+              product.cartItems.forEach((cartItem) => {
+                const productDetail = cartItem.productdetail;
+                console.log(
+                  `idcartitem: ${cartItem.idcartitem}, Tên sản phẩm: ${cartItem.productdetail.product.productname}, Sản phẩm này có cùng idproductdetail: ${productDetail.idproductdetail}`
+                );
+                console.log(`Tồn kho: ${productDetail.quantityinstock}`);
+              });
+            });
+            // Tính tổng giá trị đơn hàng
+            $scope.calculateTotal();
+          })
+          .catch(function (error) {
+            console.error("Lỗi khi lấy chi tiết sản phẩm:", error);
+          });
       })
       .catch(function (error) {
-        console.error("Error fetching product details:", error);
+        console.error("Lỗi khi lấy giỏ hàng:", error);
       });
+    $scope.updateQuantityInDatabase = function (product) {
+      if (updateTimeout) {
+        $timeout.cancel(updateTimeout); // Hủy bỏ timeout nếu người dùng tiếp tục thay đổi
+      }
 
-    // Hàm tính tổng giá
+      // Kiểm tra các thuộc tính cần thiết
+      if (
+        !product.idcartitem ||
+        !product.quantity ||
+        !product.idShoppingCart ||
+        !product.idproductdetail
+      ) {
+        console.error(
+          "Thiếu idcartitem, quantity, idShoppingCart, hoặc idproductdetail:",
+          product
+        );
+        return;
+      }
+
+      // Tạo payload theo cấu trúc API yêu cầu, chỉ thay đổi quantity, các giá trị khác giữ nguyên
+      const payload = {
+        idcartitem: product.idcartitem,
+        quantity: product.quantity, // Cập nhật quantity
+        productdetail: {
+          idproductdetail: product.idproductdetail,
+          unitprice: product.price || 0, // Giữ nguyên hoặc đặt giá trị mặc định
+          quantityinstock: product.stockQuantity || 0,
+          product: {
+            idproduct: product.id, // Giữ nguyên ID sản phẩm
+            productname: product.name,
+            img: product.image,
+            description: product.description || "string", // Thêm mô tả nếu có
+            isactive: true, // Giữ trạng thái mặc định
+            category: {
+              idcategory: product.categoryId || 0, // Giữ nguyên ID category nếu có
+              categoryname: product.categoryName || "string",
+            },
+          },
+          size: {
+            idsize: product.size.idsize || 0,
+            sizename: product.size.sizename || "string",
+          },
+        },
+        shoppingcart: {
+          idshoppingcart: product.idShoppingCart, // Thêm idShoppingCart
+          account: {
+            idaccount: product.accountId || "string",
+            password: product.password || "string",
+            fullname: product.fullname || "string",
+            email: product.email || "string",
+            phonenumber: product.phonenumber || "string",
+            active: true,
+            idrole: product.roleId || 0,
+          },
+        },
+      };
+
+      // Log payload để kiểm tra trước khi gửi
+      console.log("Cập nhật số lượng với payload:", payload);
+
+      // Đặt timeout để cập nhật sau khi người dùng dừng thay đổi trong 3 giây
+      updateTimeout = $timeout(function () {
+        $http
+          .put(
+            `http://localhost:8080/beesixcake/api/cartitems/${product.idcartitem}`,
+            payload
+          )
+          .then(function (response) {
+            console.log("Cập nhật số lượng thành công:", response.data);
+          })
+          .catch(function (error) {
+            console.error("Lỗi khi cập nhật số lượng:", error); // Log chi tiết lỗi
+            console.error("Thông tin lỗi:", error.data); // Thêm thông tin từ máy chủ nếu có
+          });
+      }, 3000); // Đợi 3 giây
+    };
+
+    $scope.increaseQuantity = function (product) {
+      if (product.quantity < product.stockQuantity) {
+        product.quantity += 1;
+        product.outOfStock = false; // Đặt lại trạng thái hết hàng nếu số lượng hợp lệ
+      } else {
+        $("#exceedStockModal").modal("show");
+      }
+      $scope.calculateTotal();
+
+      // Cập nhật số lượng hiển thị và gọi update sau 3 giây nếu không thay đổi
+      console.log("Số lượng hiện tại của sản phẩm:", product.quantity);
+      $scope.updateQuantityInDatabase(product);
+    };
+    // Kiểm tra và điều chỉnh số lượng sản phẩm nhập tay
+    $scope.validateQuantity = function (product) {
+      if (isNaN(product.quantity) || product.quantity < 1) {
+        product.quantity = 1;
+      } else if (product.quantity > product.stockQuantity) {
+        product.quantity = product.stockQuantity;
+        $("#exceedStockModal").modal("show");
+      }
+
+      product.outOfStock = product.quantity > product.stockQuantity;
+      $scope.calculateTotal();
+
+      // Cập nhật số lượng hiển thị và gọi update sau 3 giây nếu không thay đổi
+      console.log("Số lượng hiện tại của sản phẩm:", product.quantity);
+      $scope.updateQuantityInDatabase(product);
+    };
+    // Tính tổng giá trị giỏ hàng, đánh dấu hết hàng nếu số lượng vượt quá tồn kho
     $scope.calculateTotal = function () {
       $scope.totalPrice = $scope.products.reduce(function (sum, product) {
-        return sum + product.price * product.quantity;
+        if (product.quantity > product.stockQuantity) {
+          product.outOfStock = true; // Đánh dấu sản phẩm là "Hết hàng"
+        } else {
+          product.outOfStock = false;
+          return sum + product.price * product.quantity;
+        }
+        return sum;
       }, 0);
     };
 
-    // Hàm gửi đơn hàng
-    $scope.placeOrder = function () {
-      const orderData = {
-        products: $scope.products.map((product) => ({
-          idproduct: product.id,
-          quantity: product.quantity,
-        })),
-      };
-
-      $http
-        .post("http://localhost:8080/beesixcake/api/order", orderData)
-        .then(function (response) {
-          alert("Đơn hàng đã được gửi thành công!");
-          $scope.clearCart(); // Xóa giỏ hàng sau khi đặt hàng
-        })
-        .catch(function (error) {
-          console.error("Lỗi khi gửi đơn hàng:", error);
-          alert("Có lỗi xảy ra khi gửi đơn hàng. Vui lòng thử lại.");
-        });
+    $scope.calculateSelectedTotal = function () {
+      return $scope.products.reduce(function (sum, product) {
+        if (product.selected) {
+          if (product.quantity <= product.stockQuantity) {
+            product.outOfStock = false;
+            return sum + product.price * product.quantity;
+          } else {
+            product.outOfStock = true;
+          }
+        }
+        return sum;
+      }, 0);
     };
+    $scope.decreaseQuantity = function (product) {
+      if (product.quantity > 1) {
+        product.quantity -= 1;
+        product.outOfStock = product.quantity > product.stockQuantity;
+        $scope.calculateTotal();
+      }
 
-    $scope.productToRemove = null; // Biến lưu trữ sản phẩm cần xóa
+      // Cập nhật số lượng hiển thị và gọi update sau 3 giây nếu không thay đổi
+      console.log("Số lượng hiện tại của sản phẩm:", product.quantity);
+      $scope.updateQuantityInDatabase(product);
+    };
+    // Biến để lưu sản phẩm cần xóa
+    $scope.productToRemove = null;
 
-    // Hàm hiển thị modal và lưu sản phẩm cần xóa
+    // Hiển thị modal và lưu sản phẩm cần xóa
     $scope.removeFromCart = function (product) {
       $scope.productToRemove = product;
-      // Hiển thị modal
-      $("#confirmationModal").modal("show");
+      $("#confirmationModal").modal("show"); // Hiển thị modal xác nhận xóa
     };
 
-    // Hàm xử lý xóa sản phẩm sau khi xác nhận
+    // Xác nhận xóa sản phẩm
     $scope.confirmRemove = function () {
-      // Gửi yêu cầu xóa sản phẩm từ giỏ hàng
       $http
         .delete(
           `http://localhost:8080/beesixcake/api/cartitems/productdetail/${$scope.productToRemove.idproductdetail}`
@@ -89,56 +240,50 @@ app.controller("CartController", [
           const index = $scope.products.indexOf($scope.productToRemove);
           if (index !== -1) {
             $scope.products.splice(index, 1);
-            $scope.calculateTotal(); // Cập nhật tổng tiền sau khi xóa
+            $scope.calculateTotal(); // Cập nhật tổng tiền
             showMessage("Đã xóa sản phẩm khỏi giỏ hàng.", "success");
           }
-          // Đóng modal tự động sau khi xóa
-          $("#confirmationModal").modal("hide");
+          $("#confirmationModal").modal("hide"); // Đóng modal sau khi xóa
         })
         .catch(function (error) {
-          console.error("Error deleting product from cart:", error);
+          console.error("Lỗi khi xóa sản phẩm:", error);
           showMessage("Không thể xóa sản phẩm. Vui lòng thử lại.", "danger");
-          // Đóng modal tự động sau khi có lỗi
-          $("#confirmationModal").modal("hide");
+          $("#confirmationModal").modal("hide"); // Đóng modal khi có lỗi
         });
     };
   },
 ]);
 
+// Controller cho đăng nhập và đăng xuất
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
-  // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.isLoggedIn = false;
-  $scope.user = {
-    idaccount: "",
-    password: "",
-  };
-  $scope.loginError = ""; // Biến để lưu thông báo lỗi
+  $scope.user = { idaccount: "", password: "" };
+  $scope.loginError = "";
 
-  // Kiểm tra trạng thái đăng nhập từ localStorage
+  // Kiểm tra người dùng đã đăng nhập chưa
   if (localStorage.getItem("loggedInUser")) {
     $scope.isLoggedIn = true;
     $scope.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   } else {
-    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
-    $window.location.href = "login.html"; // Đường dẫn đến trang đăng nhập
+    $window.location.href = "login.html"; // Chuyển đến trang đăng nhập nếu chưa đăng nhập
   }
 
-  // Hàm cập nhật giao diện
+  // Cập nhật giao diện theo trạng thái đăng nhập
   $scope.updateAccountMenu = function () {
     $scope.isLoggedIn = !!localStorage.getItem("loggedInUser");
   };
 
-  // Phương thức đăng nhập
+  // Đăng nhập
   $scope.login = function () {
     if (!$scope.isLoggedIn) {
       $scope.loginError = ""; // Reset thông báo lỗi
 
-      // Gửi yêu cầu GET để lấy danh sách tài khoản từ API
+      // Gửi yêu cầu để lấy danh sách tài khoản
       $http
         .get("http://localhost:8080/beesixcake/api/account")
         .then(function (response) {
           $scope.accounts = response.data;
-          var foundAccount = $scope.accounts.find(
+          const foundAccount = $scope.accounts.find(
             (account) =>
               account.idaccount === $scope.user.idaccount &&
               account.password === $scope.user.password
@@ -146,30 +291,21 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
 
           if (foundAccount) {
             if (foundAccount.admin) {
-              // Nếu tài khoản là admin
               $scope.loginError = "Bạn không có quyền truy cập!";
             } else {
-              // Đăng nhập thành công
               $scope.loginSuccess = "Đăng nhập thành công!";
-              // Lưu thông tin đăng nhập vào localStorage
               localStorage.setItem(
                 "loggedInUser",
                 JSON.stringify(foundAccount)
               );
-
-              // Cập nhật giao diện
               $scope.updateAccountMenu();
-
-              // Chuyển hướng về trang chính ngay lập tức
-              $window.location.href = "index.html"; // Hoặc sử dụng $timeout nếu cần delay
+              $window.location.href = "index.html"; // Chuyển đến trang chính sau khi đăng nhập thành công
             }
           } else {
-            // Nếu tài khoản không đúng hoặc mật khẩu không khớp
             $scope.loginError = "Tên người dùng hoặc mật khẩu không đúng!";
           }
         })
         .catch(function (error) {
-          // Xử lý lỗi từ API
           $scope.loginError = "Lỗi khi kết nối đến máy chủ. Vui lòng thử lại.";
           console.error("Error:", error);
         });
@@ -178,7 +314,7 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
     }
   };
 
-  // Phương thức đăng xuất
+  // Đăng xuất
   $scope.logout = function () {
     localStorage.removeItem("loggedInUser");
     $scope.isLoggedIn = false;
