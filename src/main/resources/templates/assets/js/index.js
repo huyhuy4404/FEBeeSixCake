@@ -3,11 +3,13 @@ var app = angular.module("myApp", []);
 app.controller("discountsController", function ($scope, $http) {
   // Khởi tạo mảng để chứa sản phẩm
   $scope.Products = [];
+  $scope.category = [];
   $scope.CartItems = [];
   $scope.DiscountedProducts = [];
   $scope.NewProducts = [];
   $scope.ActiveProducts = [];
   $scope.FilteredProducts = []; // Khởi tạo mảng để chứa sản phẩm đã lọc
+  $scope.filcategoryname = [];
   $scope.selectedCategory = '';
 
   // Lấy dữ liệu từ API
@@ -56,24 +58,27 @@ app.controller("discountsController", function ($scope, $http) {
             window.location.href = 'SanPham.html#/' + categoryName;
         };
   };
+  $scope.getCategories = function () {
+    $http.get('http://localhost:8080/beesixcake/api/category')
+        .then(function (response) {
+            console.log('Category Response:', response.data);
+            if (Array.isArray(response.data)) {
+                $scope.category = response.data.map(item => ({
+                    idcategory: item.idcategory,
+                    categoryname: item.categoryname
+                }));
+                console.log('All Categories:', $scope.category);
+            } else {
+                console.error("Dữ liệu không phải mảng!");
+            }
+        })
+        .catch(function (error) {
+            console.error("Error fetching categories:", error);
+        });
+};
+  
 
-  // Hàm lọc sản phẩm theo loại
-  // $scope.filterProducts = function (categoryName, startingLetter) {
-  //     $scope.selectedCategory = categoryName; // Lưu tên loại sản phẩm đã chọn
 
-  //     if (categoryName === 'Bánh') {
-  //         // Lọc các sản phẩm có categoryname chứa 'Bánh' và productname bắt đầu bằng ký tự cụ thể
-  //         $scope.FilteredProducts = $scope.ActiveProducts.filter(product =>
-  //             product.categoryname.includes("Bánh") && product.productname.startsWith(startingLetter)
-  //         );
-  //     } else {
-  //         // Nếu không phải loại 'Bánh', lọc theo tên loại đã chọn
-  //         $scope.FilteredProducts = $scope.ActiveProducts.filter(product => product.categoryname === categoryName);
-  //     }
-
-  //     // Kiểm tra danh sách sản phẩm đã lọc
-  //     console.log('Filtered Products:', $scope.FilteredProducts);
-  // };
 
   // Hàm chuyển hướng đến trang chi tiết sản phẩm
   $scope.goToProduct = function (productId) {
@@ -91,7 +96,8 @@ app.controller("discountsController", function ($scope, $http) {
   };
 
   // Gọi hàm để lấy dữ liệu
-  $scope.getProducts();
+  $scope.getProducts();    $scope.getCategories(); // Gọi hàm lấy danh mục
+
 });
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {

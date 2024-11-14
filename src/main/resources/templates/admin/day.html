@@ -16,15 +16,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-
         }
-        .nav-item.dropdown .dropdown-menu {
-    display: none; /* Ẩn menu xổ xuống mặc định */
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block; /* Hiện menu khi hover */
-}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -161,17 +153,17 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
                                         <a class="dropdown-item" href="quy.html">
-                                            Quản Lý Doanh Thu theo Quý
+                                             Doanh Thu theo Quý
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="thang.html">
-                                            Quản Lý Doanh Thu theo Năm
+                                             Doanh Thu theo Tháng
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="day.html">
-                                            Quản Lý Doanh Thu theo Ngày
+                                        <a class="dropdown-item" href="Year.html">
+                                             Doanh Thu theo Năm
                                         </a>
                                     </li>
                                 </ul>
@@ -188,42 +180,49 @@
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Tồn Kho Theo Loại</h1>
+                        <h1 class="h2 mb-0">Doanh thu theo ngày</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
                             <div class="custom-block">
-                                <div id="pie-chart"></div>
-                            </div>
-                            
-                            <div class="card">
-                                <div class="card-header">
-                                    Bảng hiển thị dữ liệu
-                                </div>
-                                <div class="card-body">
-                                 
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Loại Sản Phẩm</th>
-                                                <th>Số Lượng Tồn Kho</th>
-                                                <!-- <th>Giá</th>
-                                                <th>Giá Trị Tồn Kho</th> -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr ng-repeat="stat in groupedOrderDetails">
-                                                <td>{{stat.categoryName}}</td> <!-- Loại sản phẩm -->
-                                                <td>{{stat.totalQuantity}}</td> <!-- Số lượng tồn kho -->
-                                                <!-- <td>{{formatCurrency(stat.price)}}</td> Giá -->
-                                                <!-- <td>{{formatCurrency(stat.totalQuantity * stat.price)}}</td> Giá trị tồn kho -->
-                                            </tr>
-                                            <tr ng-if="groupedOrderDetails.length === 0">
-                                                <td colspan="4">Không có dữ liệu</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <button ng-click="exportToExcel()" class="btn btn-success">Xuất Excel</button>
+                                <div class="card">
+                                    <div class="">
+                                        <div class="card-header">
+                                            Doanh thu theo ngày
+                                        </div>
+                                        <div class="card-body">
+                                            <div id="daily-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo ngày -->
+                                        </div>
+                                    </div>
+                
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="date-select">Chọn Ngày</label>
+                                            <select id="date-select" class="form-control" ng-model="selectedDate" ng-change="filterData()">
+                                                <option value="" disabled selected>Chọn một ngày</option>
+                                                <option ng-repeat="date in availableDates" value="{{date}}">{{date}}</option>
+                                            </select>
+                                        </div>
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ngày</th>
+                                                    <th>Tổng Đơn Hàng</th>
+                                                    <th>Tổng Tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="stat in dailyStats" ng-if="stat.totalOrders > 0">
+                                                    <td>{{stat.date}}</td> <!-- Hiển thị ngày -->
+                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
+                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tổng tiền -->
+                                                </tr>
+                                                <tr ng-if="dailyStats.length === 0">
+                                                    <td colspan="3">Không có dữ liệu cho ngày đã chọn.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +238,7 @@
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
-    <script src="../admin/js/revenue.js"></script>
+    <script src="../admin/js/day.js"></script>
 
 </body>
 </html>

@@ -20,7 +20,7 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 </head>
 
@@ -153,17 +153,17 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
                                         <a class="dropdown-item" href="quy.html">
-                                             Doanh Thu theo Quý
+                                            Quản Lý Doanh Thu theo Quý
                                         </a>
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="thang.html">
-                                             Doanh Thu theo Tháng
+                                            Quản Lý Doanh Thu theo Năm
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="Year.html">
-                                             Doanh Thu theo Năm
+                                        <a class="dropdown-item" href="day.html">
+                                            Quản Lý Doanh Thu theo Ngày
                                         </a>
                                     </li>
                                 </ul>
@@ -180,7 +180,7 @@
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Thống kê theo quý</h1>
+                        <h1 class="h2 mb-0">Doanh thu theo quý</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
@@ -189,13 +189,13 @@
                             
                             <div class="card mt-4">
                                 <div class="card-header">
-                                    Thống kê theo quý
+                                    Doanh thu theo quý
                                 </div>
                                 <div class="card-body">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Năm</th>
+                                                <!-- <th>Năm</th> -->
                                                 <th>Quý</th>
                                                 <th>Tổng Số Lượng</th>
                                                 <th>Tổng Doanh Thu</th>
@@ -203,7 +203,7 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="stat in quarterlyStats">
-                                                <td>{{stat.year}}</td>
+                                                <!-- <td>{{stat.year}}</td> -->
                                                 <td>{{stat.quarter}}</td>
                                                 <td>{{stat.totalQuantity}}</td>
                                                 <td>{{formatCurrency(stat.totalRevenue)}}</td>

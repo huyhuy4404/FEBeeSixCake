@@ -1,160 +1,127 @@
-var app = angular.module('myApp', []);
+    var app = angular.module('myApp', []);
 
-app.controller('discountsController', function($scope, $http) {
-    $scope.orderdetai = [];
-    $scope.filteredOrderDetails = []; // Biến để lưu dữ liệu đã lọc
-    $scope.groupedOrderDetails = []; // Biến để lưu dữ liệu đã nhóm
-    $scope.startDate = null; // Ngày bắt đầu
-    $scope.endDate = null; // Ngày kết thúc
-
-    // Hàm lấy dữ liệu giảm giá
-    $scope.getDiscounts = function() {
-        $http.get('http://localhost:8080/beesixcake/api/orderdetail')
-        .then(function(response) {
-            console.log(response.data); // Kiểm tra dữ liệu nhận được
-            $scope.orderdetai = response.data.map(function(item) {
-                var orderDate = new Date(item.order.orderdate);
-                return {
-                    date: orderDate.toISOString().split('T')[0], // Lưu ngày theo định dạng YYYY-MM-DD
-                    name: item.productdetail.product.productname,
-                    img: item.productdetail.product.img,
-                    categoryName: item.productdetail.product.category.categoryname,
-                    sz: item.productdetail.size.sizename,
-                    price: item.unitprice,
-                    quantity: item.productdetail.quantityinstock,
-                    unitprice: item.productdetail.unitprice,
-                    description: item.productdetail.product.description
-                };
-            });
-            $scope.filteredOrderDetails = $scope.orderdetai; // Khởi tạo dữ liệu đã lọc
-            $scope.groupData(); // Nhóm dữ liệu ngay khi dữ liệu được lấy
-            $scope.renderChart(); // Vẽ biểu đồ ngay khi dữ liệu được lấy
-        })
-        .catch(function(error) {
-            console.error('Error fetching product details:', error);
-        });
-    };
-
-    // Hàm nhóm dữ liệu theo ngày và loại sản phẩm
-    $scope.groupData = function() {
+    app.controller('discountsController', function($scope, $http) {
+        $scope.orderdetai = [];
         $scope.groupedOrderDetails = [];
+        $scope.categories = []; // Danh sách loại sản phẩm
 
-        const statsMap = {}; // Đối tượng chứa thông tin thống kê
-
-        $scope.filteredOrderDetails.forEach(function(item) {
-            var date = item.date; // Lấy ngày
-            var categoryName = item.categoryName; // Lấy tên loại sản phẩm
-
-            // Tạo key cho mỗi loại sản phẩm trong ngày
-            var key = `${date}-${categoryName}`;
-
-            if (!statsMap[key]) {
-                statsMap[key] = {
-                    date: date,
-                    categoryName: categoryName,
-                    totalQuantity: 0,
-                    totalRevenue: 0
-                };
-            }
-
-            // Cộng dồn số lượng và doanh thu cho loại sản phẩm
-            statsMap[key].totalQuantity += item.quantity; // Cộng dồn số lượng
-            statsMap[key].totalRevenue += item.unitprice * item.quantity; // Tổng doanh thu cho từng sản phẩm
-        });
-
-        // Chuyển đổi đối tượng thành mảng để lưu vào groupedOrderDetails
-        $scope.groupedOrderDetails = Object.values(statsMap);
-
-        console.log($scope.groupedOrderDetails); // Kiểm tra thống kê sau khi tính toán
-    };
-
-    // Hàm xuất dữ liệu ra Excel
-    $scope.exportToExcel = function() {
-        const worksheet = XLSX.utils.json_to_sheet($scope.groupedOrderDetails.map(item => ({
-            'Ngày tạo': item.date,
-            'Loại Sản Phẩm': item.categoryName,
-            'Số lượng': item.totalQuantity,
-            'Giá': item.totalRevenue
-        })));
-
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Order Details");
-
-        // Xuất file
-        XLSX.writeFile(workbook, 'order_details.xlsx');
-    };
-
-    // Hàm lọc dữ liệu theo ngày
-    $scope.filterData = function() {
-        $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
-            var itemDate = new Date(item.date);
-            var start = $scope.startDate ? new Date($scope.startDate) : null;
-            var end = $scope.endDate ? new Date($scope.endDate) : null;
-
-            // Đặt giờ cho ngày bắt đầu và ngày kết thúc
-            if (start) {
-                start.setHours(0, 0, 0, 0); // Đầu ngày
-            }
-            if (end) {
-                end.setHours(23, 59, 59, 999); // Cuối ngày
-            }
-
-            // Kiểm tra xem ngày sản phẩm có nằm trong khoảng không
-            if (start && end) {
-                return itemDate >= start && itemDate <= end;
-            } else if (start) {
-                return itemDate >= start;
-            } else if (end) {
-                return itemDate <= end;
-            } else {
-                return true; // Nếu không có ngày nào được chọn thì hiển thị tất cả
-            }
-        });
-
-        // Nhóm dữ liệu sau khi lọc
-        $scope.groupData();
-        
-        // Cập nhật biểu đồ sau khi lọc dữ liệu
-        $scope.renderChart();
-    };
-
-    // Hàm vẽ biểu đồ
-    $scope.renderChart = function() {
-        // Nếu không có dữ liệu, không vẽ biểu đồ
-        if ($scope.groupedOrderDetails.length === 0) {
-            document.getElementById("pie-chart").innerHTML = ""; // Xóa biểu đồ nếu không có dữ liệu
-            return;
-        }
-
-        var options = {
-            series: $scope.groupedOrderDetails.map(item => item.totalQuantity), // Số lượng sản phẩm
-            chart: {
-                width: 380,
-                type: 'pie',
-            },
-            labels: $scope.groupedOrderDetails.map(item => item.categoryName), // Tên sản phẩm
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
+        // Hàm lấy dữ liệu loại sản phẩm
+        $scope.getCategories = function() {
+            $http.get('http://localhost:8080/beesixcake/api/category')
+            .then(function(response) {
+                $scope.categories = response.data; // Lưu danh sách loại sản phẩm vào biến
+                $scope.getDiscounts(); // Lấy dữ liệu giảm giá sau khi đã có loại sản phẩm
+            })
+            .catch(function(error) {
+                console.error('Error fetching categories:', error);
+            });
         };
 
-        var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
-        chart.render();
-    };
+        // Hàm lấy dữ liệu sản phẩm
+        $scope.getDiscounts = function() {
+            $http.get('http://localhost:8080/beesixcake/api/productdetail') // Cập nhật URL API
+            .then(function(response) {
+                console.log(response.data); // Kiểm tra dữ liệu trả về
+                $scope.orderdetai = response.data.map(function(item) {
+                    return {
+                        categoryName: item.product.category.categoryname, // Cập nhật đường dẫn nếu cần
+                        price: item.unitprice, // Cập nhật nếu cần
+                        quantityInStock: item.quantityinstock, // Cập nhật nếu cần
+                        productId: item.idproduct, // Cập nhật nếu cần
+                    };
+                });
+        
+                console.log($scope.orderdetai); // Kiểm tra dữ liệu đã được xử lý
+                $scope.groupData(); // Nhóm dữ liệu sau khi đã lấy thông tin
+            })
+            .catch(function(error) {
+                console.error('Error fetching product details:', error);
+            });
+        };
 
-    // Hàm định dạng tiền tệ
-    $scope.formatCurrency = function(amount) {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
+        // Hàm nhóm dữ liệu theo loại sản phẩm
+        $scope.groupData = function() {
+            const statsMap = {};
+        
+            // Tạo một đối tượng cho mỗi loại sản phẩm
+            $scope.categories.forEach(category => {
+                statsMap[category.categoryname] = {
+                    categoryName: category.categoryname,
+                    totalQuantity:  0,
+                    totalRevenue: 0,
+                    price: 0,
+                };
+            });
+        
+            // Cập nhật thông tin sản phẩm từ orderdetai
+            $scope.orderdetai.forEach(item => {
+                if (statsMap[item.categoryName]) {
+                    // Cập nhật số lượng tồn kho
+                    statsMap[item.categoryName].totalQuantity += item.quantityInStock > 0 ? item.quantityInStock : 0; 
+                    // Tính doanh thu
+                    statsMap[item.categoryName].totalRevenue += (item.price * item.quantityInStock);
+                    // Lưu giá của sản phẩm
+                    statsMap[item.categoryName].price = item.price;
+                }
+            });
+        
+            // Chuyển đổi đối tượng thành mảng
+            $scope.groupedOrderDetails = Object.values(statsMap);
+            $scope.renderChart(); // Vẽ biểu đồ sau khi đã nhóm dữ liệu
+            console.log($scope.groupedOrderDetails); // Kiểm tra dữ liệu nhóm
+        };
+        // Hàm vẽ biểu đồ
+        $scope.renderChart = function() {
+            if ($scope.groupedOrderDetails.length === 0) {
+                document.getElementById("pie-chart").innerHTML = "";
+                return;
+            }
 
-    // Gọi hàm để lấy dữ liệu
-    $scope.getDiscounts();
-});
+            var options = {
+                series: $scope.groupedOrderDetails.map(item => item.totalQuantity),
+                chart: {
+                    width: 380,
+                    type: 'pie',
+                },
+                labels: $scope.groupedOrderDetails.map(item => item.categoryName),
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
+            chart.render();
+        };
+
+        // Hàm xuất dữ liệu ra Excel
+        $scope.exportToExcel = function() {
+            const worksheet = XLSX.utils.json_to_sheet($scope.groupedOrderDetails.map(item => ({
+                'Loại Sản Phẩm': item.categoryName,
+                'Giá': $scope.formatCurrency(item.price),
+                'Số Lượng': item.totalQuantity,
+                'Giá Trị Tồn Kho': $scope.formatCurrency(item.totalRevenue),
+            })));
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Order Details");
+
+            // Xuất file
+            XLSX.writeFile(workbook, 'order_details.xlsx');
+        };
+
+        // Hàm định dạng tiền tệ
+        $scope.formatCurrency = function(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        };
+
+        // Gọi hàm để lấy danh sách loại sản phẩm
+        $scope.getCategories(); // Lấy dữ liệu loại sản phẩm
+    });

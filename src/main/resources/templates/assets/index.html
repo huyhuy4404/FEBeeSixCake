@@ -69,7 +69,10 @@
       </div>
       <div class="row py-4" style="justify-content: center; margin: 0 5%;">
         <h4>Tất cả sản phẩm:</h4>
-        <div class="col-lg-3" ng-repeat="item in Products | limitTo: 4 track by item.idproduct">
+        <div class="col-lg-3" ng-repeat="item in Products | limitTo: 4 ">
+          <script>
+            console.log('Item:', item ); // In ra thông tin của từng sản phẩm
+          </script>
           <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
             <div class="box-images">
               <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
@@ -100,7 +103,7 @@
       <div class="row py-2" style="justify-content: center; margin: 0 5%; margin-top: 30px;">
         <h4>Tất cả sản phẩm:</h4>
         <div class="col-lg-3" style="margin-top: 30px;"
-          ng-repeat="item in Products | limitTo: 8 track by item.idproduct">
+          ng-repeat="item in Products | limitTo: 8">
           <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
             <div class="box-images">
               <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
@@ -125,7 +128,7 @@
   </div>
   <div ng-include="'layout/footer.html'"></div>
   <script src="../assets/js/bootstrap.bundle.js"></script>
-  <script src="../assets/js/index.js"></script>
+  <script src="../assets/js/indexx.js"></script>
 
 </body>
 

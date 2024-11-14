@@ -281,7 +281,7 @@ Bootstrap 5 Dashboard Admin Template
 
             <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
                 <div class="title-group mb-3">
-                    <h1 class="h2 mb-0">Quản Lý Khuyến Mãi</h1>
+                    <h1 class="h2 mb-0">Quản Lý Mã Giảm Giá</h1>
                 </div>
 
                 <div class="row my-4">
@@ -306,10 +306,7 @@ Bootstrap 5 Dashboard Admin Template
                                     <!-- Form sửa đổi -->
                                     <form name="discountForm" class="custom-form profile-form" novalidate>
                                         <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <p>ID:</p>
-                                                <input class="form-control" type="text" name="Discounts-id" id="Discounts-id" ng-model="selecteddiscount.iddiscount" readonly>
-                                            </div>
+                                            
                                             <div class="col-md-6">
                                                 <p>Mã giảm giá:</p>
                                                 <input class="form-control" type="text" name="Discounts-code" id="Discounts-code" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode" required>
@@ -322,9 +319,9 @@ Bootstrap 5 Dashboard Admin Template
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Phần trăm giảm giá:</p>
-                                                <input class="form-control" type="number" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm chiết khấu" ng-model="selecteddiscount.discountpercentage" min="0" max="100" required>
+                                                <input class="form-control" type="number" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm khuyến mãi" ng-model="selecteddiscount.discountpercentage" min="0" max="100" required>
                                                 <div ng-show="discountForm['Discounts-percentage'].$touched && discountForm['Discounts-percentage'].$invalid" class="text-danger">
-                                                    Phần trăm chiết khấu là bắt buộc và phải từ 0 đến 100.
+                                                    Phần trăm  là bắt buộc và phải từ 0 đến 100.
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -345,10 +342,10 @@ Bootstrap 5 Dashboard Admin Template
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <p>Giá thấp nhất:</p>
+                                                <p>Đơn hàng tối thiểu:</p>
                                                 <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Giá thấp nhất" required>
                                                 <div ng-show="discountForm['lowestPrice'].$touched && discountForm['lowestPrice'].$invalid" class="text-danger">
-                                                    Giá thấp nhất là bắt buộc.
+                                                    Giá thấp nhất là bắt buộc. 
                                                 </div>
                                             </div>
                                         </div>
@@ -380,7 +377,7 @@ Bootstrap 5 Dashboard Admin Template
                                                     <th>Phần trăm giảm giá</th>
                                                     <th>Ngày bắt đầu</th>
                                                     <th>Ngày kết thúc</th>
-                                                    <th>Giá thấp nhất</th>
+                                                    <th>thời gian voucher</th>
                                                     <th class="text-end">Actions</th>
                                                 </tr>
                                             </thead>
@@ -388,10 +385,10 @@ Bootstrap 5 Dashboard Admin Template
                                                 <tr ng-repeat="category in Discounts">
                                                     <td>{{category.iddiscount}}</td>
                                                     <td>{{category.discountcode}}</td>
-                                                    <td>{{category.discountpercentage}}</td>
-                                                    <td>{{category.startdate}}</td>
-                                                    <td>{{category.enddate}}</td>
-                                                    <td>{{category.lowestprice | currency:'₫'}}</td>
+                                                    <td>{{category.discountpercentage}}%</td> <!-- Hiển thị phần trăm kèm dấu % -->
+                                                    <td>{{category.startdate | date:'dd/MM/yyyy'}}</td> <!-- Định dạng ngày -->
+                                                    <td>{{category.enddate | date:'dd/MM/yyyy'}}</td> <!-- Định dạng ngày -->
+                                                    <td>{{formatCurrency(category.lowestprice)}}</td> <!-- Định dạng tiền tệ -->
                                                     <td class="text-end">
                                                         <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Edit</button>
                                                         <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Delete</button>

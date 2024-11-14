@@ -7,7 +7,7 @@ app.controller('ResetPasswordController', function($scope, $http, $window) {
     };
     $scope.resetSuccess = '';
     $scope.resetError = '';
-    $scope.isSubmitting = false; // Biến theo dõi trạng thái gửi
+    $scope.isSubmitting = false; // Theo dõi trạng thái gửi
 
     $scope.sendResetLink = function() {
         // Kiểm tra nếu đang gửi để tránh gửi nhiều lần
@@ -17,7 +17,7 @@ app.controller('ResetPasswordController', function($scope, $http, $window) {
 
         // Kiểm tra tính hợp lệ của form
         if (!$scope.user.email) {
-            alert('Vui lòng nhập email!');
+            $scope.resetError = 'Vui lòng nhập email!';
             return;
         }
 
@@ -25,20 +25,25 @@ app.controller('ResetPasswordController', function($scope, $http, $window) {
 
         // Gửi yêu cầu đến server để gửi liên kết đặt lại mật khẩu
         $http.post('http://localhost:8080/beesixcake/api/account/reset-password', { email: $scope.user.email })
-        .then(function(response) {
-            $scope.resetSuccess = response.data.message; // Hiển thị thông báo thành công
-            $scope.resetError = null; // Xóa thông báo lỗi nếu có
-            
-            // Chuyển hướng đến trang nhập mã OTP
-            $window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/assets/opt.html"; // Thay đổi URL theo yêu cầu
-        })
-        .catch(function(error) {
-            $scope.resetError = "Có lỗi xảy ra, vui lòng thử lại.";
-            $scope.resetSuccess = null; // Xóa thông báo thành công nếu có
-        })
-        .finally(function() {
-            $scope.isSubmitting = false; // Đánh dấu không còn đang gửi
-        });
+            .then(function(response) {
+                $scope.resetSuccess = response.data.message; // Hiển thị thông báo thành công
+                $scope.resetError = ''; // Xóa thông báo lỗi nếu có
+                
+                // Chuyển hướng đến trang nhập mã OTP
+                $window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/assets/opt.html"; // Thay đổi URL theo yêu cầu
+            })
+            .catch(function(error) {
+                // Kiểm tra xem có thông báo lỗi từ server không
+                if (error.data && error.data.message) {
+                    $scope.resetError = error.data.message; // Hiển thị thông báo lỗi từ server
+                } else {
+                    $scope.resetError = "Có lỗi xảy ra, vui lòng thử lại."; // Thông báo lỗi chung
+                }
+                $scope.resetSuccess = ''; // Xóa thông báo thành công nếu có
+            })
+            .finally(function() {
+                $scope.isSubmitting = false; // Đánh dấu không còn đang gửi
+            });
     };
 });
 
