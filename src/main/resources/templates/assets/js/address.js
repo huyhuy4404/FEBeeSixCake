@@ -98,16 +98,16 @@ app.controller('AddressController', function ($scope, $http) {
 
   // Danh sách các quận và huyện với phường và xã
   $scope.districts = [
-    { name: 'Quận Ninh Kiều', wards: ['An Cư', 'An Hòa', 'An Hội', 'An Lạc', 'An Nghiệp', 'An Phú', 'An Thới', 'Bình Thủy', 'Cái Khế', 'Hưng Lợi', 'Hưng Phú', 'Tân An', 'Thới Bình', 'Trà Nóc', 'Xuân Khánh'] },
-    { name: 'Quận Cái Răng', wards: ['An Cư', 'Bình Thủy', 'Cái Khế', 'Hưng Phú', 'Trà Nóc', 'Xuân Khánh'] },
-    { name: 'Quận Bình Thủy', wards: ['Bình Thủy', 'Cái Khế', 'Hưng Phú', 'Hưng Lợi'] },
-    { name: 'Quận Ô Môn', wards: ['An Lạc', 'Bình Thủy', 'Hưng Thạnh', 'Long Tuyền'] },
-    { name: 'Huyện Phong Điền', wards: ['An Bình', 'Giai Xuân', 'Hưng Thạnh', 'Long Hòa'] },
-    { name: 'Huyện Thốt Nốt', wards: ['An Lạc', 'Bình Thủy', 'Hưng Lợi'] },
-    { name: 'Huyện Cờ Đỏ', wards: ['Cái Khế', 'Hưng Thạnh'] },
-    { name: 'Huyện Vĩnh Thạnh', wards: ['Tân An', 'Thới Bình', 'Thới An Đông'] },
-    { name: 'Huyện Thới Lai', wards: ['Thới Lai', 'Thới An Đông'] }
-  ];
+    { name: 'Quận Ninh Kiều', wards: ['Tân An', 'An Cư', 'An Hội', 'An Khánh', 'An Lạc', 'An Nghiệp', 'An Phú', 'Cái Khế', 'Hưng Lợi', 'Xuân Khánh', 'Thới Bình'] },
+    { name: 'Quận Bình Thủy', wards: ['Bình Thủy', 'An Thới', 'Bùi Hữu Nghĩa', 'Long Hòa', 'Long Tuyền', 'Thới An Đông', 'Trà Nóc', 'Trà An'] },
+    { name: 'Quận Cái Răng', wards: ['Lê Bình', 'Hưng Phú', 'Hưng Thạnh', 'Phú Thứ', 'Tân Phú', 'Thường Thạnh', 'Ba Láng'] },
+    { name: 'Quận Ô Môn', wards: ['Châu Văn Liêm', 'Long Hưng', 'Phước Thới', 'Thới An', 'Thới Hòa', 'Thới Long', 'Thới An Đông'] },
+    { name: 'Quận Thốt Nốt', wards: ['Thốt Nốt', 'Thạnh Hòa', 'Thạnh Lộc', 'Thuận An', 'Thuận Hưng', 'Tân Lộc', 'Trung Nhứt', 'Trung Kiên'] },
+    { name: 'Huyện Phong Điền', wards: ['Mỹ Khánh', 'Nhơn Ái', 'Nhơn Nghĩa', 'Tân Thới', 'Trường Long'], town: 'Phong Điền' },
+    { name: 'Huyện Thới Lai', wards: ['Thới Tân', 'Trường Thành', 'Trường Thắng', 'Tân Thạnh', 'Trường Xuân', 'Trường Xuân A', 'Trường Xuân B', 'Xuân Thắng'], town: 'Thới Lai' },
+    { name: 'Huyện Cờ Đỏ', wards: ['Đông Hiệp', 'Đông Thắng', 'Thạnh Phú', 'Thới Đông', 'Thới Hưng', 'Trung Hưng', 'Trung Thạnh', 'Trung An'], town: 'Cờ Đỏ' },
+    { name: 'Huyện Vĩnh Thạnh', wards: ['Thạnh An', 'Thạnh Mỹ', 'Thạnh Quới', 'Thạnh Thắng', 'Thạnh Tiến', 'Vĩnh Bình', 'Vĩnh Trinh'], town: ['Vĩnh Thạnh', 'Thạnh An'] }
+];
 
   // Cập nhật danh sách phường khi quận hoặc huyện thay đổi
   $scope.updateWards = function () {
