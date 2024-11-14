@@ -27,57 +27,63 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4"></div>
                 <div class="col-lg-4 col-md-4">
-                    <div class="account_form">
+                    <div class="wrapper">
+                        <div class="account_form position-relative">
 
-                        <form id="form" name="regisForm" ng-submit="register()">
-                            <br>
-                            <h2>Đăng ký</h2>
-
-                            <input type="text" ng-model="user.idaccount" placeholder="Tên người dùng (*)" class="mb-2"
-                                name="txtUsername" required><br>
-                            <div class="form-text text-danger"
-                                ng-show="regisForm.txtUsername.$touched && regisForm.txtUsername.$invalid">
-                                Tên người dùng không hợp lệ
-                            </div>
-                            <input type="password" ng-model="user.password" minlength="6" name="txtPassword"
-                                placeholder="Mật khẩu (*)" class="mt-2 mb-2" required><br>
-                            <div class="form-text text-danger"
-                                ng-show="regisForm.txtPassword.$touched && regisForm.txtPassword.$invalid">
-                                Mật khẩu phải có ít nhất 6 ký tự
-                            </div>
-                            <input type="text" ng-model="user.fullname" placeholder="Họ và tên (*)" class="mb-2"
-                                name="txtFullName" required><br>
-                            <div class="form-text text-danger"
-                                ng-show="regisForm.txtFullName.$touched && regisForm.txtFullName.$invalid">
-                                Họ và tên không hợp lệ
-                            </div>
-                            <input type="email" ng-model="user.email" placeholder="Email (*)" class="mt-2 mb-2"
-                                name="txtEmail" required><br>
-                            <div class="form-text text-danger"
-                                ng-show="regisForm.txtEmail.$touched && regisForm.txtEmail.$invalid">
-                                Email không hợp lệ
-                            </div>
-                            <input type="tel" ng-model="user.phonenumber" placeholder="Số điện thoại (*)"
-                                class="mt-2 mb-2" name="txtPhone" required><br>
-                            <div class="form-text text-danger"
-                                ng-show="regisForm.txtPhone.$touched && regisForm.txtPhone.$invalid">
-                                Số điện thoại không hợp lệ
-                            </div>
-                            <div class="login_submit">
-                                <a href="login.html"> Đã có tài khoản? Đăng nhập </a>
-                                <button type="submit" id="xacnhan" class="btn btn-primary">Đăng ký</button>
-                                <div class="form-text text-success" ng-show="registerSuccess">
-                                    {{registerSuccess}}
+                            <form id="form" name="regisForm" ng-submit="register()">
+                                <br>
+                                <h2>Đăng ký</h2>
+                                <img src="../assets/img/sticker-cake1.png" class="sticker sticker-left-top" alt="Sticker bánh kem">
+                                <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom" alt="Sticker bánh kem">
+                            
+    
+                                <input type="text" ng-model="user.idaccount" placeholder="Tên người dùng (*)" class="mb-2"
+                                    name="txtUsername" required><br>
+                                <div class="form-text text-danger"
+                                    ng-show="regisForm.txtUsername.$touched && regisForm.txtUsername.$invalid">
+                                    Tên người dùng không hợp lệ
                                 </div>
-                                <div class="form-text text-danger" ng-show="registerError">
-                                    {{registerError}}
+                                <input type="password" ng-model="user.password" minlength="6" name="txtPassword"
+                                    placeholder="Mật khẩu (*)" class="mt-2 mb-2" required><br>
+                                <div class="form-text text-danger"
+                                    ng-show="regisForm.txtPassword.$touched && regisForm.txtPassword.$invalid">
+                                    Mật khẩu phải có ít nhất 6 ký tự
                                 </div>
-
-
-                            </div>
-
-                        </form>
+                                <input type="text" ng-model="user.fullname" placeholder="Họ và tên (*)" class="mb-2"
+                                    name="txtFullName" required><br>
+                                <div class="form-text text-danger"
+                                    ng-show="regisForm.txtFullName.$touched && regisForm.txtFullName.$invalid">
+                                    Họ và tên không hợp lệ
+                                </div>
+                                <input type="email" ng-model="user.email" placeholder="Email (*)" class="mt-2 mb-2"
+                                    name="txtEmail" required><br>
+                                <div class="form-text text-danger"
+                                    ng-show="regisForm.txtEmail.$touched && regisForm.txtEmail.$invalid">
+                                    Email không hợp lệ
+                                </div>
+                                <input type="tel" ng-model="user.phonenumber" placeholder="Số điện thoại (*)"
+                                    class="mt-2 mb-2" name="txtPhone" required><br>
+                                <div class="form-text text-danger"
+                                    ng-show="regisForm.txtPhone.$touched && regisForm.txtPhone.$invalid">
+                                    Số điện thoại không hợp lệ
+                                </div>
+                                <div class="login_submit">
+                                    <a href="login.html"> Đã có tài khoản? Đăng nhập </a>
+                                    <button type="submit" id="xacnhan" class="btn btn-primary">Đăng ký</button>
+                                    <div class="form-text text-success" ng-show="registerSuccess">
+                                        {{registerSuccess}}
+                                    </div>
+                                    <div class="form-text text-danger" ng-show="registerError">
+                                        {{registerError}}
+                                    </div>
+    
+    
+                                </div>
+    
+                            </form>
+                        </div>
                     </div>
+                    
 
                 </div>
                 <div class="col-lg-4 col-md-4"></div>

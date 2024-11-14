@@ -1,122 +1,123 @@
-/* CSS */
-/*contact page css end*/
-/* 19. login page css here */
-.account_form h2 {
-  font-size: 30px;
-  text-transform: capitalize;
-  color: #242424;
-  font-weight: 500;
-  line-height: 22px;
-  margin-bottom: 34px;
+/* Khung bao quanh form, tạo nền và căn giữa */
+/* Đặt màu nền pastel cho .wrapper */
+.container {
+  background: linear-gradient(135deg, #f9f5ef, #fae9dc); /* nền pastel nhẹ nhàng */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px 20px;
+  margin-top: 30px;
+  position: relative;
 }
-@media only screen and (max-width: 767px) {
-  .account_form h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f9f5ef, #c6783c); /* Nền cho phần form */
+  padding: 40px; /* Khoảng cách giữa viền và nội dung */
+  margin-top: 30px; /* Cách từ phần tử trên */
+  box-sizing: border-box;
+  border-radius: 10px; /* Bo tròn viền */
+  max-width: 600px; /* Giới hạn chiều rộng tối đa */
+  width: 100%; /* Đảm bảo chiều rộng không vượt quá max-width */
 }
-.account_form form {
-  border: 1px solid #ddd;
-  padding: 23px 20px 29px;
-  border-radius: 5px;
-}
-.account_form label {
-  font-size: 15px;
-  font-weight: 400;
-  color: #242424;
-  cursor: pointer;
-  line-height: 12px;
-  margin-bottom: 12px;
-}
-.account_form label:hover {
-  color: #ff6a28;
-}
-.account_form input {
-  border: 1px solid #ddd;
-  height: 40px;
-  max-width: 100%;
-  padding: 0 20px;
-  background: none;
+
+
+/* Thiết kế cho .account_form */
+.account_form {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 40px 30px;
+  max-width: 400px;
   width: 100%;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
 }
-.account_form button {
-  background: #ff6a28;
-  border: 0;
-  color: #ffffff;
-  display: inline-block;
-  font-size: 12px;
+
+/* Tiêu đề đăng nhập */
+.account_form h2 {
+  font-size: 26px;
+  color: #333;
   font-weight: 700;
-  height: 34px;
-  line-height: 21px;
-  padding: 5px 20px;
-  text-transform: uppercase;
-  cursor: pointer;
-  -webkit-transition: 0.3s;
-  transition: 0.3s;
-  margin-left: 20px;
-  border-radius: 20px;
-}
-.account_form button:hover {
-  background: #242424;
+  margin-bottom: 25px;
 }
 
-.login_submit label input[type="checkbox"] {
-  width: 15px;
-  height: 13px;
-  margin-right: 3px;
+/* Thiết kế input */
+.account_form input[type="text"],
+.account_form input[type="password"],
+.account_form input[type="email"],
+.account_form input[type="tel"] {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  box-sizing: border-box;
 }
 
-.login_submit {
-  text-align: right;
-}
-.login_submit a {
-  font-size: 13px;
-  color: #ff6a28;
-  float: left;
-  line-height: 39px;
-}
-@media only screen and (max-width: 767px) {
-  .login_submit a {
-    float: none;
-    line-height: 18px;
-    display: block;
-    margin-bottom: 20px;
-  }
+.account_form input[type="text"]:focus,
+.account_form input[type="password"]:focus {
+  border-color: #ff6a28;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+  outline: none;
 }
 
-.customer_login {
-  padding-bottom: 59px;
-}
-
-.account_form p {
-  margin-bottom: 20px;
-}
-
-@media only screen and (max-width: 767px) {
-  .account_form.register {
-    margin-top: 57px;
-  }
-}
-
-.modal-content {
-  border-radius: 10px;
-  border: none;
-}
-
-.modal-header {
-  background-color: #f8d7da;
-}
-
-.modal-body {
+/* Nút đăng nhập */
+.account_form button {
+  width: 100%;
+  padding: 12px;
   font-size: 16px;
+  color: #fff;
+  background-color: #ff6a28;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(255, 106, 40, 0.4);
 }
 
-.modal-footer .btn-danger {
-  background-color: #dc3545;
-  border-color: #dc3545;
+.account_form button:hover {
+  background-color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.modal-footer .btn-secondary {
-  background-color: #f8f9fa;
-  border-color: #ccc;
+/* Link và label ghi nhớ */
+.login_submit a {
+  font-size: 14px;
+  color: #ff6a28;
+  transition: color 0.3s;
+}
+
+.login_submit a:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+.login_submit label {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Sticker bánh kem */
+.sticker {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+
+.sticker-left-top {
+  top: -20px;
+  left: -20px;
+  transform: rotate(-15deg);
+}
+
+.sticker-right-bottom {
+  bottom: -20px;
+  right: -20px;
+  transform: rotate(15deg);
 }
