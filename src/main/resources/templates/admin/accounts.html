@@ -1,34 +1,35 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <meta name="description" content="">
-        <meta name="author" content="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Mini Finance - Settings</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        <!-- CSS FILES -->      
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Mini Finance - Settings</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 
 
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-        <link href="css/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
 
-        <link href="css/tooplate-mini-finance.css" rel="stylesheet">
+    <link href="css/tooplate-mini-finance.css" rel="stylesheet">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-        
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-       
-<!--
+
+
+    <!--
 
 Tooplate 2135 Mini Finance
 
@@ -37,372 +38,432 @@ https://www.tooplate.com/view/2135-mini-finance
 Bootstrap 5 Dashboard Admin Template
 
 -->
-<style>
-    .notification {
-    padding: 10px;
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    margin-bottom: 15px;
-    border-radius: 4px;
-}
+    <style>
+        .notification {
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
 
-.notification.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
+        .notification.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
 
-</style>
-    </head>
-    
-    <body  >
-        <header class="navbar sticky-top flex-md-nowrap">
-            <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
-                <a class="navbar-brand" href="index.html">
-                   
-                    <i class="bi-box"></i>
-                    BEE SIX CAKE
-                </a>
-            </div>
-        
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <form class="custom-form header-form ms-lg-3 ms-md-3 me-lg-auto me-md-auto order-2 order-lg-0 order-md-0" action="#" method="get" role="form">
-                <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
-            </form>
-        
-            <div class="navbar-nav me-lg-2">
-                <div class="nav-item text-nowrap d-flex align-items-center">
-                    <!-- Notifications Dropdown -->
-                    <div class="dropdown ps-3">
-                        <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi-bell"></i>
-                            <span class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                <span class="visually-hidden">New alerts</span>
-                            </span>
-                        </a>
-        
-                        <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
-                            <small>Notifications</small>
-                            <li class="notifications-block border-bottom pb-2 mb-2">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="notifications-icon-wrap bg-success">
-                                        <i class="notifications-icon bi-check-circle-fill"></i>
-                                    </div>
-                                    <div>
-                                        <span>Your account has been created successfully.</span>
-                                        <p>12 days ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="notifications-block border-bottom pb-2 mb-2">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="notifications-icon-wrap bg-info">
-                                        <i class="notifications-icon bi-folder"></i>
-                                    </div>
-                                    <div>
-                                        <span>Please check. We have sent a Daily report.</span>
-                                        <p>10 days ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="notifications-block">
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="notifications-icon-wrap bg-danger">
-                                        <i class="notifications-icon bi-question-circle"></i>
-                                    </div>
-                                    <div>
-                                        <span>Account verification failed.</span>
-                                        <p>1 hour ago</p>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- Social Media Dropdown -->
-                    <div class="dropdown ps-1">
-                        <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi-three-dots-vertical"></i>
-                        </a>
-        
-                        <div class="dropdown-menu dropdown-menu-social bg-white shadow">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-4">
-                                        <a class="dropdown-item text-center" href="#">
-                                            <img src="images/social/search.png" class="profile-image img-fluid" alt="Google">
-                                            <span class="d-block">Google</span>
-                                        </a>
-                                    </div>
-                                    <!-- More social media links here -->
+<body>
+    <header class="navbar sticky-top flex-md-nowrap">
+        <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
+            <a class="navbar-brand" href="index.html">
+
+                <i class="bi-box"></i>
+                BEE SIX CAKE
+            </a>
+        </div>
+
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <form class="custom-form header-form ms-lg-3 ms-md-3 me-lg-auto me-md-auto order-2 order-lg-0 order-md-0"
+            action="#" method="get" role="form">
+            <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
+        </form>
+
+        <div class="navbar-nav me-lg-2">
+            <div class="nav-item text-nowrap d-flex align-items-center">
+                <!-- Notifications Dropdown -->
+                <div class="dropdown ps-3">
+                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi-bell"></i>
+                        <span
+                            class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
+                        </span>
+                    </a>
+
+                    <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
+                        <small>Notifications</small>
+                        <li class="notifications-block border-bottom pb-2 mb-2">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="notifications-icon-wrap bg-success">
+                                    <i class="notifications-icon bi-check-circle-fill"></i>
                                 </div>
+                                <div>
+                                    <span>Your account has been created successfully.</span>
+                                    <p>12 days ago</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notifications-block border-bottom pb-2 mb-2">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="notifications-icon-wrap bg-info">
+                                    <i class="notifications-icon bi-folder"></i>
+                                </div>
+                                <div>
+                                    <span>Please check. We have sent a Daily report.</span>
+                                    <p>10 days ago</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="notifications-block">
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="notifications-icon-wrap bg-danger">
+                                    <i class="notifications-icon bi-question-circle"></i>
+                                </div>
+                                <div>
+                                    <span>Account verification failed.</span>
+                                    <p>1 hour ago</p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Social Media Dropdown -->
+                <div class="dropdown ps-1">
+                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi-three-dots-vertical"></i>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-social bg-white shadow">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-4">
+                                    <a class="dropdown-item text-center" href="#">
+                                        <img src="images/social/search.png" class="profile-image img-fluid"
+                                            alt="Google">
+                                        <span class="d-block">Google</span>
+                                    </a>
+                                </div>
+                                <!-- More social media links here -->
                             </div>
                         </div>
                     </div>
-        
-                    <!-- User Profile Dropdown -->
-                    <div class="dropdown px-3">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid" alt="User Profile">
-                        </a>
-                        <ul class="dropdown-menu bg-white shadow">
-                            <li>
-                                <div class="dropdown-menu-profile-thumb d-flex">
-                                    <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3" alt="User Profile">
-                                    <div class="d-flex flex-column">
-                                        <small>Thomas</small>
-                                        <a href="#">thomas@site.com</a>
-                                    </div>
+                </div>
+
+                <!-- User Profile Dropdown -->
+                <div class="dropdown px-3">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid"
+                            alt="User Profile">
+                    </a>
+                    <ul class="dropdown-menu bg-white shadow">
+                        <li>
+                            <div class="dropdown-menu-profile-thumb d-flex">
+                                <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3"
+                                    alt="User Profile">
+                                <div class="d-flex flex-column">
+                                    <small>Thomas</small>
+                                    <a href="#">thomas@site.com</a>
                                 </div>
-                            </li>
-                            <!-- Profile and Settings Links -->
-                            <li>
-                                <a class="dropdown-item" href="profile.html">
-                                    <i class="bi-person me-2"></i>
-                                    Profile
-                                </a>
-                            </li>
-                            <!-- More profile options here -->
-                            <li class="border-top mt-3 pt-2 mx-4">
-                                <a class="dropdown-item ms-0 me-0" href="#">
-                                    <i class="bi-box-arrow-left me-2"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                        </li>
+                        <!-- Profile and Settings Links -->
+                        <li>
+                            <a class="dropdown-item" href="profile.html">
+                                <i class="bi-person me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <!-- More profile options here -->
+                        <li class="border-top mt-3 pt-2 mx-4">
+                            <a class="dropdown-item ms-0 me-0" href="#">
+                                <i class="bi-box-arrow-left me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </header>
-        
+        </div>
+    </header>
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Sidebar Menu -->
-                <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
-                    <div class="position-sticky py-4 px-3 sidebar-sticky">
-                        <ul class="nav flex-column h-100">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.html">
-                                    <i class="bi-house-fill me-2"></i>
-                                    Trang Chủ
-                                </a>
-                            </li>
-                            <!-- <li class="nav-item">
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Menu -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
+                <div class="position-sticky py-4 px-3 sidebar-sticky">
+                    <ul class="nav flex-column h-100">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="index.html">
+                                <i class="bi-house-fill me-2"></i>
+                                Trang Chủ
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
                                 <a class="nav-link" href="wallet.html">
                                     <i class="bi-wallet me-2"></i>
                                     My Wallet
                                 </a>
                             </li> -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="accounts.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Người Dùng
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="product-type.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Loại Sản Phẩm
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="size.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Size
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="product.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Sản Phẩm
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="wallet.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Đơn hàng
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Discount.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý Khuyến Mãi
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="profile.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quản Lý doanh thu
-                                </a>
-                            </li>
-                           
-                            <li class="nav-item border-top mt-auto pt-2">
-                                <a class="nav-link" href="#">
-                                    <i class="bi-box-arrow-left me-2"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-        
-                <!-- Main Content -->
-                <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start" ng-app="myApp"  ng-controller="UserController">
-                    <div class="title-group mb-3">
-                        <h1 class="h2 mb-0">Quản Lý Người Dùng</h1>
-                    </div>
-                    <!-- <div class="notification" ng-if="message">{{ message }}</div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="accounts.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Người Dùng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="product-type.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Loại Sản Phẩm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="size.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Size
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="product.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Sản Phẩm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="wallet.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Đơn hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Discount.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý Khuyến Mãi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">
+                                <i class="bi-person me-2"></i>
+                                Quản Lý doanh thu
+                            </a>
+                        </li>
+
+                        <li class="nav-item border-top mt-auto pt-2">
+                            <a class="nav-link" href="#">
+                                <i class="bi-box-arrow-left me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start" ng-app="myApp"
+                ng-controller="UserController">
+                <div class="title-group mb-3">
+                    <h1 class="h2 mb-0">Quản Lý Người Dùng</h1>
+                </div>
+                <!-- <div class="notification" ng-if="message">{{ message }}</div>
                     <div class="notification error" ng-if="errorMessage">{{ errorMessage }}</div> -->
-                    <div class="row my-4">
-                        <div class="col-12">
-                            <div class="custom-block bg-white">
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">List</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link " id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
-                                    </li>
-                                    
-                                </ul>
-                
-                                <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade " id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
-                                        <form class="row g-3">
-                                            <div class="col-md-6">
-                                                <label for="product-name" class="form-label">Tên tài khoản</label>
-                                                <input type="text" id="product-name" ng-model="selectedUser.idaccount" placeholder="Nhập tên tài khoản" class="form-control" readonly />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="product-password" class="form-label">Mật khẩu</label>
-                                                <input type="password" id="product-password" ng-model="selectedUser.password" placeholder="Nhập mật khẩu" class="form-control" readonly />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="product-fullname" class="form-label">Họ và tên</label>
-                                                <input type="text" id="product-fullname" ng-model="selectedUser.fullname" placeholder="Nhập họ và tên" class="form-control" readonly />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="product-email" class="form-label">Email</label>
-                                                <input type="email" id="product-email" ng-model="selectedUser.email" placeholder="Nhập Email" class="form-control" readonly />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="product-phone" class="form-label">Số điện thoại</label>
-                                                <input type="text" id="product-phone" ng-model="selectedUser.phonenumber" placeholder="Số điện thoại" class="form-control" readonly />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="user-role" class="form-label">Chức vụ</label>
-                                                <div>
-                                                    <label>
-                                                        <input type="radio" id="user-role-admin" name="userRole" ng-model="selectedUser.idrole" value="1" disabled /> Admin
-                                                    </label>
-                                                    <label>
-                                                        <input type="radio" id="user-role-user" name="userRole" ng-model="selectedUser.idrole" value="2" disabled /> User
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Trạng thái</label>
-                                                <label class="form-control">
-                                                    {{selectedUser.active ? 'Đã kích hoạt' : 'Chưa kích hoạt'}}
+                <div class="row my-4">
+                    <div class="col-12">
+                        <div class="custom-block bg-white">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="list-tab" data-bs-toggle="tab"
+                                        data-bs-target="#list-tab-pane" type="button" role="tab"
+                                        aria-controls="list-tab-pane" aria-selected="false">List</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link " id="edit-tab" data-bs-toggle="tab"
+                                        data-bs-target="#edit-tab-pane" type="button" role="tab"
+                                        aria-controls="edit-tab-pane" aria-selected="true">Edit</button>
+                                </li>
+
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade " id="edit-tab-pane" role="tabpanel"
+                                    aria-labelledby="edit-tab" tabindex="0">
+                                    <form class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="product-name" class="form-label">Tên tài khoản</label>
+                                            <input type="text" id="product-name" ng-model="selectedUser.idaccount"
+                                                placeholder="Nhập tên tài khoản" class="form-control" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="product-password" class="form-label">Mật khẩu</label>
+                                            <input type="password" id="product-password"
+                                                ng-model="selectedUser.password" placeholder="Nhập mật khẩu"
+                                                class="form-control" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="product-fullname" class="form-label">Họ và tên</label>
+                                            <input type="text" id="product-fullname" ng-model="selectedUser.fullname"
+                                                placeholder="Nhập họ và tên" class="form-control" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="product-email" class="form-label">Email</label>
+                                            <input type="email" id="product-email" ng-model="selectedUser.email"
+                                                placeholder="Nhập Email" class="form-control" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="product-phone" class="form-label">Số điện thoại</label>
+                                            <input type="text" id="product-phone" ng-model="selectedUser.phonenumber"
+                                                placeholder="Số điện thoại" class="form-control" readonly />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="user-role" class="form-label">Chức vụ</label>
+                                            <div>
+                                                <label>
+                                                    <input type="radio" id="user-role-admin" name="userRole"
+                                                        ng-model="selectedUser.idrole" value="1" disabled /> Admin
+                                                </label>
+                                                <label>
+                                                    <input type="radio" id="user-role-user" name="userRole"
+                                                        ng-model="selectedUser.idrole" value="2" disabled /> User
                                                 </label>
                                             </div>
-                                
-                                            <div class="col-md-12">
-                                                <button type="button" class="btn btn-success" ng-click="unlockAccount(selectedUser.idaccount)" ng-disabled="selectedUser.active">
-                                                    <i class="fas fa-unlock-alt"></i> Mở khóa tài khoản
-                                                </button>
-                                                <button type="button" class="btn btn-danger" ng-click="lockAccount(selectedUser.idaccount)" ng-disabled="!selectedUser.active">
-                                                    <i class="fas fa-lock"></i> Khóa tài khoản
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                
-                
-                                    <!-- List Tab Content -->
-<div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
-    <form class="password-form" action="#" method="post">
-        <div class="row my-4">
-            <div class="col-lg-12">
-                <div class="bg-white p-3">
-                    <div class="table-responsive">
-                        <table class="table account-table">
-                            <thead>
-                                <tr>
-                                    <th>Tên tài khoản</th>
-                                    <th>Họ và tên</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Chức vụ</th>
-                                    <th>Trạng thái</th>
-                                    <th class="text-end">Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="user in users">
-                                    <td>{{ user.idaccount }}</td>
-                                    <td>{{ user.fullname }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.phonenumber }}</td>
-                                    <td>{{ user.idrole === 1 ? 'Admin' : 'Người dùng' }}</td>
-                                    <td>{{ user.active ? 'Đang hoạt động' : 'Không hoạt động' }}</td>
-                                    <td class="text-end">
-                                        <button type="button" class="btn btn-sm btn-warning" ng-click="editUser(user)">Xem chi tiết</button>
-                                        <button type="button" class="btn btn-sm btn-danger" ng-click="deleteUser(user.idaccount)">Xóa</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center mb-0">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">Trước</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">Sau</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Trạng thái</label>
+                                            <label class="form-control">
+                                                {{selectedUser.active ? 'Đã kích hoạt' : 'Chưa kích hoạt'}}
+                                            </label>
+                                        </div>
 
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-success"
+                                                ng-click="unlockAccount(selectedUser.idaccount)"
+                                                ng-disabled="selectedUser.active">
+                                                <i class="fas fa-unlock-alt"></i> Mở khóa tài khoản
+                                            </button>
+                                            <button type="button" class="btn btn-danger"
+                                                ng-click="lockAccount(selectedUser.idaccount)"
+                                                ng-disabled="!selectedUser.active">
+                                                <i class="fas fa-lock"></i> Khóa tài khoản
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
+
+
+                            <!-- List Tab Content -->
+       
+                            <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
+                                aria-labelledby="list-tab" tabindex="0">
+                                <form class="password-form" action="#" method="post">
+                                    <div class="row my-4">
+                                        <div class="col-lg-12">
+                                            <div class="bg-white p-3">
+                                                <!-- Phần Tìm Kiếm -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-8">
+                                                        <input type="text" class="form-control"
+                                                            placeholder="Nhập từ khóa tìm kiếm..."
+                                                            ng-model="searchQuery" />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <button type="button" class="btn btn-primary w-100"
+                                                            ng-click="searchUsers()">
+                                                            <i class="fas fa-search"></i> Tìm kiếm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!-- Kết Thúc Phần Tìm Kiếm -->
+
+                                                <!-- Bảng Danh Sách Người Dùng -->
+                                                <div class="table-responsive">
+                                                    <table class="table account-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Tên tài khoản</th>
+                                                                <th>Họ và tên</th>
+                                                                <th>Email</th>
+                                                                <th>Số điện thoại</th>
+                                                                <th>Chức vụ</th>
+                                                                <th>Trạng thái</th>
+                                                                <th class="text-end">Hành động</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="user in filteredUsers">
+                                                                <td>{{ user.idaccount }}</td>
+                                                                <td>{{ user.fullname }}</td>
+                                                                <td>{{ user.email }}</td>
+                                                                <td>{{ user.phonenumber }}</td>
+                                                                <td>{{ user.idrole === 1 ? 'Admin' : 'Người dùng' }}
+                                                                </td>
+                                                                <td>{{ user.active ? 'Đang hoạt động' : 'Không hoạt
+                                                                    động' }}</td>
+                                                                <td class="text-end">
+                                                                    <button type="button" class="btn btn-sm btn-warning"
+                                                                        ng-click="editUser(user)">Xem chi tiết</button>
+                                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                                        ng-click="deleteUser(user.idaccount)">Xóa</button>
+                                                                </td>
+                                                            </tr>
+                                                            <tr ng-if="filteredUsers.length === 0">
+                                                                <td colspan="7" class="text-center text-muted">Không tìm
+                                                                    thấy người dùng nào.</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- Kết Thúc Bảng Danh Sách Người Dùng -->
+
+                                                <!-- Phân Trang -->
+                                                <nav aria-label="Page navigation">
+                                                    <ul class="pagination justify-content-center mb-0">
+                                                        <li class="page-item" ng-class="{disabled: currentPage === 1}">
+                                                            <a class="page-link" href="#" aria-label="Previous"
+                                                                ng-click="goToPage(currentPage - 1)">
+                                                                Trước
+                                                            </a>
+                                                        </li>
+                                                        <li class="page-item" ng-repeat="page in pages"
+                                                            ng-class="{active: currentPage === page}">
+                                                            <a class="page-link" href="#" ng-click="goToPage(page)">{{
+                                                                page }}</a>
+                                                        </li>
+                                                        <li class="page-item"
+                                                            ng-class="{disabled: currentPage === totalPages}">
+                                                            <a class="page-link" href="#" aria-label="Next"
+                                                                ng-click="goToPage(currentPage + 1)">
+                                                                Sau
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                                <!-- Kết Thúc Phân Trang -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
                         </div>
                     </div>
-                </main>
-                
-            </div>
+                </div>
         </div>
-        <!-- JAVASCRIPT FILES -->
-        <script src="../admin/js/jquery.min.js"></script>
-        <script src="../admin/js/bootstrap.bundle.min.js"></script>
-        <script src="../admin/js/custom.js"></script>
-        <script src="../assets/js/angular.min.js"></script>
-        <script src="../assets/js/angular-route.js"></script>
-        <script src="../admin/js/account.js"></script>     
-        
+        </main>
 
-    </body>
+    </div>
+    </div>
+    <!-- JAVASCRIPT FILES -->
+    <script src="../admin/js/jquery.min.js"></script>
+    <script src="../admin/js/bootstrap.bundle.min.js"></script>
+    <script src="../admin/js/custom.js"></script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../admin/js/account.js"></script>
+
+
+</body>
+
 </html>
