@@ -119,13 +119,13 @@
         .order-footer-right {
             /* Giới hạn chiều rộng để các phần tử không bị quá rộng */
             padding-left: 50px;
-            
+
         }
 
-        .border-tt{
-           border: 1px solid gray; 
-           margin-top: 20px;
-           padding: 20px;
+        .border-tt {
+            border: 1px solid gray;
+            margin-top: 20px;
+            padding: 20px;
         }
 
         .order-footer-right div {
@@ -502,7 +502,7 @@
                                                     </label>
                                                 </div>
 
-                                                <button class="btn btn-primary" ng-click="updateOrderStatus()"
+                                                <button class="btn btn-primary" ng-click="updateOrderStatus()" style="float: right;"
                                                     ng-disabled="isUpdating">
                                                     Cập nhật
                                                 </button>
@@ -512,29 +512,33 @@
                                                 <p class="fw-bold mb-2">Trạng thái thanh toán</p>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <label class="btn btn-danger"
-                                                        ng-class="{'active': selectedOrder.statuspay.idstatuspay == 1}">
+                                                           ng-class="{'active': selectedOrder.idstatuspay == 1}">
                                                         <input type="radio" name="statuspay"
-                                                            ng-model="selectedOrder.statuspay.idstatuspay" value="1" />
+                                                               ng-model="selectedOrder.idstatuspay" value="1" />
                                                         Chưa Thanh Toán
                                                     </label>
                                                     <label class="btn btn-success"
-                                                        ng-class="{'active': selectedOrder.statuspay.idstatuspay == 2}">
+                                                           ng-class="{'active': selectedOrder.idstatuspay == 2}">
                                                         <input type="radio" name="statuspay"
-                                                            ng-model="selectedOrder.statuspay.idstatuspay" value="2" />
+                                                               ng-model="selectedOrder.idstatuspay" value="2" />
                                                         Đã Thanh Toán
                                                     </label>
                                                 </div>
-                                                <button class="btn btn-primary" ng-click="updateOrderStatusPay()"
-                                                    ng-disabled="isUpdating">
+                                                <button class="btn btn-primary" ng-click="updateOrderStatusPay()" style="float: right;"
+                                                        ng-disabled="isUpdating">
                                                     Cập nhật
                                                 </button>
                                             </div>
+                                            
                                         </div>
                                         <div class="col-lg-6 order-footer-right">
                                             <div class="border-tt">
-                                                <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}}₫</span></h6>      
-                                                <h6>Giảm giá: <span>{{selectedOrder.discount | number: 0}}₫</span></h6> 
-                                                <h6>Tổng tiền theo đơn hàng: <span class="total-amount">{{selectedOrder.total | number: 0}}₫</span></h6>
+                                                <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}}₫</span>
+                                                </h6>
+                                                <h6>Giảm giá: <span>{{ selectedOrder.discount ? (selectedOrder.discount | number: 0) : 0 }}₫</span></h6>
+                                                <h6>Tổng tiền theo đơn hàng: <span
+                                                        class="total-amount">{{selectedOrder.total | number: 0}}₫</span>
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
