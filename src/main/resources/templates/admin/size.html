@@ -206,7 +206,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="size.html">
                                 <i class="bi-person me-2"></i>
-                                Quản Lý Size
+                                Quản Lý Kích Thước
                             </a>
                         </li>
                         <li class="nav-item">
@@ -247,7 +247,7 @@
             <!-- Main Content -->
             <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
                 <div class="title-group mb-3">
-                    <h1 class="h2 mb-0">Quản Lý Size</h1>
+                    <h1 class="h2 mb-0">Quản Lý Kích Thước</h1>
                 </div>
 
                 <!-- Tabs -->
@@ -257,12 +257,12 @@
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane" type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="true">
-                                        <i class="fas fa-edit"></i> Chỉnh sửa
+                                        <i class="fas fa-edit"></i> Chỉnh sửa kích thước 
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">
-                                        <i class="fas fa-list"></i> Danh sách
+                                        <i class="fas fa-list"></i> Danh sách kích thước 
                                     </button>
                                 </li>
                             </ul>
@@ -275,18 +275,19 @@
                                         <div ng-if="message" class="alert" ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" role="alert">
                                             {{ message }}
                                         </div>
-                
+                                        
                                         <!-- ID Size -->
-                                        <div class="col-md-6">
+                                        <!-- <div class="col-md-6">
                                             <label for="size-id" class="form-label">ID Size</label>
                                             <input type="text" id="size-id" ng-model="selectedSize.idsize" placeholder="" class="form-control" required readonly />
-                                        </div>
+                                        </div> -->
                 
                                         <!-- Kích thước -->
                                         <div class="col-md-6">
                                             <label for="size-name" class="form-label">Kích Thước</label>
-                                            <input type="text" id="size-name" ng-model="selectedSize.sizename" class="form-control" placeholder="Nhập kích thước" />
+                                            <input type="text" id="size-name" ng-model="selectedSize.sizename" class="form-control form-control-rounded" placeholder="Nhập kích thước" />
                                         </div>
+                                      
                 
                                         <!-- Hành động -->
                                         <div class="col-md-12">
