@@ -52,7 +52,7 @@
                 <label class="active">★</label>
                 <label class="active">★</label>
               </div>
-              <span>|  số lươt đánh giá</span>
+              <span>|  số lượt đánh giá</span>
             </div>
 
             <div class="box-price" ng-if="productDetails.length">
@@ -64,9 +64,9 @@
             <div class="">
               <span class="QuantityInStock text-chitietsp">Số lượng hiện có:
                 <b>{{selectedSizeDetail.quantityinstock}}</b></span>
-              <span class="QuantityInStock text-chitietsp ms-4">Số lượng yêu thích:
-                <b>1</b></span>
-                <button type="button" class="btn btn-yt" ng-click="toggleHeart()" ng-class="{'active': isActive}">
+              <span class=" text-chitietsp ms-3">Số lượng yêu thích:
+                <b>{{product.favorite}}</b></span>
+                <button type="button" class="btn btn-yt ps-1" ng-click="toggleHeart()" ng-class="{'active': isActive}">
                   <i class="bi bi-heart-fill"></i>
                 </button>
             </div>
@@ -97,7 +97,7 @@
             <div class="inner-load mt-3 ps-0">
               <div class="box-add">
                 <div class="btn-chitietsanpham">
-                  <button type="button" class="btn btn-primary me-2">
+                  <button type="button" class="btn btn-primary me-2"  ng-click="goToCart(product.idproduct)">
                     <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
                   </button>
                   <button type="button" class="btn btn-secondary">
@@ -109,7 +109,7 @@
           </div>
           <div class="moTa mt-3" style="padding-left: 50px;">
             <span class="text-chitietsp">Mô tả:</span>
-            <textarea rows="5" readonly>{{ product.description }}</textarea>
+            <p>{{ product.description }}</p>
           </div>
         </div>
       </div>

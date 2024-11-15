@@ -3,7 +3,7 @@ var app = angular.module("myApp", ["ngRoute"]);
 const API = "http://localhost:8080/beesixcake/api";
 const imageBaseUrl = "https://5ck6jg.csb.app/anh/";
 
-app.controller("OrderController", function ($scope, $http) {
+app.controller("OrderController", function ($scope, $window, $http) {
   // Tải danh sách đơn hàng và cập nhật trạng thái
   $scope.loadOrders = function () {
     $http
@@ -12,7 +12,8 @@ app.controller("OrderController", function ($scope, $http) {
         $scope.Orders = response.data;
         $scope.Orders.forEach((order) => {
           if (order.product && order.product.img) {
-            order.product.img = imageBaseUrl + order.product.img.split("/").pop();
+            order.product.img =
+              imageBaseUrl + order.product.img.split("/").pop();
           }
         });
         $scope.refreshOrderStatusHistory(); // Cập nhật lịch sử trạng thái cho mỗi đơn hàng
@@ -30,7 +31,8 @@ app.controller("OrderController", function ($scope, $http) {
         $scope.orderDetails = response.data;
         $scope.orderDetails.forEach((detail) => {
           if (detail.product && detail.product.img) {
-            detail.product.img = imageBaseUrl + detail.product.img.split("/").pop();
+            detail.product.img =
+              imageBaseUrl + detail.product.img.split("/").pop();
           }
         });
       })
@@ -67,14 +69,14 @@ app.controller("OrderController", function ($scope, $http) {
   // Cập nhật trạng thái đơn hàng với điều kiện kiểm tra chuyển đổi hợp lệ
   $scope.updateOrderStatus = function () {
     $scope.isUpdating = true; // Bật trạng thái đang cập nhật
-  
+
     var newStatus = $scope.selectedOrder.status.idstatus;
     var oldStatus = $scope.originalStatus;
-  
+
     // Ép kiểu về số nguyên để đảm bảo so sánh đúng
     oldStatus = Number(oldStatus);
     newStatus = Number(newStatus);
-  
+
     // Kiểm tra nếu trạng thái không thay đổi
     if (oldStatus === newStatus) {
       $scope.message = "Trạng thái không thay đổi.";
@@ -82,30 +84,46 @@ app.controller("OrderController", function ($scope, $http) {
       $scope.isUpdating = false;
       return;
     }
-  
+
     // Kiểm tra điều kiện chuyển đổi trạng thái hợp lệ
     var validationResult = isValidStatusChange(oldStatus, newStatus);
-  
+
     if (!validationResult.isValid) {
-      $scope.message = "Cập nhật trạng thái không thành công: " + validationResult.message;
+      $scope.message =
+        "Cập nhật trạng thái không thành công: " + validationResult.message;
       $scope.messageType = "error";
       $scope.isUpdating = false;
       return;
     }
-  
+
     // Tạo đối tượng order-status-history mới
     var orderStatusHistory = {
       order: { idorder: $scope.selectedOrder.idorder },
       status: { idstatus: newStatus },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-  
+
     // Gửi yêu cầu PUT để cập nhật trạng thái lên server
-    $http.put(`${API}/order-status-history/${$scope.selectedOrder.idorder}`, orderStatusHistory)
+    $http
+      .put(
+        `${API}/order-status-history/${$scope.selectedOrder.idorder}`,
+        orderStatusHistory
+      )
       .then((response) => {
         $scope.message = "Cập nhật trạng thái thành công!";
         $scope.messageType = "success";
-        $scope.loadOrders();  // Tải lại danh sách đơn hàng sau khi cập nhật
+
+        // Cập nhật trạng thái trực tiếp trong $scope.selectedOrder
+        $scope.selectedOrder.status.idstatus = newStatus;
+
+        // Cập nhật trong danh sách Orders
+        const orderIndex = $scope.Orders.findIndex(
+          (order) => order.idorder === $scope.selectedOrder.idorder
+        );
+        if (orderIndex !== -1) {
+          $scope.Orders[orderIndex].status.idstatus = newStatus;
+          $scope.Orders[orderIndex].statusName = response.data.statusName;
+        }
       })
       .catch((error) => {
         $scope.message = "Có lỗi xảy ra khi cập nhật trạng thái!";
@@ -115,72 +133,86 @@ app.controller("OrderController", function ($scope, $http) {
         $scope.isUpdating = false;
       });
   };
-  
+
+  $(document).on("hide.bs.modal", ".modal", function () {
+    $window.location.reload(); // Reload toàn bộ trang
+  });
+
   // Hàm kiểm tra điều kiện chuyển đổi trạng thái
   function isValidStatusChange(oldStatus, newStatus) {
     if (oldStatus === 1 && (newStatus === 2 || newStatus === 4)) {
       return { isValid: true };
     } else if (oldStatus === 2 && (newStatus === 3 || newStatus === 4)) {
       return { isValid: true };
-    } else if (oldStatus === 3 && newStatus === 4) {
-      return { isValid: true };
+    } else if (oldStatus === 3) {
+      return {
+        isValid: false,
+        message: "Trạng thái 'Đã Giao Hàng' không thể cập nhật sang trạng thái khác.",
+      };
     } else if (oldStatus === 4) {
-      return { isValid: false, message: "Trạng thái 'Đã Hủy' không thể cập nhật sang trạng thái khác." };
+      return {
+        isValid: false,
+        message: "Trạng thái 'Đã Hủy' không thể cập nhật sang trạng thái khác.",
+      };
     } else {
       return { isValid: false, message: "Trạng thái không hợp lệ." };
     }
   }
 
-// Lấy dữ liệu trạng thái thanh toán từ API
-$http.get(`${API}/statuspay`)
-  .then(function(response) {
-    $scope.paymentStatuses = response.data; // Cập nhật danh sách trạng thái thanh toán
-  })
-  .catch(function(error) {
-    console.log("Có lỗi xảy ra khi lấy dữ liệu trạng thái thanh toán!", error);
-  });
-
-// Sau khi có được paymentStatuses từ API, bạn có thể sử dụng chúng trong giao diện
-$scope.openOrderModal = function (order) {
-  $scope.selectedOrder = angular.copy(order); // Đảm bảo giữ lại bản sao đơn hàng
-  console.log("selectedOrder.idstatuspay", $scope.selectedOrder.idstatuspay); // Kiểm tra giá trị tại đây
-  $scope.originalStatus = order.status.idstatus; // Lưu trạng thái ban đầu của đơn hàng
-  if ($scope.selectedOrder.idstatuspay !== 1 && $scope.selectedOrder.idstatuspay !== 2) {
-      $scope.selectedOrder.idstatuspay = 1; // Thiết lập giá trị mặc định là 1 nếu không hợp lệ
-  }
-  $scope.getOrderDetails(order.idorder);
-};
-
-
-// Cập nhật trạng thái thanh toán
-$scope.updateOrderStatusPay = function () {
-  // Gửi yêu cầu cập nhật trạng thái thanh toán đến API
-  var updatedPayment = { idstatuspay: $scope.selectedOrder.idstatuspay };
+  // Lấy dữ liệu trạng thái thanh toán từ API
   $http
-    .put(`${API}/order/${$scope.selectedOrder.idorder}`, updatedPayment)
-    .then((response) => {
-      $scope.message = "Cập nhật trạng thái thanh toán thành công!";
-      $scope.messageType = "success";
-      $scope.loadOrders(); // Tải lại danh sách đơn hàng
+    .get(`${API}/statuspay`)
+    .then(function (response) {
+      $scope.paymentStatuses = response.data; // Cập nhật danh sách trạng thái thanh toán
     })
-    .catch((error) => {
-      $scope.message = "Có lỗi xảy ra khi cập nhật thanh toán!";
-      $scope.messageType = "error";
-    })
-    .finally(() => {
-      $scope.isUpdating = false;
+    .catch(function (error) {
+      console.log(
+        "Có lỗi xảy ra khi lấy dữ liệu trạng thái thanh toán!",
+        error
+      );
     });
-};
 
+  // Sau khi có được paymentStatuses từ API, bạn có thể sử dụng chúng trong giao diện
+  $scope.openOrderModal = function (order) {
+    $scope.selectedOrder = angular.copy(order); // Đảm bảo giữ lại bản sao đơn hàng
+    console.log("selectedOrder.idstatuspay", $scope.selectedOrder.idstatuspay); // Kiểm tra giá trị tại đây
+    $scope.originalStatus = order.status.idstatus; // Lưu trạng thái ban đầu của đơn hàng
+    if (
+      $scope.selectedOrder.idstatuspay !== 1 &&
+      $scope.selectedOrder.idstatuspay !== 2
+    ) {
+      $scope.selectedOrder.idstatuspay = 1; // Thiết lập giá trị mặc định là 1 nếu không hợp lệ
+    }
+    $scope.getOrderDetails(order.idorder);
+  };
 
-// Định dạng thời gian hiển thị
-$scope.formatDate = function (dateString) {
-  var date = new Date(dateString);
-  return date.toLocaleString("vi-VN", { hour12: false });
-};
+  // Cập nhật trạng thái thanh toán
+  $scope.updateOrderStatusPay = function () {
+    // Gửi yêu cầu cập nhật trạng thái thanh toán đến API
+    var updatedPayment = { idstatuspay: $scope.selectedOrder.idstatuspay };
+    $http
+      .put(`${API}/order/${$scope.selectedOrder.idorder}`, updatedPayment)
+      .then((response) => {
+        $scope.message = "Cập nhật trạng thái thanh toán thành công!";
+        $scope.messageType = "success";
+        $scope.loadOrders(); // Tải lại danh sách đơn hàng
+      })
+      .catch((error) => {
+        $scope.message = "Có lỗi xảy ra khi cập nhật thanh toán!";
+        $scope.messageType = "error";
+      })
+      .finally(() => {
+        $scope.isUpdating = false;
+      });
+  };
 
-  
-  $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/"; 
+  // Định dạng thời gian hiển thị
+  $scope.formatDate = function (dateString) {
+    var date = new Date(dateString);
+    return date.toLocaleString("vi-VN", { hour12: false });
+  };
+
+  $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/";
   // Khởi tạo dữ liệu
   $scope.loadOrders();
 });
