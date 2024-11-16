@@ -366,7 +366,7 @@
                 </div>
 
                 <!-- Tabs -->
-               <div class="row my-4" ng-app="myApp" ng-controller="OrderController">
+                <div class="row my-4" ng-app="myApp" ng-controller="OrderController">
                     <div class="col-12">
                         <div class="custom-block bg-white">
                             <div class="tab-content" id="myTabContent">
@@ -518,19 +518,17 @@
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <!-- Radio cho trạng thái Chưa Thanh Toán -->
                                                     <label class="btn btn-danger"
-                                                        ng-class="{'active': selectedOrder.idstatuspay.idstatuspay == 1}">
-                                                        <input type="radio" ng-model="selectedOrder.idstatuspay.idstatuspay"
-                                                            ng-checked="selectedOrder.idstatuspay.idstatuspay == 1" value="1"
-                                                            autocomplete="off" />
+                                                        ng-class="{'active': selectedOrder.idstatuspay == 1}">
+                                                        <input type="radio" ng-model="selectedOrder.idstatuspay"
+                                                            value="1" autocomplete="off" />
                                                         Chưa Thanh Toán
                                                     </label>
 
                                                     <!-- Radio cho trạng thái Đã Thanh Toán -->
                                                     <label class="btn btn-success"
-                                                        ng-class="{'active': selectedOrder.idstatuspay.idstatuspay == 2}">
-                                                        <input type="radio" ng-model="selectedOrder.idstatuspay.idstatuspay"
-                                                            ng-checked="selectedOrder.idstatuspay.idstatuspay == 2" value="2"
-                                                            autocomplete="off" />
+                                                        ng-class="{'active': selectedOrder.idstatuspay == 2}">
+                                                        <input type="radio" ng-model="selectedOrder.idstatuspay"
+                                                            value="2" autocomplete="off" />
                                                         Đã Thanh Toán
                                                     </label>
                                                 </div>
@@ -541,15 +539,18 @@
                                                 </button>
                                             </div>
 
+
                                         </div>
                                         <div class="col-lg-5 order-footer-right">
                                             <div class="border-tt">
-                                                <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}} ₫</span>
+                                                <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}}
+                                                        ₫</span>
                                                 </h6>
                                                 <h6>Giảm giá: <span>{{ selectedOrder.discount ? (selectedOrder.discount
                                                         | number: 0) : 0 }} ₫</span></h6>
                                                 <h6>Tổng tiền theo đơn hàng: <span
-                                                        class="total-amount">{{selectedOrder.total | number: 0}} ₫</span>
+                                                        class="total-amount">{{selectedOrder.total | number: 0}}
+                                                        ₫</span>
                                                 </h6>
                                             </div>
                                         </div>
@@ -558,7 +559,7 @@
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
 
             </main>
         </div>

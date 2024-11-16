@@ -147,7 +147,8 @@ app.controller("OrderController", function ($scope, $window, $http) {
     } else if (oldStatus === 3) {
       return {
         isValid: false,
-        message: "Trạng thái 'Đã Giao Hàng' không thể cập nhật sang trạng thái khác.",
+        message:
+          "Trạng thái 'Đã Giao Hàng' không thể cập nhật sang trạng thái khác.",
       };
     } else if (oldStatus === 4) {
       return {
@@ -158,19 +159,6 @@ app.controller("OrderController", function ($scope, $window, $http) {
       return { isValid: false, message: "Trạng thái không hợp lệ." };
     }
   }
-
-  // Lấy dữ liệu trạng thái thanh toán từ API
-  $http
-    .get(`${API}/statuspay`)
-    .then(function (response) {
-      $scope.paymentStatuses = response.data; // Cập nhật danh sách trạng thái thanh toán
-    })
-    .catch(function (error) {
-      console.log(
-        "Có lỗi xảy ra khi lấy dữ liệu trạng thái thanh toán!",
-        error
-      );
-    });
 
   // Sau khi có được paymentStatuses từ API, bạn có thể sử dụng chúng trong giao diện
   $scope.openOrderModal = function (order) {
@@ -188,16 +176,20 @@ app.controller("OrderController", function ($scope, $window, $http) {
 
   // Cập nhật trạng thái thanh toán
   $scope.updateOrderStatusPay = function () {
-    // Gửi yêu cầu cập nhật trạng thái thanh toán đến API
-    var updatedPayment = { idstatuspay: $scope.selectedOrder.idstatuspay };
+    var updatedPayment = { 
+      idstatuspay: $scope.selectedOrder.idstatuspay.idstatuspay 
+    }; // Không gửi mã giảm giá nếu không sử dụng
+  
     $http
       .put(`${API}/order/${$scope.selectedOrder.idorder}`, updatedPayment)
       .then((response) => {
         $scope.message = "Cập nhật trạng thái thanh toán thành công!";
         $scope.messageType = "success";
-        $scope.loadOrders(); // Tải lại danh sách đơn hàng
+        $scope.loadOrders();
       })
       .catch((error) => {
+        console.error("Có lỗi xảy ra khi cập nhật trạng thái thanh toán: ", error);
+        console.error("Chi tiết lỗi từ server: ", error.data); // In ra chi tiết lỗi từ server
         $scope.message = "Có lỗi xảy ra khi cập nhật thanh toán!";
         $scope.messageType = "error";
       })
@@ -205,6 +197,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.isUpdating = false;
       });
   };
+  
 
   // Định dạng thời gian hiển thị
   $scope.formatDate = function (dateString) {
@@ -212,7 +205,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
     return date.toLocaleString("vi-VN", { hour12: false });
   };
 
-  $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/";
+  $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/"; // Đảm bảo base URL là đúng
   // Khởi tạo dữ liệu
   $scope.loadOrders();
 });
