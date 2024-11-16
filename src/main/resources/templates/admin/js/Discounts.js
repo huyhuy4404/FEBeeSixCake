@@ -86,9 +86,17 @@ app.controller('discountsController', function($scope, $http) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
     // Chuyển dữ liệu khuyến mãi vào form để chỉnh sửa
-    $scope.goToEdit = function(discount) {
-        $scope.selecteddiscount = angular.copy(discount);
-    };
+  // Chuyển dữ liệu khuyến mãi vào form để chỉnh sửa
+$scope.goToEdit = function(discount) {
+    $scope.selecteddiscount = angular.copy(discount);
+    // Chuyển đổi các trường ngày sang đối tượng Date
+    if (discount.startdate) {
+        $scope.selecteddiscount.startdate = new Date(discount.startdate);
+    }
+    if (discount.enddate) {
+        $scope.selecteddiscount.enddate = new Date(discount.enddate);
+    }
+};
 
     // Làm mới form
     $scope.resetForm = function() {
