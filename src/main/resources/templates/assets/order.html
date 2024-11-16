@@ -92,59 +92,183 @@
                 <h3 class="cart-header">Đơn HÀNG CỦA BẠN</h3>
                 <h5>
                     Đơn HÀNG của bạn (<b class="cart-cnt">{{ products.length }}</b> sản phẩm)
-                    <span class="float-end total-price">
-                        Tổng tiền: {{ formatCurrency(calculateTotal()) }}
-                    </span>
                 </h5>
 
                 <div ng-if="loading">Đang tải đơn hàng...</div>
                 <div ng-if="!loading && products.length === 0">Không tìm thấy đơn hàng.</div>
-                <table class="table table-order" ng-if="!loading && products.length > 0">
-                    <thead>
-                        <tr>
-                            <th>
-                            </th>
-                            <th>ID</th>
-                            <th>Tên Sản Phẩm</th>
-                            <th>Kích cỡ</th>
-                            <th>Số Lượng</th>
-                            <th>Giá</th>
-                            <th>Ngày Đặt Hàng</th>
-                            <th>Địa Chỉ Giao Hàng</th>
-                            <th>Trạng thái</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="order in products">
-                            <td>
-                            </td>
-                            <td>{{ order.order.idorder }}</td>
-                            <td>{{ order.productdetail.product.productname }}</td>
-                            <td>{{ order.productdetail.size.sizename }}</td>
-                            <td>{{ order.quantity }}</td>
-                            <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
-                            <td>{{ order.order.orderdate | date:'short' }}</td>
-                            <td>{{ order.order.addressdetail }}</td>
-                            <td>{{ order.status }}</td>
-                            <td>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">Hủy</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="total-price" ng-if="!loading && products.length > 0">
-                    Tổng tiền: {{ formatCurrency(calculateTotal()) }}
-                </div>
-                
-               
-        </div>
-    </div>
 
-    <div ng-include="'layout/footer.html'"></div>
-    <script src="../assets/js/bootstrap.bundle.js"></script>
+                <!-- Tabs Navigation -->
+                <ul class="nav nav-tabs" id="orderTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="true">Đang Xác Nhận</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="delivered-tab" data-bs-toggle="tab" href="#delivered" role="tab" aria-controls="delivered" aria-selected="false">Đang Giao Hàng</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="completed-tab" data-bs-toggle="tab" href="#completed" role="tab" aria-controls="completed" aria-selected="false">Hoàn Thành</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="cancelled-tab" data-bs-toggle="tab" href="#cancelled" role="tab" aria-controls="cancelled" aria-selected="false">Hủy</a>
+                    </li>
+                </ul>
+
+                <!-- Tabs Content -->
+                <div class="tab-content" id="orderTabsContent">
+                    <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+                        <table class="table table-order" ng-if="!loading && pendingOrders.length > 0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Kích cỡ</th>
+                                    <th>Số Lượng</th>
+                                    <th>Giá</th>
+                                    <th>Ngày Đặt Hàng</th>
+                                    <th>Địa Chỉ Giao Hàng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="order in pendingOrders">
+                                    <td></td>
+                                    <td>{{ order.order.idorder }}</td>
+                                    <td>
+                                        <a href="#" ng-click="goToProduct(order.productdetail.product.idproduct, order)">
+                                            {{ order.productdetail.product.productname }}
+                                        </a>
+                                    </td>
+                                    <!-- <td>{{ order.productdetail.product.productname }}</td> -->
+                                    <td>{{ order.productdetail.size.sizename }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td>{{ order.order.orderdate | date:'short' }}</td>
+                                    <td>{{ order.order.addressdetail }}</td>
+                                    <td>{{ order.status }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">Hủy</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div ng-if="pendingOrders.length === 0">Không có đơn hàng nào đang xác nhận.</div>
+                    </div>
+
+                    <div class="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
+                        <table class="table table-order" ng-if="!loading && deliveredOrders.length > 0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <!-- <th>ID</th> -->
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Kích Cỡ</th>
+                                    <th>Số Lượng</th>
+                                    <th>Giá</th>
+                                    <th>Ngày Đặt Hàng</th>
+                                    <th>Địa Chỉ Giao Hàng</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="order in deliveredOrders">
+                                    <td></td>
+                                    <!-- <td>{{ order.order.idorder }}</td> -->
+                                    <td>{{ order.productdetail.product.productname }}</td>
+                                    <td>{{ order.productdetail.size.sizename }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td>{{ order.order.orderdate | date:'short' }}</td>
+                                    <td>{{ order.order.addressdetail }}</td>
+                                    <td>{{ order.status }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">Hủy</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div ng-if="deliveredOrders.length === 0">Không có đơn hàng nào đang giao hàng.</div>
+                    </div>
+
+                    <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                        <table class="table table-order" ng-if="!loading && completedOrders.length > 0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Kích Cỡ</th>
+                                    <th>Số Lượng</th>
+                                    <th>Giá</th>
+                                    <th>Ngày Đặt Hàng</th>
+                                    <th>Địa Chỉ Giao Hàng</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="order in completedOrders">
+                                    <td></td>
+                                    <td>{{ order.order.idorder }}</td>
+                                    <td>{{ order.productdetail.product.productname }}</td>
+                                    <td>{{ order.productdetail.size.sizename }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td>{{ order.order.orderdate | date:'short' }}</td>
+                                    <td>{{ order.order.addressdetail }}</td>
+                                    <td>{{ order.status }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">Hủy</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div ng-if="completedOrders.length === 0">Không có đơn hàng nào đã hoàn thành.</div>
+                    </div>
+
+                    <div class="tab-pane fade" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab">
+                        <table class="table table-order" ng-if="!loading && cancelledOrders.length > 0">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>Tên Sản Phẩm</th>
+                                    <th>Kích Cỡ</th>
+                                    <th>Số Lượng</th>
+                                    <th>Giá</th>
+                                    <th>Ngày Đặt Hàng</th>
+                                    <th>Địa Chỉ Giao Hàng</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="order in cancelledOrders">
+                                    <td></td>
+                                    <td>{{ order.order.idorder }}</td>
+                                    <td>{{ order.productdetail.product.productname }}</td>
+                                    <td>{{ order.productdetail.size.sizename }}</td>
+                                    <td>{{ order.quantity }}</td>
+                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td>{{ order.order.orderdate | date:'short' }}</td>
+                                    <td>{{ order.order.addressdetail }}</td>
+                                    <td>{{ order.status }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">Hủy</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div ng-if="cancelledOrders.length === 0">Không có đơn hàng nào đã hủy.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-include="'layout/footer.html'"></div>
+        <script src="../assets/js/bootstrap.bundle.js"></script>
+    </div>
 </body>
 </html>

@@ -41,7 +41,7 @@ a {
     border-radius: 30px;
     font-weight: bold;
     position: absolute; /* Thay đổi từ fixed thành absolute */
-    width: 90%;
+    width: 93%;
     font-size: 24px;
     box-shadow: 0px 0px 6px 2px #555;
     transition: top 0.3s ease; /* Thêm hiệu ứng chuyển động */
@@ -172,9 +172,8 @@ a {
 
 .carousel-control-prev,
 .carousel-control-next {
-  height: 400px !important;
-  z-index: 0;
-  top: 200px;
+  top: 20%;
+  height: 400px;
 }
 
 .carousel-control-prev:hover,
@@ -193,9 +192,9 @@ a {
   padding: 10px; /* Giảm padding để phù hợp với kích thước border */
   width: 50px; /* Tăng kích thước để chứa icon và border */
   height: 50px;
-  margin-top: 60px;
+  top: 50%;
   color: #fff;
-  z-index: -1;
+  z-index: 1001;
 }
 
 .prev-icon:hover,

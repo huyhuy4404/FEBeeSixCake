@@ -38,14 +38,6 @@
         <img src="https://5ck6jg.csb.app/anh/benner3.png" class="d-block w-100" style="height: 565px" />
       </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-      data-bs-slide="prev">
-      <i class="bi bi-chevron-left prev-icon"></i>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-      data-bs-slide="next">
-      <i class="bi bi-chevron-right next-icon"></i>
-    </button>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
     <i class="bi bi-chevron-left prev-icon"></i>
@@ -53,7 +45,6 @@
   <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
     <i class="bi bi-chevron-right next-icon"></i>
   </button>
-  </div>
 
   <div class="card mb-3" style="border: none">
     <!-- Sản phẩm giảm giá -->
@@ -71,7 +62,7 @@
         <h4>Tất cả sản phẩm:</h4>
         <div class="col-lg-3" ng-repeat="item in Products | limitTo: 4 ">
           <script>
-            console.log('Item:', item ); // In ra thông tin của từng sản phẩm
+            console.log('Item:', item); // In ra thông tin của từng sản phẩm
           </script>
           <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
             <div class="box-images">
@@ -102,8 +93,7 @@
       </div>
       <div class="row py-2" style="justify-content: center; margin: 0 5%; margin-top: 30px;">
         <h4>Tất cả sản phẩm:</h4>
-        <div class="col-lg-3" style="margin-top: 30px;"
-          ng-repeat="item in Products | limitTo: 8">
+        <div class="col-lg-3" style="margin-top: 30px;" ng-repeat="item in Products | limitTo: 8">
           <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); width: 320px">
             <div class="box-images">
               <a ng-click="goToProduct(item.idproduct)" title="{{item.productname}}">
@@ -124,8 +114,7 @@
       </div>
     </div>
   </div>
-  </div>
-  </div>
+
   <div ng-include="'layout/footer.html'"></div>
   <script src="../assets/js/bootstrap.bundle.js"></script>
   <script src="../assets/js/indexx.js"></script>
