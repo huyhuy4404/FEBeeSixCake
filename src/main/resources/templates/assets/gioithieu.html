@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/gioithieu.css">
+    <link rel="stylesheet" href="../assets/css/thuan.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/account.js"></script>
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="assets/css/plugins.css">
+</head>
+
+<body ng-app="myApp" ng-controller="LoginController">
+    <div ng-include="'layout/header.html'"></div>
+    <div ng-include="'layout/menu.html'"></div>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <img src="../assets/img/about-bakery.jpg" class="img-fluid rounded shadow-lg" alt="Cửa hàng bánh ngọt">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Về BeeSixCake</h2>
+                    <p>
+                        Tại BeeSixCake, chúng tôi không chỉ làm bánh, mà chúng tôi còn tạo ra những khoảnh khắc đáng nhớ. 
+                        Từ những chiếc bánh ngọt tinh tế cho đến dịch vụ tận tâm, chúng tôi luôn sẵn sàng mang đến hương vị 
+                        và trải nghiệm tuyệt vời nhất cho bạn.
+                    </p>
+                    <p>
+                        Chúng tôi tin rằng mỗi chiếc bánh đều mang một câu chuyện và chúng tôi ở đây để kể câu chuyện đó cho bạn.
+                    </p>
+                    <a href="/src/main/resources/templates/assets/SanPhamMoiFull.html" class="btn btn-outline-dark mt-3">Khám Phá Bộ Sưu Tập</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light text-center">
+        <div class="container">
+            <h2 class="mb-4">Điểm Nổi Bật Của Chúng Tôi</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <i class="bi bi-star-fill text-warning fs-1"></i>
+                    <h4 class="mt-3">Chất Lượng Tuyệt Hảo</h4>
+                    <p>Sử dụng nguyên liệu tươi ngon và kỹ thuật làm bánh truyền thống.</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="bi bi-heart-fill text-danger fs-1"></i>
+                    <h4 class="mt-3">Tình Yêu Trong Từng Chiếc Bánh</h4>
+                    <p>Mỗi sản phẩm là món quà chứa đựng tâm huyết của chúng tôi.</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="bi bi-award-fill text-primary fs-1"></i>
+                    <h4 class="mt-3">Dịch Vụ Tận Tâm</h4>
+                    <p>Luôn đặt khách hàng là trung tâm trong mọi hoạt động.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section -->
+    <section id="contact" class="py-5 bg-gradient text-white text-center">
+        <div class="container">
+            <a href="#" class="btn btn-light">Liên Hệ Ngay</a>
+        </div>
+    </section>
+    <div ng-include="'layout/footer.html'"></div>
+    <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>

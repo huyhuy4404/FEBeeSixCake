@@ -1,0 +1,219 @@
+/* Các tùy chỉnh chung */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa; /* Màu nền sáng nhẹ */
+    color: #495057; /* Màu văn bản tối */
+}
+
+/* Phần About */
+#about {
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#about h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #5a5a5a; /* Màu xám nhẹ */
+}
+
+#about p {
+    font-size: 1.1rem;
+    color: #6c757d; /* Màu xám nhạt */
+}
+
+/* Hình ảnh trong phần About */
+#about img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Phần Features */
+#features {
+    background-color: #f9f9f9; /* Nền xám sáng */
+}
+
+#features h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333; /* Màu đen đậm cho tiêu đề */
+}
+
+#features .col-md-4 {
+    margin-bottom: 20px;
+}
+
+#features i {
+    font-size: 4rem;
+    color: #ff6f61; /* Màu cam nhạt cho icon */
+    margin-bottom: 20px;
+}
+
+#features h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #5a5a5a; /* Màu xám cho tiêu đề */
+}
+
+#features p {
+    font-size: 1rem;
+    color: #777; /* Màu xám nhạt cho nội dung */
+}
+
+/* Form liên hệ */
+/* Phần Gửi Thắc Mắc Của Bạn */
+#contact-form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+#contact-form h3 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#contact-form input,
+#contact-form textarea {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background-color: #f8f9fa; /* Nền sáng cho input */
+}
+
+#contact-form input:focus,
+#contact-form textarea:focus {
+    border-color: #ff6f61; /* Màu viền khi focus */
+    outline: none;
+    box-shadow: 0 0 8px rgba(255, 111, 97, 0.5); /* Hiệu ứng sáng khi focus */
+}
+
+#contact-form button {
+    background-color: #ff6f61; /* Nút màu cam */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 100%; /* Nút full-width */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#contact-form button:hover {
+    background-color: #e14f3d; /* Màu cam đậm khi hover */
+    transform: translateY(-2px); /* Hiệu ứng nhấc nút lên */
+}
+
+#contact-form button:active {
+    transform: translateY(2px); /* Hiệu ứng nhấn nút */
+}
+
+/* Tùy chỉnh label */
+#contact-form label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Phần thông báo thành công hoặc lỗi */
+#contact-form .alert {
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#contact-form .alert-success {
+    background-color: #28a745;
+    color: white;
+}
+
+#contact-form .alert-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Hiệu ứng cho các input và nút gửi */
+@media (max-width: 768px) {
+    #contact-form {
+        padding: 20px;
+    }
+
+    #contact-form button {
+        width: 100%;
+        font-size: 1rem;
+    }
+}
+
+
+/* Phần Contact Footer */
+#contact-footer {
+    background: linear-gradient(90deg, rgba(255, 111, 97, 1) 0%, rgba(255, 159, 143, 1) 100%);
+    color: #fff;
+    padding: 40px 0;
+    text-align: center;
+}
+
+#contact-footer p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: #ff6f61;
+}
+
+#contact-footer .btn-light {
+    background-color: #fff;
+    color: #ff6f61;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#contact-footer .btn-light:hover {
+    background-color: #ff6f61;
+    color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #about {
+        text-align: center;
+    }
+
+    #about img {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    #features .col-md-4 {
+        margin-bottom: 20px;
+    }
+
+    #contact-form {
+        padding: 20px;
+    }
+
+    #contact-footer .btn-light {
+        width: 100%;
+    }
+}
