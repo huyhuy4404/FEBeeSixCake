@@ -34,6 +34,29 @@
     <script src="js/angular-route.js"></script>
 
     <style>
+        /* Container for the custom block with the table and pagination */
+        .custom-block {
+            display: flex;
+            flex-direction: column;
+            min-height: 500px;
+            /* Adjust as needed to set the minimum height */
+            justify-content: space-between;
+        }
+
+        /* Table responsiveness and styles */
+        .table-responsive {
+            flex-grow: 1;
+            margin-bottom: 20px;
+            /* Adds space between table and pagination */
+        }
+
+        /* Ensures pagination stays in a consistent position */
+        .pagination {
+            margin-top: auto;
+            /* Automatically positions pagination at the end of the flex container */
+        }
+
+
         .account-table th {
             font-size: 16px;
         }
@@ -386,13 +409,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="order in Orders"
+                                                <tr ng-repeat="order in paginatedOrders"
                                                     style="text-align: center; font-size: 16px;">
                                                     <td>{{ order.idorder }}</td> <!-- Sửa idOrder thành idorder -->
                                                     <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                     <td>{{ order.total | number : 0}} ₫</td>
-                                                    <td>{{ order.statusName}}</td>
-                                                    <td>{{ order.idstatuspay.statuspayname}}</td>
+                                                    <td>{{ order.statusName }}</td>
+                                                    <td>{{ order.idstatuspay.statuspayname }}</td>
                                                     <td class="">
                                                         <button type="button" class="btn btn-sm btn-primary"
                                                             data-bs-toggle="modal"
@@ -406,8 +429,31 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Thanh Phân Trang -->
+                            <nav aria-label="Page navigation" class="mt-4">
+                                <ul class="pagination justify-content-center mb-0">
+                                    <li class="page-item" ng-class="{disabled: currentPage === 1}">
+                                        <a class="page-link" href="#" aria-label="Previous"
+                                            ng-click="goToPage(currentPage - 1)">
+                                            <span aria-hidden="true">&laquo; Trang Trước</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item" ng-repeat="page in pages"
+                                        ng-class="{active: currentPage === page}">
+                                        <a class="page-link" href="#" ng-click="goToPage(page)">{{ page }}</a>
+                                    </li>
+                                    <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
+                                        <a class="page-link" href="#" aria-label="Next"
+                                            ng-click="goToPage(currentPage + 1)">
+                                            <span aria-hidden="true">Trang Sau &raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
+
                     </div>
+
                     <!-- Modal -->
                     <div class="modal fade" id="modal-{{order.idorder}}" tabindex="-1"
                         aria-labelledby="exampleModalLabel" aria-hidden="true" ng-repeat="order in Orders"

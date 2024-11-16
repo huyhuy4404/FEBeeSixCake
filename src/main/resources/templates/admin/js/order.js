@@ -176,10 +176,10 @@ app.controller("OrderController", function ($scope, $window, $http) {
 
   // Cập nhật trạng thái thanh toán
   $scope.updateOrderStatusPay = function () {
-    var updatedPayment = { 
-      idstatuspay: $scope.selectedOrder.idstatuspay.idstatuspay 
-    }; // Không gửi mã giảm giá nếu không sử dụng
-  
+    var updatedPayment = {
+      idstatuspay: $scope.selectedOrder.idstatuspay.idstatuspay,
+    }; // Make sure no discount code or other unnecessary fields are being sent
+
     $http
       .put(`${API}/order/${$scope.selectedOrder.idorder}`, updatedPayment)
       .then((response) => {
@@ -188,7 +188,10 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.loadOrders();
       })
       .catch((error) => {
-        console.error("Có lỗi xảy ra khi cập nhật trạng thái thanh toán: ", error);
+        console.error(
+          "Có lỗi xảy ra khi cập nhật trạng thái thanh toán: ",
+          error
+        );
         console.error("Chi tiết lỗi từ server: ", error.data); // In ra chi tiết lỗi từ server
         $scope.message = "Có lỗi xảy ra khi cập nhật thanh toán!";
         $scope.messageType = "error";
@@ -197,7 +200,6 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.isUpdating = false;
       });
   };
-  
 
   // Định dạng thời gian hiển thị
   $scope.formatDate = function (dateString) {
@@ -208,4 +210,58 @@ app.controller("OrderController", function ($scope, $window, $http) {
   $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/"; // Đảm bảo base URL là đúng
   // Khởi tạo dữ liệu
   $scope.loadOrders();
+
+  $scope.itemsPerPage = 5; // Limit to 5 orders per page
+
+  $scope.updatePagination = function () {
+      // Apply search filter
+      if ($scope.searchQuery) {
+        $scope.filteredOrders = $scope.Orders.filter(function (order) {
+          return order.idorder.toString().includes($scope.searchQuery) || 
+                 (order.statusName && order.statusName.toLowerCase().includes($scope.searchQuery.toLowerCase()));
+        });
+      } else {
+        $scope.filteredOrders = $scope.Orders;
+      }
+  
+      // Calculate total pages
+      $scope.totalPages =
+        Math.ceil($scope.filteredOrders.length / $scope.itemsPerPage) || 1;
+  
+      // Create an array of pages
+      $scope.pages = [];
+      for (var i = 1; i <= $scope.totalPages; i++) {
+        $scope.pages.push(i);
+      }
+  
+      // Adjust current page if it exceeds total pages
+      if ($scope.currentPage > $scope.totalPages) {
+        $scope.currentPage = $scope.totalPages;
+      }
+  
+      // Get the orders for the current page
+      var start = ($scope.currentPage - 1) * $scope.itemsPerPage;
+      var end = start + $scope.itemsPerPage;
+      $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
+    };
+  
+    // Page change function
+    $scope.goToPage = function (page) {
+      if (page < 1 || page > $scope.totalPages) {
+        return;
+      }
+      $scope.currentPage = page;
+      $scope.updatePagination();
+    };
+  
+    // Watch for changes in Orders or searchQuery to update pagination
+    $scope.$watchGroup(
+      ["Orders", "searchQuery"],
+      function (newValues, oldValues) {
+        $scope.currentPage = 1; // Reset to page 1 when data changes
+        $scope.updatePagination();
+      }
+    );
+  
+
 });
