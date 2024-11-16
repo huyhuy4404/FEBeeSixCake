@@ -135,7 +135,7 @@ app.controller('SizeController', function($scope, $http, $timeout) {
                         $scope.showError('Có lỗi xảy ra khi xóa kích thước: ' + error.data.message);
                     } else {
                         // Thông báo lỗi chung nếu không có thông tin chi tiết
-                        $scope.showError('Có lỗi xảy ra khi xóa kích thước.');
+                        $scope.showError('Không thể xóa kích thước này vì kích thước đang được sử dụng bởi một sản phẩm !');
                     }
                 });
         }
