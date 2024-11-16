@@ -271,11 +271,14 @@
                                 <!-- Nội dung Tab Chỉnh sửa -->
                                 <div class="tab-pane fade show active" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab" tabindex="0">
                                     <form class="row g-3 needs-validation" novalidate>
-                                        <!-- Hiển thị thông báo -->
-                                        <div ng-if="message" class="alert" ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}" role="alert">
+                                        <div ng-if="message" class="alert" ng-class="{
+                                            'alert-success': messageType === 'success',
+                                            'alert-danger': messageType === 'error',
+                                            'alert-info': messageType === 'info',
+                                            'alert-warning': messageType === 'warning'
+                                        }" role="alert">
                                             {{ message }}
                                         </div>
-                                        
                                         <!-- ID Size -->
                                         <!-- <div class="col-md-6">
                                             <label for="size-id" class="form-label">ID Size</label>
@@ -283,10 +286,12 @@
                                         </div> -->
                 
                                         <!-- Kích thước -->
-                                        <div class="col-md-6">
-                                            <label for="size-name" class="form-label">Kích Thước</label>
-                                            <input type="text" id="size-name" ng-model="selectedSize.sizename" class="form-control form-control-rounded" placeholder="Nhập kích thước" />
-                                        </div>
+                                     <!-- Kích thước -->
+<div class="col-md-6">
+    <label for="size-name" class="form-label">Kích Thước</label>
+    <input type="text" id="size-name" ng-model="selectedSize.sizename" class="form-control form-control-rounded" placeholder="Nhập kích thước" required />
+</div>
+
                                       
                 
                                         <!-- Hành động -->

@@ -1,0 +1,29 @@
+
+/* Thay đổi màu sắc khi di chuột */
+.nav-link:hover {
+    color: red !important;
+    background-color: #f8f9fa; /* Optional: Thêm nền khi hover để dễ nhìn hơn */
+}
+
+/* Màu sắc cho mục được chọn */
+.nav-link.active {
+    color: red !important;
+    background-color: #f8f9fa; /* Optional: Thêm nền cho mục active */
+}
+
+/* Đảm bảo biểu tượng cũng thay đổi màu cùng văn bản */
+.nav-link i {
+    transition: color 0.3s;
+}
+
+.nav-link:hover i,
+.nav-link.active i {
+    color: red !important;
+}
+
+/* Đổi màu các liên kết trong dropdown khi hover và active */
+.dropdown-item:hover,
+.dropdown-item.active {
+    color: red !important;
+    background-color: #f8f9fa !important; /* Optional */
+}

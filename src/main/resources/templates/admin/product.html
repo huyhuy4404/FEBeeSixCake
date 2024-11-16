@@ -268,8 +268,18 @@
                                     <button class="nav-link" id="edit-tab" data-bs-toggle="tab"
                                         data-bs-target="#edit-tab-pane" type="button" role="tab"
                                         aria-controls="edit-tab-pane" aria-selected="false">
-                                        <i class="fas fa-edit"></i> Chỉnh sửa danh sách sản phẩm 
+                                        <i class="fas fa-edit"></i> Chỉnh sửa danh sách sản phẩm
                                     </button>
+                                </li>
+                                <!-- Phần Tìm kiếm -->
+                                <li class="nav-item ms-auto" role="presentation">
+                                    <div class="d-flex align-items-center">
+                                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm"
+                                            aria-label="Search" ng-model="searchQuery">
+                                        <!-- Nếu bạn muốn giữ nút tìm kiếm, nhưng không thực hiện hành động gì:
+                        <button class="btn btn-outline-success" type="button"><i class="fas fa-search"></i> Tìm kiếm</button>
+                        -->
+                                    </div>
                                 </li>
                             </ul>
 
@@ -292,9 +302,9 @@
                                                         <th scope="col" class="text-end">Hành động</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody ng-if="Products.length > 0">
-                                                    <tr ng-repeat-start="product in Products">
-                                                        <td rowspan="{{product.sizes.length}}" fw-bold>{{
+                                                <tbody ng-if="paginatedProducts.length > 0">
+                                                    <tr ng-repeat-start="product in paginatedProducts">
+                                                        <td rowspan="{{product.sizes.length}}" class="fw-bold">{{
                                                             product.productname }}</td>
                                                         <td>{{ product.sizes[0].sizename }}</td>
                                                         <td>{{ product.sizes[0].quantityinstock }}</td>
@@ -307,7 +317,7 @@
                                                         <td>{{ product.sizes[0].unitprice | currency:'' }} VNĐ</td>
                                                         <!-- Thêm VNĐ sau giá -->
                                                         <td rowspan="{{product.sizes.length}}">
-                                                            <img src="../admin/images/{{product.img}}"
+                                                            <img src="https://5ck6jg.csb.app/anh/{{product.img}}"
                                                                 alt="Ảnh sản phẩm" class="img-thumbnail"
                                                                 style="width: 60px; height: 60px; object-fit: cover;">
                                                         </td>
@@ -332,7 +342,7 @@
                                                         <!-- Thêm VNĐ sau giá -->
                                                     </tr>
                                                 </tbody>
-                                                <tbody ng-if="Products.length == 0">
+                                                <tbody ng-if="paginatedProducts.length == 0">
                                                     <tr>
                                                         <td colspan="8" class="text-center text-muted">Không có sản phẩm
                                                             nào.</td>
@@ -340,12 +350,13 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <!-- Thanh Phân Trang -->
                                         <nav aria-label="Page navigation" class="mt-4">
                                             <ul class="pagination justify-content-center mb-0">
                                                 <li class="page-item" ng-class="{disabled: currentPage === 1}">
                                                     <a class="page-link" href="#" aria-label="Previous"
                                                         ng-click="goToPage(currentPage - 1)">
-                                                        <span aria-hidden="true">&laquo; Prev</span>
+                                                        <span aria-hidden="true">&laquo; Trang Trước</span>
                                                     </a>
                                                 </li>
                                                 <li class="page-item" ng-repeat="page in pages"
@@ -356,7 +367,7 @@
                                                 <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
                                                     <a class="page-link" href="#" aria-label="Next"
                                                         ng-click="goToPage(currentPage + 1)">
-                                                        <span aria-hidden="true">Next &raquo;</span>
+                                                        <span aria-hidden="true">Trang Sau &raquo;</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -375,7 +386,6 @@
                                             {{ message }}
                                         </div>
 
-
                                         <!-- Tên sản phẩm -->
                                         <div class="col-md-6">
                                             <label for="product-name" class="form-label">Tên sản phẩm</label>
@@ -389,10 +399,12 @@
                                             <label for="category-select" class="form-label">Danh Mục</label>
                                             <select class="form-select" id="category-select"
                                                 ng-model="selectedProduct.category"
-                                                ng-options="category as category.categoryname for category in categories track by category.idcategory">
-                                                <option value="" selected>Chọn danh mục</option>
+                                                ng-options="category as category.categoryname for category in categories track by category.idcategory"
+                                                required>
+                                                <option value="" disabled selected>Chọn danh mục</option>
                                             </select>
-                                            <div class="invalid-feedback" ng-show="!selectedProduct.category">
+                                            <div class="invalid-feedback"
+                                                ng-show="productForm.$submitted && !selectedProduct.category">
                                                 Vui lòng chọn danh mục.
                                             </div>
                                         </div>
@@ -505,6 +517,8 @@
                         </div>
                     </div>
                 </div>
+
+
 
 
 
