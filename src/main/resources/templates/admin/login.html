@@ -7,6 +7,7 @@
     <title>Đăng Nhập - Bee Six Cake</title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
     <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/hau.css">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
     <script src="../assets/js/angular.min.js"></script>
@@ -15,56 +16,6 @@
     <script src="../admin/js/login.js"></script>
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="../assets/css/plugins.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .account_form {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-        .account_form h2 {
-            color: tomato;
-            margin-bottom: 30px;
-        }
-
-        .login_submit {
-            margin-top: 20px;
-        }
-
-        .form-text {
-            margin-top: 10px;
-        }
-
-        footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #6c757d;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            color: tomato;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background-color: tomato;
-            border-color: tomato;
-        }
-    </style>
 </head>
 
 <body ng-app="myApp" ng-controller="LoginController">
@@ -73,38 +24,43 @@
         <div class="row">
             <div class="col-lg-4 col-md-4"></div>
             <div class="col-lg-4 col-md-4">
-                <div class="account_form">
-                    <div class="logo">BEE SIX CAKE</div>
-                    <h2>Đăng Nhập</h2>
-                    <form id="form" name="loginForm" ng-submit="login()">
-                        <p>
-                            <input type="text" ng-model="user.idaccount" placeholder="Tên đăng nhập (*)"
-                                class="mb-2 form-control" name="txtIDAccount" required>
-                            <div class="form-text text-danger"
-                                ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
-                                Tên người dùng không hợp lệ
+                <div class="wrapper">
+                    <div class="account_form position-relative">
+                        <div class="logo">BEE SIX CAKE</div>
+                        <h2>Đăng Nhập</h2>
+                        <img src="../assets/img/sticker-cake1.png" class="sticker sticker-left-top" alt="Sticker bánh kem">
+                        <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom" alt="Sticker bánh kem">
+                        <form id="form" name="loginForm" ng-submit="login()">
+                            <p>
+                                <input type="text" ng-model="user.idaccount" placeholder="Tên đăng nhập (*)"
+                                    class="mb-2 form-control" name="txtIDAccount" required>
+                                <div class="form-text text-danger"
+                                    ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
+                                    Tên người dùng không hợp lệ
+                                </div>
+                            </p>
+                            <p>
+                                <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)" minlength="6"
+                                    name="txtPassword" class="mt-2 mb-2 form-control" required>
+                                <div class="form-text text-danger"
+                                    ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
+                                    Mật khẩu phải có ít nhất 6 ký tự
+                                </div>
+                            </p>
+                            <div class="login_submit">
+                                <button type="submit" id="xacnhan" class="btn btn-primary">Đăng Nhập</button>
+                                <div class="form-text text-danger" ng-show="loginError">
+                                    {{loginError}}
+                                </div>
+                                <div class="form-text text-success" ng-show="loginSuccess">
+                                    {{loginSuccess}}
+                                </div>
+    
                             </div>
-                        </p>
-                        <p>
-                            <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)" minlength="6"
-                                name="txtPassword" class="mt-2 mb-2 form-control" required>
-                            <div class="form-text text-danger"
-                                ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
-                                Mật khẩu phải có ít nhất 6 ký tự
-                            </div>
-                        </p>
-                        <div class="login_submit">
-                            <button type="submit" id="xacnhan" class="btn btn-primary">Đăng Nhập</button>
-                            <div class="form-text text-danger" ng-show="loginError">
-                                {{loginError}}
-                            </div>
-                            <div class="form-text text-success" ng-show="loginSuccess">
-                                {{loginSuccess}}
-                            </div>
-
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
+                
             </div>
             <div class="col-lg-4 col-md-4"></div>
         </div>
