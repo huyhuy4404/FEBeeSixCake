@@ -415,7 +415,7 @@
                                                     <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                     <td>{{ order.total | number : 0}} ₫</td>
                                                     <td>{{ order.statusName }}</td>
-                                                    <td>{{ order.idstatuspay.statuspayname }}</td>
+                                                    <td>{{ order.statuspay.statuspayname }}</td>
                                                     <td class="">
                                                         <button type="button" class="btn btn-sm btn-primary"
                                                             data-bs-toggle="modal"
@@ -559,33 +559,31 @@
                                                 </button>
                                             </div>
 
+                                            <!-- Trạng thái thanh toán -->
                                             <div class="mt-4">
                                                 <p class="fw-bold mb-2">Trạng thái thanh toán</p>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <!-- Radio cho trạng thái Chưa Thanh Toán -->
+                                                    <!-- Chỉ hiển thị nút 'Chưa Thanh Toán' nếu trạng thái hiện tại là 1 -->
                                                     <label class="btn btn-danger"
-                                                        ng-class="{'active': selectedOrder.idstatuspay == 1}">
+                                                        ng-class="{'active': selectedOrder.idstatuspay == 1}"
+                                                        ng-if="selectedOrder.statuspay.idstatuspay == 1">
                                                         <input type="radio" ng-model="selectedOrder.idstatuspay"
-                                                            value="1" autocomplete="off" />
-                                                        Chưa Thanh Toán
+                                                            ng-value="1" autocomplete="off"> Chưa Thanh Toán
                                                     </label>
-
-                                                    <!-- Radio cho trạng thái Đã Thanh Toán -->
+                                                    <!-- Luôn hiển thị nút 'Đã Thanh Toán' -->
                                                     <label class="btn btn-success"
                                                         ng-class="{'active': selectedOrder.idstatuspay == 2}">
                                                         <input type="radio" ng-model="selectedOrder.idstatuspay"
-                                                            value="2" autocomplete="off" />
-                                                        Đã Thanh Toán
+                                                            ng-value="2" autocomplete="off"> Đã Thanh Toán
                                                     </label>
                                                 </div>
 
                                                 <button class="btn btn-primary" ng-click="updateOrderStatusPay()"
-                                                    style="float: right;" ng-disabled="isUpdating">
+                                                    style="float: right;"
+                                                    ng-disabled="isUpdating || (selectedOrder.statuspay.idstatuspay != 1)">
                                                     Cập nhật
                                                 </button>
                                             </div>
-
-
                                         </div>
                                         <div class="col-lg-5 order-footer-right">
                                             <div class="border-tt">
