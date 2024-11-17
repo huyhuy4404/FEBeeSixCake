@@ -15,7 +15,9 @@
   <script src="../assets/js/account.js"></script>
 </head>
 
-<body ng-app="myApp" ng-controller="discountsController">
+<body ng-app="myApp" ng-controller="CheckLogin"  >
+  <div ng-controller="discountsController">
+
   <div ng-include="'layout/header.html'"></div>
   <div ng-include="'layout/menu.html'"></div>
 
@@ -25,7 +27,7 @@
       <span class="fw-bold mx-2">/</span>
       <span>{{selectedCategory || 'Tất cả sản phẩm'}}</span>
   </div>
-    <div class="row mt-4">
+    <div class="row mt-4"  >
       <div class="col-lg-9">
         <div class="row pt-3">
           <div class="col-md-9">
@@ -83,16 +85,18 @@
         <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">
           <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
           <hr />
-          <ul class="list-group" ng-repeat="item in Products">
+          <ul class="list-group" ng-repeat="item in category">
             <li class="list-group-item" style="border: none">
               {{item.categoryname}}
-              <span class="">(14)</span>
+              
             </li>
           </ul>
         </div>
       </div>
     </div>
   </div>
+</div>
+
   <script src="../assets/js/bootstrap.bundle.js"></script>
   <script src="../assets/js/indexx.js"></script>
 </body>

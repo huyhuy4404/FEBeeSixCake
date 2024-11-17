@@ -4,6 +4,9 @@ const categoryApi = "http://localhost:8080/beesixcake/api/category"; // API endp
 var app = angular.module('myApp', []);
 
 app.controller('CategoryController', function($scope, $http) {
+    // Thêm biến để kiểm tra trạng thái thêm/sửa
+    $scope.isEditing = false;  // Mặc định là chế độ thêm mới
+
     // Lấy danh sách loại sản phẩm từ API
     $scope.getCategories = function() {
         $http.get('http://localhost:8080/beesixcake/api/category')
@@ -25,6 +28,7 @@ app.controller('CategoryController', function($scope, $http) {
                 alert('Thêm loại sản phẩm thành công!');
                 $scope.getCategories(); // Tải lại danh sách sau khi thêm
                 $scope.resetForm(); // Làm mới form
+                $scope.isEditing = false; // Đặt lại chế độ thêm mới
             }, function(error) {
                 console.log('Error adding category:', error);
             });
@@ -42,6 +46,7 @@ app.controller('CategoryController', function($scope, $http) {
                 alert('Sửa loại sản phẩm thành công!');
                 $scope.getCategories(); // Tải lại danh sách sau khi sửa
                 $scope.resetForm(); // Làm mới form
+                $scope.isEditing = false; // Chuyển về chế độ thêm mới
             }, function(error) {
                 console.log('Error editing category:', error);
             });
@@ -63,11 +68,12 @@ app.controller('CategoryController', function($scope, $http) {
     // Đưa dữ liệu sản phẩm vào form để chỉnh sửa
     $scope.goToEdit = function(category) {
         $scope.selectedCategory = angular.copy(category);
+        $scope.isEditing = true; // Chuyển sang chế độ chỉnh sửa
     };
 
     // Làm mới form
     $scope.resetForm = function() {
-        $scope.selectedCategory = {};
+        $scope.selectedCategory = {}; // Reset form
     };
 
     // Khởi động: Tải danh sách loại sản phẩm ngay khi trang được tải
