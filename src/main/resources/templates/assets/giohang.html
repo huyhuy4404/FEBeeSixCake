@@ -18,6 +18,7 @@
   <body ng-app="order" ng-controller="CheckLogin">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
+    <br />
     <div class="order" ng-controller="CartController">
       <div class="container mt-4">
         <br />
@@ -204,11 +205,55 @@
             </div>
           </div>
         </div>
+        <!-- Modal thông báo chọn sản phẩm -->
+        <div
+          class="modal fade"
+          id="noProductSelectedModal"
+          tabindex="-1"
+          aria-labelledby="noProductSelectedModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="noProductSelectedModalLabel">
+                  Thông báo
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                Vui lòng chọn ít nhất một sản phẩm để thanh toán.
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <hr />
         <div class="text-center">
-          <a href="/home" class="btn btn-lg btn-primary">Tiếp tục mua hàng</a>
-          <a href="/thanhtoan.html" class="btn btn-lg btn-success">Đặt hàng</a>
+          <a href="../assets/index.html" class="btn btn-lg btn-primary"
+            >Tiếp tục mua hàng</a
+          >
+          <a
+            href="javascript:void(0);"
+            class="btn btn-lg btn-success"
+            ng-click="checkout()"
+          >
+            Đặt hàng
+          </a>
         </div>
       </div>
     </div>
