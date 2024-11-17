@@ -251,6 +251,25 @@ app.controller("CartController", [
           $("#confirmationModal").modal("hide"); // Đóng modal khi có lỗi
         });
     };
+    $scope.checkout = function () {
+      const selectedProducts = $scope.products.filter(
+        (product) => product.selected
+      );
+
+      if (selectedProducts.length === 0) {
+        // Hiển thị thông báo khi không có sản phẩm nào được chọn
+        $("#noProductSelectedModal").modal("show");
+      } else {
+        // Lưu danh sách sản phẩm đã chọn vào localStorage
+        localStorage.setItem(
+          "selectedProducts",
+          JSON.stringify(selectedProducts)
+        );
+
+        // Chuyển hướng đến trang thanh toán
+        window.location.href = "../assets/thanhtoan.html";
+      }
+    };
   },
 ]);
 
