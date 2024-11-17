@@ -7,6 +7,10 @@ app.controller("UserController", function($scope, $http) {
     $scope.message = '';
     $scope.errorMessage = '';
     $scope.searchQuery = ''; // Trường lưu trữ giá trị tìm kiếm
+    $scope.currentPage = 1; // Trang hiện tại
+    $scope.pageSize = 4; // Số lượng bản ghi mỗi trang
+    $scope.pages = []; // Danh sách các trang
+    $scope.totalPages = 0; // Tổng số trang
 
     $scope.loadUsers = function() {
         console.log("Đang tải dữ liệu người dùng...");
@@ -15,13 +19,36 @@ app.controller("UserController", function($scope, $http) {
                 console.log("Dữ liệu nhận được:", response.data);
                 $scope.users = response.data;
                 $scope.filteredUsers = $scope.users; // Khởi tạo danh sách đã lọc bằng toàn bộ người dùng
+                $scope.calculatePages();
+                $scope.changePage(1); // Đặt về trang đầu tiên
                 $scope.errorMessage = ''; // Xóa thông báo lỗi nếu có
+                
             })
             .catch(function(error) {
                 console.error('Lỗi khi tải dữ liệu:', error);
                 $scope.errorMessage = "Lỗi khi tải dữ liệu: " + (error.statusText || 'Không xác định');
                 $scope.message = ''; // Xóa thông báo thành công nếu có
             });
+    };
+    // Tính toán số trang
+    $scope.calculatePages = function() {
+        $scope.totalPages = Math.ceil($scope.users.length / $scope.pageSize);
+        $scope.pages = Array.from({ length: $scope.totalPages }, (_, i) => i + 1);
+    };
+
+    // Thay đổi trang
+    $scope.changePage = function(page) {
+        if (page >= 1 && page <= $scope.totalPages) {
+            $scope.currentPage = page;
+            $scope.updateFilteredUsers();
+        }
+    };
+
+    // Cập nhật danh sách người dùng hiển thị dựa trên trang hiện tại
+    $scope.updateFilteredUsers = function() {
+        const startIndex = ($scope.currentPage - 1) * $scope.pageSize;
+        const endIndex = startIndex + $scope.pageSize;
+        $scope.filteredUsers = $scope.users.slice(startIndex, endIndex);
     };
     
     $scope.searchUsers = function() {

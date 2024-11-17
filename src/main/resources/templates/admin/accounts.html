@@ -56,7 +56,7 @@ Bootstrap 5 Dashboard Admin Template
     </style>
 </head>
 
-<body>
+<body >
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
@@ -150,30 +150,9 @@ Bootstrap 5 Dashboard Admin Template
                 </div>
 
                 <!-- User Profile Dropdown -->
-                <div class="dropdown px-3">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid"
-                            alt="User Profile">
-                    </a>
+                <div class="dropdown px-3" >
+                   
                     <ul class="dropdown-menu bg-white shadow">
-                        <li>
-                            <div class="dropdown-menu-profile-thumb d-flex">
-                                <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3"
-                                    alt="User Profile">
-                                <div class="d-flex flex-column">
-                                    <small>Thomas</small>
-                                    <a href="#">thomas@site.com</a>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- Profile and Settings Links -->
-                        <li>
-                            <a class="dropdown-item" href="profile.html">
-                                <i class="bi-person me-2"></i>
-                                Profile
-                            </a>
-                        </li>
                         <!-- More profile options here -->
                         <li class="border-top mt-3 pt-2 mx-4">
                             <a class="dropdown-item ms-0 me-0" href="#">
@@ -398,26 +377,22 @@ Bootstrap 5 Dashboard Admin Template
                                                 </div>
                                                 <nav aria-label="Page navigation">
                                                     <ul class="pagination justify-content-center mb-0">
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="#"
-                                                                aria-label="Previous">Trước</a>
+                                                        <li class="page-item" ng-class="{ disabled: currentPage === 1 }">
+                                                            <a class="page-link" href="#" aria-label="Previous" ng-click="changePage(currentPage - 1)">
+                                                                Trước
+                                                            </a>
                                                         </li>
-                                                        <li class="page-item active">
-                                                            <a class="page-link" href="#">1</a>
+                                                        <li class="page-item" ng-repeat="page in pages" ng-class="{ active: page === currentPage }">
+                                                            <a class="page-link" href="#" ng-click="changePage(page)">{{ page }}</a>
                                                         </li>
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="#">2</a>
+                                                        <li class="page-item" ng-class="{ disabled: currentPage === totalPages }">
+                                                            <a class="page-link" href="#" aria-label="Next" ng-click="changePage(currentPage + 1)">
+                                                                Sau
+                                                            </a>
                                                         </li>
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="#">3</a>
-                                                        </li>
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="#">4</a>
-                                                        </li>
-                                                        <li class="page-item">
-                                                            <a class="page-link" href="#" aria-label="Next">Sau</a>
-                                                        </li> </ul>
+                                                    </ul>
                                                 </nav>
+                                                
                                             </div>
                                         </div>
                                     </div>
