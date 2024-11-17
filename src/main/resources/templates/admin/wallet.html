@@ -411,7 +411,7 @@
                                             <tbody>
                                                 <tr ng-repeat="order in paginatedOrders"
                                                     style="text-align: center; font-size: 16px;">
-                                                    <td>{{ order.idorder }}</td> <!-- Sửa idOrder thành idorder -->
+                                                    <td>{{ order.idorder }}</td>
                                                     <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                     <td>{{ order.total | number : 0}} ₫</td>
                                                     <td>{{ order.statusName }}</td>
@@ -565,29 +565,33 @@
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <!-- Chỉ hiển thị nút 'Chưa Thanh Toán' nếu trạng thái hiện tại là 1 -->
                                                     <label class="btn btn-danger"
-                                                        ng-class="{'active': selectedOrder.idstatuspay == 1}"
+                                                        ng-class="{'active': selectedOrder.statuspay.idstatuspay == 1}"
                                                         ng-if="selectedOrder.statuspay.idstatuspay == 1">
-                                                        <input type="radio" ng-model="selectedOrder.idstatuspay"
-                                                            ng-value="1" autocomplete="off"> Chưa Thanh Toán
+                                                        <input type="radio"
+                                                            ng-model="selectedOrder.statuspay.idstatuspay" ng-value="1"
+                                                            autocomplete="off"> Chưa Thanh Toán
                                                     </label>
                                                     <!-- Luôn hiển thị nút 'Đã Thanh Toán' -->
                                                     <label class="btn btn-success"
-                                                        ng-class="{'active': selectedOrder.idstatuspay == 2}">
-                                                        <input type="radio" ng-model="selectedOrder.idstatuspay"
-                                                            ng-value="2" autocomplete="off"> Đã Thanh Toán
+                                                        ng-class="{'active': selectedOrder.statuspay.idstatuspay == 2}">
+                                                        <input type="radio"
+                                                            ng-model="selectedOrder.statuspay.idstatuspay" ng-value="2"
+                                                            autocomplete="off"> Đã Thanh Toán
                                                     </label>
                                                 </div>
 
                                                 <button class="btn btn-primary" ng-click="updateOrderStatusPay()"
                                                     style="float: right;"
-                                                    ng-disabled="isUpdating || (selectedOrder.statuspay.idstatuspay != 1)">
+                                                    ng-disabled="isUpdating || (selectedOrder.statuspay.idstatuspay == originalPaymentStatus)">
                                                     Cập nhật
                                                 </button>
                                             </div>
+
                                         </div>
                                         <div class="col-lg-5 order-footer-right">
                                             <div class="border-tt">
-                                                <h6>Tổng tiền sản phẩm: <span>{{ calculateTotalProductPrice() | number: 0 }} ₫</span></h6>
+                                                <h6>Tổng tiền sản phẩm: <span>{{ calculateTotalProductPrice() | number:
+                                                        0 }} ₫</span></h6>
                                                 <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}}
                                                         ₫</span>
                                                 </h6>
@@ -605,6 +609,8 @@
                         </div>
                     </div>
                 </div>
+
+
 
             </main>
         </div>
