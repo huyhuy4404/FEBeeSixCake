@@ -62,7 +62,7 @@
         }
 
         .modal-order {
-            max-width: 60vw;
+            max-width: 70vw;
             /* Đặt kích thước tối đa cho modal là 80% chiều rộng của màn hình */
             margin: 1.75rem auto;
             /* Căn giữa modal */
@@ -587,6 +587,7 @@
                                         </div>
                                         <div class="col-lg-5 order-footer-right">
                                             <div class="border-tt">
+                                                <h6>Tổng tiền sản phẩm: <span>{{ calculateTotalProductPrice() | number: 0 }} ₫</span></h6>
                                                 <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}}
                                                         ₫</span>
                                                 </h6>

@@ -58,6 +58,40 @@ app.controller("OrderController", function ($scope, $window, $http) {
             });
     };
 
+    $scope.loadOrderDetailsByIdOrder = function (idorder) {
+        const url = `${API}/orderdetail/order/${idorder}`;
+        $http
+            .get(url)
+            .then((response) => {
+                $scope.selectedOrderDetails = response.data; // Gán dữ liệu vào selectedOrderDetails
+                
+                // Duyệt qua từng chi tiết đơn hàng và log ra console
+                $scope.selectedOrderDetails.forEach((detail) => {
+                    const idOrderDetail = detail.idorderdetail || "N/A";
+                    const unitPrice = detail.productdetail ? detail.productdetail.unitprice : "Không có giá";
+                    const quantity = detail.quantity || "Không có số lượng";
+    
+                    console.log(`idorderdetail: ${idOrderDetail}, unitprice: ${unitPrice}, quantity: ${quantity}`);
+                });
+            })
+            .catch((error) => {
+                console.error("Có lỗi xảy ra khi tải dữ liệu orderdetail:", error);
+            });
+    };
+    
+    
+    //Tính tổng tiền sản phẩm
+    $scope.calculateTotalProductPrice = function () {
+        if (!$scope.selectedOrderDetails || !$scope.selectedOrderDetails.length) {
+            return 0;
+        }
+        return $scope.selectedOrderDetails.reduce((total, detail) => {
+            const quantity = detail.quantity || 0;
+            const unitPrice = detail.productdetail ? detail.productdetail.unitprice : 0;
+            return total + (quantity * unitPrice);
+        }, 0);
+    };
+
     // Lấy lịch sử trạng thái đơn hàng và cập nhật trạng thái hiện tại
     $scope.refreshOrderStatusHistory = function () {
         $http
@@ -228,6 +262,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
             $scope.selectedOrder.statuspay.idstatuspay = 1; // Thiết lập giá trị mặc định là 1 nếu không hợp lệ
         }
         $scope.getOrderDetails(order.idorder);
+        $scope.loadOrderDetailsByIdOrder(order.idorder); // Tải dữ liệu chi tiết đơn hàng
     };
 
     // Định dạng thời gian hiển thị
