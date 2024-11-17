@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thanh Toán</title>
+    <!-- Liên kết các tệp CSS -->
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
     <link
       rel="stylesheet"
@@ -11,21 +12,20 @@
     />
     <link rel="stylesheet" href="../assets/css/thanhtoan.css" />
     <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/thanhtoan.js"></script>
     <style>
-      .thongTinND,
-      .thongTinSP {
-        border: 1px solid rgb(222, 226, 230);
-        border-radius: 5px;
-        padding: 15px 0 15px 15px;
+      body {
+        background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
+        font-family: "Roboto", sans-serif;
       }
 
-      .thongTinSP {
-        width: 1320px;
-        margin-left: -12px;
+      .thongTinND,
+      .thongTinSP,
+      .tong-TT {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       }
 
       .titleThongTinND,
@@ -35,36 +35,8 @@
         color: #d38450;
       }
 
-      .ten-NguoiDung,
-      .sdt-NguoiDung,
-      .thongTinDiaChi {
-        font-weight: bold;
-        font-size: 18px;
-      }
-
-      .sp-ThanhToan td {
-        padding-top: 20px;
-      }
-
-      .btn-ThayDoi {
-        margin-top: 20px;
-        margin-right: 20px;
-      }
-
-      .btn-ThayDoi:hover {
-        color: white;
-        font-weight: bold;
-      }
-
-      .tong-TT {
-        line-height: 15px;
-        padding: 20px;
-        padding-left: 40px;
-        padding-right: 70px;
-      }
-
       .tong-TT p {
-        font-size: 20px;
+        font-size: 18px;
       }
 
       .tong-TT p span {
@@ -74,169 +46,369 @@
       .tongThanhTien {
         font-size: 28px;
         font-weight: bold;
-        color: red;
+        color: #dc3545;
+      }
+
+      .btn {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
+
+      .breadcrumb {
+        background-color: transparent;
+      }
+
+      .breadcrumb a {
+        color: #2e1d15;
+      }
+
+      /* Tùy chỉnh thêm cho radio buttons */
+      .form-check-label {
+        cursor: pointer;
+      }
+
+      .form-check-input:checked + .form-check-label {
+        font-weight: bold;
+        color: #d38450;
       }
     </style>
   </head>
 
   <body ng-app="myApp">
+    <!-- Header và Menu -->
     <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
     <div ng-include="'layout/menu.html'"></div>
-
-    <div class="container-fluid mx-4" style="margin-top: 55px">
-      <div style="font-size: 20px">
-        <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
-        <span class="fw-bold mx-2">/</span>
-        <a href="" style="color: #2e1d15"><span>Thanh Toán</span></a>
+    <br />
+    <!-- Breadcrumb -->
+    <div class="container-fluid bg-light py-3">
+      <div class="container">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="index.html">Trang Chủ</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              Thanh Toán
+            </li>
+          </ol>
+        </nav>
       </div>
     </div>
-    <div class="container mt-4">
-      <div class="row mb-3">
-        <div class="col-lg-3 thongTinND" ng-controller="CheckoutController">
+
+    <!-- Nội dung chính -->
+    <div class="container mt-4" ng-controller="CheckoutController">
+      <!-- Thông Tin Người Nhận và Địa Chỉ -->
+      <div class="row mb-4">
+        <div class="col-lg-3 thongTinND">
           <p class="titleThongTinND">Thông Tin Người Nhận</p>
-          <p>
-            Họ tên khách hàng:<br />
-            {{fullname}}
-          </p>
-          <p>
-            Số điện thoại: <br />
-            {{phone}}
-          </p>
+          <p>Họ tên khách hàng: <br /><strong>{{ fullname }}</strong></p>
+          <p>Số điện thoại: <br /><strong>{{ phone }}</strong></p>
         </div>
         <div class="col-lg-9 thongTinND">
-          <div class="row">
-            <div class="col-lg-10">
-              <p class="titleThongTinND">Địa Chỉ Người Dùng</p>
-              <span class="thongTinDiaChi"
-                >222/22, Phường Long Hòa, Quận Bình Thủy, Cần Thơ</span
+          <p class="titleThongTinND">Địa Chỉ Người Dùng</p>
+          <div ng-repeat="addr in addresses" class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="addressOptions"
+              id="address{{ addr.idaddress }}"
+              ng-value="addr.idaddress"
+              ng-model="selectedAddressId"
+              ng-change="changeDefaultAddress()"
+            />
+            <label class="form-check-label" for="address{{ addr.idaddress }}">
+              {{ formatAddress(addr) }}
+              <span
+                ng-if="addr.isDefault"
+                style="color: red; font-weight: bold"
               >
-              <span class="mx-3" style="color: red">Trạng Thái(Mặc Định)</span>
-            </div>
-
-            <div class="col-lg-2">
-              <button
-                type="button"
-                class="btn btn-outline-info btn-ThayDoi"
-                style="margin-top: 35px"
+                (Mặc Định)</span
               >
-                Thay đổi
-              </button>
-            </div>
+            </label>
           </div>
         </div>
       </div>
-      <div class="thongTinSP mb-3">
+
+      <!-- Thông Tin Sản Phẩm -->
+      <div class="thongTinSP mb-4">
         <p class="titleThongTinSP">Thông Tin Sản Phẩm</p>
-        <table class="table">
-          <thead>
-            <tr style="text-align: center">
+        <table class="table table-bordered table-striped">
+          <thead class="table-secondary text-center">
+            <tr>
               <th style="width: 10%">Hình</th>
               <th style="width: 40%">Tên Sản Phẩm</th>
               <th style="width: 10%">Kích Cỡ</th>
               <th style="width: 11%">Giá</th>
               <th style="width: 10%">Số Lượng</th>
-              <th style="width: 14%" class="text-center">Thành tiền</th>
-              <th style="width: 5%" class="pe-2">Hủy</th>
+              <th style="width: 14%">Thành tiền</th>
+              <th style="width: 5%">Hủy</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="sp-ThanhToan" style="text-align: center">
-              <td data-th="Product" style="padding-top: 8px !important">
+          <tbody class="text-center">
+            <tr ng-repeat="product in products">
+              <td>
                 <img
-                  src="benner4.png"
-                  alt="Product"
-                  class="img-responsive"
-                  width="auto"
-                  height="50px"
+                  ng-src="../assets/img/{{ product.image }}"
+                  alt="{{ product.name }}"
+                  width="80px"
                 />
               </td>
-              <td class="size-chu" data-th="Name">Bánh kem socola</td>
-              <td class="size-chu" data-th="size">L</td>
-              <td class="size-chu" data-th="Price">300.000đ</td>
-              <td class="size-chu" data-th="quantity">2</td>
-              <td data-th="Subtotal" class="size-chu text-center">600.000đ</td>
-              <td class="actions" data-th="" style="padding-top: 16px">
+              <td>{{ product.name }}</td>
+              <td>{{ product.size.sizename }}</td>
+              <td>{{ product.price | number: 0 }} VNĐ</td>
+              <td>{{ product.quantity }}</td>
+              <td>{{ (product.price * product.quantity) | number: 0 }} VNĐ</td>
+              <td>
                 <button
                   class="btn btn-danger btn-sm"
-                  ng-click="delete(product.id)"
+                  ng-click="deleteProduct(product.idcartitem)"
                 >
-                  <i class="bi bi-trash3"></i>
-                </button>
-              </td>
-            </tr>
-            <tr class="sp-ThanhToan" style="text-align: center">
-              <td data-th="Product" style="padding-top: 8px !important">
-                <img
-                  src="benner4.png"
-                  alt="Product"
-                  class="img-responsive"
-                  width="auto"
-                  height="50px"
-                />
-              </td>
-              <td class="size-chu" data-th="Name">Bánh kem socola</td>
-              <td class="size-chu" data-th="size">L</td>
-              <td class="size-chu" data-th="Price">300.000đ</td>
-              <td class="size-chu" data-th="quantity">2</td>
-              <td data-th="Subtotal" class="size-chu text-center">600.000đ</td>
-              <td class="actions" data-th="" style="padding-top: 16px">
-                <button
-                  class="btn btn-danger btn-sm"
-                  ng-click="delete(product.id)"
-                >
-                  <i class="bi bi-trash3"></i>
+                  <i class="bi bi-trash"></i>
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="row mb-3">
-        <div class="col-lg-6 thongTinND">
-          <div class="row">
-            <div class="col-lg-9">
-              <p class="titleThongTinND">Voucher</p>
-              <span class="thongTinDiaChi"
-                >Giảm 5% khi hóa đơn trên 200.000đ</span
-              >
-            </div>
 
-            <div class="col-lg-3">
-              <button type="button" class="btn btn-outline-info btn-ThayDoi">
-                Thay đổi
+      <!-- Voucher và Phương Thức Thanh Toán -->
+      <div class="row mb-4">
+        <div class="col-lg-6 thongTinND">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="titleThongTinND">Giảm giá</p>
+              <p>
+                {{ selectedDiscount ? "Giảm giá " +
+                selectedDiscount.discountpercentage + "% cho đơn từ " +
+                (selectedDiscount.lowestprice | number: 0) + " VNĐ" : "Không
+                chọn mã giảm giá" }}
+              </p>
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-info btn-sm"
+              ng-click="openDiscountModal()"
+            >
+              Thay đổi
+            </button>
+          </div>
+        </div>
+        <div class="col-lg-6 thongTinND">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <p class="titleThongTinND">Phương Thức Thanh Toán</p>
+              <p>{{ selectedPayment.paymentname }}</p>
+            </div>
+            <button
+              type="button"
+              class="btn btn-outline-info btn-sm"
+              ng-click="openPaymentModal()"
+            >
+              Thay đổi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mã QR và Tổng Tiền -->
+      <div class="row mb-4">
+        <div
+          class="col-lg-6 thongTinND"
+          ng-if="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng'"
+        >
+          <div class="text-center">
+            <h5 class="titleThongTinND mb-4">Thông tin thanh toán</h5>
+            <div class="card border-secondary mb-3">
+              <div class="card-header bg-secondary text-white">
+                Thông tin ngân hàng
+              </div>
+              <div class="card-body">
+                <p><strong>Ngân hàng:</strong> {{ bankInfo.name }}</p>
+                <p>
+                  <strong>Số tài khoản:</strong> {{ bankInfo.accountNumber }}
+                </p>
+                <p>
+                  <strong>Chủ tài khoản:</strong> {{ bankInfo.accountHolder }}
+                </p>
+                <p>
+                  <strong>Nội dung chuyển khoản:</strong> THANH TOÁN HÓA ĐƠN
+                  BEESIXCAKE
+                </p>
+                <p>
+                  <strong>Tổng tiền:</strong> {{ finalTotal | number: 0 }} VNĐ
+                </p>
+              </div>
+            </div>
+            <div>
+              <h6 class="mb-3">Mã QR thanh toán</h6>
+              <div ng-if="qrCode">
+                <img
+                  ng-src="{{ qrCode }}"
+                  alt="QR Code Thanh Toán"
+                  class="img-fluid mb-3"
+                />
+              </div>
+              <button
+                type="button"
+                class="btn btn-primary"
+                ng-click="generateQRCode()"
+              >
+                Tạo mã QR
               </button>
             </div>
           </div>
         </div>
-        <div class="col-lg-6 thongTinND">
-          <div class="row">
-            <div class="col-lg-9">
-              <p class="titleThongTinND">Phương Thức Thanh Toán</p>
-              <span class="thongTinDiaChi"
-                >Thanh Toán Khi Nhận Nhận Được Hàng</span
-              >
+        <div class="col-lg-6 tong-TT thongTinND">
+          <p>Tổng tiền hàng: <span>{{ totalPrice | number: 0 }}đ</span></p>
+          <p>Phí vận chuyển: <span>{{ shippingFee | number: 0 }}đ</span></p>
+          <p>Tổng giảm giá: <span>{{ voucherDiscount | number: 0 }}đ</span></p>
+          <p>
+            Tổng tiền thanh toán:
+            <span class="tongThanhTien">{{ finalTotal | number: 0 }}đ</span>
+          </p>
+        </div>
+      </div>
+      <!-- Modal chọn mã giảm giá -->
+      <div
+        class="modal fade"
+        id="discountModal"
+        tabindex="-1"
+        aria-labelledby="discountModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="discountModalLabel">
+                Chọn mã giảm giá
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
+            <div class="modal-body">
+              <!-- Radio "Không chọn mã giảm giá" -->
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="discountOptions"
+                  id="noDiscount"
+                  ng-value="null"
+                  ng-model="selectedDiscount"
+                  ng-click="selectDiscount(null)"
+                />
+                <label class="form-check-label" for="noDiscount">
+                  Không chọn mã giảm giá
+                </label>
+              </div>
 
-            <div class="col-lg-3">
-              <button type="button" class="btn btn-outline-info btn-ThayDoi">
-                Thay đổi
+              <!-- Danh sách mã giảm giá hợp lệ -->
+              <div ng-repeat="discount in validDiscounts" class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="discountOptions"
+                  id="discount{{discount.iddiscount}}"
+                  ng-value="discount"
+                  ng-model="selectedDiscount"
+                  ng-click="selectDiscount(discount)"
+                />
+                <label
+                  class="form-check-label"
+                  for="discount{{discount.iddiscount}}"
+                >
+                  Giảm giá {{ discount.discountpercentage }}%% cho đơn từ {{
+                  discount.lowestprice | number:0 }} VNĐ
+                </label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                OK
               </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="row mb-3">
-        <div class="col-lg-6 thongTinND">
-          <div class="text-center">nơi để mã QR khi thanh toán</div>
+      <!-- Modal thay đổi phương thức thanh toán -->
+      <div
+        class="modal fade"
+        id="paymentModal"
+        tabindex="-1"
+        aria-labelledby="paymentModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="paymentModalLabel">
+                Chọn Phương Thức Thanh Toán
+              </h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div ng-repeat="payment in payments" class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="paymentOptions"
+                  id="payment{{payment.idpayment}}"
+                  ng-value="payment.idpayment"
+                  ng-model="selectedPaymentId"
+                  ng-click="updatePaymentMethod(payment)"
+                />
+                <label
+                  class="form-check-label"
+                  for="payment{{payment.idpayment}}"
+                >
+                  {{ payment.paymentname }}
+                </label>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                OK
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="col-lg-6 tong-TT thongTinND">
-          <p>Tổng tiền hàng: <span>1.200.000đ</span></p>
-          <p>Phí vận chuyển: <span>30.000đ</span></p>
-          <p>Tổng cộng Voucher giảm giá: <span>20.000đ</span></p>
-          <p>Tổng tiền hàng: <span class="tongThanhTien">1.210.000đ</span></p>
+      </div>
+      <!-- Nút Đặt Hàng và Trở Về -->
+      <div class="row mb-4 text-center">
+        <div class="col-lg-12">
+          <button
+            type="button"
+            class="btn btn-outline-secondary me-3"
+            ng-click="returnToCart()"
+          >
+            Trở về giỏ hàng
+          </button>
+          <button type="button" class="btn btn-primary">Đặt hàng</button>
         </div>
       </div>
     </div>
+
+    <div ng-include="'layout/footer.html'"></div>
+    <!-- Liên kết các tệp JavaScript -->
+    <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/bootstrap.bundle.js"></script>
+    <script src="../assets/js/thanhtoan.js"></script>
   </body>
 </html>
