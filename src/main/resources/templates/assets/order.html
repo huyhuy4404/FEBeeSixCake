@@ -12,7 +12,7 @@
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
     <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/order1.js"></script>
+    <script src="../assets/js/order1.js"></script> <!-- Your separate JS file -->
 
     <style>
         body {
@@ -20,21 +20,21 @@
         }
 
         .order {
-            padding: 15px; /* Giảm padding */
+            padding: 15px;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 15px; /* Giảm margin */
+            margin: 15px;
         }
 
         .cart-header {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 10px; /* Giảm khoảng cách */
+            margin-bottom: 10px;
         }
 
         .table-order {
-            margin-top: 10px; /* Giảm khoảng cách */
+            margin-top: 10px;
         }
 
         .table th {
@@ -58,13 +58,13 @@
         }
 
         .button-order {
-            margin-top: 10px; /* Giảm khoảng cách */
+            margin-top: 10px;
             text-align: center;
         }
 
         .progress {
             height: 10px;
-            margin-bottom: 5px; /* Giảm khoảng cách */
+            margin-bottom: 5px;
         }
 
         .progress-bar {
@@ -86,8 +86,8 @@
 <body ng-app="myApp" ng-controller="CheckLogin">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
-    <div class="container order" style="margin-left: 100px;">
-        <div class="tab-content" ng-controller="OrderController" id="nav-tabContent">
+    <div class="container order" style="margin-left: 100px;" ng-controller="OrderController">
+        <div  id="nav-tabContent">
             <div class="container mt-3">
                 <h3 class="cart-header">Đơn HÀNG CỦA BẠN</h3>
                 <h5>
@@ -120,11 +120,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>ID</th>
-                                    <th>Tên Sản Phẩm</th>
-                                    <th>Kích cỡ</th>
-                                    <th>Số Lượng</th>
-                                    <th>Giá</th>
+                                    <th>Mã đơn hàng</th>
                                     <th>Ngày Đặt Hàng</th>
                                     <th>Địa Chỉ Giao Hàng</th>
                                     <th>Trạng thái</th>
@@ -134,16 +130,9 @@
                             <tbody>
                                 <tr ng-repeat="order in pendingOrders">
                                     <td></td>
-                                    <td>{{ order.order.idorder }}</td>
-                                    <td>
-                                        <a href="#" ng-click="goToProduct(order.productdetail.product.idproduct, order)">
-                                            {{ order.productdetail.product.productname }}
-                                        </a>
+                                    <td ng-click="loadOrderDetails(order)" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                        {{ order.order.idorder }}
                                     </td>
-                                    <!-- <td>{{ order.productdetail.product.productname }}</td> -->
-                                    <td>{{ order.productdetail.size.sizename }}</td>
-                                    <td>{{ order.quantity }}</td>
-                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
                                     <td>{{ order.order.orderdate | date:'short' }}</td>
                                     <td>{{ order.order.addressdetail }}</td>
                                     <td>{{ order.status }}</td>
@@ -161,11 +150,6 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <!-- <th>ID</th> -->
-                                    <th>Tên Sản Phẩm</th>
-                                    <th>Kích Cỡ</th>
-                                    <th>Số Lượng</th>
-                                    <th>Giá</th>
                                     <th>Ngày Đặt Hàng</th>
                                     <th>Địa Chỉ Giao Hàng</th>
                                     <th>Trạng Thái</th>
@@ -173,13 +157,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="order in deliveredOrders">
+                                <tr ng-repeat="order in pendingOrders">
                                     <td></td>
-                                    <!-- <td>{{ order.order.idorder }}</td> -->
-                                    <td>{{ order.productdetail.product.productname }}</td>
-                                    <td>{{ order.productdetail.size.sizename }}</td>
-                                    <td>{{ order.quantity }}</td>
-                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td ng-click="loadOrderDetails(order)" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                        {{ order.order.idorder }}
+                                    </td>
                                     <td>{{ order.order.orderdate | date:'short' }}</td>
                                     <td>{{ order.order.addressdetail }}</td>
                                     <td>{{ order.status }}</td>
@@ -197,25 +179,19 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>ID</th>
-                                    <th>Tên Sản Phẩm</th>
-                                    <th>Kích Cỡ</th>
-                                    <th>Số Lượng</th>
-                                    <th>Giá</th>
+                                    <th>Mã đơn hàng</th>
                                     <th>Ngày Đặt Hàng</th>
                                     <th>Địa Chỉ Giao Hàng</th>
-                                    <th>Trạng Thái</th>
-                                    <th>Hành Động</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="order in completedOrders">
+                                <tr ng-repeat="order in pendingOrders">
                                     <td></td>
-                                    <td>{{ order.order.idorder }}</td>
-                                    <td>{{ order.productdetail.product.productname }}</td>
-                                    <td>{{ order.productdetail.size.sizename }}</td>
-                                    <td>{{ order.quantity }}</td>
-                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td ng-click="loadOrderDetails(order)" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                        {{ order.order.idorder }}
+                                    </td>
                                     <td>{{ order.order.orderdate | date:'short' }}</td>
                                     <td>{{ order.order.addressdetail }}</td>
                                     <td>{{ order.status }}</td>
@@ -233,25 +209,19 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>ID</th>
-                                    <th>Tên Sản Phẩm</th>
-                                    <th>Kích Cỡ</th>
-                                    <th>Số Lượng</th>
-                                    <th>Giá</th>
+                                    <th>Mã đơn hàng</th>
                                     <th>Ngày Đặt Hàng</th>
                                     <th>Địa Chỉ Giao Hàng</th>
-                                    <th>Trạng Thái</th>
-                                    <th>Hành Động</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="order in cancelledOrders">
+                                <tr ng-repeat="order in pendingOrders">
                                     <td></td>
-                                    <td>{{ order.order.idorder }}</td>
-                                    <td>{{ order.productdetail.product.productname }}</td>
-                                    <td>{{ order.productdetail.size.sizename }}</td>
-                                    <td>{{ order.quantity }}</td>
-                                    <td>{{ formatCurrency(order.productdetail.unitprice) }}</td>
+                                    <td ng-click="loadOrderDetails(order)" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
+                                        {{ order.order.idorder }}
+                                    </td>
                                     <td>{{ order.order.orderdate | date:'short' }}</td>
                                     <td>{{ order.order.addressdetail }}</td>
                                     <td>{{ order.status }}</td>
@@ -267,6 +237,56 @@
             </div>
         </div>
 
+        <!-- Order Details Modal -->
+       <!-- Order Details Modal -->
+<!-- Order Details Modal -->
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderDetailsModalLabel">Chi Tiết Đơn Hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Mã đơn hàng: {{ selectedOrder.order.idorder }}</h6>
+                <p>Ngày đặt hàng: {{ selectedOrder.order.orderdate | date:'short' }}</p>
+                <p>Địa chỉ giao hàng: {{ selectedOrder.order.addressdetail }}</p>
+                <p>Phí vận chuyển: {{ formatCurrency(selectedOrder.order.shipfee) }}</p>
+                <p>Tổng cộng: {{ formatCurrency(selectedOrder.order.total) }}</p>
+                <p>Người đặt hàng: {{ selectedOrder.order.account.fullname }} - {{ selectedOrder.order.account.phonenumber }}</p>
+                <p>Phương thức thanh toán: {{ selectedOrder.order.payment.paymentname }}</p>
+                <p>Trạng thái thanh toán: {{ selectedOrder.order.idstatuspay }}</p>
+
+                <h6>Thông tin sản phẩm:</h6>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Kích cỡ</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ selectedOrder.productdetail.product.productname }}</td>
+                            <td>{{ selectedOrder.productdetail.size.sizename }}</td>
+                            <td>{{ formatCurrency(selectedOrder.productdetail.unitprice) }}</td>
+                            <td>{{ selectedOrder.quantity }}</td>
+                            <td>{{ formatCurrency(selectedOrder.productdetail.unitprice * selectedOrder.quantity) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Mô tả: {{ selectedOrder.productdetail.product.description }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
         <div ng-include="'layout/footer.html'"></div>
         <script src="../assets/js/bootstrap.bundle.js"></script>
     </div>
