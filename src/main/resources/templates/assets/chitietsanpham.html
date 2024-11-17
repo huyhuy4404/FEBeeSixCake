@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="myApp" ng-controller="ProductDetailController">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tên Sản Phẩm</title>
+  <title>{{product.productname}}</title>
   <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
   <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
   <link rel="stylesheet" href="../assets/css/thuan.css">
@@ -16,119 +16,122 @@
 
 </head>
 
-<body ng-app="myApp" ng-controller="ProductDetailController">
-  <div ng-include="'layout/header.html'"></div>
+<body>
+  <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
   <div ng-include="'layout/menu.html'"></div>
-
-  <div class="container-fluid mx-4" style="margin-top: 55px; z-index: -1">
-    <div style="font-size: 20px">
-      <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
-      <span class="fw-bold mx-2">/</span>
-      <a href="" style="color: #2e1d15"><span>{{ product.category.categoryname }}</span></a>
-      <span class="fw-bold mx-2">/</span>
-      <span>{{ product.productname }}</span>
+  <div class="setDoDaiTrang">
+    <div class="container-fluid mx-4" style="margin-top: 55px; z-index: -1">
+      <div style="font-size: 20px">
+        <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
+        <span class="fw-bold mx-2">/</span>
+        <a href="" style="color: #2e1d15"><span>{{ product.category.categoryname }}</span></a>
+        <span class="fw-bold mx-2">/</span>
+        <span>{{ product.productname }}</span>
+      </div>
     </div>
-  </div>
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="box-img-detail">
-              <a href="">
-                <img ng-src="{{product.img}}" alt="{{product.productname}}"
-                  class="img-reponsive mt-0" style="width: auto; height: 290px; margin-bottom: 0px;">
-              </a>
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
-            <div class="danhgia text-chitietsp">
-              <b>5.0</b>
-              <div class="rating">
-                <label class="active">★</label>
-                <label class="active">★</label>
-                <label class="active">★</label>
-                <label class="active">★</label>
-                <label class="active">★</label>
-              </div>
-              <span>|  số lượt đánh giá</span>
-            </div>
 
-            <div class="box-price" ng-if="productDetails.length">
-              <div class="price-chitiet">
-                <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
-                <span class="current-price">{{selectedSizeDetail.unitprice | number : 0}}₫</span>
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="box-img-detail">
+                <a href="">
+                  <img ng-src="{{product.img}}" alt="{{product.productname}}" class="img-reponsive mt-0"
+                    style="width: auto; height: 290px; margin-bottom: 0px;">
+                </a>
               </div>
             </div>
-            <div class="">
-              <span class="QuantityInStock text-chitietsp">Số lượng hiện có:
-                <b>{{selectedSizeDetail.quantityinstock}}</b></span>
-              <span class=" text-chitietsp ms-3">Số lượng yêu thích:
-                <b>{{product.favorite}}</b></span>
+            <div class="col-lg-6">
+              <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
+              <div class="danhgia text-chitietsp">
+                <b>5.0</b>
+                <div class="rating">
+                  <label class="active">★</label>
+                  <label class="active">★</label>
+                  <label class="active">★</label>
+                  <label class="active">★</label>
+                  <label class="active">★</label>
+                </div>
+                <span>| số lượt đánh giá</span>
+              </div>
+
+              <div class="box-price" ng-if="productDetails.length">
+                <div class="price-chitiet">
+                  <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
+                  <span class="current-price">{{selectedSizeDetail.unitprice | number : 0}}₫</span>
+                </div>
+              </div>
+              <div class="">
+                <span class="QuantityInStock text-chitietsp">Số lượng hiện có:
+                  <b>{{selectedSizeDetail.quantityinstock}}</b></span>
+                <span class=" text-chitietsp ms-3">Số lượng yêu thích:
+                  <b>{{product.favorite}}</b></span>
                 <button type="button" class="btn btn-yt ps-1" ng-click="toggleHeart()" ng-class="{'active': isActive}">
                   <i class="bi bi-heart-fill"></i>
                 </button>
-            </div>
-            <div class="size-pd text-chitietsp mt-1">
-              <span class="text-chitietsp">Kích cỡ: </span>
-              <div class="size-options">
-                <button ng-repeat="detail in productDetails" style="width: 50px; font-weight: bold"
-                  ng-class="{'selected-size': selectedSize === detail.size.sizename}" class="size-button"
-                  ng-click="selectSize(detail.size.sizename)">
-                  {{detail.size.sizename}}
-                </button>
               </div>
-            </div>
-            <div class="number-card text-chitietsp mt-3">
-              <span>Số lượng:</span>
+              <div class="size-pd text-chitietsp mt-1">
+                <span class="text-chitietsp">Kích cỡ: </span>
+                <div class="size-options">
+                  <button ng-repeat="detail in productDetails" style="width: 50px; font-weight: bold"
+                    ng-class="{'selected-size': selectedSize === detail.size.sizename}" class="size-button"
+                    ng-click="selectSize(detail.size.sizename)">
+                    {{detail.size.sizename}}
+                  </button>
+                </div>
+              </div>
+              <div class="number-card text-chitietsp mt-3">
+                <span>Số lượng:</span>
                 <div class="buttons_added">
                   <button class="minus is-form" type="button" ng-click="decreaseQuantity()">
                     <i class="bi bi-dash-lg"></i>
                   </button>
-                  
-                  <input aria-label="quantity" class="input-qty" max="{{maxQuantity}}" min="1" ng-model="quantity" name="quantity" type="number">
-                  
+
+                  <input aria-label="quantity" class="input-qty" max="{{maxQuantity}}" min="1" ng-model="quantity"
+                    name="quantity" type="number">
+
                   <button class="plus is-form" type="button" ng-click="increaseQuantity()">
                     <i class="bi bi-plus-lg"></i>
                   </button>
-              </div>  
-            </div>
-            <div class="inner-load mt-3 ps-0">
-              <div class="box-add">
-                <div class="btn-chitietsanpham">
-                  <button type="button" class="btn btn-primary me-2" ng-click="addToCart()">
-                    <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
-                  </button>
-                  
-                  <button type="button" class="btn btn-secondary">
-                    Mua Nhanh
-                  </button>
+                </div>
+              </div>
+              <div class="inner-load mt-3 ps-0">
+                <div class="box-add">
+                  <div class="btn-chitietsanpham">
+                    <button type="button" class="btn btn-primary me-2" ng-click="addToCart()">
+                      <i class="bi bi-cart-fill"></i> Thêm giỏ hàng
+                    </button>
+
+                    <button type="button" class="btn btn-secondary">
+                      Mua Nhanh
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="moTa mt-3" style="padding-left: 50px;">
+              <span class="text-chitietsp">Mô tả:</span>
+              <p>{{ product.description }}</p>
+            </div>
           </div>
-          <div class="moTa mt-3" style="padding-left: 50px;">
-            <span class="text-chitietsp">Mô tả:</span>
-            <p>{{ product.description }}</p>
+        </div>
+        <div class="col-lg-4">
+          <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">
+            <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
+            <hr />
+            <ul class="list-group">
+              <li class="list-group-item" style="border: none" ng-repeat="category in categories">
+                {{ category.categoryname }}
+                <span class="">({{ category.count }})</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
-        <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">
-          <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
-          <hr />
-          <ul class="list-group">
-            <li class="list-group-item" style="border: none" ng-repeat="category in categories">
-              {{ category.categoryname }}
-              <span class="">({{ category.count }})</span>
-            </li>
-          </ul>
-        </div>
+      <div>
+        <span class="textSanPham">Sản phẩm Tương tự</span>
       </div>
-    </div>
-    <div>
-      <span class="textSanPham">Sản phẩm Tương tự</span>
     </div>
   </div>
   <div ng-include="'layout/footer.html'"></div>

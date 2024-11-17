@@ -1,99 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đơn Hàng</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/order1.js"></script>
 
-    <style>
-      body {
-        background-color: #f8f9fa;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đơn Hàng</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/thuan.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../assets/js/angular.min.js"></script>
+  <script src="../assets/js/angular-route.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/order1.js"></script>
 
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .order {
+      padding: 15px;
+      /* Giảm padding */
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 15px;
+      /* Giảm margin */
+    }
+
+    .cart-header {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      /* Giảm khoảng cách */
+    }
+
+    .table-order {
+      margin-top: 10px;
+      /* Giảm khoảng cách */
+    }
+
+    .table th {
+      background-color: #d38450;
+      color: white;
+      text-align: center;
+    }
+
+    .table td {
+      text-align: center;
+    }
+
+    .fw-bold {
+      font-weight: bold;
+    }
+
+    .total-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #cc3300;
+    }
+
+    .button-order {
+      margin-top: 10px;
+      /* Giảm khoảng cách */
+      text-align: center;
+    }
+
+    .progress {
+      height: 10px;
+      margin-bottom: 5px;
+      /* Giảm khoảng cách */
+    }
+
+    .progress-bar {
+      background-color: #d38450;
+    }
+
+    @media (max-width: 768px) {
       .order {
-        padding: 15px; /* Giảm padding */
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin: 15px; /* Giảm margin */
+        padding: 10px;
       }
 
       .cart-header {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px; /* Giảm khoảng cách */
+        font-size: 20px;
       }
+    }
+  </style>
+</head>
 
-      .table-order {
-        margin-top: 10px; /* Giảm khoảng cách */
-      }
+<body ng-app="myApp" ng-controller="CheckLogin">
+  <div ng-include="'layout/header.html'"></div>
+  <div ng-include="'layout/menu.html'"></div>
 
-      .table th {
-        background-color: #d38450;
-        color: white;
-        text-align: center;
-      }
-
-      .table td {
-        text-align: center;
-      }
-
-      .fw-bold {
-        font-weight: bold;
-      }
-
-      .total-price {
-        font-size: 18px;
-        font-weight: bold;
-        color: #cc3300;
-      }
-
-      .button-order {
-        margin-top: 10px; /* Giảm khoảng cách */
-        text-align: center;
-      }
-
-      .progress {
-        height: 10px;
-        margin-bottom: 5px; /* Giảm khoảng cách */
-      }
-
-      .progress-bar {
-        background-color: #d38450;
-      }
-
-      @media (max-width: 768px) {
-        .order {
-          padding: 10px;
-        }
-
-        .cart-header {
-          font-size: 20px;
-        }
-      }
-    </style>
-  </head>
-
-  <body ng-app="myApp" ng-controller="CheckLogin">
-    <div ng-include="'layout/header.html'"></div>
-    <div ng-include="'layout/menu.html'"></div>
+  <div class="setDoDaiTrang">
     <div class="container order" style="margin-left: 100px">
-      <div
-        class="tab-content"
-        ng-controller="OrderController"
-        id="nav-tabContent"
-      >
+      <div class="tab-content" ng-controller="OrderController" id="nav-tabContent">
         <div class="container mt-3">
           <h3 class="cart-header">Đơn HÀNG CỦA BẠN</h3>
           <h5>
@@ -109,67 +111,27 @@
           <!-- Tabs Navigation -->
           <ul class="nav nav-tabs" id="orderTabs" role="tablist">
             <li class="nav-item" role="presentation">
-              <a
-                class="nav-link active"
-                id="pending-tab"
-                data-bs-toggle="tab"
-                href="#pending"
-                role="tab"
-                aria-controls="pending"
-                aria-selected="true"
-                >Đang Xác Nhận</a
-              >
+              <a class="nav-link active" id="pending-tab" data-bs-toggle="tab" href="#pending" role="tab"
+                aria-controls="pending" aria-selected="true">Đang Xác Nhận</a>
             </li>
             <li class="nav-item" role="presentation">
-              <a
-                class="nav-link"
-                id="delivered-tab"
-                data-bs-toggle="tab"
-                href="#delivered"
-                role="tab"
-                aria-controls="delivered"
-                aria-selected="false"
-                >Đang Giao Hàng</a
-              >
+              <a class="nav-link" id="delivered-tab" data-bs-toggle="tab" href="#delivered" role="tab"
+                aria-controls="delivered" aria-selected="false">Đang Giao Hàng</a>
             </li>
             <li class="nav-item" role="presentation">
-              <a
-                class="nav-link"
-                id="completed-tab"
-                data-bs-toggle="tab"
-                href="#completed"
-                role="tab"
-                aria-controls="completed"
-                aria-selected="false"
-                >Hoàn Thành</a
-              >
+              <a class="nav-link" id="completed-tab" data-bs-toggle="tab" href="#completed" role="tab"
+                aria-controls="completed" aria-selected="false">Hoàn Thành</a>
             </li>
             <li class="nav-item" role="presentation">
-              <a
-                class="nav-link"
-                id="cancelled-tab"
-                data-bs-toggle="tab"
-                href="#cancelled"
-                role="tab"
-                aria-controls="cancelled"
-                aria-selected="false"
-                >Hủy</a
-              >
+              <a class="nav-link" id="cancelled-tab" data-bs-toggle="tab" href="#cancelled" role="tab"
+                aria-controls="cancelled" aria-selected="false">Hủy</a>
             </li>
           </ul>
 
           <!-- Tabs Content -->
           <div class="tab-content" id="orderTabsContent">
-            <div
-              class="tab-pane fade show active"
-              id="pending"
-              role="tabpanel"
-              aria-labelledby="pending-tab"
-            >
-              <table
-                class="table table-order"
-                ng-if="!loading && pendingOrders.length > 0"
-              >
+            <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+              <table class="table table-order" ng-if="!loading && pendingOrders.length > 0">
                 <thead>
                   <tr>
                     <th></th>
@@ -189,10 +151,7 @@
                     <td></td>
                     <td>{{ order.order.idorder }}</td>
                     <td>
-                      <a
-                        href="#"
-                        ng-click="goToProduct(order.productdetail.product.idproduct, order)"
-                      >
+                      <a href="#" ng-click="goToProduct(order.productdetail.product.idproduct, order)">
                         {{ order.productdetail.product.productname }}
                       </a>
                     </td>
@@ -204,11 +163,7 @@
                     <td>{{ order.order.addressdetail }}</td>
                     <td>{{ order.status }}</td>
                     <td>
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        ng-click="cancelOrder(order)"
-                      >
+                      <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">
                         Hủy
                       </button>
                     </td>
@@ -220,16 +175,8 @@
               </div>
             </div>
 
-            <div
-              class="tab-pane fade"
-              id="delivered"
-              role="tabpanel"
-              aria-labelledby="delivered-tab"
-            >
-              <table
-                class="table table-order"
-                ng-if="!loading && deliveredOrders.length > 0"
-              >
+            <div class="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
+              <table class="table table-order" ng-if="!loading && deliveredOrders.length > 0">
                 <thead>
                   <tr>
                     <th></th>
@@ -256,11 +203,7 @@
                     <td>{{ order.order.addressdetail }}</td>
                     <td>{{ order.status }}</td>
                     <td>
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        ng-click="cancelOrder(order)"
-                      >
+                      <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">
                         Hủy
                       </button>
                     </td>
@@ -272,16 +215,8 @@
               </div>
             </div>
 
-            <div
-              class="tab-pane fade"
-              id="completed"
-              role="tabpanel"
-              aria-labelledby="completed-tab"
-            >
-              <table
-                class="table table-order"
-                ng-if="!loading && completedOrders.length > 0"
-              >
+            <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+              <table class="table table-order" ng-if="!loading && completedOrders.length > 0">
                 <thead>
                   <tr>
                     <th></th>
@@ -308,11 +243,7 @@
                     <td>{{ order.order.addressdetail }}</td>
                     <td>{{ order.status }}</td>
                     <td>
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        ng-click="cancelOrder(order)"
-                      >
+                      <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">
                         Hủy
                       </button>
                     </td>
@@ -324,16 +255,8 @@
               </div>
             </div>
 
-            <div
-              class="tab-pane fade"
-              id="cancelled"
-              role="tabpanel"
-              aria-labelledby="cancelled-tab"
-            >
-              <table
-                class="table table-order"
-                ng-if="!loading && cancelledOrders.length > 0"
-              >
+            <div class="tab-pane fade" id="cancelled" role="tabpanel" aria-labelledby="cancelled-tab">
+              <table class="table table-order" ng-if="!loading && cancelledOrders.length > 0">
                 <thead>
                   <tr>
                     <th></th>
@@ -360,11 +283,7 @@
                     <td>{{ order.order.addressdetail }}</td>
                     <td>{{ order.status }}</td>
                     <td>
-                      <button
-                        type="button"
-                        class="btn btn-secondary"
-                        ng-click="cancelOrder(order)"
-                      >
+                      <button type="button" class="btn btn-secondary" ng-click="cancelOrder(order)">
                         Hủy
                       </button>
                     </td>
@@ -379,7 +298,10 @@
         </div>
       </div>
     </div>
-    <div ng-include="'layout/footer.html'"></div>
-    <script src="../assets/js/bootstrap.bundle.js"></script>
-  </body>
+  </div>
+
+  <div ng-include="'layout/footer.html'"></div>
+  <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
+
 </html>

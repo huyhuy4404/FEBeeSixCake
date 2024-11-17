@@ -1,10 +1,6 @@
 <header class="container-fluid parent-header">
     <div class="row">
         <div class="col-md-6 header-left">
-            <div class="Notification me-3 ps-3">
-                <a class="text-header-left" href=""><i class="bi bi-bell-fill"></i> Thông
-                    báo</a>
-            </div>
             <div class="love me-3">
                 <a class="text-header-left" href="#"><i class="bi bi-heart-fill"></i> Yêu
                     thích </a>
@@ -29,16 +25,18 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="topContai mt-3 ms-3" style="width: 156px; height: 46px;">
-                        <div class="row text-header-right">
-                            <div class="col-3 ">
-                                <div class="fs-4"><i style="font-size: 28px; margin-top: 9px;"
-                                    class="bi bi-telephone-fill"></i></div>
+                        <a href="https://zalo.me/0362598142" target="_blank">
+                            <div class="row text-header-right">
+                                <div class="col-3 ">
+                                    <div class="fs-4"><i style="font-size: 28px; margin-top: 9px;"
+                                            class="bi bi-telephone-fill"></i></div>
+                                </div>
+                                <div class="col-9 ">
+                                    <strong style="font-size: 16px;">097.151.3720</strong>
+                                    <p style="font-size: 13px;">Hỗ trợ</p>
+                                </div>
                             </div>
-                            <div class="col-9 ">
-                                <strong style="font-size: 16px;">0900.980.880</strong>
-                                <p style="font-size: 13px;">Hỗ trợ</p>
-                            </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -70,22 +68,28 @@
                     </div>
                 </div>
                 <div class="topContai mt-3" style="width: 160px; height: 46px;">
-                    <span class="text-header-right dropdown-toggle fw-bold" style="font-size: 18px;" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i style="font-size: 28px;" class="bi bi-person-fill"></i> 
+                    <span class="text-header-right dropdown-toggle fw-bold" style="font-size: 18px;" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i style="font-size: 28px;" class="bi bi-person-fill"></i>
                         <span ng-if="!isLoggedIn">Tài khoản</span>
                         <span ng-if="isLoggedIn">{{ loggedInUser.idaccount }}</span>
                     </span>
                     <ul class="dropdown-menu">
-                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="../assets/login.html" data-lang="Tiếng Việt">Đăng nhập</a></li>
-                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="../assets/register.html" data-lang="English">Đăng ký</a></li>
-                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="../assets/Information.html" data-lang="English">Thông tin cá nhân</a></li>
-                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="../assets/addrest.html" data-lang="English">Địa Chỉ</a></li>
-                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="../assets/changepassword.html" data-lang="English"> Đỗi mật khẩu</a></li>
+                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="../assets/login.html"
+                                data-lang="Tiếng Việt">Đăng nhập</a></li>
+                        <li ng-if="!isLoggedIn"><a class="dropdown-item" href="../assets/register.html"
+                                data-lang="English">Đăng ký</a></li>
+                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="../assets/Information.html"
+                                data-lang="English">Thông tin cá nhân</a></li>
+                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="../assets/addrest.html"
+                                data-lang="English">Địa Chỉ</a></li>
+                        <li ng-if="isLoggedIn"><a class="dropdown-item" href="../assets/changepassword.html"
+                                data-lang="English"> Đỗi mật khẩu</a></li>
                         <li ng-if="isLoggedIn"><a class="dropdown-item" href="#" ng-click="logout()">Đăng xuất</a></li>
                     </ul>
                 </div>
-                
-                
+
+
             </div>
         </div>
     </div>

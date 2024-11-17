@@ -21,90 +21,96 @@
 <body ng-app="myApp" ng-controller="RegisterController">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
+    <div class="setDoDaiTrang">
+        <div class="customer_register">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4"></div>
+                    <div class="col-lg-4 col-md-4">
+                        <div class="wrapper">
+                            <div class="account_form position-relative">
 
-    <div class="customer_register">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-4"></div>
-                <div class="col-lg-4 col-md-4">
-                    <div class="wrapper">
-                        <div class="account_form position-relative">
+                                <form id="form" name="regisForm" ng-submit="register()">
+                                    <br>
+                                    <h2>Đăng ký</h2>
+                                    <img src="../assets/img/sticker-cake1.png" class="sticker sticker-left-top"
+                                        alt="Sticker bánh kem">
+                                    <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom"
+                                        alt="Sticker bánh kem">
 
-                            <form id="form" name="regisForm" ng-submit="register()">
-                                <br>
-                                <h2>Đăng ký</h2>
-                                <img src="../assets/img/sticker-cake1.png" class="sticker sticker-left-top" alt="Sticker bánh kem">
-                                <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom" alt="Sticker bánh kem">
-                            
-    
-                                <div>
-                                    <input placeholder="Tên tài khoản (*)" type="text" id="idaccount" name="idaccount" ng-model="user.idaccount" 
-                                           class="form-control" required minlength="4" />
-                                    <div class="form-text text-danger" ng-show="regisForm.idaccount.$touched && regisForm.idaccount.$error.required">
-                                        Tên tài khoản không được để trống.
+
+                                    <div>
+                                        <input placeholder="Tên tài khoản (*)" type="text" id="idaccount"
+                                            name="idaccount" ng-model="user.idaccount" class="form-control" required
+                                            minlength="4" />
+                                        <div class="form-text text-danger"
+                                            ng-show="regisForm.idaccount.$touched && regisForm.idaccount.$error.required">
+                                            Tên tài khoản không được để trống.
+                                        </div>
+                                        <div class="form-text text-danger"
+                                            ng-show="regisForm.idaccount.$touched && regisForm.idaccount.$error.minlength">
+                                            Tên tài khoản phải có ít nhất 4 ký tự.
+                                        </div>
                                     </div>
-                                    <div class="form-text text-danger" ng-show="regisForm.idaccount.$touched && regisForm.idaccount.$error.minlength">
-                                        Tên tài khoản phải có ít nhất 4 ký tự.
+
+                                    <!-- Mật khẩu -->
+                                    <div>
+                                        <input placeholder="Mật khẩu (*)" type="password" id="password" name="password"
+                                            ng-model="user.password" class="form-control" required minlength="6" />
+                                        <div class="form-text text-danger"
+                                            ng-show="regisForm.password.$touched && regisForm.password.$error.required">
+                                            Mật khẩu không được để trống.
+                                        </div>
+                                        <div class="form-text text-danger"
+                                            ng-show="regisForm.password.$touched && regisForm.password.$error.minlength">
+                                            Mật khẩu phải có ít nhất 6 ký tự.
+                                        </div>
                                     </div>
-                                </div>
-                            
-                                <!-- Mật khẩu -->
-                                <div>
-                                    <input placeholder="Mật khẩu (*)" type="password" id="password" name="password" ng-model="user.password" 
-                                           class="form-control" required minlength="6" />
-                                    <div class="form-text text-danger" ng-show="regisForm.password.$touched && regisForm.password.$error.required">
-                                        Mật khẩu không được để trống.
-                                    </div>
-                                    <div class="form-text text-danger" ng-show="regisForm.password.$touched && regisForm.password.$error.minlength">
-                                        Mật khẩu phải có ít nhất 6 ký tự.
-                                    </div>
-                                </div>
-                            
-                                <!-- Email -->
-                                <div>
-                                    <input placeholder="Email (*)" type="email" id="email" name="email" ng-model="user.email" 
-                                           class="form-control" required />
-                                    <div class="form-text text-danger" ng-show="regisForm.email.$touched && regisForm.email.$error.required">
-                                        Email không được để trống.
-                                    </div>
-                                    <div class="form-text text-danger" ng-show="regisForm.email.$touched && regisForm.email.$error.email">
-                                        Địa chỉ email không hợp lệ.
-                                    </div>
-                                <div>
-                                    <input placeholder="Số điện thoại (*)" type="text" id="phonenumber" name="phonenumber" ng-model="user.phonenumber" 
-                                           class="form-control" required ng-pattern="/^[0-9]{10,11}$/" />
-                                    <div class="form-text text-danger" ng-show="regisForm.phonenumber.$touched && regisForm.phonenumber.$error.required">
-                                        Số điện thoại không được để trống.
-                                    </div>
-                                    <div class="form-text text-danger" ng-show="regisForm.phonenumber.$touched && regisForm.phonenumber.$error.pattern">
-                                        Số điện thoại phải là số có 10-11 chữ số.
-                                    </div>
-                                </div>
-                                <div class="login_submit">
-                                    <a href="login.html"> Đã có tài khoản? Đăng nhập </a>
-                                    <button type="submit" id="xacnhan" class="btn btn-primary">Đăng ký</button>
-                                    <div class="form-text text-success" ng-show="registerSuccess">
-                                        {{registerSuccess}}
-                                    </div>
-                                    <div class="form-text text-danger" ng-show="registerError">
-                                        {{registerError}}
-                                    </div>
-    
-    
-                                </div>
-    
-                            </form>
+
+                                    <!-- Email -->
+                                    <div>
+                                        <input placeholder="Email (*)" type="email" id="email" name="email"
+                                            ng-model="user.email" class="form-control" required />
+                                        <div class="form-text text-danger"
+                                            ng-show="regisForm.email.$touched && regisForm.email.$error.required">
+                                            Email không được để trống.
+                                        </div>
+                                        <div class="form-text text-danger"
+                                            ng-show="regisForm.email.$touched && regisForm.email.$error.email">
+                                            Địa chỉ email không hợp lệ.
+                                        </div>
+                                        <div>
+                                            <input placeholder="Số điện thoại (*)" type="text" id="phonenumber"
+                                                name="phonenumber" ng-model="user.phonenumber" class="form-control"
+                                                required ng-pattern="/^[0-9]{10,11}$/" />
+                                            <div class="form-text text-danger"
+                                                ng-show="regisForm.phonenumber.$touched && regisForm.phonenumber.$error.required">
+                                                Số điện thoại không được để trống.
+                                            </div>
+                                            <div class="form-text text-danger"
+                                                ng-show="regisForm.phonenumber.$touched && regisForm.phonenumber.$error.pattern">
+                                                Số điện thoại phải là số có 10-11 chữ số.
+                                            </div>
+                                        </div>
+                                        <div class="login_submit">
+                                            <a href="login.html"> Đã có tài khoản? Đăng nhập </a>
+                                            <button type="submit" id="xacnhan" class="btn btn-primary">Đăng ký</button>
+                                            <div class="form-text text-success" ng-show="registerSuccess">
+                                                {{registerSuccess}}
+                                            </div>
+                                            <div class="form-text text-danger" ng-show="registerError">
+                                                {{registerError}}
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                    
-
+                    <div class="col-lg-4 col-md-4"></div>
                 </div>
-                <div class="col-lg-4 col-md-4"></div>
-
             </div>
         </div>
     </div>
-
     <div ng-include="'layout/footer.html'"></div>
     <script src="../assets/js/bootstrap.bundle.js"></script>
 </body>

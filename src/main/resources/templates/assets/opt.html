@@ -18,35 +18,41 @@
 <body ng-app="myApp" ng-controller="CheckLogin">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
-
-    <div class="container" ng-controller="OTPController">
-        <div class="row">
-            <div class="col-lg-4 col-md-4"></div>
-            <div class="col-lg-4 col-md-4">
-                <div class="account_form">
-                    <h2>Xác Thực OTP</h2>
-                    <form ng-submit="submitOTP()" novalidate>
-                        <div class="form-group d-flex justify-content-between">
-                            <input type="text" ng-model="otp[0]" maxlength="1" class="form-control mb-2 otp-input" ng-keyup="moveFocus($index)" required>
-                            <input type="text" ng-model="otp[1]" maxlength="1" class="form-control mb-2 otp-input" ng-keyup="moveFocus($index)" required>
-                            <input type="text" ng-model="otp[2]" maxlength="1" class="form-control mb-2 otp-input" ng-keyup="moveFocus($index)" required>
-                            <input type="text" ng-model="otp[3]" maxlength="1" class="form-control mb-2 otp-input" ng-keyup="moveFocus($index)" required>
-                            <input type="text" ng-model="otp[4]" maxlength="1" class="form-control mb-2 otp-input" ng-keyup="moveFocus($index)" required>
-                            <input type="text" ng-model="otp[5]" maxlength="1" class="form-control mb-2 otp-input" ng-keyup="moveFocus($index)" required>
-                        </div>
-                        <div class="login_submit">
-                            <button type="submit" id="xacnhan" class="btn btn-primary">Xác Nhận OTP</button>
-                            <div class="form-text text-danger" ng-show="otpError">{{otpError}}</div>
-                            <div class="form-text text-success" ng-show="otpSuccess">{{otpSuccess}}</div>
-                            <a href="login.html">Quay lại đăng nhập</a>
-                        </div>
-                    </form>
+    <div class="setDoDaiTrang">
+        <div class="container" ng-controller="OTPController">
+            <div class="row">
+                <div class="col-lg-4 col-md-4"></div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="account_form">
+                        <h2>Xác Thực OTP</h2>
+                        <form ng-submit="submitOTP()" novalidate>
+                            <div class="form-group d-flex justify-content-between">
+                                <input type="text" ng-model="otp[0]" maxlength="1" class="form-control mb-2 otp-input"
+                                    ng-keyup="moveFocus($index)" required>
+                                <input type="text" ng-model="otp[1]" maxlength="1" class="form-control mb-2 otp-input"
+                                    ng-keyup="moveFocus($index)" required>
+                                <input type="text" ng-model="otp[2]" maxlength="1" class="form-control mb-2 otp-input"
+                                    ng-keyup="moveFocus($index)" required>
+                                <input type="text" ng-model="otp[3]" maxlength="1" class="form-control mb-2 otp-input"
+                                    ng-keyup="moveFocus($index)" required>
+                                <input type="text" ng-model="otp[4]" maxlength="1" class="form-control mb-2 otp-input"
+                                    ng-keyup="moveFocus($index)" required>
+                                <input type="text" ng-model="otp[5]" maxlength="1" class="form-control mb-2 otp-input"
+                                    ng-keyup="moveFocus($index)" required>
+                            </div>
+                            <div class="login_submit">
+                                <button type="submit" id="xacnhan" class="btn btn-primary">Xác Nhận OTP</button>
+                                <div class="form-text text-danger" ng-show="otpError">{{otpError}}</div>
+                                <div class="form-text text-success" ng-show="otpSuccess">{{otpSuccess}}</div>
+                                <a href="login.html">Quay lại đăng nhập</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                <div class="col-lg-4 col-md-4"></div>
             </div>
-            <div class="col-lg-4 col-md-4"></div>
         </div>
     </div>
-
     <div ng-include="'layout/footer.html'"></div>
     <script src="../assets/js/bootstrap.bundle.js"></script>
     <script src="../assets/js/otp.js"></script>

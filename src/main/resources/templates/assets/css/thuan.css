@@ -1,6 +1,11 @@
 body {
   font-family: roboto;
   color: #2e1d15;
+  
+}
+
+.setDoDaiTrang{
+  min-height: 440px;
 }
 
 a {

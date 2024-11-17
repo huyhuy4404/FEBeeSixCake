@@ -21,83 +21,77 @@
 <body ng-app="myApp" ng-controller="LoginController">
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
+    <div class="setDoDaiTrang">
+        <div class="customer_login"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4"></div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="wrapper">
+                        <div class="account_form position-relative">
+                            <h2>Đăng nhập</h2>
+                            <img src="../assets/img/sticker-cake1.png" class="sticker sticker-left-top"
+                                alt="Sticker bánh kem">
+                            <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom"
+                                alt="Sticker bánh kem">
 
-    <div class="customer_login"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-4"></div>
-            <div class="col-lg-4 col-md-4">
-                <div class="wrapper">
-                    <div class="account_form position-relative">
-                        <h2>Đăng nhập</h2>
-                        <img src="../assets/img/sticker-cake1.png" class="sticker sticker-left-top" alt="Sticker bánh kem">
-                        <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom" alt="Sticker bánh kem">
-                    
-                        <div ng-if="!isLoggedIn">
-                            <form id="form" name="loginForm" ng-submit="login()">
-                                <p>
-                                    <input type="text" ng-model="user.idaccount" placeholder="Tên đăng nhập (*)"
-                                        class="mb-2" name="txtIDAccount" required><br>
-                                <div class="form-text text-danger"
-                                    ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
-                                    Tên người dùng không hợp lệ
-                                </div>
-                                </p>
-                                <p>
-                                    <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)" minlength="6"
-                                        name="txtPassword" class="mt-2 mb-2" required><br>
-                                <div class="form-text text-danger"
-                                    ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
-                                    Password phải có ít nhất 6 ký tự
-                                </div>
-                                </p>
-                                <!-- Hiển thị thông báo lỗi -->
-    
-                                <div class="login_submit">
-                                    <a href="#">Quên mật khẩu?</a>
-                                    <label for="remember">
-                                        <input id="remember" type="checkbox" ng-model="loginData.remember">
-                                        Ghi nhớ
-                                    </label>
-                                    <button type="submit" id="xacnhan" class="btn btn-primary">Đăng nhập</button>
-                                    <div class="form-text text-danger" ng-show="loginError">
-                                        {{loginError}}
+                            <div ng-if="!isLoggedIn">
+                                <form id="form" name="loginForm" ng-submit="login()">
+                                    <p>
+                                        <input type="text" ng-model="user.idaccount" placeholder="Tên đăng nhập (*)"
+                                            class="mb-2" name="txtIDAccount" required><br>
+                                    <div class="form-text text-danger"
+                                        ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
+                                        Tên người dùng không hợp lệ
                                     </div>
-                                    <div class="form-text text-success" ng-show="loginSuccess">
-                                        {{loginSuccess}}
+                                    </p>
+                                    <p>
+                                        <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)"
+                                            minlength="6" name="txtPassword" class="mt-2 mb-2" required><br>
+                                    <div class="form-text text-danger"
+                                        ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
+                                        Password phải có ít nhất 6 ký tự
                                     </div>
-                                    <a href="register.html"> Đăng ký tài khoản__ </a>
-                                    <a href="index.html"> Quay về trang chủ </a>
-                                </div>
-                            </form>
+                                    </p>
+                                    <!-- Hiển thị thông báo lỗi -->
+
+                                    <div class="login_submit">
+                                        <a href="#">Quên mật khẩu?</a>
+                                        <label for="remember">
+                                            <input id="remember" type="checkbox" ng-model="loginData.remember">
+                                            Ghi nhớ
+                                        </label>
+                                        <button type="submit" id="xacnhan" class="btn btn-primary">Đăng nhập</button>
+                                        <div class="form-text text-danger" ng-show="loginError">
+                                            {{loginError}}
+                                        </div>
+                                        <div class="form-text text-success" ng-show="loginSuccess">
+                                            {{loginSuccess}}
+                                        </div>
+                                        <a href="register.html"> Đăng ký tài khoản__ </a>
+                                        <a href="index.html"> Quay về trang chủ </a>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-    
                     </div>
+                    <!-- Kiểm tra nếu người dùng đã đăng nhập -->
                 </div>
-                
-
-
-                <!-- Kiểm tra nếu người dùng đã đăng nhập -->
-
+                <div class="col-lg-4 col-md-4"></div>
             </div>
-            <div class="col-lg-4 col-md-4"></div>
-        </div>
-
-
-        <!-- Hiển thị thông tin nếu người dùng đã đăng nhập -->
-        <div ng-if="isLoggedIn" class="text-center p-4 shadow-sm rounded" style="border: 1px solid #e0e0e0;">
-            <h2 class="mb-3">Xin chào, <strong>{{loggedInUser.idaccount}}</strong>!</h2>
-            <p class="text">Bạn đã đăng nhập thành công.</p>
-
-            <div class="my-4">
-                <a href="changepassword.html" class="btn btn-outline-primary mx-2">Đổi mật khẩu</a>
-                <a href="forgot-password.html" class="btn btn-outline-secondary mx-2">Quên mật khẩu</a>
+            <!-- Hiển thị thông tin nếu người dùng đã đăng nhập -->
+            <div ng-if="isLoggedIn" class="text-center p-4 shadow-sm rounded" style="border: 1px solid #e0e0e0;">
+                <h2 class="mb-3">Xin chào, <strong>{{loggedInUser.idaccount}}</strong>!</h2>
+                <p class="text">Bạn đã đăng nhập thành công.</p>
+                <div class="my-4">
+                    <a href="changepassword.html" class="btn btn-outline-primary mx-2">Đổi mật khẩu</a>
+                    <a href="forgot-password.html" class="btn btn-outline-secondary mx-2">Quên mật khẩu</a>
+                </div>
+                <button ng-click="logout()" class="btn btn-danger mt-3">Đăng xuất</button>
             </div>
-
-            <button ng-click="logout()" class="btn btn-danger mt-3">Đăng xuất</button>
         </div>
-
     </div>
+
     <div ng-include="'layout/footer.html'"></div>
     <script src="../assets/js/bootstrap.bundle.js"></script>
 </body>

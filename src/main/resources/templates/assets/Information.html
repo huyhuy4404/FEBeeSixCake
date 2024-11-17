@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"/>
-    <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <link rel="stylesheet" href="../assets/css/phat.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <link rel="stylesheet" href="assets/css/plugins.css" />
-    <script src="../assets/js/Information.js"></script>
-  </head>
-  <body ng-app="myApp" ng-controller="Controller">
-    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
-    <div ng-include="'layout/menu.html'"></div>
-  
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/thuan.css" />
+  <link rel="stylesheet" href="../assets/css/phat.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../assets/js/angular.min.js"></script>
+  <script src="../assets/js/angular-route.js"></script>
+  <link rel="stylesheet" href="assets/css/plugins.css" />
+  <script src="../assets/js/Information.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="Controller">
+  <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+  <div ng-include="'layout/menu.html'"></div>
+  <div class="setDoDaiTrang">
     <div class="container d-flex justify-content-center my-5">
       <div class="col-lg-6">
         <div class="card shadow-sm p-4">
           <h2 class="text-center mb-4">Thông tin cá nhân</h2>
-  
+
           <!-- Form cập nhật thông tin người dùng -->
           <form id="userProfileForm" ng-submit="updateUserProfile()">
             <div class="form-group mb-3">
@@ -44,14 +44,14 @@
               <input type="text" class="form-control" ng-model="user.phonenumber" required pattern="^\d{10,15}$"
                 title="Số điện thoại phải từ 10 đến 15 chữ số" />
             </div>
-  
+
             <!-- Khung chứa các nút -->
             <div class="d-flex justify-content-between mt-4">
               <button type="submit" class="btn btn-primary px-4">Cập nhật thông tin</button>
               <button type="button" ng-click="logout()" class="btn btn-secondary px-4">Đăng xuất</button>
             </div>
           </form>
-  
+
           <!-- Thông báo cập nhật thành công -->
           <div ng-if="updateSuccess" class="alert alert-success mt-3 text-center">
             Cập nhật thông tin thành công!
@@ -59,12 +59,9 @@
         </div>
       </div>
     </div>
-  
-    <script src="../assets/js/bootstrap.bundle.js"></script>
-  </body>
-  
+  </div>
+  <div ng-include="'layout/footer.html'"></div>
+  <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
 
-  
 </html>
-<div ng-include="'layout/footer.html'"></div>
-    

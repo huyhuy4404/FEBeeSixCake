@@ -7,6 +7,21 @@
         </li>
 
         <li class="nav-item">
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Sản Phẩm
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
+              <li ng-repeat="item in category"> <!-- Sửa đổi từ Products thành category -->
+                <a class="dropdown-item" ng-click="filterProducts(item.categoryname)">
+                  {{item.categoryname}} <!-- Hiển thị tên danh mục -->
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>        
+
+        <li class="nav-item">
           <a class="nav-link" href="gioithieu.html">Giới Thiệu</a>
         </li>
 
@@ -14,22 +29,6 @@
           <a class="nav-link" href="lienhe.html">Liên Hệ</a>
         </li>
 
-        <li class="nav-item">
-          <div class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Sản Phẩm
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
-                  <li ng-repeat="item in category"> <!-- Sửa đổi từ Products thành category -->
-                      <a class="dropdown-item" ng-click="filterProducts(item.categoryname)">
-                          {{item.categoryname}} <!-- Hiển thị tên danh mục -->
-                      </a>
-                  </li>
-              </ul>
-          </div>
-      </li>
-      </li>
-      </li>
       </ul>
 
       <ul class="navbar-nav menu-right">
@@ -92,17 +91,16 @@
 </div>
 
 <script>
-  $(document).ready(function() {
-      var headerHeight = $('header').outerHeight(); // Chiều cao của header
-      var menu = $('.parent-menu'); // Chọn menu
+  $(document).ready(function () {
+    var headerHeight = $('header').outerHeight(); // Chiều cao của header
+    var menu = $('.parent-menu'); // Chọn menu
 
-      $(window).scroll(function() {
-          if ($(this).scrollTop() > headerHeight) {
-              menu.addClass('sticky'); // Thêm class sticky khi cuộn qua header
-          } else {
-              menu.removeClass('sticky'); // Xóa class khi cuộn lên trên
-          }
-      });
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > headerHeight) {
+        menu.addClass('sticky'); // Thêm class sticky khi cuộn qua header
+      } else {
+        menu.removeClass('sticky'); // Xóa class khi cuộn lên trên
+      }
+    });
   });
 </script>
-
