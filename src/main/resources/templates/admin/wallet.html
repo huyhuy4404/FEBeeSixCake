@@ -62,7 +62,7 @@
         }
 
         .modal-order {
-            max-width: 60vw;
+            max-width: 70vw;
             /* Đặt kích thước tối đa cho modal là 80% chiều rộng của màn hình */
             margin: 1.75rem auto;
             /* Căn giữa modal */
@@ -411,11 +411,11 @@
                                             <tbody>
                                                 <tr ng-repeat="order in paginatedOrders"
                                                     style="text-align: center; font-size: 16px;">
-                                                    <td>{{ order.idorder }}</td> <!-- Sửa idOrder thành idorder -->
+                                                    <td>{{ order.idorder }}</td>
                                                     <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                     <td>{{ order.total | number : 0}} ₫</td>
                                                     <td>{{ order.statusName }}</td>
-                                                    <td>{{ order.idstatuspay.statuspayname }}</td>
+                                                    <td>{{ order.statuspay.statuspayname }}</td>
                                                     <td class="">
                                                         <button type="button" class="btn btn-sm btn-primary"
                                                             data-bs-toggle="modal"
@@ -522,73 +522,74 @@
                                 <div class="modal-footer">
                                     <div class="row">
                                         <div class="col-lg-7 order-footer-left">
-                                            <div>
-                                                <p class="fw-bold mb-2">Trạng thái đơn hàng</p>
-                                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-primary"
-                                                        ng-class="{'active': selectedOrder.status.idstatus == 1}">
-                                                        <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                            ng-checked="selectedOrder.status.idstatus == 1" value="1"
-                                                            autocomplete="off" /> Chờ Xác Nhận
+                                            <p class="fw-bold mb-2">Trạng thái đơn hàng</p>
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-primary"
+                                                    ng-class="{'active': selectedOrder.status.idstatus == 1}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                        ng-checked="selectedOrder.status.idstatus == 1" value="1"
+                                                        autocomplete="off" /> Chờ Xác Nhận
 
-                                                    </label>
-                                                    <label class="btn btn-info"
-                                                        ng-class="{'active': selectedOrder.status.idstatus == 2}">
-                                                        <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                            ng-checked="selectedOrder.status.idstatus == 2" value="2"
-                                                            autocomplete="off" /> Chờ Giao Hàng
+                                                </label>
+                                                <label class="btn btn-info"
+                                                    ng-class="{'active': selectedOrder.status.idstatus == 2}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                        ng-checked="selectedOrder.status.idstatus == 2" value="2"
+                                                        autocomplete="off" /> Chờ Giao Hàng
 
-                                                    </label>
-                                                    <label class="btn btn-warning"
-                                                        ng-class="{'active': selectedOrder.status.idstatus == 3}">
-                                                        <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                            ng-checked="selectedOrder.status.idstatus == 3" value="3"
-                                                            autocomplete="off" /> Đã Giao Hàng
-                                                    </label>
-                                                    <label class="btn btn-danger"
-                                                        ng-class="{'active': selectedOrder.status.idstatus == 4}">
-                                                        <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                            ng-checked="selectedOrder.status.idstatus == 4" value="4"
-                                                            autocomplete="off" /> Đã Hủy
-                                                    </label>
-                                                </div>
-
-                                                <button class="btn btn-primary" ng-click="updateOrderStatus()"
-                                                    style="float: right;" ng-disabled="isUpdating">
-                                                    Cập nhật
-                                                </button>
+                                                </label>
+                                                <label class="btn btn-warning"
+                                                    ng-class="{'active': selectedOrder.status.idstatus == 3}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                        ng-checked="selectedOrder.status.idstatus == 3" value="3"
+                                                        autocomplete="off" /> Đã Giao Hàng
+                                                </label>
+                                                <label class="btn btn-danger"
+                                                    ng-class="{'active': selectedOrder.status.idstatus == 4}">
+                                                    <input type="radio" ng-model="selectedOrder.status.idstatus"
+                                                        ng-checked="selectedOrder.status.idstatus == 4" value="4"
+                                                        autocomplete="off" /> Đã Hủy
+                                                </label>
                                             </div>
 
+                                            <button class="btn btn-primary" ng-click="updateOrderStatus()"
+                                                style="float: right;" ng-disabled="isUpdating">
+                                                Cập nhật
+                                            </button>
+
+                                            <!-- Trạng thái thanh toán -->
                                             <div class="mt-4">
                                                 <p class="fw-bold mb-2">Trạng thái thanh toán</p>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                                    <!-- Radio cho trạng thái Chưa Thanh Toán -->
+                                                    <!-- Chỉ hiển thị nút 'Chưa Thanh Toán' nếu trạng thái hiện tại là 1 -->
                                                     <label class="btn btn-danger"
-                                                        ng-class="{'active': selectedOrder.idstatuspay == 1}">
-                                                        <input type="radio" ng-model="selectedOrder.idstatuspay"
-                                                            value="1" autocomplete="off" />
-                                                        Chưa Thanh Toán
+                                                        ng-class="{'active': selectedOrder.statuspay.idstatuspay == 1}"
+                                                        ng-if="selectedOrder.statuspay.idstatuspay == 1">
+                                                        <input type="radio"
+                                                            ng-model="selectedOrder.statuspay.idstatuspay" ng-value="1"
+                                                            autocomplete="off"> Chưa Thanh Toán
                                                     </label>
-
-                                                    <!-- Radio cho trạng thái Đã Thanh Toán -->
+                                                    <!-- Luôn hiển thị nút 'Đã Thanh Toán' -->
                                                     <label class="btn btn-success"
-                                                        ng-class="{'active': selectedOrder.idstatuspay == 2}">
-                                                        <input type="radio" ng-model="selectedOrder.idstatuspay"
-                                                            value="2" autocomplete="off" />
-                                                        Đã Thanh Toán
+                                                        ng-class="{'active': selectedOrder.statuspay.idstatuspay == 2}">
+                                                        <input type="radio"
+                                                            ng-model="selectedOrder.statuspay.idstatuspay" ng-value="2"
+                                                            autocomplete="off"> Đã Thanh Toán
                                                     </label>
                                                 </div>
 
                                                 <button class="btn btn-primary" ng-click="updateOrderStatusPay()"
-                                                    style="float: right;" ng-disabled="isUpdating">
+                                                    style="float: right;"
+                                                    ng-disabled="isUpdating || (selectedOrder.statuspay.idstatuspay == originalPaymentStatus)">
                                                     Cập nhật
                                                 </button>
                                             </div>
 
-
                                         </div>
                                         <div class="col-lg-5 order-footer-right">
                                             <div class="border-tt">
+                                                <h6>Tổng tiền sản phẩm: <span>{{ calculateTotalProductPrice() | number:
+                                                        0 }} ₫</span></h6>
                                                 <h6>Phí vận chuyển: <span>{{selectedOrder.shipfee | number : 0}}
                                                         ₫</span>
                                                 </h6>
@@ -606,6 +607,8 @@
                         </div>
                     </div>
                 </div>
+
+
 
             </main>
         </div>

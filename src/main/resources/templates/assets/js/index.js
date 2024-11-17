@@ -81,14 +81,14 @@ app.controller("discountsController", function ($scope, $http) {
 
 
   // Hàm chuyển hướng đến trang chi tiết sản phẩm
-  $scope.goToProduct = function (productId) {
-      if (productId) {
-          const url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
-          window.location.href = url;
-      } else {
-          console.log("Product ID is not valid.");
-      }
-  };
+  // $scope.goToProduct = function (productId) {
+  //     if (productId) {
+  //         const url = "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" + productId;
+  //         window.location.href = url;
+  //     } else {
+  //         console.log("Product ID is not valid.");
+  //     }
+  // };
 
   // Hàm định dạng tiền tệ
   $scope.formatCurrency = function (amount) {
