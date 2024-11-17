@@ -158,29 +158,28 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     $scope.finalTotal =
       $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
   };
-  $scope.bankInfo = {
-    name: "Ngân hàng Vietcombank",
-    accountNumber: "0123456789",
-    accountHolder: "BEESIXCAKE",
-  };
-
   $scope.generateQRCode = function () {
     if (
+      $scope.selectedPayment &&
       $scope.selectedPayment.paymentname ===
-      "Thanh Toán Qua Chuyển Khoản Ngân Hàng"
+        "Thanh Toán Qua Chuyển Khoản Ngân Hàng"
     ) {
-      const qrData =
-        `Ngân hàng: ${$scope.bankInfo.name}\n` +
-        `Số tài khoản: ${$scope.bankInfo.accountNumber}\n` +
-        `Chủ tài khoản: ${$scope.bankInfo.accountHolder}\n` +
-        `Nội dung chuyển khoản: THANH TOÁN HÓA ĐƠN BEESIXCAKE\n` +
-        `Tổng tiền: ${$scope.finalTotal} VNĐ`;
+      const bankCode = "mbbank"; // Mã ngân hàng (viết thường, không dấu)
+      const accountNumber = "0928025739"; // Số tài khoản
+      const accountName = "Nguyen Thanh Huy"; // Tên chủ tài khoản (không dấu)
+      const amount = $scope.finalTotal; // Tổng tiền
+      const description = "THANH TOÁN HÓA ĐƠN BEESIXCAKE"; // Nội dung thanh toán
+      const template = "compact"; // Template hiển thị QR
 
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(
-        qrData
-      )}&size=300x300`;
+      // Tạo URL VietQR
+      const qrApiUrl = `https://img.vietqr.io/image/${bankCode}-${accountNumber}-${template}.png?amount=${amount}&addInfo=${encodeURIComponent(
+        description
+      )}&accountName=${encodeURIComponent(accountName)}`;
 
       $scope.qrCode = qrApiUrl;
+
+      // In ra console để kiểm tra
+      console.log("Generated QR Code URL:", qrApiUrl);
     }
   };
 });
