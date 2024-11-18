@@ -47,7 +47,17 @@
                                         Tên tài khoản phải có ít nhất 4 ký tự.
                                     </div>
                                 </div>
-                            
+                                <div>
+                                    <input placeholder="Họ và tên (*)" type="text" id="fullname" name="fullname" ng-model="user.fullname" 
+                                           class="form-control" required minlength="2" />
+                                    <div class="form-text text-danger" ng-show="regisForm.fullname.$touched && regisForm.fullname.$error.required">
+                                        Họ và tên không được để trống.
+                                    </div>
+                                    <div class="form-text text-danger" ng-show="regisForm.fullname.$touched && regisForm.fullname.$error.minlength">
+                                        Họ và tên phải có ít nhất 2 ký tự.
+                                    </div>
+                                </div>
+                                
                                 <!-- Mật khẩu -->
                                 <div>
                                     <input placeholder="Mật khẩu (*)" type="password" id="password" name="password" ng-model="user.password" 
