@@ -147,6 +147,38 @@ app.controller("ProductDetailController", function ($scope, $http) {
       console.log("Product ID is not valid.");
     }
   };
+
+   // Tải danh mục sản phẩm từ API
+   $http.get(`${API}/category`)
+   .then(function (response) {
+     $scope.categories = response.data;
+     // Tính số lượng sản phẩm cho mỗi danh mục
+     $scope.categories.forEach(function (category) {
+       category.count = 0;  // Khởi tạo count với giá trị ban đầu là 0
+     });
+
+     // Tải danh sách sản phẩm
+     $http.get(`${API}/product`)
+       .then(function (productResponse) {
+         const products = productResponse.data;
+         // Đếm số lượng sản phẩm cho mỗi danh mục
+         products.forEach(function (product) {
+           const category = $scope.categories.find(
+             cat => cat.idcategory === product.category.idcategory
+           );
+           if (category) {
+             category.count += 1;
+           }
+         });
+       })
+       .catch(function (error) {
+         console.error("Error fetching products:", error);
+       });
+   })
+   .catch(function (error) {
+     console.error("Error fetching categories:", error);
+   });
+
 });
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {

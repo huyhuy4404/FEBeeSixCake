@@ -304,9 +304,9 @@
                                                 <tr>
                                                     <th class="text-center">Mã Đơn Hàng</th>
                                                     <th class="text-center">Thời Gian Đặt Hàng</th>
-                                                    <th class="text-center">Tổng Tiền</th>
                                                     <th class="text-center">Trạng Thái Đơn Hàng</th>
                                                     <th class="text-center">Trạng Thái Thanh Toán</th>
+                                                    <th class="text-center">Tổng Tiền</th>
                                                     <th class="text-center">Hành Động</th>
                                                 </tr>
                                             </thead>
@@ -315,9 +315,9 @@
                                                     style="text-align: center; font-size: 16px;">
                                                     <td>{{ order.idorder }}</td>
                                                     <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
-                                                    <td>{{ order.total | number : 0}} ₫</td>
                                                     <td>{{ order.statusName }}</td>
                                                     <td>{{ order.statuspay.statuspayname }}</td>
+                                                    <td>{{ order.total | number : 0}} ₫</td>
                                                     <td class="">
                                                         <button type="button" class="btn btn-sm btn-primary"
                                                             data-bs-toggle="modal"

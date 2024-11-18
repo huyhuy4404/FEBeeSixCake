@@ -98,32 +98,32 @@
 
     <div class="gia-soc">
       <div class="sanPham">
-        <span style="margin-left: 10px;" class="textSanPham">Sản phẩm mới</span>
-        <span style="float: right; font-size: 18px; padding: 8px">
-          <a href="SanPhamMoiFull.html" style="color: #fff">Xem tất cả</a>
-        </span>
+          <span style="margin-left: 10px;" class="textSanPham">Sản phẩm mới</span>
+          <span style="float: right; font-size: 18px; padding: 8px">
+              <a href="SanPhamMoiFull.html" style="color: #fff">Xem tất cả</a>
+          </span>
       </div>
       <div class="row py-2" style="justify-content: center; margin: 0 5%; margin-top: 30px;">
-        <div class="col-lg-3" style="margin-top: 30px;" ng-repeat="item in Products | limitTo: 8">
-          <div class="pd-box" style="border: 1px solid rgb(222, 226, 230);; border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <div class="box-images">
-              <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}">
-                <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: 300px;">
-              </a>
-            </div>
-            <div class="box-content">
-              <h3>
-                <a href="../assets/chitietsanpham.html?id={{item.idproduct}}"  title="{{item.productname}}"
-                  class="tenTheSP">{{item.productname}}</a>
-              </h3>
-              <div>
-                <span class="price">{{ formatCurrency(item.unitprice) }}</span> <!-- Định dạng giá sản phẩm -->
+          <div class="col-lg-3" style="margin-top: 30px;" ng-repeat="item in Products | filter:{isactive: true} | limitTo: 8">
+              <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                  <div class="box-images">
+                      <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}">
+                          <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: 300px;">
+                      </a>
+                  </div>
+                  <div class="box-content">
+                      <h3>
+                          <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}"
+                             class="tenTheSP">{{item.productname}}</a>
+                      </h3>
+                      <div>
+                          <span class="price">{{ formatCurrency(item.unitprice) }}</span> <!-- Định dạng giá sản phẩm -->
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
   </div>
 
   <div ng-include="'layout/footer.html'"></div>
