@@ -4,277 +4,278 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta name="description" content="">
-    <meta name="author" content="Tooplate">
-
     <title>Mini Finance Dashboard Template</title>
-
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
-
     <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
-
     <link href="../admin/css/apexcharts.css" rel="stylesheet">
-
     <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
 
+        }
 
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+        .nav-item.dropdown .dropdown-menu {
+            display: none;
+            /* Ẩn menu xổ xuống mặc định */
+        }
+
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            /* Hiện menu khi hover */
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
 </head>
 
-<body ng-app="myApp" ng-controller="CheckLogin">
-    <header class="navbar sticky-top flex-md-nowrap">
-        <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
-            <a class="navbar-brand" href="index.html">
-                <i class="bi-box"></i> BEE SIX CAKE
-            </a>
-        </div>
-
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-
-
-        <div class="navbar-nav me-lg-2">
-            <div class="nav-item text-nowrap d-flex align-items-center">
-                <!-- Notifications Dropdown -->
-                <div class="dropdown ps-3">
-                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="bi-bell"></i>
-                        <span
-                            class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                            <span class="visually-hidden">New alerts</span>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
-                        <small>Notifications</small>
-                        <!-- Notifications items -->
-                    </ul>
-                </div>
-
-                <!-- Social Media Dropdown -->
-                <div class="dropdown ps-1">
-                    <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="bi-three-dots-vertical"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-social bg-white shadow">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-4">
-                                    <a class="dropdown-item text-center" href="#">
-                                        <img src="images/social/search.png" class="profile-image img-fluid"
-                                            alt="Google">
-                                        <span class="d-block">Google</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Profile Dropdown -->
-                <div ng-include="'layout/header.html'"></div>
-            </div>
-        </div>
-    </header>
-
-
+<body ng-app="myApp">
 
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar Menu -->
-            <div ng-include="'layout/menu.html'"></div>
+        <header class="navbar sticky-top flex-md-nowrap">
+            <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
+                <a class="navbar-brand" href="index.html">
+                    <i class="bi-box"></i> BEE SIX CAKE
+                </a>
+            </div>
 
-            <!-- Main Content -->
-            <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
-                <div class="title-group mb-3">
-                    <h1 class="h2 mb-0">Trang Chủ</h1>
-                    <!-- <small class="text-muted">Hello Thomas, welcome back!</small> -->
+            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Form Search -->
+            <form class="custom-form header-form ms-lg-3 me-auto order-2 order-lg-0" action="#" method="get"
+                role="form">
+                <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
+            </form>
+
+            <div class="navbar-nav me-lg-2">
+                <div class="nav-item text-nowrap d-flex align-items-center">
+                    <!-- Notifications Dropdown -->
+                    <div class="dropdown ps-3">
+                        <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="bi-bell"></i>
+                            <span
+                                class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                <span class="visually-hidden">New alerts</span>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu notifications-block-wrap bg-white shadow">
+                            <small>Notifications</small>
+                            <!-- Notifications items -->
+                        </ul>
+                    </div>
+
+                    <!-- User Profile Dropdown -->
+                    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
                 </div>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar Menu -->
+                <div ng-include="'layout/menu.html'"></div>
 
-                <div class="row my-4">
-                    <!-- Left Column -->
-                    <div class=" col-12">
-                        <div class="custom-block custom-block-balance bg-white p-4 mb-4">
-                            <small>Your Balance</small>
-                            <h2 class="mt-2 mb-3">$254,800</h2>
+                <!-- Main Content -->
+                <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
+                    <div class="title-group mb-3">
+                        <h1 class="h2 mb-0">Trang Chủ</h1>
+                        <!-- <small class="text-muted">Hello Thomas, welcome back!</small> -->
+                    </div>
+
+                    <div class="row my-4" ng-controller="discountsController">
+                        <!-- Left Column -->
+                        <div class=" col-12">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="custom-block custom-block-balance bg-white p-4 mb-4">
+                                        <small>Tổng doanh thu:</small>
+                                        <h2 class="mt-2 mb-3"> {{ formatCurrency(totalRevenue) }}
+                                        </h2>
+
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="custom-block custom-block-balance bg-white p-4 mb-4">
+                                        <small> đơn hàng:</small>
+                                        <h2 class="mt-2 mb-3"> Số lượng: {{ totalOrdersCount }}
+                                        </h2>
+
+
+                                    </div>
+                                </div>
+                            </div>
                             <div class="custom-block-numbers d-flex align-items-center mb-3">
-                                <span>****</span>
-                                <span>****</span>
-                                <span>****</span>
-                                <p>2560</p>
+
                             </div>
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <small>Valid Date</small>
-                                    <p>12/2028</p>
-                                </div>
-                                <div>
-                                    <small>Card Holder</small>
-                                    <p>Thomas</p>
+                            <!-- <div class="d-flex justify-content-between">
+                            <div>
+                                <small>Valid Date</small>
+                                <p>12/2028</p>
+                            </div>
+                            <div>
+                                <small>Card Holder</small>
+                                <p>Thomas</p>
+                            </div>
+                        </div> -->
+                            <!-- History Chart -->
+                            <div class="custom-block bg-white p-4 mb-4" style="margin-top: -21px;">
+                                <h5 class="mb-4">Tồn kho theo loại</h5>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div id="pie-chart"></div>
+
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                Bảng hiển thị dữ liệu
+                                            </div>
+                                            <div class="card-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Loại Sản Phẩm</th>
+                                                            <th>Số Lượng Tồn Kho</th>
+                                                            <!-- <th>Giá</th>
+                                                        <th>Giá Trị Tồn Kho</th> -->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        <tr ng-repeat="stat in groupedOrderDetails">
+                                                            <td>{{stat.categoryName}}</td> <!-- Loại sản phẩm -->
+                                                            <td>{{stat.totalQuantity}}</td> <!-- Số lượng tồn kho -->
+                                                        </tr>
+                                                        <tr ng-if="groupedOrderDetails.length === 0">
+                                                            <td colspan="2">Không có dữ liệu</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+
+                            <!-- Transactions Chart -->
+                            <div class="custom-block bg-white p-4 mb-4">
+                                <main class="">
+                                    <div class="title-group mb-4">
+                                        <h1 class="h2 mb-0">Doanh thu theo ngày</h1>
+                                    </div>
+                                    <div class="row" ng-controller="dayController">
+                                        <div class="col-12">
+                                            <div class="custom-block">
+                                                <div class="card">
+                                                    <div class="">
+                                                        <div class="card-header">
+                                                            Doanh thu theo ngày
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div id="daily-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo ngày -->
+                                                        </div>
+                                                    </div>
+                                
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <label for="date-select">Chọn Ngày</label>
+                                                            <select id="date-select" class="form-control" ng-model="selectedDate" ng-change="filterData()">
+                                                                <option value="" disabled selected>Chọn một ngày</option>
+                                                                <option ng-repeat="date in availableDates" value="{{date}}">{{date}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <table class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Ngày</th>
+                                                                    <th>Tổng Đơn Hàng</th>
+                                                                    <th>Tổng Tiền</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="stat in dailyStats" ng-if="stat.totalOrders > 0">
+                                                                    <td>{{stat.date}}</td> <!-- Hiển thị ngày -->
+                                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
+                                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tổng tiền -->
+                                                                </tr>
+                                                                <tr ng-if="dailyStats.length === 0">
+                                                                    <td colspan="3">Không có dữ liệu cho ngày đã chọn.</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <footer class="site-footer">
+                                        <!-- Footer omitted for brevity -->
+                                    </footer>
+                                </main>
+                            </div>
+
+
+
+                            
+
+
+
+
+                            <!-- Exchange Rates -->
+                            
                         </div>
 
-                        <!-- History Chart -->
-                        <div class="custom-block bg-white p-4 mb-4">
-                            <h5 class="mb-4">History</h5>
-                            <div id="pie-chart"></div>
-                        </div>
+                        <!-- Right Column -->
+                        <div class="col-lg-5 col-12">
+                            <!-- Profile Block -->
 
-                        <!-- Transactions Chart -->
-                        <div class="custom-block bg-white p-4 mb-4">
-                            <div id="chart"></div>
-                        </div>
-
-                        <!-- Exchange Rates -->
-                        <div class="custom-block bg-white p-4 mb-4">
-                            <h5 class="mb-4">Exchange Rate</h5>
-                            <!-- Exchange Rate Entries -->
-                            <div class="d-flex align-items-center border-bottom pb-3 mb-3">
-                                <img src="images/flag/united-states.png" class="exchange-image img-fluid" alt="USD">
-                                <div>
-                                    <p>USD</p>
-                                    <h6>1 US Dollar</h6>
-                                </div>
-                                <div class="ms-auto me-4 text-end">
-                                    <small>Sell</small>
-                                    <h6>1.0931</h6>
-                                </div>
-                                <div class="text-end">
-                                    <small>Buy</small>
-                                    <h6>1.0821</h6>
-                                </div>
-                            </div>
-                            <!-- Repeat for other exchange rates -->
                         </div>
                     </div>
 
-                    <!-- Right Column -->
-                    <div class="col-lg-5 col-12">
-                        <!-- Profile Block -->
-
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <footer class="site-footer">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-12 text-center">
-                                <p class="copyright-text mb-0">Copyright © Mini Finance 2048 - Design: <a
-                                        rel="sponsored" href="https://www.tooplate.com" target="_blank">Tooplate</a></p>
+                    <!-- Footer -->
+                    <footer class="site-footer">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12 col-12 text-center">
+                                    <p class="copyright-text mb-0">Copyright © Mini Finance 2048 - Design: <a
+                                            rel="sponsored" href="https://www.tooplate.com" target="_blank">Tooplate</a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </footer>
-            </main>
+                    </footer>
+                </main>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar Menu -->
+                <div ng-include="'layout/menu.html'"></div>
+
+
+            </div>
         </div>
     </div>
 
-
-    <!-- JAVASCRIPT FILES -->
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/apexcharts.min.js"></script>
-    <script src="../admin/js/custom.js"></script>
-
-    <script type="text/javascript">
-        var options = {
-            series: [13, 43, 22],
-            chart: {
-                width: 380,
-                type: 'pie',
-            },
-            labels: ['Balance', 'Expense', 'Credit Loan',],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
-        };
-
-        var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
-        chart.render();
-    </script>
-
-    <script type="text/javascript">
-        var options = {
-            series: [{
-                name: 'Income',
-                data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-            }, {
-                name: 'Expense',
-                data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-            }, {
-                name: 'Transfer',
-                data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-            }],
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-            },
-            yaxis: {
-                title: {
-                    text: '$ (thousands)'
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return "$ " + val + " thousands"
-                    }
-                }
-            }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-    </script>
-    <script src="../admin/js/account.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/index.js"></script>
-
+    <script src="../admin/js/doanhthu.js"></script>
 
 </body>
 

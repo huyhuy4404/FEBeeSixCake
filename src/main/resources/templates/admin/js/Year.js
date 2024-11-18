@@ -80,7 +80,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
     };
   });      
-app.controller('discountsController', function($scope, $http) {
+  app.controller('discountsController', function($scope, $http) {
     $scope.orders = []; // Thay đổi tên biến thành orders
     $scope.filteredOrders = [];
     $scope.yearlyStats = [];
