@@ -1,60 +1,80 @@
-<nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse" aria-label="Sidebar Navigation">
-    <div class="position-sticky py-4 px-3">
-        <ul class="nav flex-column h-100">
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
-                    <i class="bi-house-fill me-2" aria-hidden="true"></i>
-                    Trang Chủ
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="accounts.html">
-                    <i class="bi-people me-2" aria-hidden="true"></i>
-                    Quản Lý Người Dùng
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="product-type.html">
-                    <i class="bi-tags me-2" aria-hidden="true"></i>
-                    Quản Lý Loại Sản Phẩm
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="size.html">
-                    <i class="bi-aspect-ratio me-2" aria-hidden="true"></i>
-                    Quản Lý Kích Thước
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="product.html">
-                    <i class="bi-box-seam me-2" aria-hidden="true"></i>
-                    Quản Lý Sản Phẩm
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="orders.html">
-                    <i class="bi-receipt me-2" aria-hidden="true"></i>
-                    Quản Lý Đơn hàng
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="discount.html">
-                    <i class="bi-percent me-2" aria-hidden="true"></i>
-                    Quản Lý Khuyến Mãi
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="revenue.html">
-                    <i class="bi-graph-up me-2" aria-hidden="true"></i>
-                    Quản Lý Doanh Thu
-                </a>
-            </li>
-            <li class="nav-item border-top mt-auto pt-2">
-                <a class="nav-link" href="#" onclick="logoutFunction()">
-                    <i class="bi-box-arrow-left me-2" aria-hidden="true"></i>
-                    Logout
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+    <!-- Sidebar Menu -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
+        <div class="position-sticky py-4 px-3 sidebar-sticky">
+            <ul class="nav flex-column h-100">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.html">
+                        <i class="bi-house-fill me-2"></i>
+                        Trang Chủ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="accounts.html">
+                        <i class="bi-people-fill me-2"></i>
+                        Quản Lý Người Dùng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="product-type.html">
+                        <i class="bi-tags-fill me-2"></i>
+                        Quản Lý Loại Sản Phẩm
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="size.html">
+                        <i class="bi-arrows-expand me-2"></i>
+                        Quản Lý Kích Thước
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="product.html">
+                        <i class="bi-cart-fill me-2"></i>
+                        Quản Lý Sản Phẩm
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="order.html">
+                        <i class="bi-receipt-cutoff me-2"></i>
+                        Quản Lý Đơn Hàng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="Discount.html">
+                        <i class="bi-percent me-2"></i>
+                        Quản Lý Khuyến Mãi
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi-person me-2"></i>
+                        Quản Lý Doanh Thu
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="quy.html">
+                                Quản Lý Doanh Thu theo Quý
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="thang.html">
+                                Quản Lý Doanh Thu theo Năm
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="day.html">
+                                Quản Lý Doanh Thu theo Ngày
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            
+                <li class="nav-item border-top mt-auto pt-2">
+                    <a class="nav-link" href="login.html">
+                        <i class="bi-box-arrow-left me-2"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+            
+        </div>
+    </nav>

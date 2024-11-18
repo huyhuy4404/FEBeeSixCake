@@ -1,5 +1,5 @@
 var app = angular.module("myApp", ["ngRoute"]);
-
+     
 app.controller("LoginController", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.user = {

@@ -136,39 +136,7 @@
                 </div>
 
                 <!-- User Profile Dropdown -->
-                <div class="dropdown px-3">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid"
-                            alt="User Profile">
-                    </a>
-                    <ul class="dropdown-menu bg-white shadow">
-                        <li>
-                            <div class="dropdown-menu-profile-thumb d-flex">
-                                <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3"
-                                    alt="User Profile">
-                                <div class="d-flex flex-column">
-                                    <small>Thomas</small>
-                                    <a href="#">thomas@site.com</a>
-                                </div>
-                            </div>
-                        </li>
-                        <!-- Profile and Settings Links -->
-                        <li>
-                            <a class="dropdown-item" href="profile.html">
-                                <i class="bi-person me-2"></i>
-                                Profile
-                            </a>
-                        </li>
-                        <!-- More profile options here -->
-                        <li class="border-top mt-3 pt-2 mx-4">
-                            <a class="dropdown-item ms-0 me-0" href="#">
-                                <i class="bi-box-arrow-left me-2"></i>
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
             </div>
         </div>
     </header>
@@ -230,7 +198,7 @@
                                                         <th scope="col">Tên sản phẩm</th>
                                                         <th scope="col">Kích thước</th>
                                                         <th scope="col">Số lượng</th>
-                                                        <th scope="col">Danh mục</th>
+                                                        <th scope="col">Loại sản phẩm</th>
                                                         <th scope="col">Yêu thích</th> <!-- Cột mới -->
                                                         <th scope="col">Giá</th>
                                                         <th scope="col">Ảnh</th>
@@ -331,12 +299,12 @@
 
                                         <!-- Danh Mục -->
                                         <div class="col-md-4">
-                                            <label for="category-select" class="form-label">Danh Mục</label>
+                                            <label for="category-select" class="form-label">Loại sản phẩm</label>
                                             <select class="form-select" id="category-select"
                                                 ng-model="selectedProduct.category"
                                                 ng-options="category as category.categoryname for category in categories track by category.idcategory"
                                                 required>
-                                                <option value="" disabled selected>Chọn danh mục</option>
+                                                <option value="" disabled selected>Chọn loại sản phẩm</option>
                                             </select>
                                             <div class="invalid-feedback"
                                                 ng-show="productForm.$submitted && !selectedProduct.category">
