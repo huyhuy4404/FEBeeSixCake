@@ -91,10 +91,11 @@ a {
     padding-right: 30px; 
     padding-left: 50px;
     background-color: #f8f9fa;
+    max-height: 200px;
   }
 
   footer div div .list-unstyled{
-    padding-left: 20px ;
+    padding-left: 15px ;
   }
 
   .pt-title{
@@ -102,6 +103,7 @@ a {
     color: #d38450;
     padding-top: 10px;
     font-weight: bold;
+    text-align: center;
   }
 
   .ft-icon{

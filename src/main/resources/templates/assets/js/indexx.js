@@ -1,82 +1,128 @@
 var app = angular.module("myApp", []);
 
-app.controller(
-  "discountsController",
-  function ($scope, $http, $location, $window) {
-    $scope.Products = [];
-    $scope.category = [];
-    $scope.filteredProducts = [];
-    $scope.selectedCategory = "";
+app.controller("discountsController", function ($scope, $http) {
+  // Khởi tạo mảng để chứa sản phẩm
+  $scope.Products = [];
+  $scope.category = [];
+  $scope.filteredProducts = []; // Khởi tạo mảng để chứa sản phẩm đã lọc
+  $scope.selectedCategory = "";
 
-    // Lấy danh mục sản phẩm từ API
-    $scope.getCategories = function () {
-      $http
-        .get("http://localhost:8080/beesixcake/api/category")
-        .then(function (response) {
-          if (Array.isArray(response.data)) {
-            $scope.category = response.data.map((item) => ({
-              idcategory: item.idcategory,
-              categoryname: item.categoryname,
-            }));
-          } else {
-            console.error("Dữ liệu không phải mảng!");
+  // Lấy dữ liệu từ API
+  $scope.getProducts = function () {
+    // Gọi API để lấy danh sách sản phẩm
+    $http
+      .get("http://localhost:8080/beesixcake/api/product")
+      .then(function (response) {
+        console.log("Product Response:", response.data);
+
+        if (!Array.isArray(response.data)) {
+          console.error("Dữ liệu không phải mảng!");
+          return;
+        }
+
+        // Lưu tất cả sản phẩm
+        $scope.Products = response.data.map((item) => ({
+          idproduct: item.idproduct,
+          productname: item.productname,
+          img: item.img,
+          isactive: item.isactive,
+          categoryname: item.category.categoryname,
+        }));
+
+        // Gọi API để lấy chi tiết từng sản phẩm
+        return $http.get("http://localhost:8080/beesixcake/api/productdetail");
+      })
+      .then(function (response) {
+        console.log("Product Detail Response:", response.data);
+
+        if (!Array.isArray(response.data)) {
+          console.error("Dữ liệu không phải mảng từ API chi tiết sản phẩm!");
+          return;
+        }
+
+        // Kết hợp dữ liệu giá vào sản phẩm
+        response.data.forEach((detail) => {
+          const product = $scope.Products.find(
+            (item) => item.idproduct === detail.product.idproduct
+          );
+          if (product) {
+            product.unitprice = detail.unitprice; // Giả sử unitprice có trong response này
           }
-        })
-        .catch(function (error) {
-          console.error("Lỗi khi lấy danh mục:", error);
         });
-    };
 
-    // Lấy danh sách sản phẩm từ API
-    $scope.getProducts = function () {
-      $http
-        .get("http://localhost:8080/beesixcake/api/product")
-        .then(function (response) {
-          if (!Array.isArray(response.data)) {
-            console.error("Dữ liệu không phải mảng!");
-            return;
-          }
+        console.log("All Products:", $scope.Products);
+      })
+      .catch(function (error) {
+        console.error("Error fetching data:", error);
+      });
+  };
 
-          $scope.Products = response.data.map((item) => ({
-            idproduct: item.idproduct,
-            productname: item.productname,
-            img: item.img,
-            unitprice: item.unitprice,
-            categoryname: item.category.categoryname,
+  // Hàm lọc sản phẩm theo loại
+  $scope.filterProducts = function (categoryName) {
+    // Lưu tên loại sản phẩm để hiển thị
+    $scope.selectedCategory = categoryName;
+
+    // Lọc sản phẩm theo loại từ danh sách sản phẩm
+    $scope.filteredProducts = $scope.Products.filter(
+      (product) => product.categoryname === categoryName
+    );
+
+    // Kiểm tra xem có sản phẩm nào được lọc không
+    if ($scope.filteredProducts.length > 0) {
+      console.log("Filtered Products:", $scope.filteredProducts);
+    } else {
+      console.log("Không có sản phẩm nào cho loại: " + categoryName);
+    }
+
+    // Chuyển hướng đến trang sản phẩm
+    window.location.href = "SanPham.html#/" + categoryName;
+  };
+
+  // Hàm lấy danh mục sản phẩm
+  $scope.getCategories = function () {
+    $http
+      .get("http://localhost:8080/beesixcake/api/category")
+      .then(function (response) {
+        console.log("Category Response:", response.data);
+        if (Array.isArray(response.data)) {
+          $scope.category = response.data.map((item) => ({
+            idcategory: item.idcategory,
+            categoryname: item.categoryname,
           }));
+          console.log("All Categories:", $scope.category);
+        } else {
+          console.error("Dữ liệu không phải mảng!");
+        }
+      })
+      .catch(function (error) {
+        console.error("Error fetching categories:", error);
+      });
+  };
 
-          // Áp dụng lọc sản phẩm nếu đã có danh mục được chọn
-          $scope.applyFilterFromLocalStorage();
-        })
-        .catch(function (error) {
-          console.error("Lỗi khi lấy sản phẩm:", error);
-        });
-    };
+  // Hàm chuyển hướng đến trang chi tiết sản phẩm
+  $scope.goToProduct = function (productId) {
+    if (productId) {
+      const url =
+        "http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=" +
+        productId;
+      window.location.href = url;
+    } else {
+      console.log("Product ID is not valid.");
+    }
+  };
 
-    // Lưu danh mục được chọn và chuyển hướng
-    $scope.filterProducts = function (categoryName) {
-      localStorage.setItem("selectedCategory", categoryName); // Lưu danh mục vào localStorage
-      $window.location.href = "SanPham.html"; // Chuyển hướng đến trang sản phẩm
-    };
+  // Hàm định dạng tiền tệ
+  $scope.formatCurrency = function (amount) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
 
-    // Áp dụng bộ lọc sản phẩm từ localStorage
-    $scope.applyFilterFromLocalStorage = function () {
-      const selectedCategory = localStorage.getItem("selectedCategory"); // Lấy danh mục từ localStorage
-      if (selectedCategory) {
-        $scope.selectedCategory = selectedCategory;
-        $scope.filteredProducts = $scope.Products.filter(
-          (product) => product.categoryname === selectedCategory
-        );
-      } else {
-        $scope.filteredProducts = $scope.Products; // Hiển thị tất cả sản phẩm nếu không có danh mục
-      }
-    };
-
-    // Khởi tạo dữ liệu khi tải trang
-    $scope.getCategories();
-    $scope.getProducts();
-  }
-);
+  // Gọi hàm để lấy dữ liệu
+  $scope.getProducts();
+  $scope.getCategories(); // Gọi hàm lấy danh mục
+});
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.isLoggedIn = false;

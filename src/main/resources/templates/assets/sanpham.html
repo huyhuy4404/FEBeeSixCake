@@ -77,7 +77,7 @@
                   </a>
                   <div class="box-content">
                     <h3>
-                      <a href="#" title="{{item.productname}}" class="tenTheSP"
+                      <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}" class="tenTheSP"
                         >{{item.productname}}</a
                       >
                     </h3>
@@ -89,7 +89,9 @@
                       >
                         {{item.unitprice}}₫
                       </span>
-                      <span class="discounted-price">{{item.unitprice}}₫</span>
+                      <span class="price text-danger fw-bold">
+                        <span class="price">{{ formatCurrency(item.unitprice) }}</span> 
+                      </span>
                     </div>
                     <div class="cd-content">
                       <div
