@@ -164,106 +164,14 @@ Bootstrap 5 Dashboard Admin Template
                         </div>
                     </div>
 
-                    <div class="dropdown px-3">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid" alt="">
-                        </a>
-                        <ul class="dropdown-menu bg-white shadow">
-                            <li>
-                                <div class="dropdown-menu-profile-thumb d-flex">
-                                    <img src="images/medium-shot-happy-man-smiling.jpg" class="profile-image img-fluid me-3" alt="">
-
-                                    <div class="d-flex flex-column">
-                                        <small>Thomas</small>
-                                        <a href="#">thomas@site.com</a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <a class="dropdown-item" href="profile.html">
-                                    <i class="bi-person me-2"></i>
-                                    Quan li doanh thu
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="product-type.html">
-                                    <i class="bi-person me-2"></i>
-                                    Loại Sản Phẩm
-                                </a>
-                            </li>
-
-                           
-                        </ul>
-                    </div>
+                    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
                 </div>
             </div>
         </header>
 
         <div class="container-fluid">
             <div class="row">
-                <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
-                    <div class="position-sticky py-4 px-3 sidebar-sticky">
-                        <ul class="nav flex-column h-100">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.html">
-                                    <i class="bi-house-fill me-2"></i>
-                                    Trang Chủ
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="accounts.html">
-                                    <i class="bi-people-fill me-2"></i>
-                                    Quản Lý Người Dùng
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="product-type.html">
-                                    <i class="bi-tags-fill me-2"></i>
-                                    Quản Lý Loại Sản Phẩm
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="size.html">
-                                    <i class="bi-arrows-expand me-2"></i>
-                                    Quản Lý Kích Thước
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="product.html">
-                                    <i class="bi-cart-fill me-2"></i>
-                                    Quản Lý Sản Phẩm
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="wallet.html">
-                                    <i class="bi-receipt-cutoff me-2"></i>
-                                    Quản Lý Đơn Hàng
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="Discount.html">
-                                    <i class="bi-percent me-2"></i>
-                                    Quản Lý Khuyến Mãi
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="profile.html">
-                                    <i class="bi-graph-up me-2"></i>
-                                    Quản Lý Doanh Thu
-                                </a>
-                            </li>
-                        
-                            <li class="nav-item border-top mt-auto pt-2">
-                                <a class="nav-link" href="#">
-                                    <i class="bi-box-arrow-left me-2"></i>
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                        
-                    </div>
-                </nav>
+                <div ng-include="'layout/menu.html'"></div>
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-3">
