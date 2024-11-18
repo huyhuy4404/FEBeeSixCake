@@ -1,104 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đơn Hàng</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/order1.js"></script>
 
-    <style>
-      .nav-item a {
-        cursor: pointer; /* Hiển thị hình bàn tay */
-      }
-      body {
-        background-color: #f8f9fa;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đơn Hàng</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/thuan.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="../assets/js/angular.min.js"></script>
+  <script src="../assets/js/angular-route.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/order1.js"></script>
 
+  <style>
+    .nav-item a {
+      cursor: pointer;
+      /* Hiển thị hình bàn tay */
+    }
+
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .order {
+      padding: 15px;
+      /* Giảm padding */
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 15px;
+      /* Giảm margin */
+    }
+
+    .cart-header {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      /* Giảm khoảng cách */
+    }
+
+    .table-order {
+      margin-top: 10px;
+      /* Giảm khoảng cách */
+    }
+
+    .table th {
+      background-color: #d38450;
+      color: white;
+      text-align: center;
+    }
+
+    .table td {
+      text-align: center;
+    }
+
+    .fw-bold {
+      font-weight: bold;
+    }
+
+    .total-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #cc3300;
+    }
+
+    .button-order {
+      margin-top: 10px;
+      /* Giảm khoảng cách */
+      text-align: center;
+    }
+
+    .progress {
+      height: 10px;
+      margin-bottom: 5px;
+      /* Giảm khoảng cách */
+    }
+
+    .progress-bar {
+      background-color: #d38450;
+    }
+
+    @media (max-width: 768px) {
       .order {
-        padding: 15px;
-        /* Giảm padding */
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin: 15px;
-        /* Giảm margin */
+        padding: 10px;
       }
 
       .cart-header {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        /* Giảm khoảng cách */
+        font-size: 20px;
       }
+    }
+  </style>
+</head>
 
-      .table-order {
-        margin-top: 10px;
-        /* Giảm khoảng cách */
-      }
-
-      .table th {
-        background-color: #d38450;
-        color: white;
-        text-align: center;
-      }
-
-      .table td {
-        text-align: center;
-      }
-
-      .fw-bold {
-        font-weight: bold;
-      }
-
-      .total-price {
-        font-size: 18px;
-        font-weight: bold;
-        color: #cc3300;
-      }
-
-      .button-order {
-        margin-top: 10px;
-        /* Giảm khoảng cách */
-        text-align: center;
-      }
-
-      .progress {
-        height: 10px;
-        margin-bottom: 5px;
-        /* Giảm khoảng cách */
-      }
-
-      .progress-bar {
-        background-color: #d38450;
-      }
-
-      @media (max-width: 768px) {
-        .order {
-          padding: 10px;
-        }
-
-        .cart-header {
-          font-size: 20px;
-        }
-      }
-    </style>
-  </head>
-
-  <body ng-app="myApp" ng-controller="CheckLogin">
-    <div ng-include="'layout/header.html'"></div>
-    <div ng-include="'layout/menu.html'"></div>
-    <br />
-    <br />
+<body ng-app="myApp" ng-controller="CheckLogin">
+  <div ng-include="'layout/header.html'"></div>
+  <div ng-include="'layout/menu.html'"></div>
+  <br />
+  <br />
+  <div class="setDoDaiTrang">
     <div class="order-container">
       <div class="container">
         <div class="content-wrapper" ng-controller="OrderController">
@@ -107,17 +108,8 @@
           <div ng-if="!loading && statuses.length > 0">
             <!-- Tabs Navigation -->
             <ul class="nav nav-tabs justify-content-center" role="tablist">
-              <li
-                class="nav-item"
-                ng-repeat="status in statuses"
-                ng-click="filterOrdersByStatus(status.idstatus)"
-              >
-                <a
-                  class="nav-link"
-                  ng-class="{'active': $index === 0}"
-                  role="tab"
-                  style="cursor: pointer"
-                >
+              <li class="nav-item" ng-repeat="status in statuses" ng-click="filterOrdersByStatus(status.idstatus)">
+                <a class="nav-link" ng-class="{'active': $index === 0}" role="tab" style="cursor: pointer">
                   {{ status.statusname }}
                 </a>
               </li>
@@ -146,16 +138,10 @@
                     <td>{{ order.statuspay.statuspayname }}</td>
                     <td>{{ order.statusname }}</td>
                     <td>
-                      <button
-                        class="btn btn-info btn-sm"
-                        ng-click="viewOrderDetails(order)"
-                      >
+                      <button class="btn btn-info btn-sm" ng-click="viewOrderDetails(order)">
                         Xem Chi Tiết
                       </button>
-                      <button
-                        class="btn btn-danger btn-sm"
-                        ng-click="cancelOrder(order)"
-                      >
+                      <button class="btn btn-danger btn-sm" ng-click="cancelOrder(order)">
                         Hủy
                       </button>
                     </td>
@@ -170,8 +156,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div ng-include="'layout/footer.html'"></div>
+  <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
 
-    <div ng-include="'layout/footer.html'"></div>
-    <script src="../assets/js/bootstrap.bundle.js"></script>
-  </body>
 </html>
