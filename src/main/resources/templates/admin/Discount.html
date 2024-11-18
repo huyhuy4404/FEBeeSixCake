@@ -181,50 +181,48 @@
                                             <div class="col-md-6">
                                                 <p>Mã giảm giá:</p>
                                                 <input class="form-control" type="text" name="Discounts-code" id="Discounts-code" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode" required>
-                                                <div ng-show="discountForm['Discounts-code'].$touched && discountForm['Discounts-code'].$invalid" class="text-danger">
+                                                <!-- <div ng-show="discountForm['Discounts-code'].$touched && discountForm['Discounts-code'].$invalid" class="text-danger">
                                                     Mã giảm giá là bắt buộc.
-                                                </div>
+                                                </div> -->
                                             </div>
+                                            <div class="col-md-6">
+                                                <p>Ngày bắt đầu:</p>
+                                                <input class="form-control" placeholder="ngày bắt đầu" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate" required>
+                                                <!-- <div ng-show="discountForm['Discounts-startdate'].$touched && discountForm['Discounts-startdate'].$invalid" class="text-danger">
+                                                    Ngày bắt đầu là bắt buộc.
+                                                </div> -->
+                                            </div>
+                                        </div>
+                            
+                                        <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Phần trăm giảm giá:</p>
                                                 <input class="form-control" type="number" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm giảm giá" ng-model="selecteddiscount.discountpercentage" min="0" max="100" required>
-                                                <div ng-show="discountForm['Discounts-percentage'].$touched && discountForm['Discounts-percentage'].$invalid" class="text-danger">
+                                                <!-- <div ng-show="discountForm['Discounts-percentage'].$touched && discountForm['Discounts-percentage'].$invalid" class="text-danger">
                                                     Phần trăm  là bắt buộc và phải từ 0 đến 100.
-                                                </div>
-                                           
-                                        </div>
-                            
-                                        <div class="row mb-3">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>Ngày bắt đầu:</p>
-                                            <input class="form-control" placeholder="ngày bắt đầu" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate" required>
-                                            <div ng-show="discountForm['Discounts-startdate'].$touched && discountForm['Discounts-startdate'].$invalid" class="text-danger">
-                                                Ngày bắt đầu là bắt buộc.
+                                                </div> -->
                                             </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>Ngày kết thúc:</p>
-                                            <input class="form-control" placeholder="ngày kết thúc" type="date" name="Discounts-enddate" id="Discounts-enddate" ng-model="selecteddiscount.enddate" required>
-                                            <div ng-show="discountForm['Discounts-enddate'].$touched && discountForm['Discounts-enddate'].$invalid" class="text-danger">
-                                                Ngày kết thúc là bắt buộc.
+                                            <div class="col-md-6">
+                                                <p>Đơn hàng tối thiểu:</p>
+                                                <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Đơn hàng tối thiểu" required>
+                                                <!-- <div ng-show="discountForm['lowestPrice'].$touched && discountForm['lowestPrice'].$invalid" class="text-danger">
+                                                    Giá thấp nhất là bắt buộc. 
+                                                </div> -->
                                             </div>
-                                        </div>
-                                            
                                         </div>
                             
                                         <div class="row mb-3">
                                             <div class="col-md-6">
-                                                <p>Đơn hàng tối thiểu:</p>
-                                                <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Đơn hàng tối thiểu" required>
-                                                <div ng-show="discountForm['lowestPrice'].$touched && discountForm['lowestPrice'].$invalid" class="text-danger">
-                                                    Giá thấp nhất là bắt buộc. 
-                                                </div>
+                                                <p>Ngày kết thúc:</p>
+                                                <input class="form-control" placeholder="ngày kết thúc" type="date" name="Discounts-enddate" id="Discounts-enddate" ng-model="selecteddiscount.enddate" required>
+                                                <!-- <div ng-show="discountForm['Discounts-enddate'].$touched && discountForm['Discounts-enddate'].$invalid" class="text-danger">
+                                                    Ngày kết thúc là bắt buộc.
+                                                </div> -->
                                             </div>
                                         </div>
-                            
+                            <!-- ng-disabled="discountForm.$invalid" -->
                                         <div class="d-flex justify-content-start mt-3">
-                                            <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="adddiscount()" ng-disabled="discountForm.$invalid">
+                                            <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="adddiscount()" >
                                                 <i class="fas fa-plus"></i> Thêm
                                             </button>
                                             <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editdiscount()" ng-disabled="discountForm.$invalid">
@@ -264,8 +262,8 @@
                                                     <td>{{formatCurrency(category.lowestprice)}}</td>
                                                     <td class="text-end">
                                                         
-                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Chỉnh sửa</button>
-                                                        <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Xóa</button>
+                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Edit</button>
+                                                        <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Delete</button>
                                                     </td>
                                                 </tr>
                                             </tbody>

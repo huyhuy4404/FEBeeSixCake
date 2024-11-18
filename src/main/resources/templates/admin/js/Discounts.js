@@ -80,7 +80,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
     };
   });      
-app.controller('discountsController', function($scope, $http) {
+  app.controller('discountsController', function($scope, $http) {
     // Lấy danh sách loại sản phẩm từ API
     $scope.getDiscounts = function() {
         $http.get('http://localhost:8080/beesixcake/api/discount')
@@ -110,14 +110,31 @@ app.controller('discountsController', function($scope, $http) {
 
     // Thêm loại sản phẩm mới
     $scope.adddiscount = function() {
+        // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+        if (!$scope.selecteddiscount.startdate || !$scope.selecteddiscount.enddate) {
+            alert('Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.');
+            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        }
+        
+        if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
+            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.');
+            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        }
+    
+        // Kiểm tra nếu phần trăm giảm giá lớn hơn 50%
+        if ($scope.selecteddiscount.discountpercentage > 50) {
+            alert('Phần trăm giảm giá không được vượt quá 50%.');
+            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        }
+    
         var newdiscount = {
             discountcode: $scope.selecteddiscount.discountcode,
             discountpercentage: $scope.selecteddiscount.discountpercentage,
-            startdate: $scope.selecteddiscount.startdate,
-            enddate: $scope.selecteddiscount.enddate,
+            startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
+            enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
             lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
         };
-
+    
         $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
             .then(function(response) {
                 alert('Thêm khuyến mãi thành công!');
@@ -130,22 +147,35 @@ app.controller('discountsController', function($scope, $http) {
 
     // Chỉnh sửa loại sản phẩm
     $scope.editdiscount = function() {
+        // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+        if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
+            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.');
+            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        }
+    
+        // Kiểm tra phần trăm giảm giá không vượt quá 50%
+        if ($scope.selecteddiscount.discountpercentage > 50) {
+            alert('Phần trăm giảm giá không được vượt quá 50%.');
+            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        }
+    
         var editeddiscount = {
             iddiscount: $scope.selecteddiscount.iddiscount,
             discountcode: $scope.selecteddiscount.discountcode,
             discountpercentage: $scope.selecteddiscount.discountpercentage,
-            startdate: $scope.selecteddiscount.startdate,
-            enddate: $scope.selecteddiscount.enddate,
+            startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
+            enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
             lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
         };
-
+    
         $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
             .then(function(response) {
                 alert('Sửa khuyến mãi thành công!');
                 $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
                 $scope.resetForm(); // Làm mới form
             }, function(error) {
-                console.log('Error editing category:', error);
+                console.log('Error editing discount:', error);
+                alert('Có lỗi xảy ra khi sửa khuyến mãi. Vui lòng thử lại.');
             });
     };
 

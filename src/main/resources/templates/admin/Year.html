@@ -8,13 +8,12 @@
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  
-
+    <link href="css/tooplate-mini-finance.css" rel="stylesheet">
+    <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
     <link href="../admin/css/apexcharts.css" rel="stylesheet">
     <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
-    <link href="css/tooplate-mini-finance.css" rel="stylesheet">
- 
+
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
@@ -69,30 +68,42 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- Sidebar Menu -->
-                <div ng-include="'layout/menu.html'"></div>
+            <div ng-include="'layout/menu.html'"></div>
 
                 <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
                     <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Doanh thu Theo năm</h1>
+                        <h1 class="h2 mb-0">Doanh thu theo năm</h1>
                     </div>
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
                             <div class="custom-block">
+                               
                                 <div class="card">
                                     <div class="">
                                         <div class="card-header">
                                             Doanh thu theo năm
                                         </div>
                                         <div class="card-body">
-                                            <div id="yearly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo năm -->
+                                            <div id="yearly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
                                         </div>
                                     </div>
                                 
-                                    <div ng-app="myApp" ng-controller="discountsController">
-                                        <select ng-model="selectedYear" ng-change="filterDataByYear()">
-                                            <option value="">Chọn Năm</option>
-                                            <option ng-repeat="year in years" value="{{year}}">{{year}}</option>
-                                        </select>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="year-input">Nhập Năm</label>
+                                            <input type="number" 
+                                                   id="year-input" 
+                                                   class="form-control" 
+                                                   ng-model="selectedYear" 
+                                                   ng-change="filterData()" 
+                                                   placeholder="Nhập năm" 
+                                                   min="2000" 
+                                                   max="{{currentYear}}">
+                                        </div>
+                                        
+                                        <div ng-if="filteredOrders.length === 0 && selectedYear">
+                                            <p class="text-danger">Không có dữ liệu cho năm {{selectedYear}}.</p>
+                                        </div>
                                     
                                         <table class="table table-hover table-bordered">
                                             <thead>
@@ -105,18 +116,16 @@
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="stat in yearlyStats" ng-if="stat.totalOrders > 0">
-                                                    <td>{{stat.year}}</td>
+                                                    <td>{{stat.year}}</td> <!-- Hiển thị năm -->
                                                     <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
                                                     <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng -->
-                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tổng tiền -->
+                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Định dạng tiền -->
                                                 </tr>
-                                                <tr ng-if="yearlyStats.length === 0">
-                                                    <td colspan="4">Không có dữ liệu cho năm đã chọn.</td>
+                                                <tr ng-if="yearlyStats.length === 0 && !selectedYear">
+                                                    <td colspan="4">Vui lòng chọn năm để xem dữ liệu.</td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                    
-                                        <div id="yearly-bar-chart"></div> <!-- Biểu đồ doanh thu -->
                                     </div>
                                 </div>
                                 
