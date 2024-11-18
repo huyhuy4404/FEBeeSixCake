@@ -1,83 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thanh Toán</title>
-    <!-- Liên kết các tệp CSS -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/thanhtoan.css" />
-    <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <style>
-      body {
-        background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
-        font-family: "Roboto", sans-serif;
-      }
 
-      .thongTinND,
-      .thongTinSP,
-      .tong-TT {
-        background-color: #ffffff;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thanh Toán</title>
+  <!-- Liên kết các tệp CSS -->
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/thanhtoan.css" />
+  <link rel="stylesheet" href="../assets/css/thuan.css" />
+  <style>
+    body {
+      background: linear-gradient(to bottom, #f9f9f9, #e0e0e0);
+      font-family: "Roboto", sans-serif;
+    }
 
-      .titleThongTinND,
-      .titleThongTinSP {
-        font-weight: bold;
-        font-size: 22px;
-        color: #d38450;
-      }
+    .thongTinND,
+    .thongTinSP,
+    .tong-TT {
+      background-color: #ffffff;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-      .tong-TT p {
-        font-size: 18px;
-      }
+    .titleThongTinND,
+    .titleThongTinSP {
+      font-weight: bold;
+      font-size: 22px;
+      color: #d38450;
+    }
 
-      .tong-TT p span {
-        float: right;
-      }
+    .tong-TT p {
+      font-size: 18px;
+    }
 
-      .tongThanhTien {
-        font-size: 28px;
-        font-weight: bold;
-        color: #dc3545;
-      }
+    .tong-TT p span {
+      float: right;
+    }
 
-      .btn {
-        font-size: 16px;
-        padding: 10px 20px;
-      }
+    .tongThanhTien {
+      font-size: 28px;
+      font-weight: bold;
+      color: #dc3545;
+    }
 
-      .breadcrumb {
-        background-color: transparent;
-      }
+    .btn {
+      font-size: 16px;
+      padding: 10px 20px;
+    }
 
-      .breadcrumb a {
-        color: #2e1d15;
-      }
+    .breadcrumb {
+      background-color: transparent;
+    }
 
-      /* Tùy chỉnh thêm cho radio buttons */
-      .form-check-label {
-        cursor: pointer;
-      }
+    .breadcrumb a {
+      color: #2e1d15;
+    }
 
-      .form-check-input:checked + .form-check-label {
-        font-weight: bold;
-        color: #d38450;
-      }
-    </style>
-  </head>
+    /* Tùy chỉnh thêm cho radio buttons */
+    .form-check-label {
+      cursor: pointer;
+    }
 
-  <body ng-app="myApp">
-    <!-- Header và Menu -->
-    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
-    <div ng-include="'layout/menu.html'"></div>
+    .form-check-input:checked+.form-check-label {
+      font-weight: bold;
+      color: #d38450;
+    }
+  </style>
+</head>
+
+<body ng-app="myApp">
+  <!-- Header và Menu -->
+  <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+  <div ng-include="'layout/menu.html'"></div>
+  <div class="setDoDaiTrang">
     <br />
     <!-- Breadcrumb -->
     <div class="container-fluid bg-light py-3">
@@ -107,23 +106,12 @@
         <div class="col-lg-9 thongTinND">
           <p class="titleThongTinND">Địa Chỉ Người Dùng</p>
           <div ng-repeat="addr in addresses" class="form-check mb-2">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="addressOptions"
-              id="address{{ addr.idaddress }}"
-              ng-value="addr.idaddress"
-              ng-model="selectedAddressId"
-              ng-change="changeDefaultAddress()"
-            />
+            <input class="form-check-input" type="radio" name="addressOptions" id="address{{ addr.idaddress }}"
+              ng-value="addr.idaddress" ng-model="selectedAddressId" ng-change="changeDefaultAddress()" />
             <label class="form-check-label" for="address{{ addr.idaddress }}">
               {{ formatAddress(addr) }}
-              <span
-                ng-if="addr.isDefault"
-                style="color: red; font-weight: bold"
-              >
-                (Mặc Định)</span
-              >
+              <span ng-if="addr.isDefault" style="color: red; font-weight: bold">
+                (Mặc Định)</span>
             </label>
           </div>
         </div>
@@ -147,11 +135,7 @@
           <tbody class="text-center">
             <tr ng-repeat="product in products">
               <td>
-                <img
-                  ng-src="../assets/img/{{ product.image }}"
-                  alt="{{ product.name }}"
-                  width="80px"
-                />
+                <img ng-src="../assets/img/{{ product.image }}" alt="{{ product.name }}" width="80px" />
               </td>
               <td>{{ product.name }}</td>
               <td>{{ product.size.sizename }}</td>
@@ -159,10 +143,7 @@
               <td>{{ product.quantity }}</td>
               <td>{{ (product.price * product.quantity) | number: 0 }} VNĐ</td>
               <td>
-                <button
-                  class="btn btn-danger btn-sm"
-                  ng-click="deleteProduct(product.idcartitem)"
-                >
+                <button class="btn btn-danger btn-sm" ng-click="deleteProduct(product.idcartitem)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -181,14 +162,10 @@
                 {{ selectedDiscount ? "Giảm giá " +
                 selectedDiscount.discountpercentage + "% cho đơn từ " +
                 (selectedDiscount.lowestprice | number: 0) + " VNĐ" : "Không
-                chọn mã giảm giá" }}
+                chọn mã giảm giá"}}
               </p>
             </div>
-            <button
-              type="button"
-              class="btn btn-outline-info btn-sm"
-              ng-click="openDiscountModal()"
-            >
+            <button type="button" class="btn btn-outline-info btn-sm" ng-click="openDiscountModal()">
               Thay đổi
             </button>
           </div>
@@ -199,11 +176,7 @@
               <p class="titleThongTinND">Phương Thức Thanh Toán</p>
               <p>{{ selectedPayment.paymentname }}</p>
             </div>
-            <button
-              type="button"
-              class="btn btn-outline-info btn-sm"
-              ng-click="openPaymentModal()"
-            >
+            <button type="button" class="btn btn-outline-info btn-sm" ng-click="openPaymentModal()">
               Thay đổi
             </button>
           </div>
@@ -212,10 +185,8 @@
 
       <!-- Mã QR và Tổng Tiền -->
       <div class="row mb-4">
-        <div
-          class="col-lg-6 thongTinND"
-          ng-if="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng'"
-        >
+        <div class="col-lg-6 thongTinND"
+          ng-if="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng'">
           <div class="text-center">
             <h5 class="titleThongTinND mb-4">Thông tin thanh toán</h5>
             <div class="card border-secondary mb-3">
@@ -238,17 +209,9 @@
             <div>
               <h6 class="mb-3">Mã QR thanh toán</h6>
               <div ng-if="qrCode">
-                <img
-                  ng-src="{{ qrCode }}"
-                  alt="QR Code Thanh Toán"
-                  class="img-fluid mb-3"
-                />
+                <img ng-src="{{ qrCode }}" alt="QR Code Thanh Toán" class="img-fluid mb-3" />
               </div>
-              <button
-                type="button"
-                class="btn btn-primary"
-                ng-click="generateQRCode()"
-              >
+              <button type="button" class="btn btn-primary" ng-click="generateQRCode()">
                 Tạo mã QR
               </button>
             </div>
@@ -266,38 +229,20 @@
         </div>
       </div>
       <!-- Modal chọn mã giảm giá -->
-      <div
-        class="modal fade"
-        id="discountModal"
-        tabindex="-1"
-        aria-labelledby="discountModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="discountModal" tabindex="-1" aria-labelledby="discountModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="discountModalLabel">
                 Chọn mã giảm giá
               </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <!-- Radio "Không chọn mã giảm giá" -->
               <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="discountOptions"
-                  id="noDiscount"
-                  ng-value="null"
-                  ng-model="selectedDiscount"
-                  ng-click="selectDiscount(null)"
-                />
+                <input class="form-check-input" type="radio" name="discountOptions" id="noDiscount" ng-value="null"
+                  ng-model="selectedDiscount" ng-click="selectDiscount(null)" />
                 <label class="form-check-label" for="noDiscount">
                   Không chọn mã giảm giá
                 </label>
@@ -305,30 +250,16 @@
 
               <!-- Danh sách mã giảm giá hợp lệ -->
               <div ng-repeat="discount in validDiscounts" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="discountOptions"
-                  id="discount{{discount.iddiscount}}"
-                  ng-value="discount"
-                  ng-model="selectedDiscount"
-                  ng-click="selectDiscount(discount)"
-                />
-                <label
-                  class="form-check-label"
-                  for="discount{{discount.iddiscount}}"
-                >
+                <input class="form-check-input" type="radio" name="discountOptions" id="discount{{discount.iddiscount}}"
+                  ng-value="discount" ng-model="selectedDiscount" ng-click="selectDiscount(discount)" />
+                <label class="form-check-label" for="discount{{discount.iddiscount}}">
                   Giảm giá {{ discount.discountpercentage }}%% cho đơn từ {{
                   discount.lowestprice | number:0 }} VNĐ
                 </label>
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 OK
               </button>
             </div>
@@ -336,51 +267,26 @@
         </div>
       </div>
       <!-- Modal thay đổi phương thức thanh toán -->
-      <div
-        class="modal fade"
-        id="paymentModal"
-        tabindex="-1"
-        aria-labelledby="paymentModalLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="paymentModalLabel">
                 Chọn Phương Thức Thanh Toán
               </h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <div ng-repeat="payment in payments" class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="paymentOptions"
-                  id="payment{{payment.idpayment}}"
-                  ng-value="payment.idpayment"
-                  ng-model="selectedPaymentId"
-                  ng-click="updatePaymentMethod(payment)"
-                />
-                <label
-                  class="form-check-label"
-                  for="payment{{payment.idpayment}}"
-                >
+                <input class="form-check-input" type="radio" name="paymentOptions" id="payment{{payment.idpayment}}"
+                  ng-value="payment.idpayment" ng-model="selectedPaymentId" ng-click="updatePaymentMethod(payment)" />
+                <label class="form-check-label" for="payment{{payment.idpayment}}">
                   {{ payment.paymentname }}
                 </label>
               </div>
             </div>
             <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 OK
               </button>
             </div>
@@ -390,11 +296,7 @@
       <!-- Nút Đặt Hàng và Trở Về -->
       <div class="row mb-4 text-center">
         <div class="col-lg-12">
-          <button
-            type="button"
-            class="btn btn-outline-secondary me-3"
-            ng-click="returnToCart()"
-          >
+          <button type="button" class="btn btn-outline-secondary me-3" ng-click="returnToCart()">
             Trở về giỏ hàng
           </button>
           <button type="button" class="btn btn-primary">Đặt hàng</button>
@@ -402,10 +304,13 @@
       </div>
     </div>
 
-    <div ng-include="'layout/footer.html'"></div>
-    <!-- Liên kết các tệp JavaScript -->
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/bootstrap.bundle.js"></script>
-    <script src="../assets/js/thanhtoan.js"></script>
-  </body>
+  </div>
+
+  <div ng-include="'layout/footer.html'"></div>
+  <!-- Liên kết các tệp JavaScript -->
+  <script src="../assets/js/angular.min.js"></script>
+  <script src="../assets/js/bootstrap.bundle.js"></script>
+  <script src="../assets/js/thanhtoan.js"></script>
+</body>
+
 </html>

@@ -1,6 +1,11 @@
 body {
   font-family: roboto;
   color: #2e1d15;
+  
+}
+
+.setDoDaiTrang{
+  min-height: 440px;
 }
 
 a {
@@ -47,6 +52,11 @@ a {
     transition: top 0.3s ease; /* Thêm hiệu ứng chuyển động */
   }
   
+  .sticky{
+    width: 90% !important;
+    margin-left: 0 !important;
+  }
+
   .parent-menu.sticky {
     position: fixed; /* Đổi thành fixed khi cuộn */
     top: 0; /* Giữ menu ở trên cùng */

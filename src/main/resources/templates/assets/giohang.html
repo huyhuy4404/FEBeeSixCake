@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link
-      rel="stylesheet"
-      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="../assets/css/hau.css" />
-    <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
 
-  <body ng-app="order" ng-controller="CheckLogin">
-    <div ng-include="'layout/header.html'"></div>
-    <div ng-include="'layout/menu.html'"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giỏ Hàng</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/hau.css" />
+  <link rel="stylesheet" href="../assets/css/thuan.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body ng-app="order" ng-controller="CheckLogin">
+  <div ng-include="'layout/header.html'"></div>
+  <div ng-include="'layout/menu.html'"></div>
+  <div class="setDoDaiTrang">
     <br />
     <div class="order" ng-controller="CartController">
       <div class="container mt-4">
@@ -28,9 +26,7 @@
           phẩm)
           <span class="float-end" style="font-weight: bold; font-size: 16px">
             Tổng tiền:
-            <span style="color: #cc3300" id="selectedTotal"
-              >{{ calculateSelectedTotal() | number:0 }} VNĐ</span
-            >
+            <span style="color: #cc3300" id="selectedTotal">{{ calculateSelectedTotal() | number:0 }} VNĐ</span>
           </span>
         </h5>
         <table class="table cart-table">
@@ -52,10 +48,7 @@
                 <input type="checkbox" ng-model="product.selected" />
               </td>
               <td style="text-align: center; vertical-align: middle">
-                <img
-                  ng-src="../assets/img/{{ product.image }}"
-                  style="width: 80px; height: auto"
-                />
+                <img ng-src="../assets/img/{{ product.image }}" style="width: 80px; height: auto" />
               </td>
               <td style="vertical-align: middle">
                 <p style="font-size: 18px; font-weight: bold">
@@ -73,29 +66,16 @@
                 </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
-                <button
-                  class="btn btn-sm btn-secondary"
-                  ng-click="decreaseQuantity(product)"
-                  style="font-size: 16px"
-                >
+                <button class="btn btn-sm btn-secondary" ng-click="decreaseQuantity(product)" style="font-size: 16px">
                   -
                 </button>
-                <input
-                  type="text"
-                  ng-model="product.quantity"
-                  ng-blur="validateQuantity(product)"
-                  style="
+                <input type="text" ng-model="product.quantity" ng-blur="validateQuantity(product)" style="
                     width: 60px;
                     height: 40px;
                     font-size: 16px;
                     text-align: center;
-                  "
-                />
-                <button
-                  class="btn btn-sm btn-secondary"
-                  ng-click="increaseQuantity(product)"
-                  style="font-size: 16px"
-                >
+                  " />
+                <button class="btn btn-sm btn-secondary" ng-click="increaseQuantity(product)" style="font-size: 16px">
                   +
                 </button>
                 <br />
@@ -109,11 +89,8 @@
                 </p>
               </td>
               <td style="text-align: center; vertical-align: middle">
-                <button
-                  class="btn btn-sm btn-danger"
-                  ng-click="removeFromCart(product)"
-                  style="font-size: 16px; padding: 10px"
-                >
+                <button class="btn btn-sm btn-danger" ng-click="removeFromCart(product)"
+                  style="font-size: 16px; padding: 10px">
                   <i class="bi bi-trash"></i> Xóa
                 </button>
               </td>
@@ -121,84 +98,47 @@
           </tbody>
         </table>
         <!-- Modal thông báo -->
-        <div
-          class="modal fade"
-          id="exceedStockModal"
-          tabindex="-1"
-          aria-labelledby="exceedStockModalLabel"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="exceedStockModal" tabindex="-1" aria-labelledby="exceedStockModalLabel"
+          aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="exceedStockModalLabel">
                   Thông báo
                 </h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Số lượng đã vượt quá số lượng trong kho.
               </div>
               <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
                   OK
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <div
-          class="modal fade"
-          id="stockModal"
-          tabindex="-1"
-          aria-labelledby="stockModalLabel"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="modal fade"
-          id="confirmationModal"
-          tabindex="-1"
-          aria-labelledby="confirmationModalLabel"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+        </div>
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+          aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="confirmationModalLabel">
                   Thông báo
                 </h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Bạn có chắc chắn muốn xóa sản phẩm này không?
               </div>
               <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
                   Hủy
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  ng-click="confirmRemove()"
-                >
+                <button type="button" class="btn btn-danger" ng-click="confirmRemove()">
                   Xóa
                 </button>
               </div>
@@ -206,35 +146,21 @@
           </div>
         </div>
         <!-- Modal thông báo chọn sản phẩm -->
-        <div
-          class="modal fade"
-          id="noProductSelectedModal"
-          tabindex="-1"
-          aria-labelledby="noProductSelectedModalLabel"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="noProductSelectedModal" tabindex="-1" aria-labelledby="noProductSelectedModalLabel"
+          aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="noProductSelectedModalLabel">
                   Thông báo
                 </h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 Vui lòng chọn ít nhất một sản phẩm để thanh toán.
               </div>
               <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
                   OK
                 </button>
               </div>
@@ -244,24 +170,20 @@
 
         <hr />
         <div class="text-center">
-          <a href="../assets/index.html" class="btn btn-lg btn-primary"
-            >Tiếp tục mua hàng</a
-          >
-          <a
-            href="javascript:void(0);"
-            class="btn btn-lg btn-success"
-            ng-click="checkout()"
-          >
-            Đặt hàng
+          <a href="../assets/index.html" class="btn btn-lg btn-primary">Tiếp tục mua hàng</a>
+          <a href="javascript:void(0);" class="btn btn-lg btn-success" ng-click="checkout()">
+            Thanh Toán
           </a>
         </div>
       </div>
     </div>
+  </div>
 
-    <div ng-include="'layout/footer.html'"></div>
-    <script src="../assets/js/bootstrap.bundle.js"></script>
-    <script src="../assets/js/angular.min.js"></script>
-    <script src="../assets/js/angular-route.js"></script>
-    <script src="../assets/js/order.js"></script>
-  </body>
+  <div ng-include="'layout/footer.html'"></div>
+  <script src="../assets/js/bootstrap.bundle.js"></script>
+  <script src="../assets/js/angular.min.js"></script>
+  <script src="../assets/js/angular-route.js"></script>
+  <script src="../assets/js/order.js"></script>
+</body>
+
 </html>
