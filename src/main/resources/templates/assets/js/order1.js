@@ -1,293 +1,128 @@
+app.controller("OrderController", [
+  "$scope",
+  "$http",
+  function ($scope, $http) {
+    $scope.statuses = []; // Danh sách trạng thái
+    $scope.ordersByStatus = {}; // Phân loại đơn hàng theo trạng thái (dùng idstatus)
+    $scope.selectedOrders = []; // Lưu đơn hàng được hiển thị
+    $scope.loading = true;
 
-// app.controller('OrderController', ['$scope', '$http', function ($scope, $http) {
-//   $scope.products = []; // Danh sách sản phẩm từ đơn hàng
-//   $scope.loading = true; // Trạng thái tải
-//   $scope.noOrdersMessage = ''; // Thông báo không tìm thấy đơn hàng
-//   $scope.pendingOrders = [];
-//   $scope.deliveredOrders = [];
-//   $scope.completedOrders = [];
-//   $scope.cancelledOrders = [];
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-//   // Lấy thông tin người dùng đã đăng nhập
-//   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    console.log("Thông tin đăng nhập (loggedInUser):", loggedInUser);
 
-//   // Kiểm tra xem người dùng đã đăng nhập hay chưa
-//   if (loggedInUser) {
-//       loadOrders(); // Tải đơn hàng
-//   } else {
-//       $scope.noOrdersMessage = 'Vui lòng đăng nhập để xem đơn hàng.';
-//       $scope.loading = false;
-//   }
+    console.log("ID Account đã lấy được:", loggedInUser.idaccount);
 
-//   // Hàm tải đơn hàng
-//   function loadOrders() {
-//       $scope.loading = true;
-
-//       $http.get(`http://localhost:8080/beesixcake/api/order/account/${loggedInUser.idaccount}`)
-//           .then(function (response) {
-//               if (response.data && response.data.length > 0) {
-//                   let allProducts = [];
-//                   let promises = response.data.map(order => {
-//                       return $http.get(`http://localhost:8080/beesixcake/api/orderdetail?orderId=${order.idorder}`)
-//                           .then(function (detailResponse) {
-//                               detailResponse.data.forEach(detail => {
-//                                   if (detail.order.account.idaccount === loggedInUser.idaccount) {
-//                                       // Kiểm tra sản phẩm đã tồn tại trong allProducts chưa
-//                                       if (!allProducts.some(prod => prod.productdetail.product.id === detail.productdetail.product.id && prod.order.idorder === detail.order.idorder)) {
-//                                           allProducts.push(detail);
-//                                       }
-//                                   }
-//                               });
-//                           });
-//                   });
-
-//                   return Promise.all(promises).then(() => {
-//                       $scope.products = allProducts; // Cập nhật danh sách sản phẩm
-//                       return $http.get(`http://localhost:8080/beesixcake/api/order-status-history`);
-//                   }).then(function (statusResponse) {
-//                       // Gắn trạng thái vào các sản phẩm
-//                       $scope.products.forEach(product => {
-//                           const statusInfo = statusResponse.data.find(status => status.order.idorder === product.order.idorder);
-//                           if (statusInfo) {
-//                               product.status = statusInfo.status.statusname; // Thêm trạng thái vào sản phẩm
-//                           }
-//                       });
-//                       // Phân loại đơn hàng theo trạng thái
-//                       classifyOrders();
-//                   });
-//               } else {
-//                   $scope.noOrdersMessage = 'Không tìm thấy đơn hàng của người đăng nhập này.';
-//               }
-//           })
-//           .catch(function (error) {
-//               console.error('Lỗi khi lấy thông tin đơn hàng:', error);
-//               $scope.noOrdersMessage = 'Đã xảy ra lỗi khi lấy thông tin đơn hàng.';
-//           })
-//           .finally(function () {
-//               $scope.loading = false; // Đặt trạng thái tải về false
-//           });
-//   }
-
-//   // Hàm phân loại đơn hàng theo trạng thái
-//   function classifyOrders() {
-//       // Reset các mảng trước khi phân loại
-//       $scope.pendingOrders = [];
-//       $scope.deliveredOrders = [];
-//       $scope.completedOrders = [];
-//       $scope.cancelledOrders = [];
-
-//       $scope.products.forEach(order => {
-//           switch (order.status) {
-//               case 'Đang Xác Nhận':
-//                   $scope.pendingOrders.push(order);
-//                   break;
-//               case 'Đang Giao Hàng':
-//                   $scope.deliveredOrders.push(order);
-//                   break;
-//               case 'Hoàn Thành':
-//                   $scope.completedOrders.push(order);
-//                   break;
-//               case 'Hủy':
-//                   $scope.cancelledOrders.push(order);
-//                   break;
-//           }
-//       });
-//   }
-
-//   // Hàm tính tổng giá
-//   $scope.calculateTotal = function () {
-//       return $scope.products.reduce(function (sum, product) {
-//           return sum + (product.productdetail.unitprice * product.quantity);
-//       }, 0);
-//   };
-
-//   // Hàm định dạng tiền tệ
-//   $scope.formatCurrency = function (amount) {
-//       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-//   };
-
-//   // Hàm hủy đơn hàng
-//   $scope.cancelOrder = function (order) {
-//       const payload = {
-//           idstatushistory: order.idstatushistory,
-//           orderId: order.order.idorder,
-//           newStatusId: 4 // ID cho trạng thái "Hủy"
-//       };
-
-//       $http.put(`http://localhost:8080/beesixcake/api/order/s`, payload)
-//           .then(function (response) {
-//               console.log('Đơn hàng đã được hủy thành công:', response.data);
-//               order.status = 'Hủy'; // Cập nhật trạng thái trên UI
-//               classifyOrders(); // Cập nhật phân loại
-//           })
-//           .catch(function (error) {
-//               console.error('Lỗi khi hủy đơn hàng:', error);
-//               alert('Không thể hủy đơn hàng. Vui lòng thử lại.');
-//           });
-//   };
-
-//   // Hàm chuyển hướng đến trang chi tiết sản phẩm
-//   $scope.goToProduct = function (productId, order) {
-//     if (productId) {
-//         console.log(order); // Kiểm tra chi tiết đơn hàng
-//         const orderDetails = {
-//             idOrder: order.order.idorder,
-//             productId: productId,
-//             productName: order.productdetail.product.productname,
-//             size: order.productdetail.size.sizename, // Lưu kích cỡ
-//             quantity: order.quantity,
-//             unitPrice: order.productdetail.unitprice,
-//             orderDate: order.order.orderdate,
-//             address: order.order.addressdetail,
-//             status: order.status
-//         };
-
-//         localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
-//         const url = `http://127.0.0.1:5500/src/main/resources/templates/assets/chitietsanpham.html?id=${productId}`;
-//         window.location.href = url;
-//     } else {
-//         console.log("Product ID is not valid.");
-//     }
-// };
-// }]);
-app.controller('OrderController', ['$scope', '$http', function ($scope, $http) {
-  $scope.products = [];
-  $scope.loading = true;
-  $scope.noOrdersMessage = '';
-  $scope.pendingOrders = [];
-  $scope.deliveredOrders = [];
-  $scope.completedOrders = [];
-  $scope.cancelledOrders = [];
-  $scope.selectedOrder = {};
-  $scope.selectedOrderDetails = [];
-
-  const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-  if (loggedInUser) {
-      loadOrders();
-  } else {
-      $scope.noOrdersMessage = 'Vui lòng đăng nhập để xem đơn hàng.';
-      $scope.loading = false;
-  }
-
-  function loadOrders() {
+    function initialize() {
       $scope.loading = true;
-      $http.get(`http://localhost:8080/beesixcake/api/order/account/${loggedInUser.idaccount}`)
-          .then(function (response) {
-              if (response.data && response.data.length > 0) {
-                  let allProducts = [];
-                  let promises = response.data.map(order => {
-                      return $http.get(`http://localhost:8080/beesixcake/api/orderdetail?orderId=${order.idorder}`)
-                          .then(function (detailResponse) {
-                              detailResponse.data.forEach(detail => {
-                                  if (detail.order.account.idaccount === loggedInUser.idaccount) {
-                                      if (!allProducts.some(prod => prod.productdetail.product.id === detail.productdetail.product.id && prod.order.idorder === detail.order.idorder)) {
-                                          allProducts.push(detail);
-                                      }
-                                  }
-                              });
-                          });
-                  });
 
-                  return Promise.all(promises).then(() => {
-                      $scope.products = allProducts;
-                      return $http.get(`http://localhost:8080/beesixcake/api/order-status-history`);
-                  }).then(function (statusResponse) {
-                      $scope.products.forEach(product => {
-                          const statusInfo = statusResponse.data.find(status => status.order.idorder === product.order.idorder);
-                          if (statusInfo) {
-                              product.status = statusInfo.status.statusname;
-                          }
-                      });
-                      classifyOrders();
-                  });
-              } else {
-                  $scope.noOrdersMessage = 'Không tìm thấy đơn hàng của người đăng nhập này.';
-              }
-          })
-          .catch(function (error) {
-              console.error('Lỗi khi lấy thông tin đơn hàng:', error);
-              $scope.noOrdersMessage = 'Đã xảy ra lỗi khi lấy thông tin đơn hàng.';
-          })
-          .finally(function () {
-              $scope.loading = false;
+      // Bước 1: Gọi API lấy danh sách trạng thái
+      $http
+        .get("http://localhost:8080/beesixcake/api/status")
+        .then((statusResponse) => {
+          console.log("Danh sách trạng thái:", statusResponse.data);
+          $scope.statuses = statusResponse.data;
+
+          // Chuẩn bị cấu trúc phân loại (theo idstatus)
+          $scope.statuses.forEach((status) => {
+            $scope.ordersByStatus[status.idstatus] = [];
           });
-  }
 
-  function classifyOrders() {
-      $scope.pendingOrders = [];
-      $scope.deliveredOrders = [];
-      $scope.completedOrders = [];
-      $scope.cancelledOrders = [];
+          console.log(
+            "Keys of Orders By Status After Initialization:",
+            Object.keys($scope.ordersByStatus)
+          );
 
-      $scope.products.forEach(order => {
-          switch (order.status) {
-              case 'Đang Xác Nhận':
-                  $scope.pendingOrders.push(order);
-                  break;
-              case 'Đang Giao Hàng':
-                  $scope.deliveredOrders.push(order);
-                  break;
-              case 'Hoàn Thành':
-                  $scope.completedOrders.push(order);
-                  break;
-              case 'Hủy':
-                  $scope.cancelledOrders.push(order);
-                  break;
-          }
-      });
-  }
-
-  $scope.calculateTotal = function () {
-      return $scope.products.reduce(function (sum, product) {
-          return sum + (product.productdetail.unitprice * product.quantity);
-      }, 0);
-  };
-
-  $scope.formatCurrency = function (amount) {
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-  };
-
-  $scope.cancelOrder = function (order) {
-      const payload = {
-          idstatushistory: order.idstatushistory,
-          orderId: order.order.idorder,
-          newStatusId: 4 // ID cho trạng thái "Hủy"
-      };
-
-      $http.put(`http://localhost:8080/beesixcake/api/order/s`, payload)
-          .then(function (response) {
-              console.log('Đơn hàng đã được hủy thành công:', response.data);
-              order.status = 'Hủy';
-              classifyOrders();
-          })
-          .catch(function (error) {
-              console.error('Lỗi khi hủy đơn hàng:', error);
-              alert('Không thể hủy đơn hàng. Vui lòng thử lại.');
-          });
-  };
-
-  // Hàm tải chi tiết đơn hàng
-  $scope.loadOrderDetails = function (order) {
-    console.log("Đơn hàng được chọn:", order);
-
-    // Giả sử order.order.idorder là ID đơn hàng cần lấy chi tiết
-    $http.get(`http://localhost:8080/beesixcake/api/orderdetail/${order.idorderdetail}`)
-        .then(function (response) {
-            console.log("Chi tiết đơn hàng:", response.data); // Kiểm tra dữ liệu
-
-            // Cập nhật selectedOrder với dữ liệu nhận được từ API
-            $scope.selectedOrder = response.data;
-
-            // Hiển thị modal sau khi cập nhật dữ liệu
-            $('#orderDetailsModal').modal('show');
+          // Bước 2: Gọi API lấy danh sách đơn hàng theo tài khoản
+          return $http.get(
+            `http://localhost:8080/beesixcake/api/order/account/${loggedInUser.idaccount}`
+          );
         })
-        .catch(function (error) {
-            console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
-            alert('Không thể tải chi tiết đơn hàng. Vui lòng thử lại.');
+        .then((orderResponse) => {
+          console.log("Danh sách đơn hàng:", orderResponse.data);
+          const orders = orderResponse.data;
+
+          // Bước 3: Gọi API lấy trạng thái chi tiết từng đơn hàng
+          const promises = orders.map((order) =>
+            $http
+              .get(
+                `http://localhost:8080/beesixcake/api/order-status-history/by-order/${order.idorder}`
+              )
+              .then((statusResponse) => {
+                const statusData = statusResponse.data[0];
+                order.statusname =
+                  statusData?.status.statusname.trim() || "Không Xác Định";
+                order.statusid = statusData?.status.idstatus || null; // Lưu id trạng thái
+              })
+              .catch((error) => {
+                console.error(
+                  `Lỗi khi lấy trạng thái đơn hàng ${order.idorder}:`,
+                  error
+                );
+                order.statusname = "Không Xác Định";
+                order.statusid = null; // Đặt id trạng thái là null nếu lỗi
+              })
+          );
+
+          return Promise.all(promises).then(() => {
+            // Phân loại đơn hàng theo id trạng thái
+            orders.forEach((order) => {
+              if (order.statusid && $scope.ordersByStatus[order.statusid]) {
+                $scope.ordersByStatus[order.statusid].push(order);
+              } else {
+                console.warn(
+                  `Không tìm thấy trạng thái tương ứng cho đơn hàng ${order.idorder}:`,
+                  order.statusid
+                );
+              }
+            });
+
+            // Gán mặc định đơn hàng của trạng thái đầu tiên vào bảng
+            const firstStatusId =
+              $scope.statuses.length > 0 ? $scope.statuses[0].idstatus : null;
+            if (firstStatusId) {
+              $scope.selectedOrders = $scope.ordersByStatus[firstStatusId];
+            }
+
+            console.log(
+              "Orders By Status After Classification:",
+              $scope.ordersByStatus
+            );
+          });
+        })
+        .catch((error) => {
+          console.error("Lỗi khi tải dữ liệu:", error);
+        })
+        .finally(() => {
+          $scope.loading = false;
+          console.log(
+            "Trạng thái cuối cùng của Orders By Status:",
+            $scope.ordersByStatus
+          );
         });
-};
-}]);
+    }
+
+    initialize();
+
+    // Hàm xử lý click vào trạng thái
+    $scope.filterOrdersByStatus = function (statusId) {
+      $scope.selectedOrders = $scope.ordersByStatus[statusId] || [];
+      console.log(
+        `Đơn hàng thuộc trạng thái ID "${statusId}":`,
+        $scope.selectedOrders
+      );
+    };
+
+    $scope.viewOrderDetails = function (order) {
+      console.log(`Xem chi tiết đơn hàng: ${order.idorder}`);
+    };
+
+    $scope.cancelOrder = function (order) {
+      console.log(`Hủy đơn hàng: ${order.idorder}`);
+    };
+  },
+]);
+
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.isLoggedIn = false;
