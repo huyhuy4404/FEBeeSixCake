@@ -32,27 +32,35 @@ app.controller("RegisterController", function ($scope, $http, $window, $timeout)
             url: "http://localhost:8080/beesixcake/api/account",
             data: $scope.user
         }).then(function (response) {
-            // Kiểm tra thành công
             if (response.data && response.data.success) {
+                // Hiển thị thông báo thành công
                 $scope.registerSuccess = 'Đăng ký thành công! Vui lòng đăng nhập.';
+                $scope.registerError = ''; // Xóa thông báo lỗi
                 $timeout(function () {
                     $window.location.href = 'login.html';
-                }, 3000);
+                }, 2000); // Chuyển hướng sau 3 giây
             } else if (response.data && response.data.error) {
-                // Hiển thị lỗi cụ thể từ API
+                // Hiển thị lỗi nếu có
                 $scope.registerError = parseErrorMessage(response.data.error);
+                $scope.registerSuccess = ''; // Xóa thông báo thành công
             } else {
-                $scope.registerError = 'Đăng ký thất bại! Dữ liệu trả về không hợp lệ.';
+                $scope.registerSuccess = 'Đăng ký thành công! Vui lòng đăng nhập.'; // Xóa thông báo thành công
+                $timeout(function () {
+                    $window.location.href = 'login.html';
+                }, 2000); // Chuyển hướng sau 3 giây
             }
         }).catch(function (error) {
-            // Xử lý lỗi trả về từ API
             if (error.data && error.data.error) {
-                $scope.registerError = parseErrorMessage(error.data.error);
+                const errorDetails = error.data.error.details || JSON.stringify(error.data.error);
+        $scope.registerError = `${errorDetails.replace(/["{}]/g, '')}`;
             } else {
                 $scope.registerError = 'Đăng ký thất bại! Không thể kết nối tới máy chủ.';
             }
+            $scope.registerSuccess = ''; // Xóa thông báo thành công
             console.error('Chi tiết lỗi:', error);
         });
+        
+        
     };
 
     // Hàm phân tích lỗi từ API
