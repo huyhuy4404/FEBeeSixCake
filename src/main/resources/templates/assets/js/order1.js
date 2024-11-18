@@ -6,6 +6,12 @@ app.controller("OrderController", [
     $scope.ordersByStatus = {}; // Phân loại đơn hàng theo trạng thái (dùng idstatus)
     $scope.selectedOrders = []; // Lưu đơn hàng được hiển thị
     $scope.loading = true;
+    $scope.activeTab = 0; // Mặc định tab đầu tiên là active
+
+    // Hàm để đặt tab đang được chọn
+    $scope.setActiveTab = function (index) {
+      $scope.activeTab = index;
+    };
 
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
