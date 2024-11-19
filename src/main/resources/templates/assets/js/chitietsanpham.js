@@ -6,10 +6,17 @@ app.controller("ProductDetailController", function ($scope, $http) {
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get("id");
 
-  $scope.favoriteCount = 0; // Khởi tạo số lượng yêu thích
-  $scope.isActive = false; // Trạng thái yêu thích
-  $scope.currentFavoriteId = null; // ID yêu thích hiện tại
-  $scope.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Lấy thông tin tài khoản đăng nhập
+  // Khởi tạo biến
+  $scope.product = {};
+  $scope.productDetails = [];
+  $scope.categories = [];
+  $scope.selectedSizeDetail = null;
+  $scope.quantity = 1;
+  $scope.maxQuantity = 1;
+  $scope.favoriteCount = 0;
+  $scope.isActive = false;
+  $scope.currentFavoriteId = null;
+  $scope.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
 
   if (!productId) {
     console.error("Product ID is missing from the URL");
@@ -17,30 +24,61 @@ app.controller("ProductDetailController", function ($scope, $http) {
   }
 
   // **1. Lấy thông tin sản phẩm**
-  $http
-    .get(`${API}/product/${productId}`)
-    .then((response) => {
-      $scope.product = response.data;
-      $scope.product.img = imageBaseUrl + $scope.product.img.split("/").pop();
-    })
-    .catch((error) => console.error("Error fetching product:", error));
+  const fetchProduct = () => {
+    $http
+      .get(`${API}/product/${productId}`)
+      .then((response) => {
+        $scope.product = response.data;
+        $scope.product.img = imageBaseUrl + $scope.product.img.split("/").pop();
+      })
+      .catch((error) => {
+        console.error("Error fetching product:", error);
+      });
+  };
 
-  // **2. Lấy số lượng yêu thích và kiểm tra trạng thái yêu thích**
+  // **2. Lấy chi tiết sản phẩm**
+  const fetchProductDetails = () => {
+    $http
+      .get(`${API}/productdetail`)
+      .then((response) => {
+        $scope.productDetails = response.data.filter(
+          (detail) => detail.product.idproduct == productId
+        );
+
+        if ($scope.productDetails.length > 0) {
+          $scope.productDetails.forEach((detail) => {
+            detail.product.img =
+              imageBaseUrl + detail.product.img.split("/").pop();
+          });
+
+          $scope.selectedSizeDetail =
+            $scope.productDetails.find((detail) => detail.size.idsize === 1) ||
+            $scope.productDetails[0];
+          $scope.selectedSize = $scope.selectedSizeDetail.size.sizename;
+          $scope.maxQuantity = $scope.selectedSizeDetail.quantityinstock;
+        } else {
+          console.warn("No product details found.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching product details:", error);
+      });
+  };
+
+  // **3. Lấy thông tin yêu thích**
   const fetchFavoriteData = () => {
-    if (!$scope.loggedInUser) return; // Nếu chưa đăng nhập, không cần kiểm tra
+    if (!$scope.loggedInUser) return;
 
     $http
       .get(`${API}/favorites`)
       .then((response) => {
         const favorites = response.data;
 
-        // Đếm số lượng yêu thích cho sản phẩm hiện tại
         const productFavorites = favorites.filter(
           (fav) => fav.product.idproduct == productId
         );
         $scope.favoriteCount = productFavorites.length;
 
-        // Kiểm tra xem người dùng hiện tại đã thích sản phẩm chưa
         const userFavorite = productFavorites.find(
           (fav) => fav.account.idaccount === $scope.loggedInUser.idaccount
         );
@@ -53,82 +91,12 @@ app.controller("ProductDetailController", function ($scope, $http) {
           $scope.currentFavoriteId = null;
         }
       })
-      .catch((error) => console.error("Error fetching favorite data:", error));
+      .catch((error) => {
+        console.error("Error fetching favorites:", error);
+      });
   };
 
-  // Gọi hàm khi khởi tạo
-  fetchFavoriteData();
-
-  // **3. Thay đổi trạng thái yêu thích**
-  $scope.toggleHeart = () => {
-    if (!$scope.loggedInUser) {
-      alert("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
-      return;
-    }
-
-    if ($scope.isActive) {
-      // Nếu đã thích, gửi yêu cầu DELETE
-      $http
-        .delete(`${API}/favorites/${$scope.currentFavoriteId}`)
-        .then(() => {
-          $scope.isActive = false;
-          $scope.currentFavoriteId = null;
-          fetchFavoriteData(); // Cập nhật lại số lượng yêu thích
-          
-        })
-        .catch((error) => {
-          console.error("Error deleting favorite:", error);
-          alert("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
-        });
-    } else {
-      // Nếu chưa thích, gửi yêu cầu POST
-      const newFavorite = {
-        account: { idaccount: $scope.loggedInUser.idaccount },
-        product: { idproduct: productId },
-      };
-
-      $http
-        .post(`${API}/favorites`, newFavorite)
-        .then((response) => {
-          $scope.isActive = true;
-          $scope.currentFavoriteId = response.data.idfavorite;
-          fetchFavoriteData(); // Cập nhật lại số lượng yêu thích
-          
-        })
-        .catch((error) => {
-          console.error("Error adding favorite:", error);
-          alert("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
-        });
-    }
-  };
-
-  // **4. Các hàm khác liên quan đến sản phẩm**
-  $scope.selectSize = (sizename) => {
-    $scope.selectedSize = sizename;
-    $scope.selectedSizeDetail = $scope.productDetails.find(
-      (detail) => detail.size.sizename === sizename
-    );
-    $scope.maxQuantity = $scope.selectedSizeDetail.quantityinstock || 1;
-    $scope.quantity = 1; // Đặt lại số lượng về 1 khi thay đổi kích cỡ
-  };
-
-  $scope.decreaseQuantity = () => {
-    if ($scope.quantity > 1) $scope.quantity--;
-  };
-
-  $scope.increaseQuantity = () => {
-    if ($scope.quantity < $scope.maxQuantity) $scope.quantity++;
-  };
-
-  $scope.updateQuantity = () => {
-    $scope.quantity = parseInt($scope.quantity);
-    if ($scope.quantity > $scope.maxQuantity) {
-      $scope.quantity = $scope.maxQuantity;
-    } else if ($scope.quantity < 1) {
-      $scope.quantity = 1;
-    }
-  };
-
+  // **4. Thêm vào giỏ hàng**
   $scope.addToCart = () => {
     if (!$scope.loggedInUser) {
       alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
@@ -152,15 +120,111 @@ app.controller("ProductDetailController", function ($scope, $http) {
 
     $http
       .post(`${API}/cartitems`, cartItem)
-      .then(() => alert("Thêm sản phẩm vào giỏ hàng thành công!"))
+      .then(() => {
+        alert("Thêm sản phẩm vào giỏ hàng thành công!");
+      })
       .catch((error) => {
         console.error("Error adding to cart:", error);
         alert("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.");
       });
   };
+
+  // **5. Lấy danh mục sản phẩm**
+  const fetchCategories = () => {
+    $http
+      .get(`${API}/category`)
+      .then((response) => {
+        $scope.categories = response.data;
+
+        $scope.categories.forEach((category) => {
+          category.count = 0; // Khởi tạo count là 0
+        });
+
+        $http
+          .get(`${API}/product`)
+          .then((productResponse) => {
+            const products = productResponse.data;
+
+            products.forEach((product) => {
+              const category = $scope.categories.find(
+                (cat) => cat.idcategory === product.category.idcategory
+              );
+              if (category) category.count++;
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  };
+
+  // **6. Thay đổi kích cỡ**
+  $scope.selectSize = (sizename) => {
+    $scope.selectedSize = sizename;
+    $scope.selectedSizeDetail = $scope.productDetails.find(
+      (detail) => detail.size.sizename === sizename
+    );
+    $scope.maxQuantity = $scope.selectedSizeDetail.quantityinstock || 1;
+    $scope.quantity = 1;
+  };
+
+  // **7. Giảm/Tăng số lượng**
+  $scope.decreaseQuantity = () => {
+    if ($scope.quantity > 1) $scope.quantity--;
+  };
+
+  $scope.increaseQuantity = () => {
+    if ($scope.quantity < $scope.maxQuantity) $scope.quantity++;
+  };
+
+  // **8. Yêu thích sản phẩm**
+  $scope.toggleHeart = () => {
+    if (!$scope.loggedInUser) {
+      alert("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
+      return;
+    }
+
+    if ($scope.isActive) {
+      $http
+        .delete(`${API}/favorites/${$scope.currentFavoriteId}`)
+        .then(() => {
+          $scope.isActive = false;
+          $scope.currentFavoriteId = null;
+          fetchFavoriteData();
+        })
+        .catch((error) => {
+          console.error("Error deleting favorite:", error);
+          alert("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
+        });
+    } else {
+      const newFavorite = {
+        account: { idaccount: $scope.loggedInUser.idaccount },
+        product: { idproduct: productId },
+      };
+
+      $http
+        .post(`${API}/favorites`, newFavorite)
+        .then((response) => {
+          $scope.isActive = true;
+          $scope.currentFavoriteId = response.data.idfavorite;
+          fetchFavoriteData();
+        })
+        .catch((error) => {
+          console.error("Error adding favorite:", error);
+          alert("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
+        });
+    }
+  };
+
+  // **Gọi tất cả dữ liệu khi khởi tạo**
+  fetchProduct();
+  fetchProductDetails();
+  fetchFavoriteData();
+  fetchCategories();
 });
-
-
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
