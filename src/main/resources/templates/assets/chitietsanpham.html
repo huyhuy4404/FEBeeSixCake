@@ -64,11 +64,14 @@
               </div>
               <div class="">
                 <span class="QuantityInStock text-chitietsp">Số lượng hiện có:
-                  <b>{{selectedSizeDetail.quantityinstock}}</b></span>
-                <span class=" text-chitietsp ms-3">Số lượng yêu thích:
-                  <b>{{product.favorite}}</b></span>
+                  <b>{{selectedSizeDetail.quantityinstock}}</b>
+                </span>
+                <span class="text-chitietsp ms-3">Số lượng yêu thích:
+                  <b>{{favoriteCount}}</b>
+                </span>                
+                <!-- Nút yêu thích -->
                 <button type="button" class="btn btn-yt ps-1" ng-click="toggleHeart()" ng-class="{'active': isActive}">
-                  <i class="bi bi-heart-fill"></i>
+                  <i class="bi" ng-class="isActive ? 'bi-heart-fill' : 'bi-heart'"></i>
                 </button>
               </div>
               <div class="size-pd text-chitietsp mt-1">

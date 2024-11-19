@@ -3,101 +3,107 @@ var app = angular.module("myApp", []);
 app.controller("ProductDetailController", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api";
   const imageBaseUrl = "https://5ck6jg.csb.app/anh/";
-  var urlParams = new URLSearchParams(window.location.search);
-  var productId = urlParams.get("id");
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get("id");
 
-  // Kiểm tra nếu có productId
-  if (productId) {
-    // Gọi API để lấy thông tin sản phẩm
-    $http
-      .get(`${API}/product/${productId}`)
-      .then(function (response) {
-        $scope.product = response.data;
-        $scope.product.img = imageBaseUrl + $scope.product.img.split("/").pop();
-      })
-      .catch(function (error) {
-        console.error("Error fetching product:", error);
-      });
+  $scope.favoriteCount = 0; // Khởi tạo số lượng yêu thích
+  $scope.isActive = false; // Trạng thái yêu thích
+  $scope.currentFavoriteId = null; // ID yêu thích hiện tại
+  $scope.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")); // Lấy thông tin tài khoản đăng nhập
 
-    // Gọi API để lấy chi tiết sản phẩm
-    $http
-      .get(`${API}/productdetail`)
-      .then(function (response) {
-        $scope.productDetails = response.data.filter(
-          (detail) => detail.product.idproduct == productId
-        );
-
-        $scope.productDetails.forEach((detail) => {
-          detail.product.img =
-            imageBaseUrl + detail.product.img.split("/").pop();
-        });
-
-        $scope.selectedSizeDetail =
-          $scope.productDetails.find((detail) => detail.size.idsize === 1) ||
-          $scope.productDetails[0];
-        $scope.selectedSize = $scope.selectedSizeDetail.size.sizename;
-        $scope.quantity = 1;
-        $scope.maxQuantity = $scope.selectedSizeDetail.quantityinstock;
-      })
-      .catch(function (error) {
-        console.error("Error fetching product details:", error);
-      });
-
-    // Lấy thông tin giỏ hàng từ API
-    $http
-      .get(`${API}/shoppingcart`)
-      .then(function (response) {
-        const shoppingCarts = response.data;
-        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        $scope.currentUserShoppingCart = shoppingCarts.find(
-          (cart) => cart.account.idaccount === loggedInUser.idaccount
-        );
-      })
-      .catch(function (error) {
-        console.error("Error fetching shopping cart:", error);
-      });
-  } else {
+  if (!productId) {
     console.error("Product ID is missing from the URL");
+    return;
   }
 
-  // Thêm sản phẩm vào giỏ hàng
-  $scope.addToCart = function () {
-    if (!$scope.currentUserShoppingCart) {
-      alert("Giỏ hàng không tồn tại. Vui lòng đăng nhập lại.");
-      return;
-    }
+  // **1. Lấy thông tin sản phẩm**
+  $http
+    .get(`${API}/product/${productId}`)
+    .then((response) => {
+      $scope.product = response.data;
+      $scope.product.img = imageBaseUrl + $scope.product.img.split("/").pop();
+    })
+    .catch((error) => console.error("Error fetching product:", error));
 
-    // Kiểm tra số lượng hợp lệ
-    if ($scope.quantity < 1 || $scope.quantity > $scope.maxQuantity) {
-      alert("Số lượng không hợp lệ!");
-      return;
-    }
+  // **2. Lấy số lượng yêu thích và kiểm tra trạng thái yêu thích**
+  const fetchFavoriteData = () => {
+    if (!$scope.loggedInUser) return; // Nếu chưa đăng nhập, không cần kiểm tra
 
-    // Chuẩn bị dữ liệu để gửi lên API
-    const cartItem = {
-      quantity: $scope.quantity,
-      productdetail: {
-        idproductdetail: $scope.selectedSizeDetail.idproductdetail,
-      },
-      shoppingcart: {
-        idshoppingcart: $scope.currentUserShoppingCart.idshoppingcart,
-      },
-    };
-
-    // Gửi yêu cầu POST tới API /cartitems
     $http
-      .post(`${API}/cartitems`, cartItem)
-      .then(function (response) {
-        alert("Thêm sản phẩm vào giỏ hàng thành công!");
+      .get(`${API}/favorites`)
+      .then((response) => {
+        const favorites = response.data;
+
+        // Đếm số lượng yêu thích cho sản phẩm hiện tại
+        const productFavorites = favorites.filter(
+          (fav) => fav.product.idproduct == productId
+        );
+        $scope.favoriteCount = productFavorites.length;
+
+        // Kiểm tra xem người dùng hiện tại đã thích sản phẩm chưa
+        const userFavorite = productFavorites.find(
+          (fav) => fav.account.idaccount === $scope.loggedInUser.idaccount
+        );
+
+        if (userFavorite) {
+          $scope.isActive = true;
+          $scope.currentFavoriteId = userFavorite.idfavorite;
+        } else {
+          $scope.isActive = false;
+          $scope.currentFavoriteId = null;
+        }
       })
-      .catch(function (error) {
-        console.error("Error adding to cart:", error);
-        alert("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.");
-      });
+      .catch((error) => console.error("Error fetching favorite data:", error));
   };
 
-  // Thay đổi kích cỡ
-  $scope.selectSize = function (sizename) {
+  // Gọi hàm khi khởi tạo
+  fetchFavoriteData();
+
+  // **3. Thay đổi trạng thái yêu thích**
+  $scope.toggleHeart = () => {
+    if (!$scope.loggedInUser) {
+      alert("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
+      return;
+    }
+
+    if ($scope.isActive) {
+      // Nếu đã thích, gửi yêu cầu DELETE
+      $http
+        .delete(`${API}/favorites/${$scope.currentFavoriteId}`)
+        .then(() => {
+          $scope.isActive = false;
+          $scope.currentFavoriteId = null;
+          fetchFavoriteData(); // Cập nhật lại số lượng yêu thích
+          
+        })
+        .catch((error) => {
+          console.error("Error deleting favorite:", error);
+          alert("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
+        });
+    } else {
+      // Nếu chưa thích, gửi yêu cầu POST
+      const newFavorite = {
+        account: { idaccount: $scope.loggedInUser.idaccount },
+        product: { idproduct: productId },
+      };
+
+      $http
+        .post(`${API}/favorites`, newFavorite)
+        .then((response) => {
+          $scope.isActive = true;
+          $scope.currentFavoriteId = response.data.idfavorite;
+          fetchFavoriteData(); // Cập nhật lại số lượng yêu thích
+          
+        })
+        .catch((error) => {
+          console.error("Error adding favorite:", error);
+          alert("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
+        });
+    }
+  };
+
+  // **4. Các hàm khác liên quan đến sản phẩm**
+  $scope.selectSize = (sizename) => {
     $scope.selectedSize = sizename;
     $scope.selectedSizeDetail = $scope.productDetails.find(
       (detail) => detail.size.sizename === sizename
@@ -106,28 +112,15 @@ app.controller("ProductDetailController", function ($scope, $http) {
     $scope.quantity = 1; // Đặt lại số lượng về 1 khi thay đổi kích cỡ
   };
 
-  // Yêu thích (toggle heart icon)
-  $scope.isActive = false; // Khởi tạo biến trạng thái
-  $scope.toggleHeart = function () {
-    $scope.isActive = !$scope.isActive; // Đảo ngược trạng thái khi nhấn nút
+  $scope.decreaseQuantity = () => {
+    if ($scope.quantity > 1) $scope.quantity--;
   };
 
-  // Giảm số lượng sản phẩm
-  $scope.decreaseQuantity = function () {
-    if ($scope.quantity > 1) {
-      $scope.quantity--;
-    }
+  $scope.increaseQuantity = () => {
+    if ($scope.quantity < $scope.maxQuantity) $scope.quantity++;
   };
 
-  // Tăng số lượng sản phẩm
-  $scope.increaseQuantity = function () {
-    if ($scope.quantity < $scope.maxQuantity) {
-      $scope.quantity++;
-    }
-  };
-
-  // Cập nhật số lượng sản phẩm khi người dùng thay đổi giá trị
-  $scope.updateQuantity = function () {
+  $scope.updateQuantity = () => {
     $scope.quantity = parseInt($scope.quantity);
     if ($scope.quantity > $scope.maxQuantity) {
       $scope.quantity = $scope.maxQuantity;
@@ -136,50 +129,38 @@ app.controller("ProductDetailController", function ($scope, $http) {
     }
   };
 
-  // Hàm chuyển hướng đến trang giỏ hàng
-  $scope.goToCart = function (productdetailId) {
-    if (productdetailId) {
-      const url =
-        "http://127.0.0.1:5500/src/main/resources/templates/assets/giohang.html?id=" +
-        productdetailId;
-      window.location.href = url;
-    } else {
-      console.log("Product ID is not valid.");
+  $scope.addToCart = () => {
+    if (!$scope.loggedInUser) {
+      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
+      return;
     }
+
+    if ($scope.quantity < 1 || $scope.quantity > $scope.maxQuantity) {
+      alert("Số lượng không hợp lệ!");
+      return;
+    }
+
+    const cartItem = {
+      quantity: $scope.quantity,
+      productdetail: {
+        idproductdetail: $scope.selectedSizeDetail.idproductdetail,
+      },
+      shoppingcart: {
+        idshoppingcart: $scope.loggedInUser.idshoppingcart,
+      },
+    };
+
+    $http
+      .post(`${API}/cartitems`, cartItem)
+      .then(() => alert("Thêm sản phẩm vào giỏ hàng thành công!"))
+      .catch((error) => {
+        console.error("Error adding to cart:", error);
+        alert("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.");
+      });
   };
-
-   // Tải danh mục sản phẩm từ API
-   $http.get(`${API}/category`)
-   .then(function (response) {
-     $scope.categories = response.data;
-     // Tính số lượng sản phẩm cho mỗi danh mục
-     $scope.categories.forEach(function (category) {
-       category.count = 0;  // Khởi tạo count với giá trị ban đầu là 0
-     });
-
-     // Tải danh sách sản phẩm
-     $http.get(`${API}/product`)
-       .then(function (productResponse) {
-         const products = productResponse.data;
-         // Đếm số lượng sản phẩm cho mỗi danh mục
-         products.forEach(function (product) {
-           const category = $scope.categories.find(
-             cat => cat.idcategory === product.category.idcategory
-           );
-           if (category) {
-             category.count += 1;
-           }
-         });
-       })
-       .catch(function (error) {
-         console.error("Error fetching products:", error);
-       });
-   })
-   .catch(function (error) {
-     console.error("Error fetching categories:", error);
-   });
-
 });
+
+
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
