@@ -1,5 +1,6 @@
 var app = angular.module("myApp", []);
 
+// Controller xử lý thanh toán
 app.controller("CheckoutController", function ($scope, $window, $http) {
   // Kiểm tra đăng nhập và lấy thông tin người dùng
   if (localStorage.getItem("loggedInUser")) {
@@ -46,10 +47,6 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
       if ($scope.addresses.length === 0) {
         alert("Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ.");
       } else {
-        // Sắp xếp địa chỉ mặc định lên đầu
-        $scope.addresses.sort(
-          (a, b) => (b.isDefault === true) - (a.isDefault === true)
-        );
         $scope.defaultAddress =
           $scope.addresses.find((addr) => addr.isDefault) ||
           $scope.addresses[0];
@@ -66,38 +63,11 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     (sum, product) => sum + product.price * product.quantity,
     0
   );
-  $scope.shippingFee = 20000; // Ví dụ: phí vận chuyển cố định
-  $scope.voucherDiscount = 0; // Không áp dụng giảm giá mặc định
-  $scope.finalTotal =
-    $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
+  $scope.shippingFee = 20000;
+  $scope.voucherDiscount = 0;
+  $scope.finalTotal = $scope.totalPrice + $scope.shippingFee;
 
-  // Hàm xóa sản phẩm khỏi giỏ hàng
-  $scope.deleteProduct = function (idcartitem) {
-    const index = $scope.products.findIndex((p) => p.idcartitem === idcartitem);
-    if (index !== -1) {
-      $scope.products.splice(index, 1);
-      localStorage.setItem("selectedProducts", JSON.stringify($scope.products));
-
-      $scope.totalPrice = $scope.products.reduce(
-        (sum, product) => sum + product.price * product.quantity,
-        0
-      );
-      $scope.voucherDiscount =
-        $scope.totalPrice >= 200000 ? $scope.totalPrice * 0.05 : 0;
-      $scope.finalTotal =
-        $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
-
-      $scope.checkEmptyCart(); // Gọi phương thức kiểm tra giỏ hàng trống
-    }
-  };
-
-  $scope.checkEmptyCart = function () {
-    if ($scope.products.length === 0) {
-      $window.location.href = "giohang.html";
-    }
-  };
-
-  // Lấy phương thức thanh toán
+  // Lấy phương thức thanh toán từ API
   $http
     .get("http://localhost:8080/beesixcake/api/payment")
     .then(function (response) {
@@ -109,86 +79,203 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
       console.error("Lỗi khi lấy phương thức thanh toán:", error);
     });
 
-  // Mở modal thay đổi phương thức thanh toán
   $scope.openPaymentModal = function () {
-    $scope.selectedPaymentId = $scope.selectedPayment.idpayment;
-    var paymentModal = new bootstrap.Modal(
+    const paymentModal = new bootstrap.Modal(
       document.getElementById("paymentModal")
     );
     paymentModal.show();
   };
 
-  // Cập nhật phương thức thanh toán khi người dùng chọn
   $scope.updatePaymentMethod = function (payment) {
     $scope.selectedPayment = payment;
     $scope.selectedPaymentId = payment.idpayment;
   };
 
   // Xử lý mã giảm giá
-  $scope.selectedDiscount = null;
-  $scope.openDiscountModal = function () {
+  $scope.applyDiscountCode = function () {
+    const code = $scope.discountCode.trim().toUpperCase();
+    if (!code) {
+      $scope.discountError = "Vui lòng nhập mã giảm giá.";
+      $scope.discountSuccess = "";
+      return;
+    }
+
     $http
-      .get("http://localhost:8080/beesixcake/api/discount")
+      .get(`http://localhost:8080/beesixcake/api/discount/code/${code}`)
       .then(function (response) {
-        const currentDate = new Date();
-        $scope.validDiscounts = response.data.filter((discount) => {
-          const startDate = new Date(discount.startdate);
-          const endDate = new Date(discount.enddate);
-          return (
-            $scope.totalPrice >= discount.lowestprice &&
-            currentDate >= startDate &&
-            currentDate <= endDate
-          );
-        });
-        const discountModal = new bootstrap.Modal(
-          document.getElementById("discountModal")
-        );
-        discountModal.show();
+        const discount = response.data;
+
+        if ($scope.totalPrice < discount.lowestprice) {
+          $scope.discountError =
+            "Đơn hàng không đủ điều kiện để sử dụng mã giảm giá này.";
+        } else {
+          $scope.currentDiscount = discount;
+          $scope.voucherDiscount =
+            ($scope.totalPrice * discount.discountpercentage) / 100;
+          $scope.finalTotal =
+            $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
+          $scope.discountSuccess = `Áp dụng mã giảm giá ${code} thành công!`;
+        }
       })
-      .catch(function (error) {
-        console.error("Lỗi khi lấy danh sách mã giảm giá:", error);
+      .catch(() => {
+        $scope.discountError = "Mã giảm giá không tồn tại.";
       });
   };
 
-  $scope.selectDiscount = function (discount) {
-    $scope.selectedDiscount = discount;
-    $scope.voucherDiscount = discount
-      ? ($scope.totalPrice * discount.discountpercentage) / 100
-      : 0;
-    $scope.finalTotal =
-      $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
+  $scope.cancelDiscountCode = function () {
+    $scope.currentDiscount = null;
+    $scope.voucherDiscount = 0;
+    $scope.finalTotal = $scope.totalPrice + $scope.shippingFee;
+    $scope.discountError = "";
+    $scope.discountSuccess = "Mã giảm giá đã được hủy.";
   };
-  $scope.generateQRCode = function () {
-    if (
-      $scope.selectedPayment &&
-      $scope.selectedPayment.paymentname ===
-        "Thanh Toán Qua Chuyển Khoản Ngân Hàng"
-    ) {
-      const bankCode = "mbbank"; // Mã ngân hàng (viết thường, không dấu)
-      const accountNumber = "0928025739"; // Số tài khoản
-      const accountName = "Nguyen Thanh Huy"; // Tên chủ tài khoản (không dấu)
-      const amount = $scope.finalTotal; // Tổng tiền
-      const description = "THANH TOÁN HÓA ĐƠN BEESIXCAKE"; // Nội dung thanh toán
-      const template = "compact"; // Template hiển thị QR
 
-      // Tạo URL VietQR
-      const qrApiUrl = `https://img.vietqr.io/image/${bankCode}-${accountNumber}-${template}.png?amount=${amount}&addInfo=${encodeURIComponent(
-        description
-      )}&accountName=${encodeURIComponent(accountName)}`;
+  // Đặt hàng
+  $scope.placeOrder = function () {
+    const order = {
+      orderdate: new Date().toISOString(),
+      addressdetail: $scope.address,
+      shipfee: $scope.shippingFee,
+      total: $scope.finalTotal,
+      account: { idaccount: $scope.userId },
+      discount: $scope.currentDiscount || { iddiscount: 0 },
+      payment: { idpayment: $scope.selectedPaymentId },
+      statuspay: { idstatuspay: 1 },
+    };
 
-      $scope.qrCode = qrApiUrl;
+    $http
+      .post("http://localhost:8080/beesixcake/api/order", order)
+      .then(function (response) {
+        $scope.createOrderDetails(response.data);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi đặt hàng:", error);
+      });
+  };
 
-      // In ra console để kiểm tra
-      console.log("Generated QR Code URL:", qrApiUrl);
-    }
+  // Tạo OrderDetail
+  $scope.createOrderDetails = function (createdOrder) {
+    const promises = $scope.products.map((product) => {
+      const orderDetail = {
+        quantity: product.quantity,
+        order: { idorder: createdOrder.idorder },
+        productdetail: { idproductdetail: product.idproductdetail },
+      };
+
+      return $http.post(
+        "http://localhost:8080/beesixcake/api/orderdetail",
+        orderDetail
+      );
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        $scope.updateProductStock(createdOrder);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi tạo chi tiết đơn hàng:", error);
+      });
+  };
+
+  // Cập nhật tồn kho sản phẩm
+  $scope.updateProductStock = function (createdOrder) {
+    $http
+      .get(
+        `http://localhost:8080/beesixcake/api/orderdetail/order/${createdOrder.idorder}`
+      )
+      .then((response) => {
+        const productQuantities = {};
+        response.data.forEach((detail) => {
+          const productId = detail.productdetail.idproductdetail;
+          if (!productQuantities[productId]) {
+            productQuantities[productId] = 0;
+          }
+          productQuantities[productId] += detail.quantity;
+        });
+
+        const updatePromises = Object.keys(productQuantities).map(
+          (productId) => {
+            return $http
+              .get(
+                `http://localhost:8080/beesixcake/api/productdetail/${productId}`
+              )
+              .then((response) => {
+                const productDetail = response.data;
+                productDetail.quantityinstock -= productQuantities[productId];
+                return $http.put(
+                  `http://localhost:8080/beesixcake/api/productdetail/${productId}`,
+                  productDetail
+                );
+              });
+          }
+        );
+
+        return Promise.all(updatePromises);
+      })
+      .then(() => {
+        $scope.createOrderStatusHistory(createdOrder);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi cập nhật tồn kho:", error);
+      });
+  };
+
+  // Tạo lịch sử trạng thái đơn hàng
+  $scope.createOrderStatusHistory = function (createdOrder) {
+    const statusHistory = {
+      order: { idorder: createdOrder.idorder },
+      status: { idstatus: 1 },
+      timestamp: new Date().toISOString(),
+    };
+
+    $http
+      .post(
+        "http://localhost:8080/beesixcake/api/order-status-history",
+        statusHistory
+      )
+      .then(() => {
+        console.log("Lịch sử trạng thái đơn hàng đã được tạo.");
+        // Gọi hàm xóa các cartitems sau khi hoàn thành các bước trước đó
+        $scope.deleteCartItems();
+      })
+      .then(() => {
+        alert("Đặt hàng thành công!");
+        $window.location.href = "index.html"; // Chuyển hướng sau khi đặt hàng
+      })
+      .catch((error) => {
+        console.error("Lỗi khi tạo lịch sử trạng thái:", error);
+      });
+  };
+  $scope.deleteCartItems = function () {
+    const promises = $scope.products.map((product) => {
+      return $http
+        .delete(
+          `http://localhost:8080/beesixcake/api/cartitems/${product.idcartitem}`
+        )
+        .then(() => {
+          console.log(`Đã xóa cartitem với id: ${product.idcartitem}`);
+        })
+        .catch((error) => {
+          console.error(
+            `Lỗi khi xóa cartitem với id: ${product.idcartitem}`,
+            error
+          );
+        });
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        console.log("Đã xóa toàn bộ cartitems của đơn hàng thành công.");
+      })
+      .catch((error) => {
+        console.error("Lỗi khi xóa các cartitems:", error);
+      });
   };
 });
 
 // Controller kiểm tra đăng nhập
-app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
+app.controller("CheckLogin", function ($scope, $http, $window) {
   $scope.isLoggedIn = false;
-  $scope.user = { idaccount: "", password: "" };
-  $scope.loginError = "";
 
   // Kiểm tra người dùng đã đăng nhập chưa
   if (localStorage.getItem("loggedInUser")) {
@@ -198,57 +285,11 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
     $window.location.href = "login.html"; // Chuyển đến trang đăng nhập nếu chưa đăng nhập
   }
 
-  // Cập nhật giao diện theo trạng thái đăng nhập
-  $scope.updateAccountMenu = function () {
-    $scope.isLoggedIn = !!localStorage.getItem("loggedInUser");
-  };
-
-  // Đăng nhập
-  $scope.login = function () {
-    if (!$scope.isLoggedIn) {
-      $scope.loginError = ""; // Reset thông báo lỗi
-
-      // Gửi yêu cầu để lấy danh sách tài khoản
-      $http
-        .get("http://localhost:8080/beesixcake/api/account")
-        .then(function (response) {
-          $scope.accounts = response.data;
-          const foundAccount = $scope.accounts.find(
-            (account) =>
-              account.idaccount === $scope.user.idaccount &&
-              account.password === $scope.user.password
-          );
-
-          if (foundAccount) {
-            if (foundAccount.admin) {
-              $scope.loginError = "Bạn không có quyền truy cập!";
-            } else {
-              $scope.loginSuccess = "Đăng nhập thành công!";
-              localStorage.setItem(
-                "loggedInUser",
-                JSON.stringify(foundAccount)
-              );
-              $scope.updateAccountMenu();
-              $window.location.href = "index.html"; // Chuyển đến trang chính sau khi đăng nhập thành công
-            }
-          } else {
-            $scope.loginError = "Tên người dùng hoặc mật khẩu không đúng!";
-          }
-        })
-        .catch(function (error) {
-          $scope.loginError = "Lỗi khi kết nối đến máy chủ. Vui lòng thử lại.";
-          console.error("Error:", error);
-        });
-    } else {
-      alert("Bạn đã đăng nhập rồi.");
-    }
-  };
-
   // Đăng xuất
   $scope.logout = function () {
     localStorage.removeItem("loggedInUser");
     $scope.isLoggedIn = false;
     $scope.loggedInUser = null;
-    $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
+    $window.location.href = "login.html";
   };
 });

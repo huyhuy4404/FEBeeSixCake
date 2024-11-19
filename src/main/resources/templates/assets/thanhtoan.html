@@ -177,24 +177,47 @@
         <!-- Voucher và Phương Thức Thanh Toán -->
         <div class="row mb-4">
           <div class="col-lg-6 thongTinND">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <p class="titleThongTinND">Giảm giá</p>
-                <p>
-                  {{ selectedDiscount ? "Giảm giá " +
-                  selectedDiscount.discountpercentage + "% cho đơn từ " +
-                  (selectedDiscount.lowestprice | number: 0) + " VNĐ" : "Không
-                  chọn mã giảm giá"}}
-                </p>
-              </div>
+            <p class="titleThongTinND">Nhập mã giảm giá</p>
+            <div class="input-group">
+              <!-- Ô nhập mã giảm giá -->
+              <input
+                type="text"
+                class="form-control text-uppercase"
+                placeholder="Nhập mã giảm giá"
+                ng-model="discountCode"
+                ng-disabled="currentDiscount"
+              />
+              <!-- Nút áp dụng -->
               <button
+                class="btn btn-outline-info"
                 type="button"
-                class="btn btn-outline-info btn-sm"
-                ng-click="openDiscountModal()"
+                ng-click="applyDiscountCode()"
+                ng-disabled="currentDiscount"
               >
-                Thay đổi
+                Áp dụng
               </button>
             </div>
+            <!-- Nút hủy mã giảm giá -->
+            <div ng-if="currentDiscount" class="mt-2">
+              <p class="text-success">
+                Đã áp dụng mã:
+                <strong>{{ currentDiscount.discountcode }}</strong>
+              </p>
+              <button
+                class="btn btn-danger"
+                type="button"
+                ng-click="cancelDiscountCode()"
+              >
+                Hủy mã giảm giá
+              </button>
+            </div>
+            <!-- Thông báo lỗi hoặc thành công -->
+            <p class="text-danger mt-2" ng-if="discountError">
+              {{ discountError }}
+            </p>
+            <p class="text-success mt-2" ng-if="discountSuccess">
+              {{ discountSuccess }}
+            </p>
           </div>
           <div class="col-lg-6 thongTinND">
             <div class="d-flex justify-content-between align-items-center">
@@ -402,7 +425,13 @@
             >
               Trở về giỏ hàng
             </button>
-            <button type="button" class="btn btn-primary">Đặt hàng</button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              ng-click="placeOrder()"
+            >
+              Đặt hàng
+            </button>
           </div>
         </div>
       </div>
