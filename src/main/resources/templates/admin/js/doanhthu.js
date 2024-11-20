@@ -113,13 +113,14 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
         .then(function(response) {
             $scope.orderdetai = response.data.map(function(item) {
                 return {
-                    categoryName: item.product.category.categoryname, // Update path if needed
+                    categoryName: item.product.category.categoryname,
                     price: item.unitprice,
                     quantityInStock: item.quantityinstock,
                     productId: item.idproduct,
                 };
             });
             $scope.groupData(); // Group data after fetching product details
+            $scope.getTodaysStats(); // Get today's stats after loading order details
         })
         .catch(function(error) {
             console.error('Error fetching product details:', error);
@@ -211,56 +212,35 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
         });
     };
 
+    // Function to get today's statistics
+    $scope.getTodaysStats = function() {
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+
+        const todaysOrders = $scope.orders.filter(order => order.date === formattedToday && order.statusId === 2);
+        if (todaysOrders.length > 0) {
+            $scope.todaysTotalOrders = todaysOrders.length;
+            $scope.todaysTotalRevenue = todaysOrders.reduce((sum, order) => sum + order.total, 0);
+        } else {
+            $scope.todaysTotalOrders = 0;
+            $scope.todaysTotalRevenue = 0;
+        }
+    };
+
     // Function to filter orders based on selected date range
     $scope.filterByDateRange = function() {
-        // Log the current values of startDate and endDate
-        console.log('Start Date:', $scope.startDate);
-        console.log('End Date:', $scope.endDate);
+        const start = new Date($scope.startDate);
+        const end = new Date($scope.endDate);
         
-        // Function to convert dd/mm/yyyy to a Date object
-        function parseDate(dateString) {
-            const parts = dateString.split('/');
-            // Check if the date parts are valid
-            if (parts.length === 3) {
-                const day = parseInt(parts[0], 10);
-                const month = parseInt(parts[1], 10) - 1; // Month is 0-based
-                const year = parseInt(parts[2], 10);
-                return new Date(year, month, day);
-            }
-            return null; // Return null if invalid
-        }
-    
-        const start = parseDate($scope.startDate);
-        const end = parseDate($scope.endDate);
-    
-        // Log the converted date objects
-        console.log('Converted Start Date:', start);
-        console.log('Converted End Date:', end);
-        
-        // Check if dates are valid
-        if (start && end) {
-            if (start > end) {
-                console.error("Start date cannot be greater than end date");
-                return; // Exit the function if the dates are invalid
-            }
-        }
-    
-        // If either date is not set, show all orders
-        if (!start || !end) {
+        if (!start || !end || start > end) {
             $scope.filteredOrders = $scope.orders.filter(order => order.statusId === 2);
         } else {
-            // Convert startDate and endDate to timestamps
-            const startTimestamp = start.getTime();
-            const endTimestamp = end.getTime();
-    
-            // Filter orders based on date range and statusId
             $scope.filteredOrders = $scope.orders.filter(order => {
-                const orderDate = new Date(order.date).getTime(); // Convert order date to timestamp
-                return orderDate >= startTimestamp && orderDate <= endTimestamp && order.statusId === 2;
+                const orderDate = new Date(order.date);
+                return orderDate >= start && orderDate <= end && order.statusId === 2;
             });
         }
-    
-        // Recalculate totals based on filtered orders
+        
         $scope.calculateTotals();
     };
 
@@ -275,152 +255,139 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
-    // Call functions to initialize data
+    // Initialize data
     $scope.getCategories(); // Fetch categories
     $scope.getStatusPayments(); // Fetch payment statuses
     $scope.getOrders(); // Fetch orders
 });
+
 app.controller('dayController', function($scope, $http) {
-  $scope.orderdetai = [];
-  $scope.filteredOrderDetails = []; // Dữ liệu đã lọc
-  $scope.dailyStats = []; // Thống kê theo ngày
-  $scope.selectedDate = null; // Ngày được chọn
-  $scope.statusPayments = []; // Lưu trạng thái thanh toán
-  $scope.availableDates = []; // Danh sách các ngày có sẵn
+    $scope.orderdetai = [];
+    $scope.filteredOrderDetails = []; // Dữ liệu đã lọc
+    $scope.dailyStats = []; // Thống kê theo ngày
+    $scope.selectedDate = null; // Ngày được chọn
+    $scope.statusPayments = []; // Lưu trạng thái thanh toán
+    $scope.availableDates = []; // Danh sách các ngày có sẵn
 
-  // Hàm lấy dữ liệu trạng thái thanh toán
-  $scope.getStatusPayments = function() {
-      $http.get('http://localhost:8080/beesixcake/api/statuspay')
-      .then(function(response) {
-          $scope.statusPayments = response.data; // Lưu danh sách trạng thái thanh toán
-          console.log('Trạng thái thanh toán:', $scope.statusPayments);
-      })
-      .catch(function(error) {
-          console.error('Lỗi khi lấy dữ liệu trạng thái thanh toán:', error);
-      });
-  };
+    // Hàm lấy dữ liệu trạng thái thanh toán
+    $scope.getStatusPayments = function() {
+        $http.get('http://localhost:8080/beesixcake/api/statuspay')
+        .then(function(response) {
+            $scope.statusPayments = response.data; // Lưu danh sách trạng thái thanh toán
+        })
+        .catch(function(error) {
+            console.error('Lỗi khi lấy dữ liệu trạng thái thanh toán:', error);
+        });
+    };
 
-  // Hàm lấy dữ liệu đơn hàng từ API
-  $scope.getDiscounts = function() {
-      $http.get('http://localhost:8080/beesixcake/api/order')
-      .then(function(response) {  
-          console.log(response.data);
-          $scope.orderdetai = response.data.map(function(item) {
-              var orderDate = new Date(item.orderdate);
-              return {
-                  date: orderDate.toISOString().split('T')[0], // Ngày theo định dạng YYYY-MM-DD
-                  total: item.total,
-                  statusId: item.idstatuspay,
-              };
-          });
-          
-          // Tạo danh sách các ngày có sẵn với định dạng "YYYY DD"
-          $scope.availableDates = [...new Set($scope.orderdetai.map(item => {
-              const dateParts = item.date.split('-'); // Tách thành phần ngày
-              return `${dateParts[0]} ${dateParts[2]}`; // Hiển thị năm trước rồi đến ngày
-          }))];
+    // Hàm lấy dữ liệu đơn hàng từ API
+    $scope.getDiscounts = function() {
+        $http.get('http://localhost:8080/beesixcake/api/order')
+        .then(function(response) {  
+            $scope.orderdetai = response.data.map(function(item) {
+                var orderDate = new Date(item.orderdate);
+                return {
+                    date: orderDate.toISOString().split('T')[0], // Ngày theo định dạng YYYY-MM-DD
+                    total: item.total,
+                    statusId: item.idstatuspay,
+                };
+            });
+            
+            // Tạo danh sách các ngày có sẵn
+            $scope.availableDates = [...new Set($scope.orderdetai.map(item => item.date))];
+            $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
+            $scope.calculateDailyStats();
+            $scope.renderDailyChart();
+        })
+        .catch(function(error) {
+            console.error('Lỗi khi lấy dữ liệu đơn hàng:', error);
+        });
+    };
 
-          $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
-          $scope.calculateDailyStats();
-          $scope.renderDailyChart();
-      })
-      .catch(function(error) {
-          console.error('Lỗi khi lấy dữ liệu đơn hàng:', error);
-      });
-  };
+    // Hàm lọc dữ liệu theo ngày
+    $scope.filterData = function() {
+        if (!$scope.selectedDate) {
+            $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
+        } else {
+            $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
+                return item.date === $scope.selectedDate && item.statusId === 2;
+            });
+        }
 
-  // Hàm lọc dữ liệu theo ngày
-  $scope.filterData = function() {
-      console.log('Ngày đã chọn:', $scope.selectedDate);
-      if (!$scope.selectedDate) {
-          $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
-      } else {
-          $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
-              const dateParts = item.date.split('-'); // Tách thành phần ngày
-              const formattedDate = `${dateParts[0]} ${dateParts[2]}`; // Định dạng lại ngày
-              return formattedDate === $scope.selectedDate && item.statusId === 2;
-          });
-      }
+        $scope.calculateDailyStats();
+        $scope.renderDailyChart();
+    };
 
-      console.log('Chi tiết đơn hàng đã lọc:', $scope.filteredOrderDetails);
-      $scope.calculateDailyStats();
-      $scope.renderDailyChart();
-  };
+    // Hàm tính toán thống kê theo ngày
+    $scope.calculateDailyStats = function() {
+        $scope.dailyStats = [];
+        const statsMap = {};
+        $scope.filteredOrderDetails.forEach(function(item) {
+            if (!statsMap[item.date]) {
+                statsMap[item.date] = {
+                    date: item.date,
+                    totalOrders: 0,
+                    totalRevenue: 0
+                };
+            }
+            statsMap[item.date].totalOrders += 1;
+            statsMap[item.date].totalRevenue += item.total;
+        });
 
-  // Hàm tính toán thống kê theo ngày
-  $scope.calculateDailyStats = function() {
-      $scope.dailyStats = [];
-      const statsMap = {};
-      $scope.filteredOrderDetails.forEach(function(item) {
-          const dateParts = item.date.split('-'); // Tách thành phần ngày
-          const formattedDate = `${dateParts[0]} ${dateParts[2]}`; // Định dạng lại ngày
-          if (!statsMap[formattedDate]) {
-              statsMap[formattedDate] = {
-                  date: formattedDate,
-                  totalOrders: 0,
-                  totalRevenue: 0
-              };
-          }
-  
-          statsMap[formattedDate].totalOrders += 1;
-          statsMap[formattedDate].totalRevenue += item.total;
-      });
+        $scope.dailyStats = Object.values(statsMap);
+    };
 
-      $scope.dailyStats = Object.values(statsMap);
-      console.log('Thống kê hàng ngày sau khi tính toán:', $scope.dailyStats);
-  };
+    // Hàm vẽ biểu đồ theo ngày
+    $scope.renderDailyChart = function() {
+        if ($scope.dailyStats.length === 0) {
+            document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
+            return;
+        }
 
-  // Hàm vẽ biểu đồ theo ngày
-  $scope.renderDailyChart = function() {
-      if ($scope.dailyStats.length === 0) {
-          document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
-          return;
-      }
+        document.getElementById("daily-bar-chart").innerHTML = "";
 
-      document.getElementById("daily-bar-chart").innerHTML = "";
+        var options = {
+            series: [{
+                name: 'Tổng Đơn Hàng',
+                data: $scope.dailyStats.map(stat => stat.totalOrders),
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                width: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '50%',
+                }
+            },
+            xaxis: {
+                categories: $scope.dailyStats.map(stat => stat.date),
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200,
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
 
-      var options = {
-          series: [{
-              name: 'Tổng Đơn Hàng',
-              data: $scope.dailyStats.map(stat => stat.totalOrders),
-          }],
-          chart: {
-              type: 'bar',
-              height: 300,
-              width: '100%'
-          },
-          plotOptions: {
-              bar: {
-                  horizontal: false,
-                  columnWidth: '50%',
-              }
-          },
-          xaxis: {
-              categories: $scope.dailyStats.map(stat => stat.date),
-          },
-          responsive: [{
-              breakpoint: 480,
-              options: {
-                  chart: {
-                      width: 200,
-                  },
-                  legend: {
-                      position: 'bottom'
-                  }
-              }
-          }]
-      };
+        var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
+        chart.render();
+    };
 
-      var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
-      chart.render();
-  };
+    // Hàm định dạng tiền tệ
+    $scope.formatCurrency = function(amount) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
 
-  // Hàm định dạng tiền tệ
-  $scope.formatCurrency = function(amount) {
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-  };
-
-  // Gọi hàm để lấy dữ liệu
-  $scope.getStatusPayments();
-  $scope.getDiscounts();
+    // Gọi hàm để lấy dữ liệu
+    $scope.getStatusPayments();
+    $scope.getDiscounts();
 });

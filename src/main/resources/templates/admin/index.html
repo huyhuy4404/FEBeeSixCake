@@ -92,23 +92,7 @@
                     </div>
                 
                     <!-- Date Range Selection -->
-                    <div class="custom-block bg-white p-4 mb-4">
-                        <h5 class="mb-4">Chọn Khoảng Thời Gian</h5>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="start-date">Từ Ngày</label>
-                                    <input type="text" id="start-date" class="form-control" ng-model="startDate" ng-change="filterByDateRange()" placeholder="dd/mm/yyyy">
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="end-date">Đến Ngày</label>
-                                    <input type="text" id="end-date" class="form-control" ng-model="endDate" ng-change="filterByDateRange()" placeholder="dd/mm/yyyy">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                 
                     <div class="row my-4">
                         <!-- Statistics Section -->
@@ -116,14 +100,14 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="custom-block custom-block-balance bg-white p-4 mb-4">
-                                        <small>Tổng doanh thu:</small>
-                                        <h2 class="mt-2 mb-3">{{ formatCurrency(totalRevenue) }}</h2>
+                                        <small>Doanh thu hôm nay:</small>
+                                        <h2 class="mt-2 mb-3">{{ formatCurrency(todaysTotalRevenue) }}</h2>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="custom-block custom-block-balance bg-white p-4 mb-4">
-                                        <small>Đơn hàng:</small>
-                                        <h2 class="mt-2 mb-3">Số lượng: {{ totalOrdersCount }}</h2>
+                                        <small>Đơn hàng hôm nay:</small>
+                                        <h2 class="mt-2 mb-3">Số lượng: {{ todaysTotalOrders }}</h2>
                                     </div>
                                 </div>
                             </div>
