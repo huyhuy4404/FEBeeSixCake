@@ -89,7 +89,7 @@
                                     </div>
                                 
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="year-input">Nhập Năm</label>
                                             <input type="number" 
                                                    id="year-input" 
@@ -99,7 +99,7 @@
                                                    placeholder="Nhập năm" 
                                                    min="2000" 
                                                    max="{{currentYear}}">
-                                        </div>
+                                        </div> -->
                                         
                                         <div ng-if="filteredOrders.length === 0 && selectedYear">
                                             <p class="text-danger">Không có dữ liệu cho năm {{selectedYear}}.</p>
@@ -109,7 +109,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Năm</th>
-                                                    <th>Tổng Đơn Hàng</th>
+                                                    <!-- <th>Tổng Đơn Hàng</th> -->
                                                     <th>Số Lượng Đơn Hàng</th>
                                                     <th>Tổng Tiền</th>
                                                 </tr>
@@ -117,8 +117,8 @@
                                             <tbody>
                                                 <tr ng-repeat="stat in yearlyStats" ng-if="stat.totalOrders > 0">
                                                     <td>{{stat.year}}</td> <!-- Hiển thị năm -->
-                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
-                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng -->
+                                                    <!-- <td>{{stat.totalOrders}}</td> Tổng số lượng đơn hàng -->
+                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng, có thể cần sửa -->
                                                     <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Định dạng tiền -->
                                                 </tr>
                                                 <tr ng-if="yearlyStats.length === 0 && !selectedYear">
@@ -126,6 +126,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        
                                     </div>
                                 </div>
                                 

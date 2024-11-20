@@ -70,63 +70,55 @@
                 <!-- Sidebar Menu -->
             <div ng-include="'layout/menu.html'"></div>
 
-                <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
-                    <div class="title-group mb-4">
-                        <h1 class="h2 mb-0">Doanh thu theo tháng</h1>
-                    </div>
-                    <div class="row" ng-controller="discountsController">
-                        <div class="col-12">
-                            <div class="custom-block">
-                               
-                                <div class="card">
-                                    <div class="">
-                                        <div class="card-header">
-                                            Doanh thu theo tháng
-                                        </div>
-                                        <div class="card-body">
-                                            <div id="monthly-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo tháng -->
-                                        </div>
-                                    </div>
-                                
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label for="month-input">Nhập Tháng</label>
-                                            <input type="number" id="month-input" class="form-control" ng-model="selectedMonth" ng-change="filterData()" placeholder="Nhập tháng (1-12)" min="1" max="12">
-                                        </div>
-                                        <table class="table table-hover table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tháng</th>
-                                                    <th>Tổng Đơn Hàng</th>
-                                                    <th>Số lượng Đơn Hàng</th>
-                                                    <th>Tổng Tiền</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="stat in monthlyStats" ng-if="stat.totalOrders > 0">
-                                                    <td>Tháng {{stat.monthYear}}</td> <!-- Hiển thị tháng -->
-                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
-                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng, có thể thay đổi nếu cần -->
-                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tính tổng tiền và định dạng -->
-                                                </tr>
-                                                <tr ng-if="monthlyStats.length === 0">
-                                                    <td colspan="4">Không có dữ liệu cho tháng đã chọn.</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+            <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start" ng-controller="discountsController">
+                <div class="title-group mb-4">
+                    <h1 class="h2 mb-0">Doanh thu theo tháng</h1>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="custom-block">
+                            <div class="card">
+                                <div class="card-header">
+                                    Doanh thu theo tháng
                                 </div>
-                                
-                              
-                             
-                                
-                               
+                                <div class="card-body">
+                                   
+                                    <div id="monthly-bar-chart"></div> <!-- Area for the monthly bar chart -->
+                                    <div class="form-group">
+                                        <label for="year-select">Chọn Năm</label>
+                                        <select id="year-select" class="form-control" ng-model="selectedYear" ng-change="filterData()">
+                                            <option value="" disabled selected>Chọn một năm</option>
+                                            <option ng-repeat="year in availableYears" value="{{year}}">{{year}}</option>
+                                        </select>
+                                    </div>
+                                    <table class="table table-hover table-bordered mt-4">
+                                        <thead>
+                                            <tr>
+                                                <th>Tháng</th>
+                                                <th>Tổng Đơn Hàng</th>
+                                                <th>Tổng Tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="stat in monthlyStats" ng-if="stat.totalOrders > 0">
+                                                <td>Tháng {{stat.monthYear.split('-')[1]}}</td>
+                                                <td>{{stat.totalOrders}}</td>
+                                                <td>{{formatCurrency(stat.totalRevenue)}}</td>
+                                            </tr>
+                                            <tr ng-if="monthlyStats.length === 0">
+                                                <td colspan="3">Không có dữ liệu cho tháng đã chọn.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <footer class="site-footer">
-                        <!-- Footer omitted for brevity -->
-                    </footer>
-                </main>
+                </div>
+                <footer class="site-footer">
+                    <!-- Footer omitted for brevity -->
+                </footer>
+            </main>
             </div>
         </div>
     </div>

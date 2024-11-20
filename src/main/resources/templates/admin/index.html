@@ -86,174 +86,128 @@
                 <div ng-include="'layout/menu.html'"></div>
 
                 <!-- Main Content -->
-                <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start">
+                <main class="main-wrapper col-md-9 ms-sm-auto py-4 col-lg-9 px-md-4 border-start" ng-controller="discountsController">
                     <div class="title-group mb-3">
                         <h1 class="h2 mb-0">Trang Chủ</h1>
-                        <!-- <small class="text-muted">Hello Thomas, welcome back!</small> -->
                     </div>
-
-                    <div class="row my-4" ng-controller="discountsController">
-                        <!-- Left Column -->
-                        <div class=" col-12">
+                
+                    <!-- Date Range Selection -->
+                    <div class="custom-block bg-white p-4 mb-4">
+                        <h5 class="mb-4">Chọn Khoảng Thời Gian</h5>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="start-date">Từ Ngày</label>
+                                    <input type="text" id="start-date" class="form-control" ng-model="startDate" ng-change="filterByDateRange()" placeholder="dd/mm/yyyy">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="end-date">Đến Ngày</label>
+                                    <input type="text" id="end-date" class="form-control" ng-model="endDate" ng-change="filterByDateRange()" placeholder="dd/mm/yyyy">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="row my-4">
+                        <!-- Statistics Section -->
+                        <div class="col-12">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="custom-block custom-block-balance bg-white p-4 mb-4">
                                         <small>Tổng doanh thu:</small>
-                                        <h2 class="mt-2 mb-3"> {{ formatCurrency(totalRevenue) }}
-                                        </h2>
-
-
+                                        <h2 class="mt-2 mb-3">{{ formatCurrency(totalRevenue) }}</h2>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="custom-block custom-block-balance bg-white p-4 mb-4">
-                                        <small> đơn hàng:</small>
-                                        <h2 class="mt-2 mb-3"> Số lượng: {{ totalOrdersCount }}
-                                        </h2>
-
-
+                                        <small>Đơn hàng:</small>
+                                        <h2 class="mt-2 mb-3">Số lượng: {{ totalOrdersCount }}</h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="custom-block-numbers d-flex align-items-center mb-3">
-
-                            </div>
-                            <!-- <div class="d-flex justify-content-between">
-                            <div>
-                                <small>Valid Date</small>
-                                <p>12/2028</p>
-                            </div>
-                            <div>
-                                <small>Card Holder</small>
-                                <p>Thomas</p>
-                            </div>
-                        </div> -->
-                            <!-- History Chart -->
+                
                             <div class="custom-block bg-white p-4 mb-4" style="margin-top: -21px;">
                                 <h5 class="mb-4">Tồn kho theo loại</h5>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div id="pie-chart"></div>
-
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="card">
-                                            <div class="card-header">
-                                                Bảng hiển thị dữ liệu
-                                            </div>
+                                            <div class="card-header">Bảng hiển thị dữ liệu</div>
                                             <div class="card-body">
-
                                                 <table class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th>Loại Sản Phẩm</th>
                                                             <th>Số Lượng Tồn Kho</th>
-                                                            <!-- <th>Giá</th>
-                                                        <th>Giá Trị Tồn Kho</th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-
                                                         <tr ng-repeat="stat in groupedOrderDetails">
-                                                            <td>{{stat.categoryName}}</td> <!-- Loại sản phẩm -->
-                                                            <td>{{stat.totalQuantity}}</td> <!-- Số lượng tồn kho -->
+                                                            <td>{{ stat.categoryName }}</td>
+                                                            <td>{{ stat.totalQuantity }}</td>
                                                         </tr>
                                                         <tr ng-if="groupedOrderDetails.length === 0">
                                                             <td colspan="2">Không có dữ liệu</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
-                            <!-- Transactions Chart -->
+                
+                            <!-- Daily Revenue Chart -->
                             <div class="custom-block bg-white p-4 mb-4">
-                                <main class="">
-                                    <div class="title-group mb-4">
-                                        <h1 class="h2 mb-0">Doanh thu theo ngày</h1>
-                                    </div>
-                                    <div class="row" ng-controller="dayController">
-                                        <div class="col-12">
-                                            <div class="custom-block">
-                                                <div class="card">
-                                                    <div class="">
-                                                        <div class="card-header">
-                                                            Doanh thu theo ngày
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <div id="daily-bar-chart"></div> <!-- Vùng hiển thị biểu đồ cột theo ngày -->
-                                                        </div>
-                                                    </div>
-                                
-                                                    <div class="card-body">
-                                                        <div class="form-group">
-                                                            <label for="date-select">Chọn Ngày</label>
-                                                            <select id="date-select" class="form-control" ng-model="selectedDate" ng-change="filterData()">
-                                                                <option value="" disabled selected>Chọn một ngày</option>
-                                                                <option ng-repeat="date in availableDates" value="{{date}}">{{date}}</option>
-                                                            </select>
-                                                        </div>
-                                                        <table class="table table-hover table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Ngày</th>
-                                                                    <th>Tổng Đơn Hàng</th>
-                                                                    <th>Tổng Tiền</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr ng-repeat="stat in dailyStats" ng-if="stat.totalOrders > 0">
-                                                                    <td>{{stat.date}}</td> <!-- Hiển thị ngày -->
-                                                                    <td>{{stat.totalOrders}}</td> <!-- Tổng số lượng đơn hàng -->
-                                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tổng tiền -->
-                                                                </tr>
-                                                                <tr ng-if="dailyStats.length === 0">
-                                                                    <td colspan="3">Không có dữ liệu cho ngày đã chọn.</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
+                                <div class="title-group mb-4">
+                                    <h1 class="h2 mb-0">Doanh thu theo ngày</h1>
+                                </div>
+                                <div class="row" ng-controller="dayController">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header">Doanh thu theo ngày</div>
+                                            <div class="card-body">
+                                                <div id="daily-bar-chart"></div>
                                             </div>
                                         </div>
+                
+                                        <div class="card-body">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Ngày</th>
+                                                        <th>Tổng Đơn Hàng</th>
+                                                        <th>Tổng Tiền</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="stat in dailyStats" ng-if="stat.totalOrders > 0">
+                                                        <td>{{ stat.date }}</td>
+                                                        <td>{{ stat.totalOrders }}</td>
+                                                        <td>{{ formatCurrency(stat.totalRevenue) }}</td>
+                                                    </tr>
+                                                    <tr ng-if="dailyStats.length === 0">
+                                                        <td colspan="3">Không có dữ liệu cho khoảng thời gian đã chọn.</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                    <footer class="site-footer">
-                                        <!-- Footer omitted for brevity -->
-                                    </footer>
-                                </main>
+                                </div>
                             </div>
-
-
-
-                            
-
-
-
-
-                            <!-- Exchange Rates -->
-                            
-                        </div>
-
-                        <!-- Right Column -->
-                        <div class="col-lg-5 col-12">
-                            <!-- Profile Block -->
-
                         </div>
                     </div>
-
+                
                     <!-- Footer -->
                     <footer class="site-footer">
                         <div class="container">
                             <div class="row">
                                 <div class="col-lg-12 col-12 text-center">
-                                    <p class="copyright-text mb-0">Copyright © Mini Finance 2048 - Design: <a
-                                            rel="sponsored" href="https://www.tooplate.com" target="_blank">Tooplate</a>
-                                    </p>
+                                    <p class="copyright-text mb-0">Copyright © Mini Finance 2048 - Design: <a rel="sponsored" href="https://www.tooplate.com" target="_blank">Tooplate</a></p>
                                 </div>
                             </div>
                         </div>

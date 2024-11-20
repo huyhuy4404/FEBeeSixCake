@@ -80,18 +80,19 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
     };
   });      
-app.controller('discountsController', function($scope, $http) {
+  app.controller('discountsController', function($scope, $http) {
     $scope.orderdetai = [];
-    $scope.filteredOrderDetails = []; // Dữ liệu đã lọc
-    $scope.monthlyStats = []; // Thống kê theo tháng
-    $scope.selectedDate = null; // Ngày được chọn
-    $scope.statusPayments = []; // Lưu trạng thái thanh toán
+    $scope.filteredOrderDetails = []; // Filtered data
+    $scope.monthlyStats = []; // Monthly statistics
+    $scope.selectedYear = null; // Selected year
+    $scope.statusPayments = []; // Payment status
+    $scope.availableYears = []; // List of available years
 
-    // Hàm lấy dữ liệu trạng thái thanh toán
+    // Function to fetch payment status data
     $scope.getStatusPayments = function() {
         $http.get('http://localhost:8080/beesixcake/api/statuspay')
         .then(function(response) {
-            $scope.statusPayments = response.data; // Lưu danh sách trạng thái thanh toán
+            $scope.statusPayments = response.data; // Store payment status list
             console.log('Status Payments:', $scope.statusPayments);
         })
         .catch(function(error) {
@@ -99,7 +100,7 @@ app.controller('discountsController', function($scope, $http) {
         });
     };
 
-    // Hàm lấy dữ liệu đơn hàng từ API mới
+    // Function to fetch order data from API
     $scope.getDiscounts = function() {
         $http.get('http://localhost:8080/beesixcake/api/order')
         .then(function(response) {  
@@ -121,6 +122,7 @@ app.controller('discountsController', function($scope, $http) {
                     statusId: item.idstatuspay,
                 };
             });
+            $scope.availableYears = [...new Set($scope.orderdetai.map(item => item.year))]; // Get unique years
             $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
             $scope.calculateMonthlyStats();
             $scope.renderMonthlyChart();
@@ -130,52 +132,47 @@ app.controller('discountsController', function($scope, $http) {
         });
     };
 
-    // Hàm lọc dữ liệu theo ngày
+    // Function to filter data by year
     $scope.filterData = function() {
-        console.log('Selected Date:', $scope.selectedDate);
-        if (!$scope.selectedDate) {
-            $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
-        } else {
-            var selectedDateObj = new Date($scope.selectedDate);
-            var selectedMonth = selectedDateObj.getMonth() + 1;
-            var selectedYear = selectedDateObj.getFullYear();
+      if (!$scope.selectedMonth && !$scope.selectedYear) {
+          $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
+      } else {
+          $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
+              return (item.month == $scope.selectedMonth || !$scope.selectedMonth) &&
+                     (item.year == $scope.selectedYear || !$scope.selectedYear) &&
+                     (item.statusId === 2);
+          });
+      }
 
-            $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
-                return item.month === selectedMonth && item.year === selectedYear && item.statusId === 2;
-            });
-        }
+      $scope.calculateMonthlyStats();
+      $scope.renderMonthlyChart();
+  };
 
-        console.log('Filtered Order Details:', $scope.filteredOrderDetails);
-        $scope.calculateMonthlyStats();
-        console.log('Monthly Stats:', $scope.monthlyStats);
-        $scope.renderMonthlyChart();
-    };
-
-    // Hàm tính toán thống kê theo tháng
+    // Function to calculate monthly statistics
     $scope.calculateMonthlyStats = function() {
-        $scope.monthlyStats = [];
-        const statsMap = {};
+      $scope.monthlyStats = [];
+      const statsMap = {};
+  
+      $scope.filteredOrderDetails.forEach(function(item) {
+          var monthYear = `${item.year}-${item.month < 10 ? '0' + item.month : item.month}`;
+  
+          if (!statsMap[monthYear]) {
+              statsMap[monthYear] = {
+                  monthYear: monthYear,
+                  totalOrders: 0,
+                  totalRevenue: 0
+              };
+          }
+  
+          statsMap[monthYear].totalOrders += 1;
+          statsMap[monthYear].totalRevenue += item.total;
+      });
+  
+      $scope.monthlyStats = Object.values(statsMap);
+      console.log('Monthly Stats after calculation:', $scope.monthlyStats); // Log calculated stats
+  };
 
-        $scope.filteredOrderDetails.forEach(function(item) {
-            var monthYear = `${item.year}-${item.month < 10 ? '0' + item.month : item.month}`;
-
-            if (!statsMap[monthYear]) {
-                statsMap[monthYear] = {
-                    monthYear: monthYear,
-                    totalOrders: 0,
-                    totalRevenue: 0
-                };
-            }
-
-            statsMap[monthYear].totalOrders += 1;
-            statsMap[monthYear].totalRevenue += item.total;
-        });
-
-        $scope.monthlyStats = Object.values(statsMap);
-        console.log('Monthly Stats after calculation:', $scope.monthlyStats);
-    };
-
-    // Hàm vẽ biểu đồ theo tháng
+    // Function to render monthly chart
     $scope.renderMonthlyChart = function() {
         if ($scope.monthlyStats.length === 0) {
             document.getElementById("monthly-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
@@ -192,7 +189,6 @@ app.controller('discountsController', function($scope, $http) {
             chart: {
                 type: 'bar',
                 height: 300,
-                width: 300
             },
             plotOptions: {
                 bar: {
@@ -201,7 +197,7 @@ app.controller('discountsController', function($scope, $http) {
                 }
             },
             xaxis: {
-                categories: $scope.monthlyStats.map(stat => stat.monthYear),
+                categories: $scope.monthlyStats.map(stat => stat.monthYear.split('-')[1]), // Show only months
             },
             responsive: [{
                 breakpoint: 480,
@@ -220,12 +216,12 @@ app.controller('discountsController', function($scope, $http) {
         chart.render();
     };
 
-    // Hàm định dạng tiền tệ
+    // Function to format currency
     $scope.formatCurrency = function(amount) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
-    // Gọi hàm để lấy dữ liệu
+    // Initial data fetch
     $scope.getStatusPayments();
     $scope.getDiscounts();
 });

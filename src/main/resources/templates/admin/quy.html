@@ -16,7 +16,8 @@
     <link href="css/tooplate-mini-finance.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 </head>
 
@@ -29,18 +30,19 @@
                     <i class="bi-box"></i> BEE SIX CAKE
                 </a>
             </div>
-    
+
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-    
+
             <!-- Form Search -->
-            <form class="custom-form header-form ms-lg-3 me-auto order-2 order-lg-0" action="#" method="get" role="form">
+            <form class="custom-form header-form ms-lg-3 me-auto order-2 order-lg-0" action="#" method="get"
+                role="form">
                 <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
             </form>
-    
+
             <div class="navbar-nav me-lg-2">
                 <div class="nav-item text-nowrap d-flex align-items-center">
                     <!-- Notifications Dropdown -->
@@ -58,7 +60,7 @@
                             <!-- Notifications items -->
                         </ul>
                     </div>
-    
+
                     <!-- User Profile Dropdown -->
                     <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
                 </div>
@@ -77,8 +79,15 @@
                     <div class="row" ng-controller="discountsController">
                         <div class="col-12">
                             <div class="custom-block">
-                                <div id="bar-chart"></div>                            </div>
-                            
+                                <div id="bar-chart"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="yearInput">Nhập Năm:</label>
+                                    <input type="number" id="yearInput" class="form-control" ng-model="selectedYear"
+                                        ng-change="filterByYear()" min="2000" max="2100" placeholder="Nhập năm" />
+                                </div>
+                            </div>
                             <div class="card mt-4">
                                 <div class="card-header">
                                     Doanh thu theo quý
@@ -123,4 +132,5 @@
     <script src="../admin/js/quy.js"></script>
 
 </body>
+
 </html>

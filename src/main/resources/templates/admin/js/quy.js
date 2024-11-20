@@ -80,150 +80,131 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
     };
   });      
-app.controller('discountsController', function($scope, $http) {
-    $scope.orders = []; // Thay đổi tên biến thành orders
-    $scope.filteredOrderDetails = []; // Biến để lưu dữ liệu đã lọc
-    $scope.quarterlyStats = []; // Thống kê theo quý
-    $scope.startDate = null; // Ngày bắt đầu
-    $scope.endDate = null; // Ngày kết thúc
+  app.controller('discountsController', function($scope, $http) {
+    $scope.orders = [];
+    $scope.filteredOrderDetails = [];
+    $scope.quarterlyStats = [];
+    $scope.selectedYear = new Date().getFullYear(); // Mặc định là năm hiện tại
+    $scope.chart = null; // Biến để lưu trữ biểu đồ
 
     // Hàm lấy dữ liệu đơn hàng
     $scope.getOrders = function() {
         $http.get('http://localhost:8080/beesixcake/api/order')
         .then(function(response) {
-            console.log(response.data); // Kiểm tra dữ liệu nhận được
+            console.log(response.data);
             $scope.orders = response.data.map(function(item) {
-                var orderDate = new Date(item.orderdate); // Lấy ngày đặt hàng từ đơn hàng
+                var orderDate = new Date(item.orderdate);
                 return {
-                    date: orderDate.toISOString().split('T')[0], // Lưu ngày theo định dạng YYYY-MM-DD
-                    month: orderDate.getMonth() + 1, // Tháng (1-12)
-                    year: orderDate.getFullYear(), // Năm
-                    total: item.total, // Tổng tiền từ đơn hàng
-                    statusId: item.idstatuspay // Lưu ID trạng thái thanh toán
+                    date: orderDate.toISOString().split('T')[0],
+                    month: orderDate.getMonth() + 1,
+                    year: orderDate.getFullYear(),
+                    total: item.total,
+                    statusId: item.idstatuspay
                 };
             });
 
-            // Giả sử ID trạng thái "đã thanh toán" là 2
-            $scope.filteredOrderDetails = $scope.orders.filter(item => item.statusId === 2); // Chỉ giữ sản phẩm đã thanh toán
-            $scope.calculateQuarterlyStats(); // Tính toán thống kê theo quý
-            $scope.renderChart(); // Vẽ biểu đồ ngay khi dữ liệu được lấy
+            // Lọc đơn hàng theo năm đã chọn
+            $scope.filterByYear();
         })
         .catch(function(error) {
             console.error('Error fetching orders:', error);
         });
     };
 
+    // Hàm lọc dữ liệu theo năm
+    $scope.filterByYear = function() {
+        // Lọc đơn hàng theo năm đã chọn
+        $scope.filteredOrderDetails = $scope.orders.filter(item => item.year === $scope.selectedYear && item.statusId === 2);
+        console.log('Filtered Orders:', $scope.filteredOrderDetails); // Kiểm tra dữ liệu đã lọc
+        $scope.calculateQuarterlyStats();
+        $scope.renderChart();
+    };
+
     // Hàm tính toán thống kê theo quý
     $scope.calculateQuarterlyStats = function() {
-        $scope.quarterlyStats = [];
+        // Khởi tạo thống kê quý cho năm đã chọn
+        $scope.quarterlyStats = [
+            { quarter: 1, year: $scope.selectedYear, totalQuantity: 0, totalRevenue: 0 },
+            { quarter: 2, year: $scope.selectedYear, totalQuantity: 0, totalRevenue: 0 },
+            { quarter: 3, year: $scope.selectedYear, totalQuantity: 0, totalRevenue: 0 },
+            { quarter: 4, year: $scope.selectedYear, totalQuantity: 0, totalRevenue: 0 }
+        ];
 
-        // Nhóm dữ liệu theo quý
+        // Nhóm dữ liệu theo quý cho năm đã chọn
         $scope.filteredOrderDetails.forEach(function(item) {
-            var quarter = Math.ceil(item.month / 3); // Tính quý
-            var year = item.year;
-
-            // Tạo hoặc cập nhật đối tượng thống kê cho quý
-            var stat = $scope.quarterlyStats.find(s => s.quarter === quarter && s.year === year);
-            if (!stat) {
-                stat = { quarter: quarter, year: year, totalQuantity: 0, totalRevenue: 0 };
-                $scope.quarterlyStats.push(stat);
-            }
-            stat.totalQuantity += 1; // Tăng số lượng đơn hàng
-            stat.totalRevenue += item.total; // Cộng tổng tiền từ trường total
-        });
-
-        console.log('Quarterly Stats:', $scope.quarterlyStats); // Kiểm tra dữ liệu thống kê
-    };
-
-    // Hàm xuất dữ liệu ra Excel
-    $scope.exportToExcel = function() {
-        const worksheet = XLSX.utils.json_to_sheet($scope.filteredOrderDetails.map(item => ({
-            'Ngày tạo': item.date,
-            'Tổng tiền': item.total
-        })));
-
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Order Details");
-
-        // Xuất file
-        XLSX.writeFile(workbook, 'order_details.xlsx');
-    };
-
-    // Hàm lọc dữ liệu theo ngày
-    $scope.filterData = function() {
-        $scope.filteredOrderDetails = $scope.orders.filter(function(item) {
-            var itemDate = new Date(item.date);
-            var start = $scope.startDate ? new Date($scope.startDate) : null;
-            var end = $scope.endDate ? new Date($scope.endDate) : null;
-
-            // Đặt giờ cho ngày bắt đầu và ngày kết thúc
-            if (start) {
-                start.setHours(0, 0, 0, 0); // Đầu ngày
-            }
-            if (end) {
-                end.setHours(23, 59, 59, 999); // Cuối ngày
-            }
-
-            // Kiểm tra xem ngày sản phẩm có nằm trong khoảng không
-            if (start && end) {
-                return itemDate >= start && itemDate <= end;
-            } else if (start) {
-                return itemDate >= start;
-            } else if (end) {
-                return itemDate <= end;
-            } else {
-                return true; // Nếu không có ngày nào được chọn thì hiển thị tất cả
+            var quarter = Math.ceil(item.month / 3);
+            var stat = $scope.quarterlyStats.find(s => s.quarter === quarter && s.year === $scope.selectedYear);
+            if (stat) {
+                stat.totalQuantity += 1;
+                stat.totalRevenue += item.total;
             }
         });
 
-        // Tính toán thống kê theo quý sau khi lọc dữ liệu
-        $scope.calculateQuarterlyStats();
-        // Cập nhật biểu đồ sau khi lọc dữ liệu
-        $scope.renderChart();
+        console.log('Quarterly Stats:', $scope.quarterlyStats); // Kiểm tra thống kê quý
     };
 
     // Hàm vẽ biểu đồ
     $scope.renderChart = function() {
-        // Nếu không có dữ liệu, không vẽ biểu đồ
-        if ($scope.quarterlyStats.length === 0) {
-            document.getElementById("bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>"; // Thông báo nếu không có dữ liệu
+        // Nếu không có dữ liệu, hiển thị thông báo
+        if ($scope.quarterlyStats.length === 0 || $scope.quarterlyStats.every(stat => stat.totalRevenue === 0)) {
+            document.getElementById("bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
             return;
         }
 
-        var options = {
-            series: [{
-                name: 'Tổng Số Lượng',
-                data: $scope.quarterlyStats.map(stat => stat.totalQuantity), // Tổng số lượng cho từng quý
-            }],
-            chart: {
-                type: 'bar',
-                height: 300,
-                width: '100%' // Đặt chiều rộng biểu đồ là 100%
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '50%',
+        // Cập nhật biểu đồ nếu đã tồn tại
+        if ($scope.chart) {
+            $scope.chart.updateOptions({
+                series: [{
+                    name: 'Doanh Thu',
+                    data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                }],
+                xaxis: {
+                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`) // Tên quý
                 }
-            },
-            xaxis: {
-                categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`), // Tên quý
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200,
-                    },
-                    legend: {
-                        position: 'bottom'
+            });
+        } else {
+            // Tạo biểu đồ mới nếu chưa có
+            var options = {
+                series: [{
+                    name: 'Doanh Thu',
+                    data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 300,
+                    width: '100%'
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '50%',
                     }
-                }
-            }]
-        };
+                },
+                xaxis: {
+                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`), // Tên quý
+                },
+                yaxis: {
+                    title: {
+                        text: 'Doanh Thu (VND)' // Tiêu đề cho trục y
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200,
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
 
-        var chart = new ApexCharts(document.querySelector("#bar-chart"), options);
-        chart.render();
+            // Tạo biểu đồ mới
+            $scope.chart = new ApexCharts(document.querySelector("#bar-chart"), options);
+            $scope.chart.render();
+        }
     };
 
     // Hàm định dạng tiền tệ
@@ -232,5 +213,5 @@ app.controller('discountsController', function($scope, $http) {
     };
 
     // Gọi hàm để lấy dữ liệu
-    $scope.getOrders(); // Gọi hàm lấy dữ liệu từ API order
+    $scope.getOrders();
 });
