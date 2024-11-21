@@ -15,13 +15,18 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     $window.location.href = "login.html";
     return;
   }
+  $scope.deleteProduct = function (productId) {
+    // Lọc ra các sản phẩm không phải là sản phẩm cần xóa
+    $scope.products = $scope.products.filter(
+      (product) => product.idcartitem !== productId
+    );
 
+    // Cập nhật lại localStorage sau khi xóa
+    localStorage.setItem("selectedProducts", JSON.stringify($scope.products));
+  };
   // Lấy sản phẩm từ localStorage
   const selectedProducts = JSON.parse(localStorage.getItem("selectedProducts"));
   if (!selectedProducts || selectedProducts.length === 0) {
-    alert("Không có sản phẩm nào được chọn. Vui lòng quay lại giỏ hàng.");
-    $window.location.href = "../assets/index.html";
-    return;
   } else {
     $scope.products = selectedProducts;
   }
@@ -149,7 +154,7 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
         $scope.createOrderDetails(response.data);
       })
       .catch((error) => {
-        console.error("Lỗi khi đặt hàng:", error);
+        console.log("Không có sản phẩm nào để đặt hàng");
       });
   };
 
@@ -271,6 +276,14 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
         console.error("Lỗi khi xóa các cartitems:", error);
       });
   };
+  $scope.returnToCart = function () {
+    localStorage.removeItem("selectedProducts");
+    $window.location.href = "giohang.html";
+  };
+  window.addEventListener("beforeunload", function () {
+    // Xóa dữ liệu sản phẩm trong localStorage
+    localStorage.removeItem("selectedProducts");
+  });
 });
 
 // Controller kiểm tra đăng nhập
