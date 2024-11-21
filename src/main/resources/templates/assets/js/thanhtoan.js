@@ -15,21 +15,14 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     $window.location.href = "login.html";
     return;
   }
-  $scope.deleteProduct = function (productId) {
-    // Lọc ra các sản phẩm không phải là sản phẩm cần xóa
-    $scope.products = $scope.products.filter(
-      (product) => product.idcartitem !== productId
-    );
 
-    // Cập nhật lại localStorage sau khi xóa
-    localStorage.setItem("selectedProducts", JSON.stringify($scope.products));
-  };
   // Lấy sản phẩm từ localStorage
   const selectedProducts = JSON.parse(localStorage.getItem("selectedProducts"));
-  if (!selectedProducts || selectedProducts.length === 0) {
-  } else {
-    $scope.products = selectedProducts;
-  }
+  // Lấy sản phẩm từ localStorage
+  $scope.products = JSON.parse(localStorage.getItem("selectedProducts")) || [];
+
+  // Không cần thông báo hoặc chuyển trang, chỉ cần kiểm tra và hiển thị dữ liệu nếu có
+  $scope.hasProducts = $scope.products.length > 0;
 
   // Hàm định dạng địa chỉ
   $scope.formatAddress = function (address) {
@@ -64,14 +57,34 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     });
 
   // Tính tổng giá tiền
-  $scope.totalPrice = selectedProducts.reduce(
-    (sum, product) => sum + product.price * product.quantity,
-    0
-  );
-  $scope.shippingFee = 20000;
-  $scope.voucherDiscount = 0;
-  $scope.finalTotal = $scope.totalPrice + $scope.shippingFee;
+  $scope.calculateTotals = function () {
+    $scope.totalPrice = $scope.products.reduce(
+      (sum, product) => sum + (product.price || 0) * (product.quantity || 0),
+      0
+    );
 
+    $scope.shippingFee = $scope.totalPrice > 0 ? 20000 : 0; // Phí vận chuyển
+    $scope.voucherDiscount = 0; // Reset giảm giá
+
+    // Kiểm tra lại mã giảm giá nếu có
+    if ($scope.currentDiscount) {
+      if ($scope.totalPrice < $scope.currentDiscount.lowestprice) {
+        // Hủy mã giảm giá nếu không đạt điều kiện
+        $scope.cancelDiscountCode();
+        $scope.discountError =
+          "Đơn hàng không còn đủ điều kiện để áp dụng mã giảm giá.";
+      } else {
+        $scope.voucherDiscount =
+          ($scope.totalPrice * $scope.currentDiscount.discountpercentage) / 100;
+      }
+    }
+
+    // Tính tổng tiền cuối cùng
+    $scope.finalTotal =
+      $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
+  };
+
+  $scope.calculateTotals();
   // Lấy phương thức thanh toán từ API
   $http
     .get("http://localhost:8080/beesixcake/api/payment")
@@ -98,10 +111,12 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
 
   // Xử lý mã giảm giá
   $scope.applyDiscountCode = function () {
+    $scope.discountError = "";
+    $scope.discountSuccess = "";
+
     const code = $scope.discountCode.trim().toUpperCase();
     if (!code) {
       $scope.discountError = "Vui lòng nhập mã giảm giá.";
-      $scope.discountSuccess = "";
       return;
     }
 
@@ -110,13 +125,37 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
       .then(function (response) {
         const discount = response.data;
 
+        // Lấy thời gian hiện tại theo UTC+7
+        const now = new Date();
+        const utc7Now = new Date(
+          now.getTime() + (7 - now.getTimezoneOffset() / 60) * 3600000
+        );
+
+        // Chuyển ngày bắt đầu và ngày kết thúc sang đối tượng Date (UTC+7)
+        const startDate = new Date(
+          new Date(discount.startdate).getTime() + 7 * 3600000
+        );
+        const endDate = new Date(
+          new Date(discount.enddate).getTime() + 7 * 3600000
+        );
+
+        // Kiểm tra ngày áp dụng
+        if (utc7Now < startDate) {
+          $scope.discountError = "Mã này chưa đến thời gian được áp dụng.";
+          return;
+        } else if (utc7Now > endDate) {
+          $scope.discountError = "Mã giảm giá đã hết hạn.";
+          return;
+        }
+
+        // Kiểm tra điều kiện tổng tiền
         if ($scope.totalPrice < discount.lowestprice) {
           $scope.discountError =
             "Đơn hàng không đủ điều kiện để sử dụng mã giảm giá này.";
         } else {
           $scope.currentDiscount = discount;
           $scope.voucherDiscount =
-            ($scope.totalPrice * discount.discountpercentage) / 100;
+            ($scope.totalPrice * discount.discountpercentage) / 100; // Chỉ tính giảm trên tiền hàng
           $scope.finalTotal =
             $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
           $scope.discountSuccess = `Áp dụng mã giảm giá ${code} thành công!`;
@@ -128,10 +167,13 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
   };
 
   $scope.cancelDiscountCode = function () {
+    // Xóa các thông báo cũ trước khi cập nhật
+    $scope.discountError = "";
+    $scope.discountSuccess = "";
+
     $scope.currentDiscount = null;
     $scope.voucherDiscount = 0;
     $scope.finalTotal = $scope.totalPrice + $scope.shippingFee;
-    $scope.discountError = "";
     $scope.discountSuccess = "Mã giảm giá đã được hủy.";
   };
 
@@ -154,7 +196,7 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
         $scope.createOrderDetails(response.data);
       })
       .catch((error) => {
-        console.log("Không có sản phẩm nào để đặt hàng");
+        console.error("Lỗi khi đặt hàng:", error);
       });
   };
 
@@ -245,7 +287,7 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
       })
       .then(() => {
         alert("Đặt hàng thành công!");
-        $window.location.href = "index.html"; // Chuyển hướng sau khi đặt hàng
+        $window.location.href = "order.html"; // Chuyển hướng sau khi đặt hàng
       })
       .catch((error) => {
         console.error("Lỗi khi tạo lịch sử trạng thái:", error);
@@ -276,8 +318,39 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
         console.error("Lỗi khi xóa các cartitems:", error);
       });
   };
+  $scope.deleteProduct = function (productId) {
+    // Lọc sản phẩm cần xóa
+    $scope.products = $scope.products.filter(
+      (product) => product.idcartitem !== productId
+    );
+
+    // Cập nhật lại tổng tiền
+    $scope.calculateTotals();
+
+    // Kiểm tra lại mã giảm giá hiện tại
+    if ($scope.currentDiscount) {
+      if ($scope.totalPrice < $scope.currentDiscount.lowestprice) {
+        // Nếu không đạt điều kiện tối thiểu, hủy mã giảm giá
+        $scope.cancelDiscountCode();
+        $scope.discountError =
+          "Đơn hàng không đủ điều kiện sử dụng mã giảm giá sau khi xóa sản phẩm.";
+      } else {
+        // Cập nhật lại giảm giá và tổng tiền nếu vẫn hợp lệ
+        $scope.voucherDiscount =
+          ($scope.totalPrice * $scope.currentDiscount.discountpercentage) / 100;
+        $scope.finalTotal =
+          $scope.totalPrice + $scope.shippingFee - $scope.voucherDiscount;
+      }
+    }
+
+    // Cập nhật lại localStorage
+    localStorage.setItem("selectedProducts", JSON.stringify($scope.products));
+  };
+
   $scope.returnToCart = function () {
+    // Xóa dữ liệu sản phẩm trong localStorage
     localStorage.removeItem("selectedProducts");
+    // Chuyển hướng về trang giỏ hàng
     $window.location.href = "giohang.html";
   };
   window.addEventListener("beforeunload", function () {

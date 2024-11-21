@@ -3,21 +3,24 @@ app.controller("OrderController", [
   "$http",
   function ($scope, $http) {
     $scope.statuses = []; // Danh sách trạng thái
-    $scope.ordersByStatus = {}; // Phân loại đơn hàng theo trạng thái (dùng idstatus)
-    $scope.selectedOrders = []; // Lưu đơn hàng được hiển thị
+    $scope.ordersByStatus = {}; // Phân loại đơn hàng theo trạng thái
+    $scope.selectedOrders = []; // Đơn hàng hiển thị
     $scope.loading = true;
-    $scope.activeTab = 0; // Mặc định tab đầu tiên là active
+    $scope.activeTab = 0; // Tab đầu tiên mặc định active
 
-    // Hàm để đặt tab đang được chọn
+    // Đặt tab đang được chọn
     $scope.setActiveTab = function (index) {
       $scope.activeTab = index;
     };
 
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-    console.log("Thông tin đăng nhập (loggedInUser):", loggedInUser);
+    if (!loggedInUser) {
+      console.error("Người dùng chưa đăng nhập.");
+      return;
+    }
 
-    console.log("ID Account đã lấy được:", loggedInUser.idaccount);
+    console.log("Thông tin đăng nhập (loggedInUser):", loggedInUser);
 
     function initialize() {
       $scope.loading = true;
@@ -34,11 +37,6 @@ app.controller("OrderController", [
             $scope.ordersByStatus[status.idstatus] = [];
           });
 
-          console.log(
-            "Keys of Orders By Status After Initialization:",
-            Object.keys($scope.ordersByStatus)
-          );
-
           // Bước 2: Gọi API lấy danh sách đơn hàng theo tài khoản
           return $http.get(
             `http://localhost:8080/beesixcake/api/order/account/${loggedInUser.idaccount}`
@@ -48,7 +46,15 @@ app.controller("OrderController", [
           console.log("Danh sách đơn hàng:", orderResponse.data);
           const orders = orderResponse.data;
 
-          // Bước 3: Gọi API lấy trạng thái chi tiết từng đơn hàng
+          // Chuyển đổi múi giờ UTC+7 cho `orderdate`
+          orders.forEach((order) => {
+            if (order.orderdate) {
+              const utcDate = new Date(order.orderdate);
+              order.orderdate = new Date(utcDate.getTime() + 7 * 3600000);
+            }
+          });
+
+          // Gọi API lấy trạng thái chi tiết từng đơn hàng
           const promises = orders.map((order) =>
             $http
               .get(
@@ -58,7 +64,7 @@ app.controller("OrderController", [
                 const statusData = statusResponse.data[0];
                 order.statusname =
                   statusData?.status.statusname.trim() || "Không Xác Định";
-                order.statusid = statusData?.status.idstatus || null; // Lưu id trạng thái
+                order.statusid = statusData?.status.idstatus || null;
               })
               .catch((error) => {
                 console.error(
@@ -66,21 +72,23 @@ app.controller("OrderController", [
                   error
                 );
                 order.statusname = "Không Xác Định";
-                order.statusid = null; // Đặt id trạng thái là null nếu lỗi
+                order.statusid = null;
               })
           );
 
           return Promise.all(promises).then(() => {
-            // Phân loại đơn hàng theo id trạng thái
+            // Phân loại đơn hàng theo trạng thái
             orders.forEach((order) => {
               if (order.statusid && $scope.ordersByStatus[order.statusid]) {
                 $scope.ordersByStatus[order.statusid].push(order);
-              } else {
-                console.warn(
-                  `Không tìm thấy trạng thái tương ứng cho đơn hàng ${order.idorder}:`,
-                  order.statusid
-                );
               }
+            });
+
+            // Sắp xếp từng nhóm trạng thái theo thời gian (mới nhất đến cũ nhất)
+            Object.keys($scope.ordersByStatus).forEach((statusId) => {
+              $scope.ordersByStatus[statusId].sort((a, b) => {
+                return new Date(b.orderdate) - new Date(a.orderdate);
+              });
             });
 
             // Gán mặc định đơn hàng của trạng thái đầu tiên vào bảng
@@ -101,16 +109,13 @@ app.controller("OrderController", [
         })
         .finally(() => {
           $scope.loading = false;
-          console.log(
-            "Trạng thái cuối cùng của Orders By Status:",
-            $scope.ordersByStatus
-          );
+          console.log("Orders By Status (Final):", $scope.ordersByStatus);
         });
     }
 
     initialize();
 
-    // Hàm xử lý click vào trạng thái
+    // Lọc đơn hàng theo trạng thái
     $scope.filterOrdersByStatus = function (statusId) {
       $scope.selectedOrders = $scope.ordersByStatus[statusId] || [];
       console.log(
@@ -119,10 +124,12 @@ app.controller("OrderController", [
       );
     };
 
+    // Xem chi tiết đơn hàng
     $scope.viewOrderDetails = function (order) {
       console.log(`Xem chi tiết đơn hàng: ${order.idorder}`);
     };
 
+    // Hủy đơn hàng
     $scope.cancelOrder = function (order) {
       console.log(`Hủy đơn hàng: ${order.idorder}`);
     };
