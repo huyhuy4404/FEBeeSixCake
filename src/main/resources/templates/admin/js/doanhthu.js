@@ -398,3 +398,174 @@ app.controller('dayController', function($scope, $http) {
     $scope.getStatusPayments();
     $scope.getDiscounts();
 });
+
+// UserService Factory
+app.factory('UserService', function($window) {
+    var user = null;
+
+    return {
+        getUser: function() {
+            if (!user) {
+                var storedUser = $window.localStorage.getItem("loggedInUser");
+                if (storedUser) {
+                    user = JSON.parse(storedUser);
+                }
+            }
+            return user;
+        },
+        setUser: function(userData) {
+            user = userData;
+            $window.localStorage.setItem("loggedInUser", JSON.stringify(userData));
+        },
+        clearUser: function() {
+            user = null;
+            $window.localStorage.removeItem("loggedInUser");
+        },
+        updateUserAddress: function(address) {
+            if (user) {
+                user.address = address;
+                this.setUser(user);
+            }
+        }
+    };
+});
+
+// Address Controller
+app.controller('address', function($scope, $http, $window, UserService) {
+    // Khởi tạo các biến
+    $scope.tinhs = [];
+    $scope.selectedAddress = "Chưa chọn địa chỉ";
+    $scope.hasSelected = false; // Cờ để ngăn chặn việc chọn nhiều lần
+    $scope.tempSelectedTinh = null; // Lưu tạm tỉnh/thành phố được chọn
+    $scope.modalTitle = "";
+    $scope.modalMessage = "";
+    $scope.modalType = ""; // 'confirmation' hoặc 'notification'
+
+    var modalInstance = null; // Biến lưu trữ instance của modal
+
+    // Hàm hiển thị modal với nội dung động
+    $scope.showModal = function(title, message, type) {
+        $scope.modalTitle = title;
+        $scope.modalMessage = message;
+        $scope.modalType = type; // 'confirmation' hoặc 'notification'
+
+        var modalElement = document.getElementById('unifiedModal');
+        if (modalElement) {
+            if (!modalInstance) {
+                modalInstance = new bootstrap.Modal(modalElement);
+            }
+            modalInstance.show();
+        } else {
+            console.error("Modal với id 'unifiedModal' không tồn tại trong DOM.");
+        }
+    };
+
+    // Hàm ẩn modal
+    $scope.hideModal = function() {
+        if (modalInstance) {
+            modalInstance.hide();
+        } else {
+            console.error("Modal instance chưa được khởi tạo.");
+        }
+    };
+
+    // Hàm xác nhận lựa chọn từ modal
+    $scope.modalAction = function() {
+        if ($scope.tempSelectedTinh) {
+            // Tạo đối tượng địa chỉ mới chỉ chứa city
+            var newAddress = {
+                city: $scope.tempSelectedTinh.full_name, // Chỉ lấy city
+                isDefault: true,
+                account: {
+                    idaccount: currentUser.idaccount
+                }
+            };
+
+            // Gửi yêu cầu POST để tạo địa chỉ mới
+            $http.post("http://localhost:8080/beesixcake/api/address", newAddress)
+                .then(function(response) {
+                    if(response.data.success){
+                        $scope.showModal("Thành công", "Địa chỉ của bạn đã được cập nhật thành công.", "notification");
+                        // Cập nhật dữ liệu người dùng trong UserService
+                        $scope.selectedAddress = newAddress.city;
+                        $scope.hasSelected = true;
+                        UserService.updateUserAddress($scope.selectedAddress); // Cập nhật địa chỉ trong UserService
+                    } else {
+                        $scope.showModal("Lỗi", "Cập nhật địa chỉ thất bại: " + response.data.message, "notification");
+                        // Reset lại lựa chọn nếu cập nhật thất bại
+                        $scope.selectedAddress = "Chưa chọn địa chỉ";
+                        $scope.hasSelected = false;
+                    }
+                })
+                .catch(function(error) {
+                    console.error("Error updating address:", error);
+                    $scope.showModal("Lỗi", "Lỗi khi cập nhật địa chỉ: " + (error.statusText || "Không xác định"), "notification");
+                    // Reset lại lựa chọn nếu có lỗi
+                    $scope.selectedAddress = "Chưa chọn địa chỉ";
+                    $scope.hasSelected = false;
+                });
+
+            $scope.tempSelectedTinh = null;
+        }
+        // Ẩn modal sau khi thực hiện hành động
+        $scope.hideModal();
+    };
+
+    // Lấy thông tin người dùng hiện tại
+    var currentUser = UserService.getUser();
+    if (!currentUser) {
+        // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        $window.location.href = "login.html";
+    } else {
+        // Gửi yêu cầu GET để lấy danh sách địa chỉ từ API
+        $http.get("http://localhost:8080/beesixcake/api/address")
+            .then(function(response) {
+                var addresses = response.data;
+                // Lọc các địa chỉ mặc định của người dùng hiện tại
+                var userAddresses = addresses.filter(addr => addr.account.idaccount === currentUser.idaccount && addr.isDefault);
+                if (userAddresses.length > 0) {
+                    var addr = userAddresses[0];
+                    $scope.selectedAddress = addr.city; // Chỉ hiển thị city
+                    $scope.hasSelected = true;
+                }
+            })
+            .catch(function(error) {
+                console.error("Error fetching addresses:", error);
+                $scope.showModal("Lỗi", "Không thể tải địa chỉ của bạn. Vui lòng thử lại sau.", "notification");
+            });
+    }
+
+    // Hàm tải danh sách tỉnh/thành phố từ API
+    $scope.loadTinhs = function() {
+        $http.get('https://esgoo.net/api-tinhthanh/1/0.htm')
+            .then(function(response) {
+                if(response.data.error === 0){
+                    $scope.tinhs = response.data.data;
+                } else {
+                    console.error("Lỗi từ API khi tải tỉnh thành:", response.data.message);
+                    $scope.showModal("Lỗi", "Lỗi từ API khi tải tỉnh thành: " + response.data.message, "notification");
+                }
+            })
+            .catch(function(error) {
+                console.error("Lỗi khi tải tỉnh thành:", error);
+                $scope.showModal("Lỗi", "Lỗi khi tải tỉnh thành: " + (error.statusText || "Không xác định"), "notification");
+            });
+    };
+
+    // Hàm xử lý khi người dùng chọn địa chỉ (chỉ chọn city)
+    $scope.selectAddress = function(tinh) {
+        if ($scope.hasSelected) {
+            // Hiển thị modal thông báo thay vì alert
+            $scope.showModal("Thông báo", "Bạn đã chọn địa chỉ bán hàng trước đó và không thể thay đổi.", "notification");
+            return;
+        }
+        $scope.tempSelectedTinh = tinh;
+        // Hiển thị modal xác nhận
+        $scope.showModal("Xác nhận", "Bạn chỉ có thể chọn địa chỉ bán hàng 1 lần duy nhất. Bạn có muốn tiếp tục?", "confirmation");
+    };
+
+    // Khởi tạo tải danh sách tỉnh/thành phố
+    $scope.loadTinhs();
+});
+
+
