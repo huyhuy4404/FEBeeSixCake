@@ -99,7 +99,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     month: orderDate.getMonth() + 1,
                     year: orderDate.getFullYear(),
                     total: item.total,
-                    statusId: item.idstatuspay
+                    statusId: item.statuspay.idstatuspay
                 };
             });
 

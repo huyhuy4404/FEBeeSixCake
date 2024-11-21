@@ -66,7 +66,7 @@
             </span>
         </div>
         <div class="row py-2" style="justify-content: center; margin: 0 5%; margin-top: 30px;">
-            <div class="col-lg-3" style="margin-top: 30px;" ng-repeat="item in Products | filter:{isactive: true} | limitTo: 8">
+            <div class="col-lg-3" style="margin-top: 30px;" ng-repeat="item in Products | filter:{isactive: true} ">
                 <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                     <div class="box-images">
                         <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}">

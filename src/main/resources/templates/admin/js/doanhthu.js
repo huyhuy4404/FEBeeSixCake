@@ -201,7 +201,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 return {
                     date: new Date(item.orderdate).toISOString().split('T')[0],
                     total: item.total,
-                    statusId: item.idstatuspay
+                    statusId: item.statuspay.idstatuspay
                 };
             });
             $scope.filteredOrders = $scope.orders.filter(order => order.statusId === 2); // Filter paid orders
@@ -289,7 +289,7 @@ app.controller('dayController', function($scope, $http) {
                 return {
                     date: orderDate.toISOString().split('T')[0], // Ngày theo định dạng YYYY-MM-DD
                     total: item.total,
-                    statusId: item.idstatuspay,
+                    statusId: item.statuspay.idstatuspay,
                 };
             });
             

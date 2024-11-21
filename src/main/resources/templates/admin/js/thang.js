@@ -119,7 +119,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     total: item.total,
                     account: item.account.fullname,
                     paymentMethod: item.payment.paymentname,
-                    statusId: item.idstatuspay,
+                    statusId: item.statuspay.idstatuspay,
                 };
             });
             $scope.availableYears = [...new Set($scope.orderdetai.map(item => item.year))]; // Get unique years

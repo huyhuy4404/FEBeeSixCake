@@ -114,7 +114,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     date: orderDate.toISOString().split('T')[0],
                     year: year,
                     total: item.total, // Lưu tổng tiền từ đơn hàng
-                    statusId: item.idstatuspay // Lưu ID trạng thái thanh toán
+                    statusId: item.statuspay.idstatuspay // Lưu ID trạng thái thanh toán
                 };
             });
             $scope.filteredOrders = $scope.orders; // Khởi tạo filteredOrders

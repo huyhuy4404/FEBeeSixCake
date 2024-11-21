@@ -7,10 +7,14 @@ app.controller("discountsController", function ($scope, $http) {
   $scope.filteredProducts = []; // Mảng chứa sản phẩm đã lọc
   $scope.selectedCategory = "";
 
+  // Thêm biến cho phân trang
+  $scope.currentPage = 1;
+  $scope.itemsPerPage = 1; // Số sản phẩm hiển thị trên mỗi trang
+  $scope.totalPages = 0; // Tổng số trang
+
   // Lấy dữ liệu từ API
   $scope.getProducts = function () {
-    $http
-      .get("http://localhost:8080/beesixcake/api/product")
+    $http.get("http://localhost:8080/beesixcake/api/product")
       .then(function (response) {
         if (!Array.isArray(response.data)) {
           console.error("Dữ liệu không phải mảng!");
@@ -45,6 +49,9 @@ app.controller("discountsController", function ($scope, $http) {
           }
         });
 
+        // Tính toán tổng số trang sau khi dữ liệu đã được tải
+        $scope.calculateTotalPages();
+
         // Nếu đã lưu loại sản phẩm trong localStorage, tự động lọc
         const storedCategory = localStorage.getItem("selectedCategory");
         if (storedCategory) {
@@ -72,6 +79,9 @@ app.controller("discountsController", function ($scope, $http) {
       console.log("Không có sản phẩm nào cho loại: " + categoryName);
     }
 
+    // Tính toán tổng số trang sau khi lọc
+    $scope.calculateTotalPages();
+
     // Nếu được yêu cầu, chuyển hướng đến trang sản phẩm
     if (shouldRedirect) {
       localStorage.setItem("selectedCategory", categoryName); // Lưu loại đã chọn
@@ -81,8 +91,7 @@ app.controller("discountsController", function ($scope, $http) {
 
   // Lấy danh mục sản phẩm
   $scope.getCategories = function () {
-    $http
-      .get("http://localhost:8080/beesixcake/api/category")
+    $http.get("http://localhost:8080/beesixcake/api/category")
       .then(function (response) {
         if (Array.isArray(response.data)) {
           $scope.category = response.data.map((item) => ({
@@ -116,6 +125,24 @@ app.controller("discountsController", function ($scope, $http) {
       style: "currency",
       currency: "VND",
     }).format(amount);
+  };
+
+  // Phân trang: Lấy sản phẩm trên trang hiện tại
+  $scope.getPaginatedProducts = function() {
+    const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
+    return $scope.Products.filter(item => item.isactive).slice(start, start + $scope.itemsPerPage);
+  };
+
+  // Chuyển trang
+  $scope.changePage = function(page) {
+    if (page >= 1 && page <= $scope.totalPages) {
+      $scope.currentPage = page;
+    }
+  };
+
+  // Tính toán tổng số trang
+  $scope.calculateTotalPages = function() {
+    $scope.totalPages = Math.ceil($scope.Products.filter(item => item.isactive).length / $scope.itemsPerPage);
   };
 
   // Gọi hàm để lấy dữ liệu ban đầu

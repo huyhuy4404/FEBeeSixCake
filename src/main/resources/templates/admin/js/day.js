@@ -115,7 +115,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     month: orderDate.getMonth() + 1, // Lấy tháng (0-11) và cộng 1
                     year: orderDate.getFullYear(), // Lấy năm
                     total: item.total,
-                    statusId: item.idstatuspay,
+                    statusId: item.statuspay.idstatuspay,
                 };
             });
 
