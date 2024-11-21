@@ -9,7 +9,7 @@ app.controller("discountsController", function ($scope, $http) {
 
   // Thêm biến cho phân trang
   $scope.currentPage = 1;
-  $scope.itemsPerPage = 1; // Số sản phẩm hiển thị trên mỗi trang
+  $scope.itemsPerPage = 8; // Số sản phẩm hiển thị trên mỗi trang
   $scope.totalPages = 0; // Tổng số trang
 
   // Lấy dữ liệu từ API
