@@ -293,6 +293,33 @@ app.controller("ProductDetailController", function ($scope, $http) {
         });
     }
   };
+  $scope.quickBuy = () => {
+    if (!$scope.loggedInUser) {
+      $scope.showNotification("Vui lòng đăng nhập để mua sản phẩm.");
+      return;
+    }
+
+    // Lấy tên hình ảnh từ URL
+    const imageName = $scope.product.img.split("/").pop(); // Lấy tên file từ đường dẫn
+
+    // Lấy thông tin sản phẩm cần mua nhanh
+    const quickBuyProduct = {
+      id: $scope.product.idproduct,
+      name: $scope.product.productname,
+      image: imageName, // Chỉ lưu tên hình ảnh
+      price: $scope.selectedSizeDetail.unitprice,
+      quantity: $scope.quantity,
+      idproductdetail: $scope.selectedSizeDetail.idproductdetail,
+      size: $scope.selectedSizeDetail.size,
+      stockQuantity: $scope.selectedSizeDetail.quantityinstock,
+    };
+
+    // Lưu sản phẩm vào localStorage để hiển thị trong trang thanh toán
+    localStorage.setItem("selectedProducts", JSON.stringify([quickBuyProduct]));
+
+    // Chuyển hướng đến trang thanh toán
+    window.location.href = "thanhtoan.html";
+  };
 
   // **Gọi tất cả dữ liệu khi khởi tạo**
   fetchProduct();

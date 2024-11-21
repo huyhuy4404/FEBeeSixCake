@@ -353,10 +353,6 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     // Chuyển hướng về trang giỏ hàng
     $window.location.href = "giohang.html";
   };
-  window.addEventListener("beforeunload", function () {
-    // Xóa dữ liệu sản phẩm trong localStorage
-    localStorage.removeItem("selectedProducts");
-  });
 });
 
 // Controller kiểm tra đăng nhập
