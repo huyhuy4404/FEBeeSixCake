@@ -16,8 +16,17 @@ app.controller("ProductDetailController", function ($scope, $http) {
   $scope.favoriteCount = 0;
   $scope.isActive = false;
   $scope.currentFavoriteId = null;
-  $scope.loggedInUser = JSON.parse(localStorage.getItem("loggedInUser")) || null;
-
+  $scope.loggedInUser =
+    JSON.parse(localStorage.getItem("loggedInUser")) || null;
+  $scope.notificationMessage = "";
+  $scope.showNotification = (message) => {
+    $scope.notificationMessage = message;
+    $scope.$applyAsync();
+    const modal = new bootstrap.Modal(
+      document.getElementById("notificationModal")
+    );
+    modal.show();
+  };
   if (!productId) {
     console.error("Product ID is missing from the URL");
     return;
@@ -99,34 +108,100 @@ app.controller("ProductDetailController", function ($scope, $http) {
   // **4. Thêm vào giỏ hàng**
   $scope.addToCart = () => {
     if (!$scope.loggedInUser) {
-      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
+      $scope.showNotification(
+        "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng."
+      );
       return;
     }
 
-    if ($scope.quantity < 1 || $scope.quantity > $scope.maxQuantity) {
-      alert("Số lượng không hợp lệ!");
-      return;
-    }
+    const idaccount = $scope.loggedInUser.idaccount;
 
-    const cartItem = {
-      quantity: $scope.quantity,
-      productdetail: {
-        idproductdetail: $scope.selectedSizeDetail.idproductdetail,
-      },
-      shoppingcart: {
-        idshoppingcart: $scope.loggedInUser.idshoppingcart,
-      },
+    // Lấy ShoppingCart của người dùng
+    $http.get(`${API}/shoppingcart/account/${idaccount}`).then((response) => {
+      const shoppingCart = response.data[0];
+
+      // Nếu chưa có shoppingcart, tạo mới
+      const shoppingCartId = shoppingCart ? shoppingCart.idshoppingcart : null;
+
+      if (!shoppingCartId) {
+        $http
+          .post(`${API}/shoppingcart`, { account: { idaccount } })
+          .then((newCartResponse) => {
+            proceedAddToCart(newCartResponse.data.idshoppingcart);
+          });
+      } else {
+        proceedAddToCart(shoppingCartId);
+      }
+    });
+
+    const proceedAddToCart = (shoppingCartId) => {
+      $http
+        .get(`${API}/cartitems/shoppingcart/${shoppingCartId}`)
+        .then((response) => {
+          const cartItems = response.data;
+
+          // Kiểm tra sản phẩm đã tồn tại chưa
+          const existingCartItem = cartItems.find(
+            (item) =>
+              item.productdetail.idproductdetail ===
+              $scope.selectedSizeDetail.idproductdetail
+          );
+
+          if (existingCartItem) {
+            // Nếu tồn tại, cập nhật số lượng
+            const updatedQuantity = existingCartItem.quantity + $scope.quantity;
+
+            if (updatedQuantity > $scope.maxQuantity) {
+              $scope.showNotification(
+                "Số lượng sản phẩm đã vượt quá số lượng trong kho."
+              );
+              return;
+            }
+
+            $http
+              .put(`${API}/cartitems/${existingCartItem.idcartitem}`, {
+                idcartitem: existingCartItem.idcartitem,
+                quantity: updatedQuantity,
+                productdetail: {
+                  idproductdetail: $scope.selectedSizeDetail.idproductdetail,
+                },
+                shoppingcart: { idshoppingcart: shoppingCartId },
+              })
+              .then(() =>
+                $scope.showNotification(
+                  "Cập nhật số lượng sản phẩm thành công!"
+                )
+              )
+              .catch((error) => {
+                console.error("Error updating cart item:", error);
+                $scope.showNotification(
+                  "Lỗi khi cập nhật sản phẩm. Vui lòng thử lại."
+                );
+              });
+          } else {
+            // Nếu chưa tồn tại, thêm mới
+            $http
+              .post(`${API}/cartitems`, {
+                quantity: $scope.quantity,
+                productdetail: {
+                  idproductdetail: $scope.selectedSizeDetail.idproductdetail,
+                },
+                shoppingcart: { idshoppingcart: shoppingCartId },
+              })
+              .then(() =>
+                $scope.showNotification(
+                  "Thêm sản phẩm vào giỏ hàng thành công!"
+                )
+              )
+              .catch((error) => {
+                console.error("Error adding to cart:", error);
+                $scope.showNotification(
+                  "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại."
+                );
+              });
+          }
+        });
     };
-
-    $http
-      .post(`${API}/cartitems`, cartItem)
-      .then(() => {
-        alert("Thêm sản phẩm vào giỏ hàng thành công!");
-      })
-      .catch((error) => {
-        console.error("Error adding to cart:", error);
-        alert("Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.");
-      });
   };
 
   // **5. Lấy danh mục sản phẩm**
@@ -314,4 +389,3 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Gọi cập nhật giao diện khi controller được khởi tạo
   $scope.updateAccountMenu();
 });
-
