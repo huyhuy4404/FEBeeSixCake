@@ -38,7 +38,7 @@
         .custom-block {
             display: flex;
             flex-direction: column;
-            min-height: 500px;
+            min-height: 650px;
             /* Adjust as needed to set the minimum height */
             justify-content: space-between;
         }
@@ -46,7 +46,6 @@
         /* Table responsiveness and styles */
         .table-responsive {
             flex-grow: 1;
-            margin-bottom: 20px;
             /* Adds space between table and pagination */
         }
 
@@ -62,7 +61,7 @@
         }
 
         .modal-order {
-            max-width: 70vw;
+            max-width: 60vw;
             /* Đặt kích thước tối đa cho modal là 80% chiều rộng của màn hình */
             margin: 1.75rem auto;
             /* Căn giữa modal */
@@ -143,16 +142,11 @@
             width: 100%;
         }
 
-        .order-footer-right {
-            /* Giới hạn chiều rộng để các phần tử không bị quá rộng */
-            padding-left: 50px;
-
-        }
-
         .border-tt {
             border: 1px solid gray;
             margin-top: 20px;
             padding: 20px;
+            border-radius: 5px;
         }
 
         .order-footer-right div {
@@ -174,6 +168,8 @@
             color: #d9534f;
             /* Màu đỏ để làm nổi bật tổng tiền */
         }
+
+        
     </style>
 
 </head>
@@ -291,7 +287,7 @@
                 </div>
 
                 <!-- Tabs -->
-                <div >
+                <div>
                     <div class="col-12">
                         <div class="custom-block bg-white">
                             <div class="tab-content" id="myTabContent">
@@ -302,6 +298,7 @@
                                         <table class="account-table table">
                                             <thead>
                                                 <tr>
+                                                    <th class="text-center">Số Thứ Tự</th>
                                                     <th class="text-center">Mã Đơn Hàng</th>
                                                     <th class="text-center">Thời Gian Đặt Hàng</th>
                                                     <th class="text-center">Trạng Thái Đơn Hàng</th>
@@ -311,14 +308,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="order in paginatedOrders"
-                                                    style="text-align: center; font-size: 16px;">
+                                                <tr ng-repeat="order in paginatedOrders | orderBy:'-orderdate'" style="text-align: center; font-size: 16px;">
+                                                    <td>{{ $index + 1 }}</td>
                                                     <td>{{ order.idorder }}</td>
                                                     <td>{{ order.orderdate | date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                     <td>{{ order.statusName }}</td>
                                                     <td>{{ order.statuspay.statuspayname }}</td>
                                                     <td>{{ order.total | number : 0}} ₫</td>
-                                                    <td class="">
+                                                    <td>
                                                         <button type="button" class="btn btn-sm btn-primary"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#modal-{{order.idorder}}"
@@ -328,11 +325,12 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                                                            
                                     </div>
                                 </div>
                             </div>
                             <!-- Thanh Phân Trang -->
-                            <nav aria-label="Page navigation" class="mt-4">
+                            <nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center mb-0">
                                     <li class="page-item" ng-class="{disabled: currentPage === 1}">
                                         <a class="page-link" href="#" aria-label="Previous"
@@ -353,7 +351,6 @@
                                 </ul>
                             </nav>
                         </div>
-
                     </div>
 
                     <!-- Modal -->
@@ -370,7 +367,7 @@
                                 </div>
                                 <div class="modal-body">
 
-                                    <div class="mb-3" style="border: 1px solid grey; padding: 10px;">
+                                    <div class="mb-3" style="border: 1px solid grey; padding: 10px; border-radius: 5px;">
                                         <p style="font-weight: bold; color: black;">Thông tin khách hàng</p>
                                         <table class="account-table table table-order mb-0">
                                             <thead>
@@ -390,12 +387,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div ng-show="message" class="alert"
-                                        ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}">
-                                        {{ message }}
-                                    </div>
                                     <!-- Table content for order details -->
-                                    <div style="border: 1px solid grey; padding: 10px;">
+                                    <div style="border: 1px solid grey; padding: 10px; border-radius: 5px;">
                                         <p style="font-weight: bold; color: black;">Thông tin đơn hàng</p>
                                         <table class="account-table table table-order mb-0">
                                             <thead>
@@ -424,44 +417,56 @@
                                 <div class="modal-footer">
                                     <div class="row">
                                         <div class="col-lg-7 order-footer-left">
-                                            <p class="fw-bold mb-2">Trạng thái đơn hàng</p>
+                                            <p class="fw-bold mb-2" style="color: black; ">Trạng thái đơn hàng</p>
                                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <!-- Nút Chờ Xác Nhận -->
                                                 <label class="btn btn-primary"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 1}">
+                                                    ng-class="{'active': selectedOrder.status.idstatus === 1}"
+                                                    ng-if="getVisibleStatusButtons(originalStatus).includes(1)">
                                                     <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 1" value="1"
-                                                        autocomplete="off" /> Chờ Xác Nhận
-
+                                                        ng-value="1" autocomplete="off" ng-click="setOrderStatus(1)">
+                                                    Chờ Xác Nhận
                                                 </label>
+
+                                                <!-- Nút Chờ Giao Hàng -->
                                                 <label class="btn btn-info"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 2}">
+                                                    ng-class="{'active': selectedOrder.status.idstatus === 2}"
+                                                    ng-if="getVisibleStatusButtons(originalStatus).includes(2)">
                                                     <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 2" value="2"
-                                                        autocomplete="off" /> Chờ Giao Hàng
+                                                        ng-value="2" autocomplete="off" ng-click="setOrderStatus(2)">
+                                                    Chờ Giao Hàng
+                                                </label>
 
-                                                </label>
+                                                <!-- Nút Đã Giao Hàng -->
                                                 <label class="btn btn-warning"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 3}">
+                                                    ng-class="{'active': selectedOrder.status.idstatus === 3}"
+                                                    ng-if="getVisibleStatusButtons(originalStatus).includes(3)">
                                                     <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 3" value="3"
-                                                        autocomplete="off" /> Đã Giao Hàng
+                                                        ng-value="3" autocomplete="off" ng-click="setOrderStatus(3)"> Đã
+                                                    Giao Hàng
                                                 </label>
+
+                                                <!-- Nút Đã Hủy -->
                                                 <label class="btn btn-danger"
-                                                    ng-class="{'active': selectedOrder.status.idstatus == 4}">
+                                                    ng-class="{'active': selectedOrder.status.idstatus === 4}"
+                                                    ng-if="getVisibleStatusButtons(originalStatus).includes(4)">
                                                     <input type="radio" ng-model="selectedOrder.status.idstatus"
-                                                        ng-checked="selectedOrder.status.idstatus == 4" value="4"
-                                                        autocomplete="off" /> Đã Hủy
+                                                        ng-value="4" autocomplete="off" ng-click="setOrderStatus(4)"> Đã
+                                                    Hủy
                                                 </label>
                                             </div>
 
+                                            <!-- Nút Cập Nhật Trạng Thái Đơn Hàng -->
                                             <button class="btn btn-primary" ng-click="updateOrderStatus()"
-                                                style="float: right;" ng-disabled="isUpdating">
+                                                style="float: right;"
+                                                ng-disabled="isUpdateDisabled(originalStatus, selectedOrder.status.idstatus)">
                                                 Cập nhật
                                             </button>
 
+
                                             <!-- Trạng thái thanh toán -->
                                             <div class="mt-4">
-                                                <p class="fw-bold mb-2">Trạng thái thanh toán</p>
+                                                <p class="fw-bold mb-2" style="color: black;">Trạng thái thanh toán</p>
                                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                     <!-- Chỉ hiển thị nút 'Chưa Thanh Toán' nếu trạng thái hiện tại là 1 -->
                                                     <label class="btn btn-danger"
@@ -497,7 +502,7 @@
                                                 </h6>
                                                 <h6>Giảm giá: <span>{{ selectedOrder.discount ? (selectedOrder.discount
                                                         | number: 0) : 0 }} ₫</span></h6>
-                                                <h6>Tổng tiền theo đơn hàng: <span
+                                                <h6>Tổng tiền đơn hàng: <span
                                                         class="total-amount">{{selectedOrder.total | number: 0}}
                                                         ₫</span>
                                                 </h6>
@@ -508,40 +513,41 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal Thông Báo -->
+                    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content" style="margin-bottom: 350px !important;">
+                                <div class="modal-header"
+                                    ng-class="{'bg-success text-white': messageType === 'success', 'bg-danger text-white': messageType === 'error', 'bg-info text-white': messageType === 'info'}">
+                                    <h5 class="modal-title" id="messageModalLabel" style="color: aliceblue;">
+                                        {{ messageType === 'success' ? 'Thành Công' : (messageType === 'error' ? 'Lỗi' :
+                                        'Thông Báo') }}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ message }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-
-
-
             </main>
         </div>
     </div>
-    </main>
 
     <!-- JAVASCRIPT FILES -->
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/custom.js"></script>
     <script src="../admin/js/order.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Khi modal bị đóng
-            $('.modal').on('hidden.bs.modal', function () {
-                // Xóa lớp 'show' để kích hoạt hiệu ứng fade-out
-                $('.modal-backdrop').removeClass('show');
-
-                // Đặt thời gian chờ để đảm bảo hiệu ứng hoàn tất trước khi xóa thẻ
-                setTimeout(function () {
-                    // Xóa thẻ backdrop khỏi DOM
-                    $('.modal-backdrop').remove();
-                    // Xóa lớp 'modal-open' khỏi body
-                    $('body').removeClass('modal-open');
-                }, 150); // Thời gian tương ứng với thời gian hiệu ứng fade-out
-            });
-        });
-    </script>
-
-
-
 </body>
 
 </html>
