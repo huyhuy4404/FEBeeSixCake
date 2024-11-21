@@ -37,23 +37,24 @@ app.controller("LoginController", function ($scope, $http, $window, $timeout) {
           );
 
           if (foundAccount) {
-            if (foundAccount.admin) {
-              // Nếu tài khoản là admin
-              $scope.loginError = "Bạn không có quyền truy cập!";
-            } else {
-              // Đăng nhập thành công
+            // Kiểm tra quyền truy cập dựa trên idrole
+            if (foundAccount.idrole === 1) {
+              // Nếu idrole = 2, không cho phép đăng nhập
+              $scope.loginError = "Bạn không có quyền đăng nhập!";
+            } else if (foundAccount.idrole === 2) {
+              // Nếu idrole = 1 (admin), cho phép đăng nhập
               $scope.loginSuccess = "Đăng nhập thành công!";
               // Lưu thông tin đăng nhập vào localStorage
-              localStorage.setItem(
-                "loggedInUser",
-                JSON.stringify(foundAccount)
-              );
-
+              localStorage.setItem("loggedInUser", JSON.stringify(foundAccount));
+  
               // Cập nhật giao diện
               $scope.updateAccountMenu();
-
+  
               // Chuyển hướng về trang chính ngay lập tức
               $window.location.href = "index.html"; // Hoặc sử dụng $timeout nếu cần delay
+            } else {
+              // Nếu idrole không phải 1 hoặc 2, xử lý trường hợp khác
+              $scope.loginError = "Không có quyền truy cập!";
             }
           } else {
             // Nếu tài khoản không đúng hoặc mật khẩu không khớp
