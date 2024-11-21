@@ -295,24 +295,22 @@ app.controller('dayController', function($scope, $http) {
             
             // Tạo danh sách các ngày có sẵn
             $scope.availableDates = [...new Set($scope.orderdetai.map(item => item.date))];
-            $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
-            $scope.calculateDailyStats();
-            $scope.renderDailyChart();
+            $scope.filterData(); // Lọc dữ liệu cho ngày hiện tại
         })
         .catch(function(error) {
             console.error('Lỗi khi lấy dữ liệu đơn hàng:', error);
         });
     };
 
-    // Hàm lọc dữ liệu theo ngày
+    // Hàm lọc dữ liệu theo ngày hiện tại
     $scope.filterData = function() {
-        if (!$scope.selectedDate) {
-            $scope.filteredOrderDetails = $scope.orderdetai.filter(item => item.statusId === 2);
-        } else {
-            $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
-                return item.date === $scope.selectedDate && item.statusId === 2;
-            });
-        }
+        const today = new Date();
+        const formattedToday = today.toISOString().split('T')[0]; // Định dạng ngày hôm nay
+
+        // Lọc đơn hàng cho ngày hôm nay
+        $scope.filteredOrderDetails = $scope.orderdetai.filter(function(item) {
+            return item.date === formattedToday && item.statusId === 2;
+        });
 
         $scope.calculateDailyStats();
         $scope.renderDailyChart();
@@ -335,11 +333,20 @@ app.controller('dayController', function($scope, $http) {
         });
 
         $scope.dailyStats = Object.values(statsMap);
+        
+        // Nếu không có đơn hàng, thêm một trường để hiển thị
+        if ($scope.dailyStats.length === 0) {
+            $scope.dailyStats.push({
+                date: formattedToday,
+                totalOrders: 0,
+                totalRevenue: 0
+            });
+        }
     };
 
     // Hàm vẽ biểu đồ theo ngày
     $scope.renderDailyChart = function() {
-        if ($scope.dailyStats.length === 0) {
+        if ($scope.dailyStats.length === 0 || $scope.dailyStats[0].totalOrders === 0) {
             document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
             return;
         }
@@ -354,7 +361,7 @@ app.controller('dayController', function($scope, $http) {
             chart: {
                 type: 'bar',
                 height: 300,
-                width: '100%'
+                width: '30%'
             },
             plotOptions: {
                 bar: {

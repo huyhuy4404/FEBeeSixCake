@@ -153,72 +153,78 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
         $scope.dailyStats = [];
         const statsMap = {};
 
+        // Tạo mảng chứa 30 ngày
+        const currentMonth = $scope.selectedMonth || new Date().getMonth() + 1;
+        const currentYear = $scope.selectedYear || new Date().getFullYear();
+        const daysInMonth = new Date(currentYear, currentMonth, 0).getDate(); // Số ngày trong tháng
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const formattedDate = `${currentYear} ${day}`; // Định dạng lại ngày
+            statsMap[formattedDate] = {
+                date: formattedDate,
+                totalOrders: 0,
+                totalRevenue: 0
+            };
+        }
+
+        // Nhóm dữ liệu theo ngày
         $scope.filteredOrderDetails.forEach(function(item) {
             const orderDate = new Date(item.date);
-            const formattedDate1 = orderDate.getDate(); // Chỉ lấy ngày
             const day = orderDate.getDate(); // Lấy ngày của tháng
             const formattedDate = `${orderDate.getFullYear()} ${day}`; // Định dạng lại ngày
-
-            if (!statsMap[formattedDate]) {
-                statsMap[formattedDate] = {
-                    date: formattedDate,
-                    date1: formattedDate1,
-                    totalOrders: 0,
-                    totalRevenue: 0
-                };
-            }
 
             statsMap[formattedDate].totalOrders += 1;
             statsMap[formattedDate].totalRevenue += item.total;
         });
 
+        // Chuyển đổi đối tượng thành mảng
         $scope.dailyStats = Object.values(statsMap);
     };
 
     // Hàm vẽ biểu đồ theo ngày
     $scope.renderDailyChart = function() {
-      if ($scope.dailyStats.length === 0) {
-          document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
-          return;
-      }
-  
-      document.getElementById("daily-bar-chart").innerHTML = "";
-  
-      var options = {
-          series: [{
-              name: 'Doanh Thu',
-              data: $scope.dailyStats.map(stat => stat.totalRevenue), // Sử dụng tổng doanh thu
-          }],
-          chart: {
-              type: 'bar',
-              height: 300,
-              width: '100%'
-          },
-          plotOptions: {
-              bar: {
-                  horizontal: false,
-                  columnWidth: '50%',
-              }
-          },
-          xaxis: {
-              categories: $scope.dailyStats.map(stat =>`Ngày ${stat.date1}`), // Sử dụng ngày
-          },
-          responsive: [{
-              breakpoint: 480,
-              options: {
-                  chart: {
-                      width: 200,
-                  },
-                  legend: {
-                      position: 'bottom'
-                  }
-              }
-          }]
-      };
-  
-      var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
-      chart.render();
-  };
+        if ($scope.dailyStats.length === 0) {
+            document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
+            return;
+        }
+
+        document.getElementById("daily-bar-chart").innerHTML = "";
+
+        var options = {
+            series: [{
+                name: 'Doanh Thu',
+                data: $scope.dailyStats.map(stat => stat.totalRevenue), // Sử dụng tổng doanh thu
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                width: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '70%',
+                }
+            },
+            xaxis: {
+                categories: $scope.dailyStats.map(stat => ` ${stat.date.split(' ')[1]}`), // Sử dụng ngày
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200,
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        };
+
+        var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
+        chart.render();
+    };
 
     // Hàm định dạng tiền tệ
     $scope.formatCurrency = function(amount) {

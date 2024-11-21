@@ -135,7 +135,7 @@
                                                             <td>{{ stat.totalQuantity }}</td>
                                                         </tr>
                                                         <tr ng-if="groupedOrderDetails.length === 0">
-                                                            <td colspan="2">Không có dữ liệu</td>
+                                                            <td colspan="2">Không có dữ liệu cho ngày hôm nay.</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -144,7 +144,6 @@
                                     </div>
                                 </div>
                             </div>
-                
                             <!-- Daily Revenue Chart -->
                             <div class="custom-block bg-white p-4 mb-4">
                                 <div class="title-group mb-4">
@@ -158,7 +157,7 @@
                                                 <div id="daily-bar-chart"></div>
                                             </div>
                                         </div>
-                
+                            
                                         <div class="card-body">
                                             <table class="table table-hover table-bordered">
                                                 <thead>
@@ -169,13 +168,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr ng-repeat="stat in dailyStats" ng-if="stat.totalOrders > 0">
+                                                    <tr ng-repeat="stat in dailyStats">
                                                         <td>{{ stat.date }}</td>
                                                         <td>{{ stat.totalOrders }}</td>
                                                         <td>{{ formatCurrency(stat.totalRevenue) }}</td>
                                                     </tr>
-                                                    <tr ng-if="dailyStats.length === 0">
-                                                        <td colspan="3">Không có dữ liệu cho khoảng thời gian đã chọn.</td>
+                                                    <tr ng-if="dailyStats.length === 0 || dailyStats[0].totalOrders === 0">
+                                                        <td colspan="3">Không có dữ liệu cho ngày hôm nay.</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
