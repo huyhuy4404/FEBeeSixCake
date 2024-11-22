@@ -292,6 +292,45 @@
                             <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
                                 aria-labelledby="list-tab" tabindex="0">
                                 <div class="table-responsive">
+                                    <div class="btn btn-danger LocDH row" style="max-width: 500px; width: auto; float: right; padding-right: 0; margin-right: 20px;">
+                                        <div class="col-lg-6 pe-4">
+                                            <div id="filterDropdown" class="language nav-item dropdown"
+                                                style="width: 200px;">
+                                                <span class="dropdown-toggle" role="button" data-bs-toggle="dropdown" style="width: auto;"
+                                                    aria-expanded="false">
+                                                    Lọc theo trạng thái đơn hàng
+                                                </span>
+                                                <ul class="dropdown-menu" id="filterOptions">
+                                                    <li style="width: 200px;"><a class="dropdown-item filter-option"
+                                                            href="#" data-filter="orderStatus">Lọc theo trạng thái đơn
+                                                            hàng</a></li>
+                                                    <li style="width: 200px;"><a class="dropdown-item filter-option"
+                                                            href="#" data-filter="paymentStatus">Lọc theo trạng thái
+                                                            thanh toán</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-5 px-2">
+                                            <div id="statusDropdown" class="language nav-item dropdown">
+                                                <span class="dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                                    aria-expanded="false" id="statusDropdownToggle">
+                                                    Chọn Trạng Thái
+                                                </span>
+                                                <ul class="dropdown-menu" id="statusOptions">
+                                                    <!-- Mặc định là trạng thái đơn hàng -->
+                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
+                                                            href="#" data-lang="Chờ Xác Nhận">Chờ Xác Nhận</a></li>
+                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
+                                                            href="#" data-lang="Chờ Giao Hàng">Chờ Giao Hàng</a></li>
+                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
+                                                            href="#" data-lang="Đã Giao Hàng">Đã Giao Hàng</a></li>
+                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
+                                                            href="#" data-lang="Đã Hủy">Đã Hủy</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1 ps-0"><i class="bi bi-arrow-down-up"></i></div>
+                                    </div>
                                     <table class="account-table table">
                                         <thead>
                                             <tr>
@@ -322,7 +361,6 @@
                                             </tr>
                                         </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
@@ -418,7 +456,7 @@
                                         <div>
                                             <span class="btn" ng-class="{'btn-danger': order.statuspay.idstatuspay == 1,
                                                 'btn-success': order.statuspay.idstatuspay == 2}">
-                                            {{ selectedOrder.statuspay.statuspayname }}
+                                                {{ selectedOrder.statuspay.statuspayname }}
                                             </span>
                                         </div>
                                     </div>
@@ -513,6 +551,45 @@
     </div>
 
     <!-- JAVASCRIPT FILES -->
+    <script>
+        $(document).ready(function () {
+            // Khi click vào tùy chọn lọc (trạng thái đơn hàng hoặc trạng thái thanh toán)
+            $('#filterDropdown .filter-option').click(function () {
+                var selectedFilter = $(this).data('filter');
+                var dropdownToggle = $('#filterDropdown .dropdown-toggle');
+                var statusDropdown = $('#statusDropdownToggle');
+                var statusOptions = $('#statusOptions');
+
+                // Cập nhật tiêu đề dropdown lọc
+                if (selectedFilter === 'orderStatus') {
+                    dropdownToggle.html('Lọc theo trạng thái đơn hàng');
+                    statusDropdown.html('Chọn Trạng Thái');
+                    // Thay danh sách trạng thái thành trạng thái đơn hàng
+                    statusOptions.html(`
+                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Chờ Xác Nhận">Chờ Xác Nhận</a></li>
+                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Chờ Giao Hàng">Chờ Giao Hàng</a></li>
+                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Đã Giao Hàng">Đã Giao Hàng</a></li>
+                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Đã Hủy">Đã Hủy</a></li>
+            `);
+                } else if (selectedFilter === 'paymentStatus') {
+                    dropdownToggle.html('Lọc theo trạng thái thanh toán');
+                    statusDropdown.html('Chọn Trạng Thái');
+                    // Thay danh sách trạng thái thành trạng thái thanh toán
+                    statusOptions.html(`
+                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Chưa Thanh Toán">Chưa Thanh Toán</a></li>
+                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Đã Thanh Toán">Đã Thanh Toán</a></li>
+            `);
+                }
+            });
+
+            // Khi click vào trạng thái
+            $(document).on('click', '#statusDropdown .status-option', function () {
+                var selectedStatus = $(this).data('lang');
+                $('#statusDropdownToggle').html(selectedStatus);
+            });
+        });
+
+    </script>
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>
     <script src="../admin/js/custom.js"></script>
