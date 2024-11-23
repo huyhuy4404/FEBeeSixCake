@@ -2,6 +2,9 @@ var app = angular.module("myApp", []);
 
 // Controller xử lý thanh toán
 app.controller("CheckoutController", function ($scope, $window, $http) {
+  $scope.qrCode = null; // Đường dẫn ảnh mã QR
+  $scope.paymentStatus = "PENDING"; // Trạng thái thanh toán
+  $scope.countdown = 0;
   // Kiểm tra đăng nhập và lấy thông tin người dùng
   if (localStorage.getItem("loggedInUser")) {
     var loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
@@ -43,7 +46,11 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     .then(function (response) {
       $scope.addresses = response.data;
       if ($scope.addresses.length === 0) {
-        alert("Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ.");
+        // Gọi modal thay vì alert
+        const addressModal = new bootstrap.Modal(
+          document.getElementById("addressModal")
+        );
+        addressModal.show();
       } else {
         $scope.defaultAddress =
           $scope.addresses.find((addr) => addr.isDefault) ||
@@ -55,6 +62,11 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     .catch(function (error) {
       console.error("Lỗi khi lấy địa chỉ từ API:", error);
     });
+
+  // Hàm chuyển hướng đến trang thêm địa chỉ
+  $scope.redirectToAddAddress = function () {
+    window.location.href = "addrest.html";
+  };
 
   // Tính tổng giá tiền
   $scope.calculateTotals = function () {
@@ -179,6 +191,15 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
 
   // Đặt hàng
   $scope.placeOrder = function () {
+    if ($scope.products.length === 0) {
+      $scope.showModal(
+        "Lỗi",
+        "Không thể đặt hàng vì không có sản phẩm trong giỏ."
+      );
+      return;
+    }
+
+    const isPaid = $scope.paymentStatus === "PAID"; // Kiểm tra trạng thái thanh toán từ API
     const order = {
       orderdate: new Date().toISOString(),
       addressdetail: $scope.address,
@@ -187,16 +208,34 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
       account: { idaccount: $scope.userId },
       discount: $scope.currentDiscount || { iddiscount: 0 },
       payment: { idpayment: $scope.selectedPaymentId },
-      statuspay: { idstatuspay: 1 },
+      statuspay: { idstatuspay: isPaid ? 2 : 1 }, // Nếu đã thanh toán, idstatuspay = 2
     };
 
+    // Gửi yêu cầu tạo đơn hàng
     $http
       .post("http://localhost:8080/beesixcake/api/order", order)
       .then(function (response) {
+        // Kiểm tra dữ liệu trả về
+        console.log("Đơn hàng được tạo:", response.data);
+
+        // Sau khi tạo đơn hàng, xử lý chi tiết đơn hàng
         $scope.createOrderDetails(response.data);
+
+        // Hiển thị thông báo trạng thái
+        const message = isPaid
+          ? "Đơn hàng đã được thanh toán thành công và đặt hàng thành công!"
+          : "Đơn hàng chưa được thanh toán. Đặt hàng thành công với trạng thái 'Chưa thanh toán'.";
+        $scope.showModal("Đặt Hàng Thành Công", message);
+
+        // Chuyển hướng tới trang đặt hàng nếu cần
+        setTimeout(() => {
+          console.log("Chuyển hướng sau 5 giây.");
+          $window.location.href = "order.html";
+        }, 5000);
       })
       .catch((error) => {
         console.error("Lỗi khi đặt hàng:", error);
+        $scope.showModal("Lỗi", "Không thể đặt hàng. Vui lòng thử lại.");
       });
   };
 
@@ -286,8 +325,10 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
         $scope.deleteCartItems();
       })
       .then(() => {
-        alert("Đặt hàng thành công!");
-        $window.location.href = "order.html"; // Chuyển hướng sau khi đặt hàng
+        setTimeout(() => {
+          console.log("Chuyển hướng sau 5 giây.");
+          $window.location.href = "order.html";
+        }, 5000); // Chuyển hướng sau khi đặt hàng
       })
       .catch((error) => {
         console.error("Lỗi khi tạo lịch sử trạng thái:", error);
@@ -352,6 +393,139 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
     localStorage.removeItem("selectedProducts");
     // Chuyển hướng về trang giỏ hàng
     $window.location.href = "giohang.html";
+  };
+  // Thêm hàm tạo mã QR
+  $scope.generateQRCode = function () {
+    const randomChars = Array(3)
+      .fill(null)
+      .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26))) // Random 3 ký tự chữ (A-Z)
+      .join("");
+
+    const qrRequest = {
+      productName: "HÓA ĐƠN BEESIXCAKE",
+      description: "", // Nội dung chuyển khoản sẽ cập nhật sau khi gọi API
+      returnUrl: "order.html",
+      cancelUrl: "index.html",
+      price: $scope.finalTotal, // Tổng tiền
+    };
+
+    $http
+      .post("http://localhost:8080/beesixcake/qr/order/create", qrRequest)
+      .then(function (response) {
+        if (response.data.error === 0) {
+          const qrData = response.data.data;
+
+          // Gán dữ liệu từ API trả về
+          $scope.orderCode = qrData.orderCode; // Lưu lại orderCode để kiểm tra
+          $scope.accountNumber = qrData.accountNumber;
+          $scope.accountName = qrData.accountName;
+          $scope.description = `${randomChars}${qrData.orderCode}`; // Nội dung chuyển khoản
+          $scope.qrCodeUrl = `https://img.vietqr.io/image/${qrData.bin}-${
+            qrData.accountNumber
+          }-vietqr_pro.jpg?addInfo=${encodeURIComponent(
+            $scope.description
+          )}&amount=${qrData.amount}`;
+          $scope.qrCodeGenerated = true; // Hiển thị thông tin thanh toán
+          $scope.startCountdown(); // Bắt đầu đếm ngược
+
+          // Bắt đầu kiểm tra trạng thái thanh toán
+          $scope.checkPaymentStatus(qrData.orderCode);
+
+          console.log(
+            `Thanh toán thành công! Link thanh toán: ${qrData.checkoutUrl}`
+          ); // In ra console
+        } else {
+          $scope.showModal("Lỗi khi tạo mã QR", response.data.message);
+        }
+      })
+      .catch(function (error) {
+        console.error("Lỗi API khi tạo mã QR:", error);
+        $scope.showModal("Lỗi", "Không thể kết nối đến API để tạo mã QR.");
+      });
+  };
+  $scope.checkPaymentStatus = function (orderCode) {
+    $scope.paymentCheckTimer = setInterval(() => {
+      $http
+        .get(`http://localhost:8080/beesixcake/qr/order/${orderCode}`)
+        .then(function (response) {
+          console.log("Payment Status Response:", response.data);
+
+          if (response.data.error === 0) {
+            const paymentData = response.data.data;
+
+            // Nếu trạng thái thanh toán là "PAID"
+            if (paymentData.status === "PAID") {
+              console.log("Thanh toán thành công:", paymentData);
+
+              // Cập nhật trạng thái thanh toán
+              $scope.paymentStatus = "PAID";
+
+              // Dừng kiểm tra
+              clearInterval($scope.paymentCheckTimer);
+
+              // Gọi hàm đặt hàng
+              $scope.placeOrder();
+            }
+          } else {
+            console.warn("Lỗi khi kiểm tra thanh toán:", response.data.message);
+          }
+        })
+        .catch(function (error) {
+          console.error("Lỗi khi kiểm tra trạng thái thanh toán:", error);
+        });
+    }, 5000); // Kiểm tra mỗi 5 giây
+  };
+
+  // Hàm hủy thanh toán
+  $scope.cancelPayment = function () {
+    $scope.qrCodeGenerated = false; // Ẩn QR Code
+    $scope.accountNumber = null;
+    $scope.accountName = null;
+    $scope.description = null;
+    $scope.qrCodeUrl = null;
+    $scope.stopCountdown(); // Dừng đếm ngược
+    $scope.showModal("Thanh toán hủy bỏ", "Thanh toán đã được hủy.");
+  };
+
+  // Đếm ngược 15 phút
+  $scope.startCountdown = function () {
+    $scope.countdown = 900; // 15 phút tính theo giây (15 * 60)
+    $scope.timer = setInterval(() => {
+      if ($scope.countdown > 0) {
+        $scope.countdown -= 1;
+        $scope.countdownDisplay = $scope.formatTime($scope.countdown);
+        $scope.$apply(); // Cập nhật giao diện
+      } else {
+        $scope.stopCountdown();
+        $scope.cancelPayment();
+        $scope.showModal(
+          "Hết thời gian thanh toán",
+          "Thanh toán đã hết thời gian. Đơn hàng tự động hủy."
+        );
+      }
+    }, 1000);
+  };
+
+  // Dừng đếm ngược
+  $scope.stopCountdown = function () {
+    clearInterval($scope.timer);
+  };
+
+  // Hàm định dạng thời gian từ giây thành "phút:giây"
+  $scope.formatTime = function (seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  // Hiển thị modal thông báo
+  $scope.showModal = function (title, message) {
+    $scope.modalTitle = title;
+    $scope.modalMessage = message;
+    const modal = new bootstrap.Modal(document.getElementById("infoModal"));
+    modal.show();
   };
 });
 

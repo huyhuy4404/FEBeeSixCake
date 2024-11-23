@@ -16,7 +16,7 @@
 
   <body ng-app="order" ng-controller="CheckLogin">
     <div ng-include="'layout/header.html'"></div>
-    <div ng-include="'layout/menu.html'"></div>
+    <div ng-include="'layout/menu.html'" ng-controller="loadLoaiSanPham"></div>
     <div class="setDoDaiTrang">
       <br />
       <div class="order" ng-controller="CartController">

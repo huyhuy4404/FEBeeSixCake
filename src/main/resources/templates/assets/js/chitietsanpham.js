@@ -195,9 +195,7 @@ app.controller("ProductDetailController", function ($scope, $http) {
               )
               .catch((error) => {
                 console.error("Error adding to cart:", error);
-                $scope.showNotification(
-                  "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại."
-                );
+                $scope.showNotification("Sản phẩm đã hết hàng!");
               });
           }
         });
@@ -258,7 +256,9 @@ app.controller("ProductDetailController", function ($scope, $http) {
   // **8. Yêu thích sản phẩm**
   $scope.toggleHeart = () => {
     if (!$scope.loggedInUser) {
-      alert("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
+      $scope.showNotification(
+        "Vui lòng đăng nhập để sử dụng chức năng yêu thích."
+      );
       return;
     }
 
@@ -272,7 +272,6 @@ app.controller("ProductDetailController", function ($scope, $http) {
         })
         .catch((error) => {
           console.error("Error deleting favorite:", error);
-          alert("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
         });
     } else {
       const newFavorite = {
@@ -289,13 +288,16 @@ app.controller("ProductDetailController", function ($scope, $http) {
         })
         .catch((error) => {
           console.error("Error adding favorite:", error);
-          alert("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
         });
     }
   };
   $scope.quickBuy = () => {
     if (!$scope.loggedInUser) {
       $scope.showNotification("Vui lòng đăng nhập để mua sản phẩm.");
+      return;
+    }
+    if ($scope.selectedSizeDetail.quantityinstock === 0) {
+      $scope.showNotification("Sản phẩm đã hết hàng!");
       return;
     }
 
@@ -401,7 +403,7 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
           console.error("Error:", error);
         });
     } else {
-      alert("Bạn đã đăng nhập rồi.");
+      $scope.showNotification("Bạn đã đăng nhập rồi.");
     }
   };
 

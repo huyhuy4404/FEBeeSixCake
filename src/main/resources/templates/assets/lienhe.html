@@ -1,107 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Liên Hệ</title>
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../assets/css/lienhe.css">
-    <link rel="stylesheet" href="../assets/css/thuan.css">
+    <link
+      rel="stylesheet"
+      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../assets/css/lienhe.css" />
+    <link rel="stylesheet" href="../assets/css/thuan.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="../assets/js/angular.min.js"></script>
     <script src="../assets/js/angular-route.js"></script>
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/account.js"></script>
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="assets/css/plugins.css">
-</head>
+    <link rel="stylesheet" href="assets/css/plugins.css" />
+  </head>
 
-<body ng-app="myApp" ng-controller="LoginController">
+  <body
+    ng-app="myApp"
+    ng-controller="LoginController"
+    ng-controller="loadLoaiSanPham"
+  >
     <div ng-include="'layout/header.html'"></div>
     <div ng-include="'layout/menu.html'"></div>
     <div class="setDoDaiTrang">
-        <!-- About Section -->
-        <section id="about" class="py-5">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <img src="../assets/img/about-bakery.jpg" class="img-fluid rounded shadow-lg"
-                            alt="Cửa hàng bánh ngọt">
-                    </div>
-                    <div class="col-lg-6">
-                        <h2 class="mb-4">Liên Hệ Với BeeSixCake</h2>
-                        <p>
-                            Chúng tôi luôn sẵn sàng để nghe và hỗ trợ bạn. Nếu bạn có bất kỳ câu hỏi nào về sản phẩm,
-                            dịch vụ hoặc đơn hàng của mình,
-                            đừng ngần ngại liên hệ với chúng tôi.
-                        </p>
-                        <p>
-                            Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất để giúp bạn giải đáp mọi thắc mắc.
-                        </p>
-                        <a href="#contact-form" class="btn btn-outline-dark mt-3">Gửi Tin Nhắn</a>
-                    </div>
-                </div>
+      <!-- About Section -->
+      <section id="about" class="py-5">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-lg-6">
+              <img
+                src="../assets/img/about-bakery.jpg"
+                class="img-fluid rounded shadow-lg"
+                alt="Cửa hàng bánh ngọt"
+              />
             </div>
-        </section>
+            <div class="col-lg-6">
+              <h2 class="mb-4">Liên Hệ Với BeeSixCake</h2>
+              <p>
+                Chúng tôi luôn sẵn sàng để nghe và hỗ trợ bạn. Nếu bạn có bất kỳ
+                câu hỏi nào về sản phẩm, dịch vụ hoặc đơn hàng của mình, đừng
+                ngần ngại liên hệ với chúng tôi.
+              </p>
+              <p>
+                Chúng tôi sẽ phản hồi bạn trong thời gian sớm nhất để giúp bạn
+                giải đáp mọi thắc mắc.
+              </p>
+              <a href="#contact-form" class="btn btn-outline-dark mt-3"
+                >Gửi Tin Nhắn</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Contact Form Section -->
-        <section id="contact-form" class="py-5 bg-light text-center">
-            <div class="container">
-                <h2 class="mb-4">Gửi Thắc Mắc Của Bạn</h2>
-                <form>
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <input type="text" class="form-control" placeholder="Tên của bạn" required>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <input type="email" class="form-control" placeholder="Email của bạn" required>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4">
-                        <textarea class="form-control" rows="5" placeholder="Tin nhắn của bạn" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Gửi</button>
-                </form>
+      <!-- Contact Form Section -->
+      <section id="contact-form" class="py-5 bg-light text-center">
+        <div class="container">
+          <h2 class="mb-4">Gửi Thắc Mắc Của Bạn</h2>
+          <form>
+            <div class="form-row">
+              <div class="col-md-6 mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Tên của bạn"
+                  required
+                />
+              </div>
+              <div class="col-md-6 mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email của bạn"
+                  required
+                />
+              </div>
             </div>
-        </section>
+            <div class="form-group mb-4">
+              <textarea
+                class="form-control"
+                rows="5"
+                placeholder="Tin nhắn của bạn"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Gửi</button>
+          </form>
+        </div>
+      </section>
 
-        <!-- Features Section -->
-        <section id="features" class="py-5 text-center">
-            <div class="container">
-                <h2 class="mb-4">Chúng Tôi Ở Đây Để Giúp Bạn</h2>
-                <div class="row">
-                    <div class="col-md-4">
-                        <i class="bi bi-telephone-fill text-success fs-1"></i>
-                        <h4 class="mt-3">Gọi Ngay</h4>
-                        <p>Liên hệ qua số điện thoại của chúng tôi để được hỗ trợ nhanh chóng.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <i class="bi bi-chat-dots-fill text-info fs-1"></i>
-                        <h4 class="mt-3">Chat Trực Tuyến</h4>
-                        <p>Chúng tôi luôn sẵn sàng hỗ trợ qua chat trực tuyến trên trang web.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <i class="bi bi-envelope-fill text-warning fs-1"></i>
-                        <h4 class="mt-3">Email</h4>
-                        <p>Gửi email cho chúng tôi nếu bạn cần thêm thông tin hoặc có yêu cầu đặc biệt.</p>
-                    </div>
-                </div>
+      <!-- Features Section -->
+      <section id="features" class="py-5 text-center">
+        <div class="container">
+          <h2 class="mb-4">Chúng Tôi Ở Đây Để Giúp Bạn</h2>
+          <div class="row">
+            <div class="col-md-4">
+              <i class="bi bi-telephone-fill text-success fs-1"></i>
+              <h4 class="mt-3">Gọi Ngay</h4>
+              <p>
+                Liên hệ qua số điện thoại của chúng tôi để được hỗ trợ nhanh
+                chóng.
+              </p>
             </div>
-        </section>
+            <div class="col-md-4">
+              <i class="bi bi-chat-dots-fill text-info fs-1"></i>
+              <h4 class="mt-3">Chat Trực Tuyến</h4>
+              <p>
+                Chúng tôi luôn sẵn sàng hỗ trợ qua chat trực tuyến trên trang
+                web.
+              </p>
+            </div>
+            <div class="col-md-4">
+              <i class="bi bi-envelope-fill text-warning fs-1"></i>
+              <h4 class="mt-3">Email</h4>
+              <p>
+                Gửi email cho chúng tôi nếu bạn cần thêm thông tin hoặc có yêu
+                cầu đặc biệt.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Footer Section -->
-        <section id="contact-footer" class="py-5 bg-gradient text-white text-center">
-            <div class="container">
-                <p>Đừng ngần ngại liên hệ với chúng tôi để biết thêm chi tiết. Chúng tôi rất vui khi nhận được tin nhắn
-                    của bạn!</p>
-                <a href="#" class="btn btn-light">Liên Hệ Ngay</a>
-            </div>
-        </section>
+      <!-- Footer Section -->
+      <section
+        id="contact-footer"
+        class="py-5 bg-gradient text-white text-center"
+      >
+        <div class="container">
+          <p>
+            Đừng ngần ngại liên hệ với chúng tôi để biết thêm chi tiết. Chúng
+            tôi rất vui khi nhận được tin nhắn của bạn!
+          </p>
+          <a href="#" class="btn btn-light">Liên Hệ Ngay</a>
+        </div>
+      </section>
     </div>
     <div ng-include="'layout/footer.html'"></div>
     <script src="../assets/js/bootstrap.bundle.js"></script>
-</body>
-
+  </body>
 </html>
