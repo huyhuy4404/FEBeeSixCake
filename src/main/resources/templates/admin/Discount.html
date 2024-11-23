@@ -188,9 +188,10 @@
                                                 <input class="form-control" type="text" name="Discounts-code" id="Discounts-code" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <p>Ngày bắt đầu:</p>
-                                                <input class="form-control" placeholder="Ngày bắt đầu" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate" required>
+                                                <p>Đơn hàng tối thiểu:</p>
+                                                <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Đơn hàng tối thiểu" required>
                                             </div>
+                                           
                                         </div>
                                         
                                         <div class="row mb-3">
@@ -199,8 +200,8 @@
                                                 <input class="form-control" type="number" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm giảm giá" ng-model="selecteddiscount.discountpercentage" min="0" max="100" required>
                                             </div>
                                             <div class="col-md-6">
-                                                <p>Đơn hàng tối thiểu:</p>
-                                                <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Đơn hàng tối thiểu" required>
+                                                <p>Ngày bắt đầu:</p>
+                                                <input class="form-control" placeholder="Ngày bắt đầu" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate" required>
                                             </div>
                                         </div>
                                         
@@ -259,6 +260,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                   
                                 </div>
                             </div>
                         </div>
