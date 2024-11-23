@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản Phẩm Yêu Thích</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/thuan.css" />
+    <link rel="stylesheet" href="../assets/css/chitietsanpham.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../assets/js/favorite.js"></script>
+</head>
+
+<body ng-app="myApp" ng-controller="FavoriteController">
+    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+    <div ng-include="'layout/menu.html'"></div>
+    <div class="setDoDaiTrang">
+        <div class="container-fluid" style="margin-top: 55px; z-index: -1">
+            <div style="font-size: 20px" class=" ms-4">
+                <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
+                <span class="fw-bold mx-2">/</span>
+                <a href="" style="color: #2e1d15"><span>Sản Phẩm Yêu Thích Của Bạn</span></a>
+            </div>
+            <div class="row mt-4">
+                <div class="col-lg-9">
+                    <div class="row pt-3">
+                        <div class="col-md-8">
+                            <h3>
+                                <a href="yeuthich.html" class="pb-3 px-2"
+                                    style="border-bottom: #d38450 3px solid; color: #2e1d15">
+                                    <span>Sản Phẩm Yêu Thích Của Bạn</span>
+                                </a>
+                            </h3>
+                        </div>
+                        <div class="col-md-4 pe-0 ps-4" style="transform: scale(1.05);">
+                            <div class="btn-group" style="border: 1px solid rgb(222, 226, 230)">
+                                <a href="#" class="btn loc-sp active" aria-current="page" style="width: auto;">Mới
+                                    về</a>
+                                <a href="#" class="btn loc-sp">Giá</a>
+                                <a href="#" class="btn loc-sp">Đánh Giá</a>
+                                <a href="#" class="btn loc-sp">Mua nhiều</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mt-2 me-1" />
+
+                    <div class="row">
+                        <div class="col-lg-3 mb-4" ng-repeat="item in favoriteProducts">
+                            <div class="pd-box"
+                                style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                <!-- Hình ảnh sản phẩm -->
+                                <div class="box-images">
+                                    <a href="../assets/chitietsanpham.html?id={{item.idproduct}}"
+                                        title="{{item.productname}}">
+                                        <img ng-src="{{item.img}}" alt="{{item.productname}}" class="img-fluid"
+                                            style="width: auto; height: 295px; margin-bottom: 0px" </a>
+                                </div>
+
+                                <!-- Nội dung sản phẩm -->
+                                <div class="box-content p-3">
+                                    <!-- Tên sản phẩm -->
+                                    <h3 class="product-name">
+                                        <a href="../assets/chitietsanpham.html?id={{item.idproduct}}"
+                                            title="{{item.productname}}"
+                                            class="text-dark text-decoration-none tenTheSP">
+                                            {{item.productname}}
+                                        </a>
+                                    </h3>
+
+                                    <!-- Giá sản phẩm -->
+                                    <div class="product-price mt-2">
+                                        <span class="price text-danger fw-bold">
+                                            <span class="price">{{ formatCurrency(item.unitprice) }}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">
+                        <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
+                        <hr />
+                        <ul class="list-group">
+                            <li class="list-group-item" style="border: none" ng-repeat="category in categories">
+                                {{ category.categoryname }}
+                                <span class="">({{ category.count }})</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'layout/footer.html'"></div>
+    <script src="../assets/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
