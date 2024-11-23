@@ -16,6 +16,7 @@
     <script src="../assets/js/account.js"></script>
     <!-- Plugins CSS -->
     <link rel="stylesheet" href="assets/css/plugins.css">
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LcT1IcqAAAAALB6S9Ycx9O3X0XdM9mR3VhekcLe"></script>
 </head>
 
 <body ng-app="myApp" ng-controller="LoginController">
@@ -94,6 +95,14 @@
 
     <div ng-include="'layout/footer.html'"></div>
     <script src="../assets/js/bootstrap.bundle.js"></script>
+    <script>
+        function onClick(e) {
+          e.preventDefault();
+          grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute('6LcT1IcqAAAAALB6S9Ycx9O3X0XdM9mR3VhekcLe', {action: 'LOGIN'});
+          });
+        }
+      </script>
 </body>
 
 </html>

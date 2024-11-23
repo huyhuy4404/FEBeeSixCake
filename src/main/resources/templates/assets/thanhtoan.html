@@ -244,38 +244,49 @@
           >
             <div class="text-center">
               <h5 class="titleThongTinND mb-4">Thông tin thanh toán</h5>
-              <div class="card border-secondary mb-3">
-                <div class="card-header bg-secondary text-white">
-                  Thông tin ngân hàng
-                </div>
-                <div class="card-body">
-                  <p><strong>Ngân hàng:</strong> MB Bank</p>
-                  <p><strong>Số tài khoản:</strong> 0928025739</p>
-                  <p><strong>Chủ tài khoản:</strong> Nguyen Thanh Huy</p>
-                  <p>
-                    <strong>Nội dung chuyển khoản:</strong> THANH TOÁN HÓA ĐƠN
-                    BEESIXCAKE
-                  </p>
-                  <p>
-                    <strong>Tổng tiền:</strong> {{ finalTotal | number: 0 }} VNĐ
-                  </p>
-                </div>
-              </div>
-              <div>
-                <h6 class="mb-3">Mã QR thanh toán</h6>
-                <div ng-if="qrCode">
-                  <img
-                    ng-src="{{ qrCode }}"
-                    alt="QR Code Thanh Toán"
-                    class="img-fluid mb-3"
-                  />
-                </div>
+              <div ng-if="!qrCodeGenerated">
                 <button
                   type="button"
                   class="btn btn-primary"
                   ng-click="generateQRCode()"
                 >
-                  Tạo mã QR
+                  Lấy Thông Tin Thanh Toán
+                </button>
+              </div>
+              <div ng-if="qrCodeGenerated">
+                <div class="card border-secondary mb-3">
+                  <div class="card-header bg-secondary text-white">
+                    Thông tin ngân hàng
+                  </div>
+                  <div class="card-body">
+                    <p><strong>Ngân hàng:</strong> MB Bank</p>
+                    <p><strong>Số tài khoản:</strong> {{ accountNumber }}</p>
+                    <p><strong>Chủ tài khoản:</strong> {{ accountName }}</p>
+                    <p>
+                      <strong>Nội dung chuyển khoản:</strong> {{ description }}
+                    </p>
+                    <p>
+                      <strong>Tổng tiền:</strong> {{ finalTotal | number: 0 }}
+                      VNĐ
+                    </p>
+                  </div>
+                </div>
+                <h6 class="mb-3">Mã QR thanh toán</h6>
+                <img
+                  ng-src="{{ qrCodeUrl }}"
+                  alt="QR Code Thanh Toán"
+                  class="img-fluid mb-3"
+                />
+                <p>
+                  <strong>Thời gian còn lại:</strong>
+                  <span>{{ countdownDisplay }}</span>
+                </p>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  ng-click="cancelPayment()"
+                >
+                  Hủy Thanh Toán
                 </button>
               </div>
             </div>
@@ -293,6 +304,7 @@
             </p>
           </div>
         </div>
+
         <!-- Modal chọn mã giảm giá -->
         <div
           class="modal fade"
@@ -363,6 +375,76 @@
             </div>
           </div>
         </div>
+        <!-- Modal thêm địa chỉ -->
+        <div
+          class="modal fade"
+          id="addressModal"
+          tabindex="-1"
+          aria-labelledby="addressModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel">Thông Báo</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <p>Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ.</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  ng-click="redirectToAddAddress()"
+                >
+                  Thêm địa chỉ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="infoModal"
+          tabindex="-1"
+          aria-labelledby="infoModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">
+                  {{ modalTitle }}
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <p>{{ modalMessage }}</p>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Modal thay đổi phương thức thanh toán -->
         <div
           class="modal fade"

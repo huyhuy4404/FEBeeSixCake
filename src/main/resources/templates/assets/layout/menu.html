@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg" style="margin-left: 70px;">
+<nav class="navbar navbar-expand-lg" style="margin-left: 70px">
   <div class="container-fluid parent-menu mx-3 py-2">
-    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 menu-left">
         <li class="nav-item active">
           <a class="nav-link" href="index.html">Trang Chủ</a>
@@ -8,18 +8,29 @@
 
         <li class="nav-item">
           <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               Sản Phẩm
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
-              <li ng-repeat="item in category"> <!-- Sửa đổi từ Products thành category -->
-                <a class="dropdown-item" ng-click="filterProducts(item.categoryname)">
-                  {{item.categoryname}} <!-- Hiển thị tên danh mục -->
+              <li ng-repeat="item in category">
+                <!-- Sửa đổi từ Products thành category -->
+                <a
+                  class="dropdown-item"
+                  ng-click="filterProducts(item.categoryname)"
+                >
+                  {{item.categoryname}}
+                  <!-- Hiển thị tên danh mục -->
                 </a>
               </li>
             </ul>
           </div>
-        </li>        
+        </li>
 
         <li class="nav-item">
           <a class="nav-link" href="gioithieu.html">Giới Thiệu</a>
@@ -28,13 +39,15 @@
         <li class="nav-item">
           <a class="nav-link" href="lienhe.html">Liên Hệ</a>
         </li>
-
       </ul>
 
       <ul class="navbar-nav menu-right">
         <li class="nav-item">
           <div data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <i class=" fa-solid fa-magnifying-glass" style="margin-top: 13px; margin-right: 10px; color: #2e1d15;"></i>
+            <i
+              class="fa-solid fa-magnifying-glass"
+              style="margin-top: 13px; margin-right: 10px; color: #2e1d15"
+            ></i>
           </div>
         </li>
         <li class="nav-item">
@@ -46,7 +59,9 @@
         </li>
 
         <li class="nav-item fs-4 position-relative pt-1 pe-3">
-          <a href="giohang.html"><img src="cart.png" alt="" style="width: 38px;"></a>
+          <a href="giohang.html"
+            ><img src="cart.png" alt="" style="width: 38px"
+          /></a>
           <span class="cart-count">0</span>
         </li>
       </ul>
@@ -54,22 +69,38 @@
   </div>
 </nav>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Tìm Kiếm</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <!-- Input tìm kiếm -->
-        <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm">
+        <input
+          type="text"
+          class="form-control"
+          id="searchInput"
+          placeholder="Nhập tên sản phẩm cần tìm"
+        />
       </div>
       <div class="modal-footer SPTimKiem">
         <!-- Cart mẫu để hiển thị kết quả tìm kiếm -->
         <div class="cart-item-timkiem">
           <div class="cart-image">
-            <img src="image_url_here" alt="Sản phẩm" width="50" height="50">
+            <img src="image_url_here" alt="Sản phẩm" width="50" height="50" />
           </div>
           <div class="cart-details">
             <h5>Tên sản phẩm</h5>
@@ -78,7 +109,7 @@
         </div>
         <div class="cart-item-timkiem">
           <div class="cart-image">
-            <img src="image_url_here" alt="Sản phẩm" width="50" height="50">
+            <img src="image_url_here" alt="Sản phẩm" width="50" height="50" />
           </div>
           <div class="cart-details">
             <h5>Tên sản phẩm</h5>
@@ -91,15 +122,72 @@
 </div>
 
 <script>
+  function updateCartCount() {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!loggedInUser) {
+      console.log("Bạn cần đăng nhập để xem giỏ hàng.");
+      $(".cart-count").text("0"); // Hiển thị 0 nếu chưa đăng nhập
+      return;
+    }
+
+    // Lấy idShoppingCart dựa trên idaccount
+    $.get(
+      `http://localhost:8080/beesixcake/api/shoppingcart/account/${loggedInUser.idaccount}`,
+      function (response) {
+        if (response && response.length > 0) {
+          const idShoppingCart = response[0].idshoppingcart;
+
+          // Lấy cart items dựa vào idShoppingCart
+          $.get(
+            `http://localhost:8080/beesixcake/api/cartitems/shoppingcart/${idShoppingCart}`,
+            function (cartItems) {
+              if (Array.isArray(cartItems)) {
+                // Đếm tổng số lượng sản phẩm trong giỏ hàng
+                let totalQuantity = cartItems.reduce(
+                  (sum, item) => sum + item.quantity,
+                  0
+                );
+
+                // Cập nhật số lượng trong `cart-count`
+                $(".cart-count").text(totalQuantity);
+              } else {
+                console.log("Không có sản phẩm trong giỏ hàng.");
+                $(".cart-count").text("0");
+              }
+            }
+          ).fail(function () {
+            console.error("Lỗi khi lấy danh sách sản phẩm trong giỏ hàng.");
+            $(".cart-count").text("0");
+          });
+        } else {
+          console.log("Không tìm thấy giỏ hàng cho tài khoản này.");
+          $(".cart-count").text("0");
+        }
+      }
+    ).fail(function () {
+      console.error("Lỗi khi lấy thông tin giỏ hàng.");
+      $(".cart-count").text("0");
+    });
+  }
+
+  // Gọi hàm khi trang được tải
   $(document).ready(function () {
-    var headerHeight = $('header').outerHeight(); // Chiều cao của header
-    var menu = $('.parent-menu'); // Chọn menu
+    // Cập nhật ngay khi trang được tải
+    updateCartCount();
+
+    // Tự động cập nhật mỗi 3 giây
+    setInterval(updateCartCount, 3000);
+  });
+  $(document).ready(function () {
+    var headerHeight = $("header").outerHeight(); // Chiều cao của header
+    var menu = $(".parent-menu"); // Chọn menu
 
     $(window).scroll(function () {
       if ($(this).scrollTop() > headerHeight) {
-        menu.addClass('sticky'); // Thêm class sticky khi cuộn qua header
+        menu.addClass("sticky"); // Thêm class sticky khi cuộn qua header
       } else {
-        menu.removeClass('sticky'); // Xóa class khi cuộn lên trên
+        menu.removeClass("sticky"); // Xóa class khi cuộn lên trên
       }
     });
   });
