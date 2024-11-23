@@ -84,7 +84,7 @@ app.controller("FavoriteController", function ($scope, $http) {
     };
 
     // Lấy danh mục sản phẩm và số lượng
-    $scope.getCategories = function () {
+    $scope.getCategorie = function () {
         $http
             .get(`${API}/category`)
             .then((response) => {
@@ -120,10 +120,49 @@ app.controller("FavoriteController", function ($scope, $http) {
 
     // Gọi hàm để lấy dữ liệu ban đầu
     $scope.getFavoriteProducts();
-    $scope.getCategories(); // Gọi để lấy danh mục sản phẩm
+    $scope.getCategorie(); // Gọi để lấy danh mục sản phẩm
 });
+app.controller("loadLoaiSanPham", function ($scope, $http) {
+  // Khởi tạo mảng để chứa loại sản phẩm
+  $scope.category = [];
+  $scope.selectedCategory = ""; // Danh mục được chọn
 
+  // Lấy danh mục sản phẩm
+  $scope.getCategories = function () {
+    $http
+      .get("http://localhost:8080/beesixcake/api/category")
+      .then(function (response) {
+        if (Array.isArray(response.data)) {
+          // Lưu danh mục vào mảng
+          $scope.category = response.data.map((item) => ({
+            idcategory: item.idcategory,
+            categoryname: item.categoryname,
+          }));
+        } else {
+          console.error("Dữ liệu danh mục không phải là mảng!");
+        }
+      })
+      .catch(function (error) {
+        console.error("Lỗi khi lấy danh mục sản phẩm:", error);
+      });
+  };
 
+  // Lọc sản phẩm theo loại (chỉ lưu tên danh mục vào localStorage để dùng sau)
+  $scope.filterProducts = function (categoryName, shouldRedirect = true) {
+    $scope.selectedCategory = categoryName;
+
+    // Lưu loại sản phẩm vào localStorage
+    localStorage.setItem("selectedCategory", categoryName);
+
+    // Chuyển hướng nếu cần
+    if (shouldRedirect) {
+      window.location.href = "SanPham.html"; // Chuyển đến trang sản phẩm
+    }
+  };
+
+  // Gọi hàm để tải danh mục sản phẩm ban đầu
+  $scope.getCategories();
+});
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.isLoggedIn = false;

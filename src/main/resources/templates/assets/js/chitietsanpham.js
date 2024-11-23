@@ -195,7 +195,9 @@ app.controller("ProductDetailController", function ($scope, $http) {
               )
               .catch((error) => {
                 console.error("Error adding to cart:", error);
-                $scope.showNotification("Sản phẩm đã hết hàng!");
+                $scope.showNotification(
+                  "Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại."
+                );
               });
           }
         });
@@ -256,9 +258,7 @@ app.controller("ProductDetailController", function ($scope, $http) {
   // **8. Yêu thích sản phẩm**
   $scope.toggleHeart = () => {
     if (!$scope.loggedInUser) {
-      $scope.showNotification(
-        "Vui lòng đăng nhập để sử dụng chức năng yêu thích."
-      );
+      alert("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
       return;
     }
 
@@ -272,6 +272,7 @@ app.controller("ProductDetailController", function ($scope, $http) {
         })
         .catch((error) => {
           console.error("Error deleting favorite:", error);
+          alert("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
         });
     } else {
       const newFavorite = {
@@ -288,16 +289,13 @@ app.controller("ProductDetailController", function ($scope, $http) {
         })
         .catch((error) => {
           console.error("Error adding favorite:", error);
+          alert("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
         });
     }
   };
   $scope.quickBuy = () => {
     if (!$scope.loggedInUser) {
       $scope.showNotification("Vui lòng đăng nhập để mua sản phẩm.");
-      return;
-    }
-    if ($scope.selectedSizeDetail.quantityinstock === 0) {
-      $scope.showNotification("Sản phẩm đã hết hàng!");
       return;
     }
 
@@ -329,7 +327,47 @@ app.controller("ProductDetailController", function ($scope, $http) {
   fetchFavoriteData();
   fetchCategories();
 });
+app.controller("loadLoaiSanPham", function ($scope, $http) {
+  // Khởi tạo mảng để chứa loại sản phẩm
+  $scope.category = [];
+  $scope.selectedCategory = ""; // Danh mục được chọn
 
+  // Lấy danh mục sản phẩm
+  $scope.getCategories = function () {
+    $http
+      .get("http://localhost:8080/beesixcake/api/category")
+      .then(function (response) {
+        if (Array.isArray(response.data)) {
+          // Lưu danh mục vào mảng
+          $scope.category = response.data.map((item) => ({
+            idcategory: item.idcategory,
+            categoryname: item.categoryname,
+          }));
+        } else {
+          console.error("Dữ liệu danh mục không phải là mảng!");
+        }
+      })
+      .catch(function (error) {
+        console.error("Lỗi khi lấy danh mục sản phẩm:", error);
+      });
+  };
+
+  // Lọc sản phẩm theo loại (chỉ lưu tên danh mục vào localStorage để dùng sau)
+  $scope.filterProducts = function (categoryName, shouldRedirect = true) {
+    $scope.selectedCategory = categoryName;
+
+    // Lưu loại sản phẩm vào localStorage
+    localStorage.setItem("selectedCategory", categoryName);
+
+    // Chuyển hướng nếu cần
+    if (shouldRedirect) {
+      window.location.href = "SanPham.html"; // Chuyển đến trang sản phẩm
+    }
+  };
+
+  // Gọi hàm để tải danh mục sản phẩm ban đầu
+  $scope.getCategories();
+});
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.isLoggedIn = false;
@@ -403,7 +441,7 @@ app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
           console.error("Error:", error);
         });
     } else {
-      $scope.showNotification("Bạn đã đăng nhập rồi.");
+      alert("Bạn đã đăng nhập rồi.");
     }
   };
 
