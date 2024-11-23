@@ -167,9 +167,8 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       // Gửi yêu cầu POST để tạo giảm giá mới
       $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
           .then(function(response) {
-              $scope.message = 'Thêm khuyến mãi thành công!';
-              $scope.messageType = 'success';
-              $scope.getDiscounts(); // Tải lại danh sách sau khi thêm
+            alert('thêm khuyến mãi thành công!');
+            $scope.getDiscounts(); // Tải lại danh sách sau khi xóa
               $scope.resetForm(); // Làm mới form
           }, function(error) {
               console.error('Error adding discount:', error); // Ghi lại chi tiết lỗi
@@ -177,45 +176,55 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
               if (error.data && error.data.message) {
                   $scope.message = error.data.message; // Hiển thị thông báo từ máy chủ nếu có
               } else {
-                  $scope.message = 'Đã xảy ra lỗi khi thêm khuyến mãi.';
+                  $scope.message = 'mã khuyến mãi đã tồn tại.';
               }
               $scope.messageType = 'error';
           });
+          $scope.resetForm();
   };
 
     // Chỉnh sửa loại sản phẩm
     $scope.editdiscount = function() {
-        // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
-        if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
-            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.');
-            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
-        }
-    
-        // Kiểm tra phần trăm giảm giá không vượt quá 50%
-        if ($scope.selecteddiscount.discountpercentage > 50) {
-            alert('Phần trăm giảm giá không được vượt quá 50%.');
-            return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
-        }
-    
-        var editeddiscount = {
-            iddiscount: $scope.selecteddiscount.iddiscount,
-            discountcode: $scope.selecteddiscount.discountcode,
-            discountpercentage: $scope.selecteddiscount.discountpercentage,
-            startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
-            enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
-            lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
-        };
-    
-        $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
-            .then(function(response) {
-                alert('Sửa khuyến mãi thành công!');
-                $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
-                $scope.resetForm(); // Làm mới form
-            }, function(error) {
-                console.log('Error editing discount:', error);
-                alert('Có lỗi xảy ra khi sửa khuyến mãi. Vui lòng thử lại.');
-            });
-    };
+      // Hiển thị thông báo trước khi kiểm tra
+      alert('Chỉnh sửa khuyến mãi'); 
+  
+      // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+      if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
+          alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.');
+          return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+      }
+       // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+      // Kiểm tra phần trăm giảm giá không vượt quá 50%
+      if ($scope.selecteddiscount.lowestprice < 30000) {
+        alert('Đơn hàng tối thiểu 30000');
+        return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+    }
+  
+      // Kiểm tra phần trăm giảm giá không vượt quá 50%
+      if ($scope.selecteddiscount.discountpercentage > 50) {
+          alert('Phần trăm giảm giá không được vượt quá 50%.');
+          return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+      }
+  
+      var editeddiscount = {
+          iddiscount: $scope.selecteddiscount.iddiscount,
+          discountcode: $scope.selecteddiscount.discountcode,
+          discountpercentage: $scope.selecteddiscount.discountpercentage,
+          startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
+          enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
+          lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
+      };
+  
+      $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
+          .then(function(response) {
+              alert('Sửa khuyến mãi thành công!');
+              $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
+              $scope.resetForm(); // Làm mới form
+          }, function(error) {
+              console.log('Error editing discount:', error);
+              alert('Có lỗi xảy ra khi sửa khuyến mãi. Vui lòng thử lại.');
+          });
+  };
 
     // Xóa khuyến mãi
     $scope.deletediscount = function(discount) {
