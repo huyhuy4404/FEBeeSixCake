@@ -39,11 +39,11 @@
                             <div ng-if="!isLoggedIn">
                                 <form id="form" name="loginForm" ng-submit="login()">
                                     <p>
-                                        <input type="text" ng-model="user.idaccount" placeholder="Tên đăng nhập (*)"
+                                        <input type="text" ng-model="user.idaccount" placeholder="Tên tài khoản (*)"
                                             class="mb-2" name="txtIDAccount" required><br>
                                     <div class="form-text text-danger"
                                         ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
-                                        Tên người dùng không hợp lệ
+                                        Tên tài khoản không hợp lệ
                                     </div>
                                     </p>
                                     <p>
