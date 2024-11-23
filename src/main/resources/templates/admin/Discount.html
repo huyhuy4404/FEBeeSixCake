@@ -174,11 +174,54 @@
                                         <i class="fas fa-edit"></i> Chỉnh sửa danh sách mã giảm giá
                                     </button>
                                 </li>
+                                <li class="nav-item ms-auto" role="presentation">
+                                    <div class="d-flex align-items-center">
+                                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm mã"
+                                            aria-label="Search" ng-model="searchQuery">
+                                        <!-- Nếu bạn muốn giữ nút tìm kiếm, nhưng không thực hiện hành động gì:
+                        <button class="btn btn-outline-success" type="button"><i class="fas fa-search"></i> Tìm kiếm</button>
+                        -->
+                                    </div>
+                                </li>
                             </ul>
                 
                             <div class="tab-content" id="myTabContent" ng-controller="discountsController">
                                 <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                     <!-- Form sửa đổi -->
+                                    <div class="table-responsive">
+                                        <table class="account-table table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Mã giảm giá</th>
+                                                    <th>Phần trăm giảm giá</th>
+                                                    <th>Ngày bắt đầu</th>
+                                                    <th>Ngày kết thúc</th>
+                                                    <th>Đơn hàng tối thiểu</th>
+                                                    <th class="text-end">Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="category in Discounts | filter:searchFilter">
+                                                    <td>{{category.iddiscount}}</td>
+                                                    <td>{{category.discountcode}}</td>
+                                                    <td>{{category.discountpercentage}}%</td>
+                                                    <td>{{category.startdate | date:'dd/MM/yyyy'}}</td>
+                                                    <td>{{category.enddate | date:'dd/MM/yyyy'}}</td>
+                                                    <td>{{formatCurrency(category.lowestprice)}}</td>
+                                                    <td class="text-end">
+                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Chỉnh sửa</button>
+                                                        <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Xóa</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                
+                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
+                                    
+
                                     <form name="discountForm" class="custom-form profile-form" novalidate>
                                         <div ng-if="message" class="alert"
                                              ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}"
@@ -229,38 +272,6 @@
                                             </button>
                                         </div>
                                     </form>
-                                </div>
-                
-                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
-                                    <div class="table-responsive">
-                                        <table class="account-table table">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Mã giảm giá</th>
-                                                    <th>Phần trăm giảm giá</th>
-                                                    <th>Ngày bắt đầu</th>
-                                                    <th>Ngày kết thúc</th>
-                                                    <th>Đơn hàng tối thiểu</th>
-                                                    <th class="text-end">Hành động</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="category in Discounts">
-                                                    <td>{{category.iddiscount}}</td>
-                                                    <td>{{category.discountcode}}</td>
-                                                    <td>{{category.discountpercentage}}%</td>
-                                                    <td>{{category.startdate | date:'dd/MM/yyyy'}}</td>
-                                                    <td>{{category.enddate | date:'dd/MM/yyyy'}}</td>
-                                                    <td>{{formatCurrency(category.lowestprice)}}</td>
-                                                    <td class="text-end">
-                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Chỉnh sửa</button>
-                                                        <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Xóa</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         </div>
