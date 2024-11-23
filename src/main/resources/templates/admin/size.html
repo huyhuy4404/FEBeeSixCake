@@ -43,7 +43,7 @@
     -->
 </head>
 
-<body  class="row my-4" ng-app="myApp" ng-controller="SizeController">
+<body class="row my-4" ng-app="myApp" ng-controller="SizeController">
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
@@ -172,7 +172,7 @@
                                         <i class="fas fa-edit"></i> Chỉnh sửa kích thước
                                     </button>
                                 </li>
-                               
+
                             </ul>
 
                             <div class="tab-content" id="myTabContent">
@@ -229,8 +229,8 @@
                                 <!-- Nội dung Tab Danh sách -->
                                 <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
                                     aria-labelledby="list-tab" tabindex="0">
-                                    <div class="custom-block bg-white">
-                                        <div class="table-responsive">
+                              
+                                        <div class="table-responsive"class="custom-block bg-white">
                                             <table class="account-table table">
                                                 <thead>
                                                     <tr>
@@ -278,31 +278,34 @@
                                                 </li>
                                             </ul>
                                         </nav>
-                                    </div>
+                                
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="messageModalBody">
-                <!-- Nội dung thông báo -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="button" id="confirmModalButton" class="btn btn-danger" style="display: none;" data-bs-dismiss="modal">Xác nhận</button>
-            </div>
-        </div>
-    </div>
-</div>
+                <!-- Modal -->
+                <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thông báo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="messageModalBody">
+                                <!-- Nội dung thông báo -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="button" id="confirmModalButton" class="btn btn-danger"
+                                    style="display: none;" data-bs-dismiss="modal">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
