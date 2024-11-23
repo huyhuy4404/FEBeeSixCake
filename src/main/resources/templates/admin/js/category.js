@@ -97,7 +97,7 @@ app.controller("CategoryController", function ($scope, $http) {
         $scope.resetForm();
       })
       .catch(function (error) {
-        showMessageModal("Lỗi khi thêm loại sản phẩm: " + error.message);
+        showMessageModal("Trùng loại sản phẩm. Vui lòng nhập lại!" );
       });
   };
 

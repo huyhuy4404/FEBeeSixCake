@@ -523,59 +523,84 @@ $scope.$watch('newAddress.tinh', function(newVal, oldVal) {
 
 
 
-  $scope.saveAddress = function () {
-    // Kiểm tra dữ liệu nhập
-    if (!$scope.newAddress.housenumber || !$scope.newAddress.roadname ||
-        !$scope.newAddress.tinh || !$scope.newAddress.quan || !$scope.newAddress.ward) {
-        $scope.addError = "Vui lòng điền đầy đủ thông tin địa chỉ!";
-        $scope.addSuccess = "";
-        return;
-    }
+$scope.saveAddress = function () {
+  // Reset previous messages
+  $scope.addSuccess = "";
+  $scope.addError = "";
 
-    const addressData = {
-        idaddress: $scope.isEditing ? $scope.newAddress.idaddress : 0,
-        housenumber: $scope.newAddress.housenumber,
-        roadname: $scope.newAddress.roadname,
-        ward: $scope.newAddress.ward.full_name, // Sử dụng tên đầy đủ
-        district: $scope.newAddress.quan.full_name, // Sử dụng tên đầy đủ
-        city: $scope.newAddress.city, // Đã được cập nhật từ tinh
-        account: { idaccount: $scope.loggedInUser.idaccount }
-    };
+  // Kiểm tra dữ liệu nhập
+  if (!$scope.newAddress.housenumber || !$scope.newAddress.roadname ||
+      !$scope.newAddress.tinh || !$scope.newAddress.quan || !$scope.newAddress.ward) {
+      $scope.addError = "Vui lòng điền đầy đủ thông tin địa chỉ!";
+      return;
+  }
+// Trong hàm saveAddress
+const isDuplicate = $scope.userAddresses.some(address => 
+  // Loại bỏ địa chỉ đang chỉnh sửa để không so sánh với chính nó
+  (!$scope.isEditing || address.idaddress !== $scope.newAddress.idaddress) &&
+  address.housenumber.trim().toLowerCase() === $scope.newAddress.housenumber.trim().toLowerCase() &&
+  address.roadname.trim().toLowerCase() === $scope.newAddress.roadname.trim().toLowerCase() &&
+  address.tinh.id === $scope.newAddress.tinh.id &&
+  address.quan.id === $scope.newAddress.quan.id &&
+  address.ward.id === $scope.newAddress.ward.id
+);
 
-    console.log("Dữ liệu gửi đi:", addressData);
+if (isDuplicate) {
+  $scope.addError = "Số nhà đã tồn tại. Vui lòng nhập số nhà khác.";
+  console.error("Lỗi: Số nhà đã tồn tại.");
+  return;
+}
 
-    const request = $scope.isEditing
-        ? $http.put(`http://localhost:8080/beesixcake/api/address/${$scope.newAddress.idaddress}`, addressData)
-        : $http.post('http://localhost:8080/beesixcake/api/address', addressData);
 
-    request
-        .then(function (response) {
-            $scope.addSuccess = $scope.isEditing ? "Cập nhật địa chỉ thành công!" : "Thêm địa chỉ thành công!";
-            $scope.addError = "";
-            $scope.isEditing = false;
-            $scope.resetForm();
+  const addressData = {
+      idaddress: $scope.isEditing ? $scope.newAddress.idaddress : 0,
+      housenumber: $scope.newAddress.housenumber,
+      roadname: $scope.newAddress.roadname,
+      ward: $scope.newAddress.ward.full_name, // Sử dụng tên đầy đủ
+      district: $scope.newAddress.quan.full_name, // Sử dụng tên đầy đủ
+      city: $scope.newAddress.city, // Đã được cập nhật từ tinh
+      account: { idaccount: $scope.loggedInUser.idaccount },
+      isDefault: $scope.isEditing ? $scope.newAddress.isDefault : false
+  };
 
-            // Cập nhật danh sách địa chỉ
-            if ($scope.isAdmin()) {
-                $scope.loadAccounts().then(function () {
-                    $scope.loadTinhs();
-                    $scope.loadUserAddresses();
-                });
-            } else {
-                $scope.loadUserAddresses();
-            }
+  console.log("Dữ liệu gửi đi:", addressData);
 
-            // Đóng modal
-            var addressModal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
-            addressModal.hide();
-        })
-        .catch(function (error) {
-            console.error("Lỗi API:", error);
-            $scope.addError = error.data?.message || "Đã xảy ra lỗi không xác định.";
-            $scope.addSuccess = "";
-        });
+  const request = $scope.isEditing
+      ? $http.put(`http://localhost:8080/beesixcake/api/address/${$scope.newAddress.idaddress}`, addressData)
+      : $http.post('http://localhost:8080/beesixcake/api/address', addressData);
+
+  request
+      .then(function (response) {
+          $scope.addSuccess = $scope.isEditing ? "Cập nhật địa chỉ thành công!" : "Thêm địa chỉ thành công!";
+          $scope.addError = "";
+          $scope.isEditing = false;
+          $scope.resetForm();
+
+          // Cập nhật danh sách địa chỉ
+          if ($scope.isAdmin()) {
+              $scope.loadAccounts().then(function () {
+                  $scope.loadTinhs();
+                  $scope.loadUserAddresses();
+              });
+          } else {
+              $scope.loadUserAddresses();
+          }
+
+          // Đóng modal
+          var addressModal = bootstrap.Modal.getInstance(document.getElementById('addressModal'));
+          addressModal.hide();
+      })
+      .catch(function (error) {
+          console.error("Lỗi API:", error);
+          // Backend validation: Check if error is due to duplicate housenumber
+          if (error.status === 409) { // Assuming 409 Conflict for duplicates
+              $scope.addError = "Số nhà đã tồn tại. Vui lòng nhập số nhà khác.";
+          } else {
+              $scope.addError = error.data?.message || "Đã xảy ra lỗi không xác định.";
+          }
+          $scope.addSuccess = "";
+      });
 };
-
 
 
 

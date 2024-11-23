@@ -128,55 +128,70 @@ app.controller('ProController', ['$scope', '$http', '$q', function ($scope, $htt
     // Load products from API
     const scope = $scope;
 
-    scope.loadProducts = function () {
-        $http.get('http://localhost:8080/beesixcake/api/productdetail')
-            .then(function (response) {
-                console.log("API Response:", response.data);
-                var productDetails = response.data;
-                var productsMap = {};
+    $scope.loadProducts = function () {
+        // Sử dụng $q.all để thực hiện đồng thời hai yêu cầu HTTP
+        $q.all([
+            $http.get('http://localhost:8080/beesixcake/api/productdetail'),
+            $http.get('http://localhost:8080/beesixcake/api/favorites')
+        ]).then(function (responses) {
+            var productDetails = responses[0].data;
+            var favorites = responses[1].data;
 
-                scope.Products = [];
+            // Tạo một map để lưu số lượng yêu thích cho mỗi sản phẩm
+            var favoriteCountMap = {};
 
-                productDetails.forEach(function(detail) {
-                    var productId = detail.product.idproduct;
-
-                    if (!productsMap[productId]) {
-                        productsMap[productId] = {
-                            idproduct: detail.product.idproduct,
-                            productname: detail.product.productname,
-                            category: detail.product.category,
-                            description: detail.product.description,
-                            img: detail.product.img,
-                            isactive: detail.product.isactive,
-                            favorite: detail.product.favorite || 0,
-                            sizes: []
-                        };
-                        scope.Products.push(productsMap[productId]);
-                    }
-
-                    productsMap[productId].sizes.push({
-                        idproductdetail: detail.idproductdetail,
-                        idsize: detail.size.idsize,
-                        sizename: detail.size.sizename,
-                        unitprice: detail.unitprice,
-                        quantityinstock: detail.quantityinstock
-                    });
-                });
-
-                console.log("Products after grouping:", scope.Products);
-
-                // Sắp xếp danh sách sản phẩm theo idproduct giảm dần
-                scope.Products.sort(function(a, b) {
-                    return b.idproduct - a.idproduct;
-                });
-
-                // Cập nhật phân trang sau khi tải sản phẩm
-                scope.updatePagination();
-            }, function (error) {
-                console.error('Error loading products:', error);
-                scope.message = "Lỗi khi tải sản phẩm.";
-                scope.messageType = 'error';
+            favorites.forEach(function(fav) {
+                var productId = fav.product.idproduct;
+                if (!favoriteCountMap[productId]) {
+                    favoriteCountMap[productId] = 0;
+                }
+                favoriteCountMap[productId]++;
             });
+
+            var productsMap = {};
+            $scope.Products = [];
+
+            productDetails.forEach(function(detail) {
+                var productId = detail.product.idproduct;
+
+                if (!productsMap[productId]) {
+                    productsMap[productId] = {
+                        idproduct: detail.product.idproduct,
+                        productname: detail.product.productname,
+                        category: detail.product.category,
+                        description: detail.product.description,
+                        img: detail.product.img,
+                        isactive: detail.product.isactive,
+                        favorite: favoriteCountMap[productId] || 0, // Gán số lượng yêu thích
+                        sizes: []
+                    };
+                    $scope.Products.push(productsMap[productId]);
+                }
+
+                productsMap[productId].sizes.push({
+                    idproductdetail: detail.idproductdetail,
+                    idsize: detail.size.idsize,
+                    sizename: detail.size.sizename,
+                    unitprice: detail.unitprice,
+                    quantityinstock: detail.quantityinstock
+                });
+            });
+
+            console.log("Products after grouping:", $scope.Products);
+
+            // Sắp xếp danh sách sản phẩm theo idproduct giảm dần
+            $scope.Products.sort(function(a, b) {
+                return b.idproduct - a.idproduct;
+            });
+
+            // Cập nhật phân trang sau khi tải sản phẩm
+            $scope.updatePagination();
+
+        }, function (error) {
+            console.error('Error loading products or favorites:', error);
+            $scope.message = "Lỗi khi tải sản phẩm hoặc yêu thích.";
+            $scope.messageType = 'error';
+        });
     };
 
     // Load categories from API
