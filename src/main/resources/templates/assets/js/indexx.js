@@ -2,6 +2,7 @@ var app = angular.module("myApp", []);
 
 app.controller("discountsController", function ($scope, $http) {
   // Khởi tạo mảng để chứa sản phẩm
+  const API = "http://localhost:8080/beesixcake/api";
   $scope.Products = [];
   $scope.category = [];
   $scope.filteredProducts = []; // Mảng chứa sản phẩm đã lọc
@@ -128,23 +129,57 @@ app.controller("discountsController", function ($scope, $http) {
   };
 
   // Phân trang: Lấy sản phẩm trên trang hiện tại
-  $scope.getPaginatedProducts = function() {
+  $scope.getPaginatedProducts = function () {
     const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
     return $scope.Products.filter(item => item.isactive).slice(start, start + $scope.itemsPerPage);
   };
 
   // Chuyển trang
-  $scope.changePage = function(page) {
+  $scope.changePage = function (page) {
     if (page >= 1 && page <= $scope.totalPages) {
       $scope.currentPage = page;
     }
   };
 
   // Tính toán tổng số trang
-  $scope.calculateTotalPages = function() {
+  $scope.calculateTotalPages = function () {
     $scope.totalPages = Math.ceil($scope.Products.filter(item => item.isactive).length / $scope.itemsPerPage);
   };
+  // Lấy danh mục sản phẩm và số lượng
+  $scope.getCategorie = function () {
+    $http
+      .get(`${API}/category`)
+      .then((response) => {
+        $scope.categories = response.data;
 
+        // Khởi tạo số lượng sản phẩm cho mỗi danh mục
+        $scope.categories.forEach((category) => {
+          category.count = 0; // Mặc định là 0
+        });
+
+        // Lấy tất cả sản phẩm để tính số lượng theo danh mục
+        $http
+          .get(`${API}/product`)
+          .then((productResponse) => {
+            const products = productResponse.data;
+
+            // Đếm số lượng sản phẩm trong từng danh mục
+            products.forEach((product) => {
+              const category = $scope.categories.find(
+                (cat) => cat.idcategory === product.category.idcategory
+              );
+              if (category) category.count++;
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  };
+  $scope.getCategorie(); // Gọi để lấy danh mục sản phẩm
   // Gọi hàm để lấy dữ liệu ban đầu
   $scope.getProducts();
   $scope.getCategories();
