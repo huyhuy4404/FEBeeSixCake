@@ -327,6 +327,132 @@ app.controller("ProductDetailController", function ($scope, $http) {
   fetchFavoriteData();
   fetchCategories();
 });
+app.controller("FavoriteTopController", function ($scope, $http) {
+  const API = "http://localhost:8080/beesixcake/api";
+  const imageBaseUrl = "../admin/images/";
+
+  // Khởi tạo mảng để chứa sản phẩm yêu thích
+  $scope.favoriteProducts = [];
+  $scope.categories = []; // Mảng lưu danh mục sản phẩm
+
+  // Lấy sản phẩm có lượt yêu thích nhiều nhất từ API
+  $scope.getMostFavoritedProducts = function () {
+    $http
+      .get(`${API}/favorites`)
+      .then(function (response) {
+        if (!Array.isArray(response.data)) {
+          console.error("Dữ liệu không phải mảng!");
+          return;
+        }
+
+        // Đếm lượt yêu thích cho mỗi sản phẩm
+        const favoriteCounts = {};
+        response.data.forEach((fav) => {
+          const productId = fav.product.idproduct;
+          if (!favoriteCounts[productId]) {
+            favoriteCounts[productId] = {
+              product: fav.product,
+              count: 0,
+            };
+          }
+          favoriteCounts[productId].count++;
+        });
+
+        // Chuyển đối tượng thành mảng và sắp xếp theo lượt yêu thích giảm dần
+        $scope.favoriteProducts = Object.values(favoriteCounts)
+          .sort((a, b) => b.count - a.count) // Sắp xếp giảm dần theo count
+          .map((item) => {
+            const product = item.product;
+            product.img = imageBaseUrl + product.img;
+            product.favoriteCount = item.count; // Gán số lượt yêu thích
+            product.unitprice = null; // Khởi tạo giá mặc định
+            return product;
+          });
+
+        // Lấy giá thấp nhất cho các sản phẩm yêu thích
+        $scope.getProductPrices();
+      })
+      .catch(function (error) {
+        console.error("Error fetching favorite products:", error);
+      });
+  };
+
+  // Lấy giá thấp nhất của sản phẩm
+  $scope.getProductPrices = function () {
+    $http
+      .get(`${API}/productdetail`)
+      .then(function (response) {
+        if (!Array.isArray(response.data)) {
+          console.error("Dữ liệu không phải mảng từ API chi tiết sản phẩm!");
+          return;
+        }
+
+        // Tìm giá thấp nhất cho mỗi sản phẩm
+        $scope.favoriteProducts.forEach((product) => {
+          const productDetails = response.data.filter(
+            (detail) => detail.product.idproduct === product.idproduct
+          );
+
+          if (productDetails.length > 0) {
+            product.unitprice = Math.min(
+              ...productDetails.map((detail) => detail.unitprice)
+            ); // Tìm giá thấp nhất
+          }
+        });
+      })
+      .catch(function (error) {
+        console.error("Error fetching product details:", error);
+      });
+  };
+
+  // Định dạng tiền tệ
+  $scope.formatCurrency = function (amount) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
+
+  // Lấy danh mục sản phẩm và số lượng
+  $scope.getCategorie = function () {
+    $http
+      .get(`${API}/category`)
+      .then((response) => {
+        $scope.categories = response.data;
+
+        // Khởi tạo số lượng sản phẩm cho mỗi danh mục
+        $scope.categories.forEach((category) => {
+          category.count = 0; // Mặc định là 0
+        });
+
+        // Lấy tất cả sản phẩm để tính số lượng theo danh mục
+        $http
+          .get(`${API}/product`)
+          .then((productResponse) => {
+            const products = productResponse.data;
+
+            // Đếm số lượng sản phẩm trong từng danh mục
+            products.forEach((product) => {
+              const category = $scope.categories.find(
+                (cat) => cat.idcategory === product.category.idcategory
+              );
+              if (category) category.count++;
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  };
+
+  // Gọi hàm để lấy dữ liệu ban đầu
+  $scope.getMostFavoritedProducts(); // Gọi để lấy sản phẩm có lượt yêu thích nhiều nhất
+  $scope.getCategorie(); // Gọi để lấy danh mục sản phẩm
+});
+
 app.controller("loadLoaiSanPham", function ($scope, $http) {
   // Khởi tạo mảng để chứa loại sản phẩm
   $scope.category = [];
