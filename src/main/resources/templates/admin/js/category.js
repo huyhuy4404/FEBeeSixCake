@@ -1,6 +1,6 @@
 const categoryApi = "http://localhost:8080/beesixcake/api/category"; // API endpoint
 
-var app = angular.module('myApp', []);
+var app = angular.module("myApp", []);
 app.controller("CheckLogin", function ($scope, $http, $window) {
   // Khởi tạo thông tin người dùng và trạng thái đăng nhập
   $scope.isLoggedIn = false;
@@ -78,10 +78,15 @@ app.controller("CategoryController", function ($scope, $http) {
     $http
       .get(categoryApi)
       .then(function (response) {
-        $scope.categories = response.data;
+        // Sắp xếp danh sách theo ID giảm dần (mới nhất -> cũ nhất)
+        $scope.categories = response.data.sort(
+          (a, b) => b.idcategory - a.idcategory
+        );
       })
       .catch(function (error) {
-        showMessageModal("Lỗi khi lấy danh sách loại sản phẩm: " + error.message);
+        showMessageModal(
+          "Lỗi khi lấy danh sách loại sản phẩm: " + error.message
+        );
       });
   };
 
@@ -97,7 +102,7 @@ app.controller("CategoryController", function ($scope, $http) {
         $scope.resetForm();
       })
       .catch(function (error) {
-        showMessageModal("Trùng loại sản phẩm. Vui lòng nhập lại!" );
+        showMessageModal("Trùng loại sản phẩm. Vui lòng nhập lại!");
       });
   };
 
@@ -105,8 +110,21 @@ app.controller("CategoryController", function ($scope, $http) {
   $scope.editCategory = function () {
     const editedCategory = {
       idcategory: $scope.selectedCategory.idcategory,
-      categoryname: $scope.selectedCategory.categoryname,
+      categoryname: $scope.selectedCategory.categoryname.trim(),
     };
+
+    // Kiểm tra trùng tên (bỏ qua in hoa/in thường và khoảng trắng)
+    const duplicateCategory = $scope.categories.find(
+      (category) =>
+        category.categoryname.trim().toLowerCase() ===
+          editedCategory.categoryname.toLowerCase() &&
+        category.idcategory !== editedCategory.idcategory
+    );
+
+    if (duplicateCategory) {
+      showMessageModal("Trùng loại sản phẩm. Vui lòng nhập lại!");
+      return; // Dừng lại nếu trùng tên
+    }
 
     $http
       .put(`${categoryApi}/${editedCategory.idcategory}`, editedCategory)
@@ -121,41 +139,40 @@ app.controller("CategoryController", function ($scope, $http) {
   };
 
   // Xóa loại sản phẩm
-// Xóa loại sản phẩm
-$scope.deleteCategory = function (category) {
-  showMessageModal(
+  // Xóa loại sản phẩm
+  $scope.deleteCategory = function (category) {
+    showMessageModal(
       "Bạn có chắc chắn muốn xóa loại sản phẩm này?",
       true,
       function () {
-          $http
-              .delete(`${categoryApi}/${category.idcategory}`)
-              .then(function (response) {
-                  showMessageModal("Xóa loại sản phẩm thành công!");
-              })
-              .catch(function (error) {
-                  showMessageModal("Loại sản phẩm đã được một sản phẩm chọn không thể xóa!");
-              })
-              .finally(function () {
-                  // Tải lại danh sách loại sản phẩm bất kể thành công hay thất bại
-                  $scope.getCategories();
-              });
+        $http
+          .delete(`${categoryApi}/${category.idcategory}`)
+          .then(function (response) {
+            showMessageModal("Xóa loại sản phẩm thành công!");
+          })
+          .catch(function (error) {
+            showMessageModal(
+              "Loại sản phẩm này đã có ít nhất 1 sản phẩm được bán nên không thể xóa!"
+            );
+          })
+          .finally(function () {
+            // Tải lại danh sách loại sản phẩm bất kể thành công hay thất bại
+            $scope.getCategories();
+          });
       }
-  );
-};
-
-  
+    );
+  };
 
   $scope.goToEdit = function (category) {
     // Đưa thông tin của sản phẩm được chọn vào form chỉnh sửa
     $scope.selectedCategory = angular.copy(category);
     $scope.isEditing = true;
-  
+
     // Tự động chuyển sang tab "Chỉnh sửa loại sản phẩm"
-    const editTab = document.querySelector('#profile-tab');
+    const editTab = document.querySelector("#profile-tab");
     const tabInstance = new bootstrap.Tab(editTab);
     tabInstance.show(); // Kích hoạt tab "Chỉnh sửa loại sản phẩm"
   };
-  
 
   // Làm mới form
   $scope.resetForm = function () {

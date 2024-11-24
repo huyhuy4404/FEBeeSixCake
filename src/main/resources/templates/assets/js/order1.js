@@ -1,3 +1,4 @@
+var app = angular.module("myApp", ["ngRoute"]);
 app.controller("OrderController", [
   "$scope",
   "$http",
@@ -123,11 +124,32 @@ app.controller("OrderController", [
         $scope.selectedOrders
       );
     };
+    $scope.getOrderDetails = function (idorder) {
+      $http
+        .get(
+          `http://localhost:8080/beesixcake/api/orderdetail/order/${idorder}`
+        )
+        .then((response) => {
+          console.log("Dữ liệu trả về từ API:", response.data); // Kiểm tra log dữ liệu
+          $scope.orderDetails = response.data;
+        })
+        .catch((error) => {
+          console.error("Lỗi khi tải chi tiết đơn hàng:", error);
+        });
+    };
+
+    $scope.openOrderModal = function (order) {
+      $scope.selectedOrder = angular.copy(order);
+      $scope.getOrderDetails(order.idorder);
+
+      const modalElement = document.getElementById("orderDetailModal");
+      console.log("Modal Element:", modalElement); // Kiểm tra log
+      const modal = new bootstrap.Modal(modalElement, { keyboard: true });
+      modal.show();
+      console.log($scope.selectedOrder.account.idaccount);
+    };
 
     // Xem chi tiết đơn hàng
-    $scope.viewOrderDetails = function (order) {
-      console.log(`Xem chi tiết đơn hàng: ${order.idorder}`);
-    };
 
     // Hủy đơn hàng
     $scope.cancelOrder = function (order) {
