@@ -41,6 +41,34 @@
             /* Thêm hiệu ứng nếu cần */
         }
 
+        /* CSS chung cho tất cả dropdown */
+        .dropdown-menu {
+            width: auto;
+            /* Kích thước tự động theo nội dung */
+            min-width: 150px;
+            /* Chiều rộng tối thiểu */
+            max-width: 250px;
+            /* Chiều rộng tối đa */
+            white-space: nowrap;
+            /* Không xuống dòng nội dung */
+            box-sizing: border-box;
+            /* Tính padding vào kích thước */
+        }
+
+        .dropdown-menu:hover {
+            background-color: aliceblue;
+            font-weight: bold;
+        }
+
+        /* CSS riêng cho filterDropdown */
+        #filterOptions {
+            min-width: 200px;
+            /* Tối thiểu 200px cho dropdown ngắn */
+            max-width: 250px !important;
+            /* Giới hạn tối đa 300px */
+            width: 250px;
+        }
+
         /* Container for the custom block with the table and pagination */
         .custom-block {
             display: flex;
@@ -321,7 +349,7 @@
 
                                         </div>
                                         <div class="col-lg-6">
-                                            <div class="border border-info border-2 rounded LocDH row mb-1 pe-0 py-1"
+                                            <div class="border border-info border-2 rounded LocDH row mb-1 pe-0 py-1 fw-bold"
                                                 style="max-width: 500px; width: auto; float: right; padding-right: 0;">
                                                 <div class="col-lg-6 pe-4">
                                                     <div id="filterDropdown" class="language nav-item dropdown">
@@ -332,14 +360,13 @@
                                                         </span>
                                                         <ul class="dropdown-menu" id="filterOptions">
                                                             <li style="width: 200px;">
-                                                                <a class="dropdown-item filter-option" href="#"
-                                                                    data-filter="orderStatus">Lọc Theo Trạng Thái Đơn
-                                                                    Hàng</a>
+                                                                <button class="dropdown-item filter-option" type="button" data-filter="orderStatus">Lọc Theo Trạng Thái Đơn Hàng
+                                                                   </button>
                                                             </li>
                                                             <li style="width: 200px;">
-                                                                <a class="dropdown-item filter-option" href="#"
+                                                                <button class="dropdown-item filter-option" type="button"
                                                                     data-filter="paymentStatus">Lọc Theo Trạng Thái
-                                                                    Thanh Toán</a>
+                                                                    Thanh Toán</button>
                                                             </li>
                                                         </ul>
                                                     </div>
