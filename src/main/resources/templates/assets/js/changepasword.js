@@ -11,7 +11,7 @@ app.controller('ChangePasswordController', function($scope, $http, $window) {
     $scope.user = JSON.parse(localStorage.getItem('loggedInUser')) || {};
     $scope.user.newPassword = '';
     $scope.user.confirmPassword = '';
-    $scope.isSubmitting = false; // Trạng thái gửi
+    // $scope.isSubmitting = false; // Trạng thái gửi
 
     // Hàm thay đổi mật khẩu
     $scope.changePassword = function() {
@@ -23,7 +23,7 @@ app.controller('ChangePasswordController', function($scope, $http, $window) {
             return;
         }
     
-        $scope.isSubmitting = true; // Đánh dấu đang gửi
+        // $scope.isSubmitting = true; // Đánh dấu đang gửi
     
         // Tạo payload chứa thông tin đổi mật khẩu
         var payload = {
