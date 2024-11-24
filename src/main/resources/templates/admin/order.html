@@ -34,11 +34,46 @@
     <script src="js/angular-route.js"></script>
 
     <style>
+        /* Tùy chọn thêm: nếu muốn giữ trạng thái focus rõ ràng */
+        select.border-0:focus-visible {
+            outline: none;
+            box-shadow: 0 0 2px rgba(0, 0, 255, 0.5);
+            /* Thêm hiệu ứng nếu cần */
+        }
+
+        /* CSS chung cho tất cả dropdown */
+        .dropdown-menu {
+            width: auto;
+            /* Kích thước tự động theo nội dung */
+            min-width: 150px;
+            /* Chiều rộng tối thiểu */
+            max-width: 250px;
+            /* Chiều rộng tối đa */
+            white-space: nowrap;
+            /* Không xuống dòng nội dung */
+            box-sizing: border-box;
+            /* Tính padding vào kích thước */
+        }
+
+        .dropdown-menu:hover {
+            background-color: aliceblue;
+            font-weight: bold;
+        }
+
+        /* CSS riêng cho filterDropdown */
+        #filterOptions {
+            min-width: 200px;
+            /* Tối thiểu 200px cho dropdown ngắn */
+            max-width: 250px !important;
+            /* Giới hạn tối đa 300px */
+            width: 250px;
+        }
+
         /* Container for the custom block with the table and pagination */
         .custom-block {
             display: flex;
             flex-direction: column;
-            min-height: 650px;
+            min-height: 690px;
             /* Adjust as needed to set the minimum height */
             justify-content: space-between;
         }
@@ -292,44 +327,66 @@
                             <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
                                 aria-labelledby="list-tab" tabindex="0">
                                 <div class="table-responsive">
-                                    <div class="btn btn-danger LocDH row" style="max-width: 500px; width: auto; float: right; padding-right: 0; margin-right: 20px;">
-                                        <div class="col-lg-6 pe-4">
-                                            <div id="filterDropdown" class="language nav-item dropdown"
-                                                style="width: 200px;">
-                                                <span class="dropdown-toggle" role="button" data-bs-toggle="dropdown" style="width: auto;"
-                                                    aria-expanded="false">
-                                                    Lọc theo trạng thái đơn hàng
-                                                </span>
-                                                <ul class="dropdown-menu" id="filterOptions">
-                                                    <li style="width: 200px;"><a class="dropdown-item filter-option"
-                                                            href="#" data-filter="orderStatus">Lọc theo trạng thái đơn
-                                                            hàng</a></li>
-                                                    <li style="width: 200px;"><a class="dropdown-item filter-option"
-                                                            href="#" data-filter="paymentStatus">Lọc theo trạng thái
-                                                            thanh toán</a></li>
-                                                </ul>
+                                    <div class="row ps-3">
+                                        <div class="col-lg-3 ps-0">
+                                            <div class="input-group border border-info border-3 rounded mb-1"
+                                                style="width: 165px !important;">
+                                                <label class="input-group-text py-1 fw-bold bg-body"
+                                                    for="inputGroupSelect01">Số Đơn
+                                                    Hàng</label>
+                                                <select class="border border-0 py-1 fw-bold" id="inputGroupSelect01"
+                                                    ng-model="itemsPerPage" ng-change="changeItemsPerPage()">
+                                                    <option ng-value="5">5</option>
+                                                    <option ng-value="8">8</option>
+                                                    <option ng-value="10">10</option>
+                                                    <option ng-value="15">15</option>
+                                                    <option ng-value="20">20</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-5 px-2">
-                                            <div id="statusDropdown" class="language nav-item dropdown">
-                                                <span class="dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                                                    aria-expanded="false" id="statusDropdownToggle">
-                                                    Chọn Trạng Thái
-                                                </span>
-                                                <ul class="dropdown-menu" id="statusOptions">
-                                                    <!-- Mặc định là trạng thái đơn hàng -->
-                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
-                                                            href="#" data-lang="Chờ Xác Nhận">Chờ Xác Nhận</a></li>
-                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
-                                                            href="#" data-lang="Chờ Giao Hàng">Chờ Giao Hàng</a></li>
-                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
-                                                            href="#" data-lang="Đã Giao Hàng">Đã Giao Hàng</a></li>
-                                                    <li style="width: 120px;"><a class="dropdown-item status-option"
-                                                            href="#" data-lang="Đã Hủy">Đã Hủy</a></li>
-                                                </ul>
+
+                                        <div class="col-lg-3">
+
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="border border-info border-2 rounded LocDH row mb-1 pe-0 py-1 fw-bold"
+                                                style="max-width: 500px; width: auto; float: right; padding-right: 0;">
+                                                <div class="col-lg-6 pe-4">
+                                                    <div id="filterDropdown" class="language nav-item dropdown">
+                                                        <span class="dropdown-toggle" role="button"
+                                                            data-bs-toggle="dropdown" style="width: auto;"
+                                                            aria-expanded="false">
+                                                            Chọn Lọc Theo
+                                                        </span>
+                                                        <ul class="dropdown-menu" id="filterOptions">
+                                                            <li style="width: 200px;">
+                                                                <button class="dropdown-item filter-option" type="button" data-filter="orderStatus">Lọc Theo Trạng Thái Đơn Hàng
+                                                                   </button>
+                                                            </li>
+                                                            <li style="width: 200px;">
+                                                                <button class="dropdown-item filter-option" type="button"
+                                                                    data-filter="paymentStatus">Lọc Theo Trạng Thái
+                                                                    Thanh Toán</button>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5 px-0">
+                                                    <div id="statusDropdown" class="language nav-item dropdown">
+                                                        <span class="dropdown-toggle pe-4" role="button"
+                                                            data-bs-toggle="dropdown" aria-expanded="false"
+                                                            id="statusDropdownToggle"
+                                                            style="float: right; width: auto;">
+                                                            Chọn Trạng Thái
+                                                        </span>
+                                                        <ul class="dropdown-menu" id="statusOptions">
+                                                            <!-- Default status options will be inserted dynamically -->
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-1 ps-0"><i class="bi bi-arrow-down-up"></i></div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-1 ps-0"><i class="bi bi-arrow-down-up"></i></div>
                                     </div>
                                     <table class="account-table table">
                                         <thead>
@@ -553,6 +610,20 @@
     <!-- JAVASCRIPT FILES -->
     <script>
         $(document).ready(function () {
+            // Cấu trúc dữ liệu cho trạng thái
+            const statusOptionsData = {
+                orderStatus: [
+                    { text: 'Chờ Xác Nhận', value: 'Chờ Xác Nhận' },
+                    { text: 'Chờ Giao Hàng', value: 'Chờ Giao Hàng' },
+                    { text: 'Đã Giao Hàng', value: 'Đã Giao Hàng' },
+                    { text: 'Đã Hủy', value: 'Đã Hủy' }
+                ],
+                paymentStatus: [
+                    { text: 'Chưa Thanh Toán', value: 'Chưa Thanh Toán' },
+                    { text: 'Đã Thanh Toán', value: 'Đã Thanh Toán' }
+                ]
+            };
+
             // Khi click vào tùy chọn lọc (trạng thái đơn hàng hoặc trạng thái thanh toán)
             $('#filterDropdown .filter-option').click(function () {
                 var selectedFilter = $(this).data('filter');
@@ -561,24 +632,19 @@
                 var statusOptions = $('#statusOptions');
 
                 // Cập nhật tiêu đề dropdown lọc
-                if (selectedFilter === 'orderStatus') {
-                    dropdownToggle.html('Lọc theo trạng thái đơn hàng');
+                if (statusOptionsData[selectedFilter]) {
+                    // Cập nhật tiêu đề lọc
+                    dropdownToggle.html(selectedFilter === 'orderStatus' ? 'Lọc Theo Trạng Thái Đơn Hàng' : 'Lọc Theo Trạng Thái Thanh Toán');
                     statusDropdown.html('Chọn Trạng Thái');
-                    // Thay danh sách trạng thái thành trạng thái đơn hàng
-                    statusOptions.html(`
-                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Chờ Xác Nhận">Chờ Xác Nhận</a></li>
-                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Chờ Giao Hàng">Chờ Giao Hàng</a></li>
-                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Đã Giao Hàng">Đã Giao Hàng</a></li>
-                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Đã Hủy">Đã Hủy</a></li>
-            `);
-                } else if (selectedFilter === 'paymentStatus') {
-                    dropdownToggle.html('Lọc theo trạng thái thanh toán');
-                    statusDropdown.html('Chọn Trạng Thái');
-                    // Thay danh sách trạng thái thành trạng thái thanh toán
-                    statusOptions.html(`
-                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Chưa Thanh Toán">Chưa Thanh Toán</a></li>
-                <li style="width: 120px;"><a class="dropdown-item status-option" href="#" data-lang="Đã Thanh Toán">Đã Thanh Toán</a></li>
-            `);
+
+                    // Tạo danh sách trạng thái dựa trên dữ liệu có sẵn
+                    var optionsHtml = statusOptionsData[selectedFilter].map(function (option) {
+                        return `<li style="width: 120px;">
+                            <a class="dropdown-item status-option" href="#" data-lang="${option.value}">${option.text}</a>
+                        </li>`;
+                    }).join('');
+
+                    statusOptions.html(optionsHtml);
                 }
             });
 
@@ -588,6 +654,7 @@
                 $('#statusDropdownToggle').html(selectedStatus);
             });
         });
+
 
     </script>
     <script src="../admin/js/jquery.min.js"></script>
