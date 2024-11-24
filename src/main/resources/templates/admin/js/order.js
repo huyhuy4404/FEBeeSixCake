@@ -17,7 +17,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
   $scope.selectedOrder = {};
   $scope.originalStatus = null;
   $scope.originalPaymentStatus = null;
-  
+
   // Định nghĩa base URL cho hình ảnh
   $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/";
 
@@ -147,22 +147,22 @@ app.controller("OrderController", function ($scope, $window, $http) {
   // Cập nhật trạng thái đơn hàng
   $scope.updateOrderStatus = function () {
     $scope.isUpdating = true;
-  
+
     var newStatus = parseInt($scope.selectedOrder.status.idstatus, 10);
     var oldStatus = parseInt($scope.originalStatus, 10);
-  
+
     if (oldStatus === newStatus) {
       $scope.showMessageModal("Trạng thái không thay đổi.", "info");
       $scope.isUpdating = false;
       return;
     }
-  
+
     var orderStatusHistory = {
       order: { idorder: $scope.selectedOrder.idorder },
       status: { idstatus: newStatus },
       timestamp: new Date().toISOString(),
     };
-  
+
     $http
       .put(
         `${API}/order-status-history/${$scope.selectedOrder.idorder}`,
@@ -170,10 +170,10 @@ app.controller("OrderController", function ($scope, $window, $http) {
       )
       .then((response) => {
         $scope.showMessageModal("Cập nhật trạng thái thành công!", "success");
-  
+
         // Cập nhật trạng thái trong $scope
         $scope.selectedOrder.status.idstatus = newStatus;
-  
+
         const orderIndex = $scope.Orders.findIndex(
           (order) => order.idorder === $scope.selectedOrder.idorder
         );
@@ -181,7 +181,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
           $scope.Orders[orderIndex].status.idstatus = newStatus;
           $scope.Orders[orderIndex].statusName = response.data.statusName;
         }
-  
+
         // Kiểm tra nếu trạng thái mới là "Đã giao hàng" (idstatus = 3)
         if (
           newStatus === 3 &&
@@ -201,7 +201,6 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.isUpdating = false;
       });
   };
-  
 
   // Cập nhật trạng thái thanh toán
   $scope.updateOrderStatusPay = function () {
@@ -212,7 +211,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
       );
       return;
     }
-  
+
     if ($scope.originalPaymentStatus !== 1) {
       $scope.showMessageModal(
         "Chỉ có thể cập nhật trạng thái thanh toán từ 'Chưa Thanh Toán' sang 'Đã Thanh Toán'.",
@@ -220,20 +219,20 @@ app.controller("OrderController", function ($scope, $window, $http) {
       );
       return;
     }
-  
+
     $scope.isUpdating = true;
-  
+
     var updatedOrder = angular.copy($scope.selectedOrder);
-  
+
     if (updatedOrder.discount === null) {
       updatedOrder.discount = {
         iddiscount: 0,
       };
     }
-  
+
     updatedOrder.statuspay.idstatuspay = 2;
     updatedOrder.statuspay.statuspayname = "Đã thanh toán";
-  
+
     $http
       .put(`${API}/order/${updatedOrder.idorder}`, updatedOrder)
       .then((response) => {
@@ -241,7 +240,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
           "Cập nhật trạng thái thanh toán thành công!",
           "success"
         );
-  
+
         const orderIndex = $scope.Orders.findIndex(
           (order) => order.idorder === $scope.selectedOrder.idorder
         );
@@ -249,12 +248,15 @@ app.controller("OrderController", function ($scope, $window, $http) {
           $scope.Orders[orderIndex].statuspay.idstatuspay = 2;
           $scope.Orders[orderIndex].statuspay.statuspayname = "Đã thanh toán";
         }
-  
+
         $scope.selectedOrder.statuspay.idstatuspay = 2;
         $scope.selectedOrder.statuspay.statuspayname = "Đã thanh toán";
       })
       .catch((error) => {
-        console.error("Có lỗi xảy ra khi cập nhật trạng thái thanh toán!", error);
+        console.error(
+          "Có lỗi xảy ra khi cập nhật trạng thái thanh toán!",
+          error
+        );
         $scope.showMessageModal(
           "Không thể cập nhật trạng thái thanh toán!",
           "error"
@@ -288,8 +290,14 @@ app.controller("OrderController", function ($scope, $window, $http) {
     // Tính tổng số trang
     $scope.totalPages =
       Math.ceil(
-        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) / $scope.itemsPerPage
+        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) /
+          $scope.itemsPerPage
       ) || 1;
+
+    // Đảm bảo không vượt quá tổng số trang
+    if ($scope.currentPage > $scope.totalPages) {
+      $scope.currentPage = $scope.totalPages;
+    }
 
     // Tạo danh sách các trang
     $scope.pages = [];
@@ -297,15 +305,36 @@ app.controller("OrderController", function ($scope, $window, $http) {
       $scope.pages.push(i);
     }
 
-    // Đảm bảo không vượt quá tổng số trang
-    if ($scope.currentPage > $scope.totalPages) {
-      $scope.currentPage = $scope.totalPages;
-    }
-
     // Lấy danh sách đơn hàng cho trang hiện tại
-    var start = ($scope.currentPage - 1) * $scope.itemsPerPage;
-    var end = start + $scope.itemsPerPage;
+    const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
+    const end = start + parseInt($scope.itemsPerPage, 10); // Sử dụng giá trị hiện tại của itemsPerPage
     $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
+  };
+
+  // Khi thay đổi số lượng đơn hàng hiển thị
+  $scope.changeItemsPerPage = function () {
+    $scope.currentPage = 1; // Reset về trang đầu tiên
+    $scope.updatePagination();
+  };
+
+  // Chuyển trang
+  $scope.goToPage = function (page) {
+    if (page >= 1 && page <= $scope.totalPages) {
+      $scope.currentPage = page;
+      $scope.updatePagination();
+    }
+  };
+
+  // Thay đổi khi itemsPerPage thay đổi
+  $scope.changeItemsPerPage = function () {
+    $scope.currentPage = 1; // Reset về trang đầu tiên
+    $scope.updatePagination();
+  };
+
+  // Thay đổi khi itemsPerPage thay đổi
+  $scope.changeItemsPerPage = function () {
+    $scope.currentPage = 1; // Reset về trang đầu tiên
+    $scope.updatePagination();
   };
 
   // Chuyển trang

@@ -34,6 +34,13 @@
     <script src="js/angular-route.js"></script>
 
     <style>
+        /* Tùy chọn thêm: nếu muốn giữ trạng thái focus rõ ràng */
+        select.border-0:focus-visible {
+            outline: none;
+            box-shadow: 0 0 2px rgba(0, 0, 255, 0.5);
+            /* Thêm hiệu ứng nếu cần */
+        }
+
         /* Container for the custom block with the table and pagination */
         .custom-block {
             display: flex;
@@ -294,16 +301,18 @@
                                 <div class="table-responsive">
                                     <div class="row ps-3">
                                         <div class="col-lg-3 ps-0">
-                                            <div class="input-group border border-info border-3 rounded mb-1" style="width: 165px !important;">
-                                                <label class="input-group-text py-1 fw-bold bg-body" for="inputGroupSelect01">Số Đơn
+                                            <div class="input-group border border-info border-3 rounded mb-1"
+                                                style="width: 165px !important;">
+                                                <label class="input-group-text py-1 fw-bold bg-body"
+                                                    for="inputGroupSelect01">Số Đơn
                                                     Hàng</label>
-                                                <select class="border border-0 py-1" id="inputGroupSelect01"
-                                                    ng-model="itemsPerPage" ng-change="updatePagination()">
-                                                    <option value="5">5</option>
-                                                    <option value="8" selected>8</option>
-                                                    <option value="10">10</option>
-                                                    <option value="15">15</option>
-                                                    <option value="20">20</option>
+                                                <select class="border border-0 py-1 fw-bold" id="inputGroupSelect01"
+                                                    ng-model="itemsPerPage" ng-change="changeItemsPerPage()">
+                                                    <option ng-value="5">5</option>
+                                                    <option ng-value="8">8</option>
+                                                    <option ng-value="10">10</option>
+                                                    <option ng-value="15">15</option>
+                                                    <option ng-value="20">20</option>
                                                 </select>
                                             </div>
                                         </div>
