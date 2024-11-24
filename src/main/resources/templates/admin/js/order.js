@@ -8,7 +8,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
   $scope.paginatedOrders = [];
   $scope.pages = [];
   $scope.currentPage = 1;
-  $scope.itemsPerPage = 8;
+  $scope.itemsPerPage = 8; // Số lượng đơn hàng hiển thị mỗi trang mặc định là 8
   $scope.searchQuery = "";
   $scope.message = "";
   $scope.messageType = "";
@@ -17,7 +17,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
   $scope.selectedOrder = {};
   $scope.originalStatus = null;
   $scope.originalPaymentStatus = null;
-
+  
   // Định nghĩa base URL cho hình ảnh
   $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/";
 
@@ -37,7 +37,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
     messageModal.show();
   };
 
-  // Thêm phương thức để cộng thêm 5 giờ vào order.orderdate
+  // Thêm phương thức để cộng thêm 7 giờ vào order.orderdate
   $scope.addHoursToOrderDate = function (orderDate, hoursToAdd) {
     if (!orderDate) return null;
 
@@ -88,6 +88,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.showMessageModal("Không thể tải chi tiết đơn hàng!", "error");
       });
   };
+
   // Tính tổng tiền sản phẩm
   $scope.calculateTotalProductPrice = function () {
     if (!$scope.orderDetails || !$scope.orderDetails.length) {
@@ -200,7 +201,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.isUpdating = false;
       });
   };
-   
+  
 
   // Cập nhật trạng thái thanh toán
   $scope.updateOrderStatusPay = function () {
@@ -251,14 +252,9 @@ app.controller("OrderController", function ($scope, $window, $http) {
   
         $scope.selectedOrder.statuspay.idstatuspay = 2;
         $scope.selectedOrder.statuspay.statuspayname = "Đã thanh toán";
-  
-        $scope.originalPaymentStatus = 2;
       })
       .catch((error) => {
-        console.error(
-          "Có lỗi xảy ra khi cập nhật trạng thái thanh toán!",
-          error
-        );
+        console.error("Có lỗi xảy ra khi cập nhật trạng thái thanh toán!", error);
         $scope.showMessageModal(
           "Không thể cập nhật trạng thái thanh toán!",
           "error"
@@ -267,18 +263,6 @@ app.controller("OrderController", function ($scope, $window, $http) {
       .finally(() => {
         $scope.isUpdating = false;
       });
-  };
-  
-
-  // Hàm mở modal đơn hàng
-  $scope.openOrderModal = function (order) {
-    $scope.selectedOrder = angular.copy(order); // Sao chép thông tin đơn hàng
-    $scope.originalStatus = order.status.idstatus; // Lưu trạng thái ban đầu
-    $scope.originalPaymentStatus = order.statuspay.idstatuspay; // Lưu trạng thái thanh toán ban đầu
-    $scope.getOrderDetails(order.idorder); // Lấy chi tiết đơn hàng
-
-    // Đồng bộ AngularJS với giao diện
-    $scope.$applyAsync();
   };
 
   // Hàm phân trang
@@ -304,8 +288,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
     // Tính tổng số trang
     $scope.totalPages =
       Math.ceil(
-        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) /
-          $scope.itemsPerPage
+        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) / $scope.itemsPerPage
       ) || 1;
 
     // Tạo danh sách các trang
@@ -325,41 +308,21 @@ app.controller("OrderController", function ($scope, $window, $http) {
     $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
   };
 
+  // Chuyển trang
   $scope.goToPage = function (page) {
     if (page >= 1 && page <= $scope.totalPages) {
       $scope.currentPage = page;
       $scope.updatePagination();
     }
   };
+
+  // Lắng nghe thay đổi trong danh sách đơn hàng hoặc tìm kiếm
   $scope.$watchGroup(["Orders", "searchQuery"], function () {
     $scope.currentPage = 1;
     $scope.updatePagination();
   });
 
-  $(document).on("hide.bs.modal", ".modal", function () {
-    $scope.loadOrders();
-    $scope.$apply();
-  });
-
-  $scope.getVisibleStatusButtons = function (originalStatus) {
-    const visibleButtons = {
-      1: [1, 2, 4], // Trạng thái Chờ Xác Nhận (hiển thị các nút 1, 2, 4)
-      2: [2, 3, 4], // Trạng thái Chờ Giao Hàng (hiển thị các nút 2, 3, 4)
-      3: [3], // Trạng thái Đã Giao Hàng (chỉ hiển thị nút 3)
-      4: [4], // Trạng thái Đã Hủy (chỉ hiển thị nút 4)
-    };
-    return visibleButtons[originalStatus] || [];
-  };
-
-  $scope.isUpdateDisabled = function (originalStatus, selectedStatus) {
-    // Nếu trạng thái ban đầu là "Đã Giao Hàng" hoặc "Đã Hủy", luôn vô hiệu hóa
-    if (originalStatus === 3 || originalStatus === 4) {
-      return true;
-    }
-    // Nếu trạng thái được chọn trùng với trạng thái ban đầu, vô hiệu hóa nút
-    return originalStatus === selectedStatus;
-  };
-
+  // Gọi hàm loadOrders khi trang tải
   $scope.loadOrders();
 });
 
