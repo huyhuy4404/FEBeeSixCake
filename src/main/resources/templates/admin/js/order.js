@@ -281,45 +281,41 @@ app.controller("OrderController", function ($scope, $window, $http) {
 
   // Hàm phân trang
   $scope.updatePagination = function () {
-    // Sắp xếp đơn hàng theo thời gian (orderdate) trước khi phân trang
     $scope.filteredOrders = $scope.Orders.sort(function (a, b) {
-      return new Date(b.orderdate) - new Date(a.orderdate); // Sắp xếp từ mới nhất
+      return new Date(b.orderdate) - new Date(a.orderdate);
     });
 
-    // Nếu có tìm kiếm, lọc đơn hàng theo từ khóa
     if ($scope.searchQuery) {
+      const query = $scope.searchQuery.toLowerCase();
       $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
         return (
-          order.idorder.toString().includes($scope.searchQuery) ||
+          order.idorder.toString().includes(query) ||
           (order.statusName &&
-            order.statusName
-              .toLowerCase()
-              .includes($scope.searchQuery.toLowerCase()))
+            order.statusName.toLowerCase().includes(query)) ||
+          (order.account &&
+            order.account.fullname &&
+            order.account.fullname.toLowerCase().includes(query))
         );
       });
     }
 
-    // Tính tổng số trang
     $scope.totalPages =
       Math.ceil(
         ($scope.filteredOrders ? $scope.filteredOrders.length : 0) /
           $scope.itemsPerPage
       ) || 1;
 
-    // Đảm bảo không vượt quá tổng số trang
     if ($scope.currentPage > $scope.totalPages) {
       $scope.currentPage = $scope.totalPages;
     }
 
-    // Tạo danh sách các trang
     $scope.pages = [];
     for (var i = 1; i <= $scope.totalPages; i++) {
       $scope.pages.push(i);
     }
 
-    // Lấy danh sách đơn hàng cho trang hiện tại
     const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
-    const end = start + parseInt($scope.itemsPerPage, 10); // Sử dụng giá trị hiện tại của itemsPerPage
+    const end = start + parseInt($scope.itemsPerPage, 10);
     $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
   };
 
@@ -336,6 +332,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
       $scope.updatePagination();
     }
   };
+
   $scope.$watchGroup(["Orders", "searchQuery"], function () {
     $scope.currentPage = 1;
     $scope.updatePagination();

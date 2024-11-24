@@ -328,12 +328,11 @@
                                 aria-labelledby="list-tab" tabindex="0">
                                 <div class="table-responsive">
                                     <div class="row ps-3">
-                                        <div class="col-lg-3 ps-0">
-                                            <div class="input-group border border-info border-3 rounded mb-1"
+                                        <div class="col-lg-2 ps-0">
+                                            <div class="input-group border border-info border-2 rounded mb-1"
                                                 style="width: 165px !important;">
                                                 <label class="input-group-text py-1 fw-bold bg-body"
-                                                    for="inputGroupSelect01">Số Đơn
-                                                    Hàng</label>
+                                                    for="inputGroupSelect01">Số Đơn Hàng</label>
                                                 <select class="border border-0 py-1 fw-bold" id="inputGroupSelect01"
                                                     ng-model="itemsPerPage" ng-change="changeItemsPerPage()">
                                                     <option ng-value="5">5</option>
@@ -345,8 +344,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-3">
-
+                                        <div class="col-lg-4">
+                                            <div class="d-flex align-items-center float-end">
+                                                <input class="form-control me-2 py-1 border border-info border-2"
+                                                    type="search" placeholder="Nhập tên người dùng" aria-label="Search"
+                                                    ng-model="searchQuery">
+                                            </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="border border-info border-2 rounded LocDH row mb-1 pe-0 py-1 fw-bold"
@@ -360,12 +363,15 @@
                                                         </span>
                                                         <ul class="dropdown-menu" id="filterOptions">
                                                             <li style="width: 200px;">
-                                                                <button class="dropdown-item filter-option" type="button" data-filter="orderStatus">Lọc Theo Trạng Thái Đơn Hàng
-                                                                   </button>
+                                                                <button class="dropdown-item filter-option"
+                                                                    type="button" data-filter="orderStatus">Lọc Theo
+                                                                    Trạng Thái Đơn Hàng
+                                                                </button>
                                                             </li>
                                                             <li style="width: 200px;">
-                                                                <button class="dropdown-item filter-option" type="button"
-                                                                    data-filter="paymentStatus">Lọc Theo Trạng Thái
+                                                                <button class="dropdown-item filter-option"
+                                                                    type="button" data-filter="paymentStatus">Lọc Theo
+                                                                    Trạng Thái
                                                                     Thanh Toán</button>
                                                             </li>
                                                         </ul>
@@ -391,7 +397,9 @@
                                     <table class="account-table table">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">Mã Đơn Hàng</th>
+                                                <th class="text-center fw-bold">STT</th>
+                                                <th class="text-center">ID</th>
+                                                <th class="text-center">Tên Khách Hàng</th>
                                                 <th class="text-center">Thời Gian Đặt Hàng</th>
                                                 <th class="text-center">Trạng Thái Đơn Hàng</th>
                                                 <th class="text-center">Trạng Thái Thanh Toán</th>
@@ -400,10 +408,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="order in paginatedOrders | orderBy:'-orderdate'"
+                                            <tr ng-repeat="order in paginatedOrders | orderBy:'-orderdate '"
                                                 style="text-align: center; font-size: 16px;">
+                                                <td>{{$index + 1}}</td>
                                                 <td>{{ order.idorder }}</td>
-                                                <!-- Sử dụng phương thức addHoursToOrderDate để cộng thêm 5 giờ và sau đó format lại -->
+                                                <td>{{ order.account.fullname }}</td>
                                                 <td>{{ addHoursToOrderDate(order.orderdate, 7) |
                                                     date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                 <td>{{ order.statusName }}</td>
@@ -412,7 +421,7 @@
                                                 <td>
                                                     <button type="button" class="btn btn-sm btn-primary"
                                                         data-bs-toggle="modal" data-bs-target="#modal-{{order.idorder}}"
-                                                        ng-click="openOrderModal(order)">Chi Tiết
+                                                        ng-click="openOrderModal(order)">Xem Chi Tiết
                                                     </button>
                                                 </td>
                                             </tr>
