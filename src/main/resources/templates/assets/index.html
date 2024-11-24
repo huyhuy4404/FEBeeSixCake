@@ -14,7 +14,38 @@
   <script src="../assets/js/angular-route.js"></script>
   <script src="../assets/js/index.js"></script>
 </head>
-
+<style>
+  .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
+  
+  .btn {
+      background-color: #007bff; /* Primary color */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+      background-color: #0056b3; /* Darker shade on hover */
+  }
+  
+  .btn:disabled {
+      background-color: #c0c0c0; /* Grey color for disabled */
+      cursor: not-allowed;
+  }
+  
+  span {
+      font-size: 18px;
+      color: #333;
+  }
+  </style>
 <body ng-app="myApp" ng-controller="discountsController">
   <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
   <div ng-include="'layout/menu.html'" style="height: 1px;"></div>
@@ -125,11 +156,11 @@
         </div>
 
         <!-- Phân trang -->
-        <div class="pagination" style="text-align: center; margin-top: 20px; margin-left: 650px;">
-          <button class="btn btn-primary" ng-click="changePage(currentPage - 1)" ng-disabled="currentPage === 1" >Previous</button>
-          <span>Page {{ currentPage }} of {{ totalPages }}</span>
-          <button class="btn btn-primary" ng-click="changePage(currentPage + 1)" ng-disabled="currentPage === totalPages">Next</button>
-        </div>
+        <div class="pagination" style="text-align: center; margin: 20px auto; max-width: 600px;">
+          <button class="btn btn-primary" ng-click="changePage(currentPage - 1)" ng-disabled="currentPage === 1">Trang trước</button>
+          <span style="margin: 0 15px; font-size: 18px; font-weight: bold;">{{ currentPage }} / {{ totalPages }}</span>
+          <button class="btn btn-primary" ng-click="changePage(currentPage + 1)" ng-disabled="currentPage === totalPages">Trang sau</button>
+      </div>
       </div>
     </div>
   </div>
