@@ -137,7 +137,7 @@
           </div>
         </div>
         <div>
-          <h3 class="textSanPham ms-4">Những Sản phẩm Được Yêu Thích Nhất</h3>
+          <h3 class="textSanPham mt-4 mb-2">Những Sản phẩm Được Yêu Thích Nhất</h3>
           <div class="row" ng-controller="FavoriteTopController">
             <div class="col-lg-3 mb-4" ng-repeat="item in favoriteProducts | limitTo: 4">
               <div class="pd-box"
@@ -158,7 +158,6 @@
                       {{item.productname}}
                     </a>
                   </h3>
-
                   <!-- Giá sản phẩm -->
                   <div class="product-price mt-2">
                     <span class="price text-danger fw-bold">

@@ -47,40 +47,41 @@
                         </div>
                     </div>
                     <hr class="mt-2 me-1" />
-
-                    <div class="row">
-                        <div class="col-lg-3 mb-4" ng-repeat="item in favoriteProducts">
-                            <div class="pd-box"
-                                style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                                <!-- Hình ảnh sản phẩm -->
-                                <div class="box-images">
-                                    <a href="../assets/chitietsanpham.html?id={{item.idproduct}}"
-                                        title="{{item.productname}}">
-                                        <img ng-src="{{item.img}}" alt="{{item.productname}}" class="img-fluid"
-                                            style="width: auto; height: 295px; margin-bottom: 0px" </a>
-                                </div>
-
-                                <!-- Nội dung sản phẩm -->
-                                <div class="box-content p-3">
-                                    <!-- Tên sản phẩm -->
-                                    <h3 class="product-name">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3 mb-4" ng-repeat="item in favoriteProducts">
+                                <div class="pd-box"
+                                    style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                    <!-- Hình ảnh sản phẩm -->
+                                    <div class="box-images">
                                         <a href="../assets/chitietsanpham.html?id={{item.idproduct}}"
-                                            title="{{item.productname}}"
-                                            class="text-dark text-decoration-none tenTheSP">
-                                            {{item.productname}}
-                                        </a>
-                                    </h3>
+                                            title="{{item.productname}}">
+                                            <img ng-src="{{item.img}}" alt="{{item.productname}}" class="img-fluid"
+                                                style="width: auto; height: 295px; margin-bottom: 0px" </a>
+                                    </div>
 
-                                    <!-- Giá sản phẩm -->
-                                    <div class="product-price mt-2">
-                                        <span class="price text-danger fw-bold">
-                                            <span class="price">{{ formatCurrency(item.unitprice) }}</span>
-                                        </span>
+                                    <!-- Nội dung sản phẩm -->
+                                    <div class="box-content p-3">
+                                        <!-- Tên sản phẩm -->
+                                        <h3 class="product-name">
+                                            <a href="../assets/chitietsanpham.html?id={{item.idproduct}}"
+                                                title="{{item.productname}}"
+                                                class="text-dark text-decoration-none tenTheSP">
+                                                {{item.productname}}
+                                            </a>
+                                        </h3>
+                                        <!-- Giá sản phẩm -->
+                                        <div class="product-price mt-2">
+                                            <span class="price text-danger fw-bold">
+                                                <span class="price">{{ formatCurrency(item.unitprice) }}</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="col-lg-3">
