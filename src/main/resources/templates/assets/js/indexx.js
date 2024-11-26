@@ -132,7 +132,7 @@ app.controller("discountsController", function ($scope, $http) {
 
   // Lấy danh mục sản phẩm
   $scope.getCategories = function () {
-    $http.get(`${API}/category`)
+    $http.get("http://localhost:8080/beesixcake/api/category")
       .then(function (response) {
         if (Array.isArray(response.data)) {
           $scope.category = response.data.map((item) => ({
@@ -147,7 +147,40 @@ app.controller("discountsController", function ($scope, $http) {
         console.error("Error fetching categories:", error);
       });
   };
+  $scope.getCategorie = function () {
+    $http
+      .get(`${API}/category`)
+      .then((response) => {
+        $scope.categories = response.data;
 
+        // Khởi tạo số lượng sản phẩm cho mỗi danh mục
+        $scope.categories.forEach((category) => {
+          category.count = 0; // Mặc định là 0
+        });
+
+        // Lấy tất cả sản phẩm để tính số lượng theo danh mục
+        $http
+          .get(`${API}/product`)
+          .then((productResponse) => {
+            const products = productResponse.data;
+
+            // Đếm số lượng sản phẩm trong từng danh mục
+            products.forEach((product) => {
+              const category = $scope.categories.find(
+                (cat) => cat.idcategory === product.category.idcategory
+              );
+              if (category) category.count++;
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching products:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  };
+  $scope.getCategorie(); // Gọi để lấy danh mục sản phẩm
   // Khởi động ứng dụng
   $scope.getProducts(); // Gọi hàm để lấy dữ liệu ban đầu
   $scope.getCategories(); // Lấy danh mục sản phẩm

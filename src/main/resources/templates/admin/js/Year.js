@@ -220,28 +220,53 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             document.getElementById("yearly-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
             return;
         }
-
+    
         const chartDiv = document.getElementById("yearly-bar-chart");
         chartDiv.innerHTML = "";
-
+    
         var options = {
-            series: [{
-                name: 'Tổng Số Lượng',
-                data: $scope.yearlyStats.map(stat => stat.totalOrders),
-            }],
+            series: [
+                {
+                    name: ' Số Lượng đơn hàng',
+                    data: $scope.yearlyStats.map(stat => stat.totalOrders), // Dữ liệu cho số lượng đơn hàng
+                },
+                {
+                    name: 'Tổng Tiền',
+                    data: $scope.yearlyStats.map(stat => stat.totalRevenue), // Dữ liệu cho tổng tiền
+                }
+            ],
             chart: {
                 type: 'bar',
                 height: 300,
-                width: 300
+                width: '100%',
+                stacked: false // Đảm bảo không chồng lên nhau
             },
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    columnWidth: '50%',
+                    columnWidth: '50%', // Tùy chỉnh độ rộng cột
                 }
             },
             xaxis: {
                 categories: $scope.yearlyStats.map(stat => stat.year), // Hiển thị năm
+            },
+            yaxis: [
+                {
+                    title: {
+                        text: 'Số lượng'
+                    },
+                    min: 0
+                },
+                {
+                    title: {
+                        text: 'Tổng tiền (VND)'
+                    },
+                    opposite: true // Trục y bên phải
+                }
+            ],
+            tooltip: {
+                shared: true,
+                intersect: false
             },
             responsive: [{
                 breakpoint: 480,
@@ -255,7 +280,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 }
             }]
         };
-
+    
         var chart = new ApexCharts(chartDiv, options);
         chart.render();
     };

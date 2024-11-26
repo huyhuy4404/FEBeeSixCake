@@ -192,26 +192,56 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             document.getElementById("monthly-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
             return;
         }
-
+    
         document.getElementById("monthly-bar-chart").innerHTML = "";
-
+    
         var options = {
-            series: [{
-                name: 'Tổng Đơn Hàng',
-                data: $scope.monthlyStats.map(stat => stat.totalOrders),
-            }],
+            series: [
+                {
+                    name: 'Tổng Đơn Hàng',
+                    data: $scope.monthlyStats.map(stat => stat.totalOrders),
+                },
+                {
+                    name: 'Tổng Tiền',
+                    data: $scope.monthlyStats.map(stat => stat.totalRevenue),
+                }
+            ],
             chart: {
                 type: 'bar',
                 height: 300,
+                width: '100%',
+                stacked: false
             },
             plotOptions: {
                 bar: {
                     horizontal: false,
                     columnWidth: '50%',
+                    dataLabels: {
+                        enabled: false // Tắt hiển thị mặc định
+                    }
                 }
             },
             xaxis: {
-                categories: $scope.monthlyStats.map(stat => stat.monthYear.split('-')[1]), // Hiển thị chỉ tháng
+                categories: $scope.monthlyStats.map(stat => `Tháng ${stat.monthYear.split('-')[1]}`),
+            },
+            yaxis: [
+                {
+                    title: {
+                        text: 'Tổng Đơn Hàng'
+                    },
+                    min: 0
+                },
+                {
+                    title: {
+                        text: 'Tổng Tiền (VND)'
+                    },
+                    opposite: true
+                }
+            ],
+            tooltip: {
+                shared: true,
+                intersect: false,
+                followCursor: true // Tùy chọn này giúp tooltip theo con trỏ chuột
             },
             responsive: [{
                 breakpoint: 480,
@@ -225,7 +255,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 }
             }]
         };
-
+    
         var chart = new ApexCharts(document.querySelector("#monthly-bar-chart"), options);
         chart.render();
     };

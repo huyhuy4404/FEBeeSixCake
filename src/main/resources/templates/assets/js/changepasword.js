@@ -15,16 +15,16 @@ app.controller('ChangePasswordController', function($scope, $http, $window) {
 
     // Hàm thay đổi mật khẩu
     $scope.changePassword = function() {
-        if ($scope.isSubmitting) return;
-    
+        if ($scope.isSubmitting) return; // Nếu đang gửi, không làm gì thêm
+        $scope.isSubmitting = true; // Đánh dấu bắt đầu gửi
+
         // Kiểm tra khớp mật khẩu mới và xác nhận mật khẩu
         if ($scope.user.newPassword !== $scope.user.confirmPassword) {
             alert('Xác nhận mật khẩu không khớp với mật khẩu mới!');
+            $scope.isSubmitting = false; // Kết thúc trạng thái gửi
             return;
         }
-    
-        $scope.isSubmitting = true; // Đánh dấu đang gửi
-    
+
         // Tạo payload chứa thông tin đổi mật khẩu
         var payload = {
             idaccount: $scope.user.idaccount,
@@ -32,34 +32,37 @@ app.controller('ChangePasswordController', function($scope, $http, $window) {
             newPassword: $scope.user.newPassword,
             fullname: $scope.user.fullname,
             email: $scope.user.email,
-            phonenumber: $scope.user.phonenumber
+            phonenumber: $scope.user.phonenumber,
+            active: $scope.user.active, // Giữ nguyên trạng thái active
+            idrole: $scope.user.idrole // Giữ nguyên vai trò
         };
-    
-        console.log('Đang gửi yêu cầu đổi mật khẩu với payload:', payload); // Ghi log payload
-    
+
+        console.log('Đang gửi yêu cầu đổi mật khẩu với payload:', payload);
+
         // Gửi yêu cầu PUT để đổi mật khẩu
         $http({
             method: 'PUT',
             url: 'http://localhost:8080/beesixcake/api/account/' + $scope.user.idaccount,
             data: payload
         }).then(function(response) {
-            console.log('Phản hồi từ máy chủ:', response); // Ghi log phản hồi từ máy chủ
-    
+            console.log('Phản hồi từ máy chủ:', response);
+
             if (response.data) {
-                console.log('Nội dung dữ liệu phản hồi:', response.data); // Ghi log nội dung dữ liệu
-    
+                console.log('Nội dung dữ liệu phản hồi:', response.data);
+
                 // Xử lý phản hồi thành công
                 alert('Đổi mật khẩu thành công!');
-                $scope.user.password = $scope.user.newPassword;
+                
+                // Cập nhật thông tin người dùng mà không thay đổi active
                 localStorage.setItem('loggedInUser', JSON.stringify($scope.user));
-                $window.location.href = 'login.html';
+                $window.location.href = 'login.html'; // Chuyển hướng đến trang đăng nhập
             } else {
                 console.log('Phản hồi không hợp lệ:', response.data);
                 alert('Đổi mật khẩu thất bại! Phản hồi từ máy chủ không hợp lệ.');
             }
         }).catch(function(error) {
-            console.error('Lỗi xảy ra trong quá trình đổi mật khẩu:', error); // Ghi log lỗi chi tiết
-            
+            console.error('Lỗi xảy ra trong quá trình đổi mật khẩu:', error);
+
             // Kiểm tra nếu có thông báo lỗi từ phản hồi
             if (error.data && error.data.error) {
                 alert('Đổi mật khẩu thất bại! Chi tiết: ' + error.data.error);
@@ -67,7 +70,7 @@ app.controller('ChangePasswordController', function($scope, $http, $window) {
                 alert('Đổi mật khẩu thất bại! Vui lòng thử lại.');
             }
         }).finally(function() {
-            $scope.isSubmitting = false; // Đánh dấu kết thúc gửi
+            $scope.isSubmitting = false; // Kết thúc trạng thái gửi
         });
     };
 });
