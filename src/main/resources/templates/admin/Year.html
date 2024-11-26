@@ -89,17 +89,8 @@
                                     </div>
                                 
                                     <div class="card-body">
-                                        <!-- <div class="form-group">
-                                            <label for="year-input">Nhập Năm</label>
-                                            <input type="number" 
-                                                   id="year-input" 
-                                                   class="form-control" 
-                                                   ng-model="selectedYear" 
-                                                   ng-change="filterData()" 
-                                                   placeholder="Nhập năm" 
-                                                   min="2000" 
-                                                   max="{{currentYear}}">
-                                        </div> -->
+                                       
+                                         
                                         
                                         <div ng-if="filteredOrders.length === 0 && selectedYear">
                                             <p class="text-danger">Không có dữ liệu cho năm {{selectedYear}}.</p>
@@ -109,20 +100,18 @@
                                             <thead>
                                                 <tr>
                                                     <th>Năm</th>
-                                                    <!-- <th>Tổng Đơn Hàng</th> -->
                                                     <th>Số Lượng Đơn Hàng</th>
                                                     <th>Tổng Tiền</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="stat in yearlyStats" ng-if="stat.totalOrders > 0">
+                                                <tr ng-repeat="stat in yearlyStats">
                                                     <td>{{stat.year}}</td> <!-- Hiển thị năm -->
-                                                    <!-- <td>{{stat.totalOrders}}</td> Tổng số lượng đơn hàng -->
-                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng, có thể cần sửa -->
-                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Định dạng tiền -->
+                                                    <td>{{stat.totalOrders}}</td> <!-- Số lượng đơn hàng -->
+                                                    <td>{{formatCurrency(stat.totalRevenue)}}</td> <!-- Tổng tiền, định dạng tiền -->
                                                 </tr>
-                                                <tr ng-if="yearlyStats.length === 0 && !selectedYear">
-                                                    <td colspan="4">Vui lòng chọn năm để xem dữ liệu.</td>
+                                                <tr ng-if="yearlyStats.length === 0">
+                                                    <td colspan="3">Vui lòng chọn năm để xem dữ liệu.</td>
                                                 </tr>
                                             </tbody>
                                         </table>

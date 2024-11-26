@@ -229,56 +229,56 @@
                                 <!-- Nội dung Tab Danh sách -->
                                 <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
                                     aria-labelledby="list-tab" tabindex="0">
-                              
-                                        <div class="table-responsive"class="custom-block bg-white">
-                                            <table class="account-table table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID Size</th>
-                                                        <th>Kích thước</th>
-                                                        <th class="text-end">Hành động</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody ng-if="Sizes.length > 0">
-                                                    <tr ng-repeat="size in Sizes">
-                                                        <td>{{ size.idsize }}</td>
-                                                        <td>{{ size.sizename }}</td>
-                                                        <td class="text-end">
-                                                            <button class="btn btn-sm btn-warning"
-                                                                ng-click="editSize(size)">Chỉnh sửa</button>
-                                                            <button class="btn btn-sm btn-danger"
-                                                                ng-click="deleteSize(size.idsize)">Xóa</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <tbody ng-if="Sizes.length == 0">
-                                                    <tr>
-                                                        <td colspan="3" class="text-center">Không có kích thước nào.
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <nav aria-label="Page navigation">
-                                            <ul class="pagination justify-content-center mb-0">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Previous">Prev</a>
-                                                </li>
-                                                <li class="page-item active">
-                                                    <a class="page-link" href="#">1</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">2</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">3</a>
-                                                </li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#" aria-label="Next">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                
+
+                                    <div class="table-responsive" class="custom-block bg-white">
+                                        <table class="account-table table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID Size</th>
+                                                    <th>Kích thước</th>
+                                                    <th class="text-end">Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-if="Sizes.length > 0">
+                                                <tr ng-repeat="size in Sizes">
+                                                    <td>{{ size.idsize }}</td>
+                                                    <td>{{ size.sizename }}</td>
+                                                    <td class="text-end">
+                                                        <button class="btn btn-sm btn-warning"
+                                                            ng-click="editSize(size)">Chỉnh sửa</button>
+                                                        <button class="btn btn-sm btn-danger"
+                                                            ng-click="deleteSize(size.idsize)">Xóa</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tbody ng-if="Sizes.length == 0">
+                                                <tr>
+                                                    <td colspan="3" class="text-center">Không có kích thước nào.
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <nav aria-label="Page navigation">
+                                        <ul class="pagination justify-content-center mb-0">
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Previous">Prev</a>
+                                            </li>
+                                            <li class="page-item active">
+                                                <a class="page-link" href="#">1</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">2</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#">3</a>
+                                            </li>
+                                            <li class="page-item">
+                                                <a class="page-link" href="#" aria-label="Next">Next</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+
                                 </div>
                             </div>
                         </div>

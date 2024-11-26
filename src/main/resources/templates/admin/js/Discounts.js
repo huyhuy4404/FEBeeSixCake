@@ -94,8 +94,8 @@ app.controller('discountsController', function ($scope, $http) {
   // Hàm kiểm tra và cập nhật phần trăm giảm giá
   $scope.updateDiscountPercentage = function () {
     var lowestPrice = parseFloat($scope.selecteddiscount.lowestprice); // Chuyển đổi thành số
-    if (lowestPrice >= 30000) {
-      $scope.selecteddiscount.discountpercentage = 5; // Đặt phần trăm giảm giá là 5%
+    if (lowestPrice >= 120000) {
+      $scope.selecteddiscount.discountpercentage = 10; // Đặt phần trăm giảm giá là 5%
     } else if (lowestPrice < 30 && $scope.selecteddiscount.discountpercentage !== null) {
       // Nếu giá trị dưới  30,000 và phần trăm giảm giá đã được xác định trước đó
       // Giữ nguyên giá trị hiện tại của phần trăm giảm giá
@@ -108,7 +108,15 @@ app.controller('discountsController', function ($scope, $http) {
     $scope.updateDiscountPercentage();
   });
 
-  // Thêm loại sản phẩm mới
+  $scope.showMessageModal = function (message, isError = false) {
+    // Cập nhật nội dung và kiểu modal
+    $scope.messageModalBody = message; // Cập nhật nội dung thông báo
+    const modalTitle = isError ? "Thông báo lỗi" : "Thông báo thành công";
+    $('#messageModal .modal-title').text(modalTitle); // Cập nhật tiêu đề
+    $('#messageModalBody').text(message); // Cập nhật nội dung modal
+    $('#messageModal').modal('show'); // Hiển thị modal
+  };
+
   $scope.adddiscount = function () {
     // Xóa thông báo trước đó
     $scope.message = '';
@@ -116,41 +124,34 @@ app.controller('discountsController', function ($scope, $http) {
 
     // Kiểm tra từng trường nhập liệu
     if (!$scope.selecteddiscount.discountcode) {
-      $scope.message = "Vui lòng nhập mã giảm giá.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Vui lòng nhập mã giảm giá.", true);
       console.error("Thiếu discountcode");
       return;
     }
     if (!$scope.selecteddiscount.discountpercentage) {
-      $scope.message = "Vui lòng nhập phần trăm giảm giá.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Vui lòng nhập phần trăm giảm giá.", true);
       console.error("Thiếu discountpercentage");
       return;
     } else if ($scope.selecteddiscount.discountpercentage > 50) {
-      $scope.message = "Phần trăm giảm giá không được vượt quá 50%.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Phần trăm giảm giá không được vượt quá 50%.", true);
       console.error("discountpercentage vượt quá 50%");
       return;
     }
     if (!$scope.selecteddiscount.lowestprice) {
-      $scope.message = "Vui lòng nhập đơn hàng tối thiểu.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Vui lòng nhập đơn hàng tối thiểu.", true);
       console.error("Thiếu lowestprice");
       return;
     } else if ($scope.selecteddiscount.lowestprice < 1000) {
-      $scope.message = "Đơn hàng tối thiểu không được dưới 1.000.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Đơn hàng tối thiểu không được dưới 1.000.", true);
       console.error("lowestprice dưới 1.000");
       return;
     }
     if (!$scope.selecteddiscount.startdate || !$scope.selecteddiscount.enddate) {
-      $scope.message = "Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Vui lòng chọn cả ngày bắt đầu và ngày kết thúc.", true);
       console.error("Thiếu startdate hoặc enddate");
       return;
     } else if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
-      $scope.message = "Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.";
-      $scope.messageType = 'error';
+      $scope.showMessageModal("Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.", true);
       console.error("startdate lớn hơn enddate");
       return;
     }
@@ -159,31 +160,28 @@ app.controller('discountsController', function ($scope, $http) {
     var newdiscount = {
       discountcode: $scope.selecteddiscount.discountcode,
       discountpercentage: $scope.selecteddiscount.discountpercentage,
-      startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
-      enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
-      lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
+      startdate: $scope.selecteddiscount.startdate.toISOString(),
+      enddate: $scope.selecteddiscount.enddate.toISOString(),
+      lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0
     };
 
     // Gửi yêu cầu POST để tạo giảm giá mới
     $http.post('http://localhost:8080/beesixcake/api/discount', newdiscount)
       .then(function (response) {
-        alert('thêm khuyến mãi thành công!');
-        $scope.getDiscounts(); // Tải lại danh sách sau khi xóa
+        $scope.showMessageModal('Thêm khuyến mãi thành công!'); // Hiển thị thông báo thành công
+        $scope.getDiscounts(); // Tải lại danh sách sau khi thêm
         $scope.resetForm(); // Làm mới form
       }, function (error) {
-        console.error('Error adding discount:', error); // Ghi lại chi tiết lỗi
+        console.error('Error adding discount:', error);
         // Kiểm tra lỗi từ phản hồi của máy chủ
         if (error.data && error.data.message) {
-          $scope.message = error.data.message; // Hiển thị thông báo từ máy chủ nếu có
+          $scope.showMessageModal(error.data.message, true); // Hiển thị thông báo từ máy chủ nếu có
         } else {
-          $scope.message = 'mã khuyến mãi đã tồn tại.';
+          $scope.showMessageModal('Mã khuyến mãi đã tồn tại.', true);
         }
-        $scope.messageType = 'error';
       });
     $scope.resetForm();
-
   };
-
   // Chỉnh sửa loại sản phẩm
   $scope.editdiscount = function () {
     // Hiển thị thông báo trước khi kiểm tra
@@ -196,8 +194,8 @@ app.controller('discountsController', function ($scope, $http) {
     }
     // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
     // Kiểm tra phần trăm giảm giá không vượt quá 50%
-    if ($scope.selecteddiscount.lowestprice < 30000) {
-      alert('Đơn hàng tối thiểu 30000');
+    if ($scope.selecteddiscount.lowestprice < 1000) {
+      alert('Đơn hàng tối thiểu 1000');
       return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
     }
 
@@ -246,15 +244,15 @@ app.controller('discountsController', function ($scope, $http) {
   };
   // Chuyển dữ liệu khuyến mãi vào form để chỉnh sửa
   // Chuyển dữ liệu khuyến mãi vào form để chỉnh sửa
-  $scope.goToEdit = function(discount) {
+  $scope.goToEdit = function (discount) {
     $scope.selecteddiscount = angular.copy(discount);
-    
+
     // Chuyển đổi các trường ngày sang đối tượng Date
     if (discount.startdate) {
-        $scope.selecteddiscount.startdate = new Date(discount.startdate);
+      $scope.selecteddiscount.startdate = new Date(discount.startdate);
     }
     if (discount.enddate) {
-        $scope.selecteddiscount.enddate = new Date(discount.enddate);
+      $scope.selecteddiscount.enddate = new Date(discount.enddate);
     }
 
     // Chuyển sang tab "Chỉnh sửa danh sách mã giảm giá" (tab thứ hai)
@@ -270,14 +268,14 @@ app.controller('discountsController', function ($scope, $http) {
     var profileTabPane = document.getElementById('profile-tab-pane');
     profileTab.classList.remove('active');
     profileTabPane.classList.remove('show', 'active');
-};
+  };
   $scope.searchFilter = function (discount) {
     if (!$scope.searchQuery) {
-        return true; // Nếu không có giá trị tìm kiếm, trả tất cả
+      return true; // Nếu không có giá trị tìm kiếm, trả tất cả
     }
     var query = $scope.searchQuery.toLowerCase(); // Chuyển đổi tìm kiếm thành chữ thường
     return discount.discountcode.toLowerCase().includes(query); // Lọc theo mã giảm giá
-};
+  };
   // Làm mới form
   $scope.resetForm = function () {
     $scope.selecteddiscount = {};

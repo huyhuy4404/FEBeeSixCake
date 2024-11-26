@@ -221,13 +221,29 @@
                 
                                 <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
                                     
-
-                                    <form name="discountForm" class="custom-form profile-form" novalidate>
-                                        <div ng-if="message" class="alert"
-                                             ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}"
-                                             role="alert">
-                                            {{ message }}
+                                    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Thông báo</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id="messageModalBody">
+                                                <!-- Nội dung thông báo -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                <button type="button" id="confirmModalButton" class="btn btn-danger"
+                                                    style="display: none;" data-bs-dismiss="modal">Xác nhận</button>
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+                                    <form name="discountForm" class="custom-form profile-form" novalidate>
+                                       <!-- Modal for error messages -->
+                                      
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Mã giảm giá:</p>
@@ -278,17 +294,7 @@
                     </div>
                 </div>
 
-                <footer class="site-footer">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-12">
-                                <p class="copyright-text">Copyright © Mini Finance 2048
-                                    - Design: <a rel="sponsored" href="https://www.tooplate.com"
-                                        target="_blank">Tooplate</a></p>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
+                
             </main>
         </div>
     </div>
