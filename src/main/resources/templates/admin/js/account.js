@@ -215,86 +215,92 @@ app.controller("UserController", function($scope, $http) {
             active: true
         };
     };
-
-    $scope.unlockAccount = function (idaccount) {
-      // Lưu ID tài khoản cần mở khóa vào scope
-      $scope.selectedAccount = idaccount;
-  
-      // Hiển thị modal xác nhận mở khóa tài khoản
-      $('#unlockAccountModal').modal('show');
-  };
-  
-  // Xác nhận mở khóa tài khoản
-  $('#confirmUnlockBtn').click(function() {
-      var idaccount = $scope.selectedAccount;
-      var user = $scope.users.find(u => u.idaccount === idaccount);
-      if (user) {
-          if (user.idrole === 1) {
-              $scope.errorMessage = "Không thể mở khóa tài khoản admin!";
-              return;
-          }
-          user.active = true;
-          $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, user)
-              .then(function(response) {
-                  $scope.message = "Tài khoản đã được mở khóa thành công!";
-                  $scope.errorMessage = '';
-                  $scope.loadUsers(); // Tải lại danh sách người dùng
-                  $('#unlockAccountModal').modal('hide'); // Đóng modal sau khi hoàn tất
-              })
-              .catch(function(error) {
-                  console.error("Error unlocking account:", error);
-                  $scope.errorMessage = "Không thể mở khóa tài khoản. Vui lòng thử lại.";
-                  $scope.message = '';
-              });
-      }
-  });
-  
+     // Phương thức mở tài khoản
+     $scope.unlockAccount = function (idaccount) {
+        $scope.selectedAccount = idaccount; // Lưu ID tài khoản được chọn
+        $('#unlockAccountModal').modal('show'); // Hiển thị modal mở khóa
+    };
+    
+    $('#confirmUnlockBtn').click(function () {
+        $scope.$apply(function () { // Đảm bảo AngularJS theo dõi thay đổi
+            var idaccount = $scope.selectedAccount;
+            var user = $scope.users.find(u => u.idaccount === idaccount);
+            if (user) {
+                if (user.idrole === 1) { // Không cho phép mở khóa admin
+                    $('#unlockErrorMessage').text("Không thể mở khóa tài khoản admin!").removeClass('d-none');
+                    return;
+                }
+    
+                user.active = true; // Cập nhật trạng thái người dùng
+                $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, user)
+                    .then(function (response) {
+                        $('#unlockSuccessMessage').text("Mở khóa tài khoản thành công!").removeClass('d-none');
+                        $('#unlockErrorMessage').addClass('d-none');
+                        $scope.loadUsers(); // Tải lại danh sách người dùng
+                        
+                        // Ẩn thông báo sau 2 giây
+                        setTimeout(function () {
+                            $('#unlockSuccessMessage').addClass('d-none');
+                        }, 2000);
+    
+                        // Đóng modal sau khi hoàn tất
+                        setTimeout(() => $('#unlockAccountModal').modal('hide'), 1500); // Đóng modal sau 1.5 giây
+                    })
+                    .catch(function (error) {
+                        console.error("Error unlocking account:", error);
+                        $('#unlockErrorMessage').text("Không thể mở khóa tài khoản. Vui lòng thử lại.").removeClass('d-none');
+                        $('#unlockSuccessMessage').addClass('d-none');
+                    });
+            }
+        });
+    });
+    
+    
   // Phương thức khóa tài khoản
-  // Phương thức khóa tài khoản
-$scope.lockAccount = function (idaccount) {
-    // Lưu ID tài khoản cần khóa vào scope
-    $scope.selectedAccount = idaccount;
-
-    // Hiển thị modal xác nhận khóa tài khoản
-    $('#lockAccountModal').modal('show');
+  $scope.lockAccount = function (idaccount) {
+    $scope.selectedAccount = idaccount; // Lưu ID tài khoản được chọn
+    $('#lockAccountModal').modal('show'); // Hiển thị modal khóa
 };
 
-// Xác nhận khóa tài khoản
-$scope.confirmLockAccount = function() {
+$scope.confirmLockAccount = function () {
     var idaccount = $scope.selectedAccount;
     var user = $scope.users.find(u => u.idaccount === idaccount);
     if (user) {
-        if (user.idrole === 1) { // Kiểm tra nếu tài khoản là admin
-            $scope.errorMessage = "Không thể khóa tài khoản admin!"; // Hiển thị lỗi
-            $scope.message = ''; // Xóa thông báo thành công nếu có
-            $('#lockAccountModal').modal('hide'); // Đóng modal nếu tài khoản là admin
-            return; // Dừng quá trình khóa tài khoản
+        if (user.idrole === 1) { // Không cho phép khóa admin
+            $('#lockErrorMessage').text("Không thể khóa tài khoản admin!").removeClass('d-none');
+            return;
         }
-        
-        // Tiến hành khóa tài khoản nếu không phải admin
-        user.active = false;
+
+        user.active = false; // Cập nhật trạng thái người dùng
         $http.put("http://localhost:8080/beesixcake/api/account/" + idaccount, user)
-            .then(function(response) {
-                $scope.message = "Tài khoản đã bị khóa thành công!";
-                $scope.errorMessage = ''; // Xóa thông báo lỗi nếu có
+            .then(function (response) {
+                $('#lockSuccessMessage').text("Khóa tài khoản thành công!").removeClass('d-none');
+                $('#lockErrorMessage').addClass('d-none');
                 $scope.loadUsers(); // Tải lại danh sách người dùng
-                $('#lockAccountModal').modal('hide'); // Đóng modal sau khi hoàn tất
+
+                // Ẩn thông báo sau 2 giây
+                setTimeout(function () {
+                    $('#lockSuccessMessage').addClass('d-none');
+                }, 2000);
+
+                // Đóng modal sau khi hoàn tất
+                setTimeout(() => $('#lockAccountModal').modal('hide'), 1500); // Đóng modal sau 1.5 giây
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 console.error("Error locking account:", error);
-                $scope.errorMessage = "Không thể khóa tài khoản. Vui lòng thử lại.";
-                $scope.message = ''; // Xóa thông báo thành công nếu có
+                $('#lockErrorMessage').text("Không thể khóa tài khoản. Vui lòng thử lại.").removeClass('d-none');
+                $('#lockSuccessMessage').addClass('d-none');
             });
     }
 };
 
-// Gắn hàm xác nhận khóa tài khoản vào sự kiện click của nút xác nhận trong modal
-$('#confirmLockBtn').click(function() {
-    $scope.$apply(function() { // Đảm bảo AngularJS theo dõi thay đổi
+// Liên kết sự kiện xác nhận khóa
+$('#confirmLockBtn').click(function () {
+    $scope.$apply(function () {
         $scope.confirmLockAccount();
     });
 });
-
+    
   
 
 
