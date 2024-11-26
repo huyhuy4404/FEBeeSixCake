@@ -232,12 +232,12 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             chart: {
                 type: 'bar',
                 height: 300,
-                width: 300
+                width: 600
             },
             plotOptions: {
                 bar: {
                     horizontal: false,
-                    columnWidth: '50%',
+                    columnWidth: '70%',
                 }
             },
             xaxis: {

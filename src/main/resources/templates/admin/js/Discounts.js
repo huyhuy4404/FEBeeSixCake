@@ -137,10 +137,10 @@ app.controller('discountsController', function ($scope, $http) {
       $scope.messageType = 'error';
       console.error("Thiếu lowestprice");
       return;
-    } else if ($scope.selecteddiscount.lowestprice < 30000) {
-      $scope.message = "Đơn hàng tối thiểu không được dưới 30.000.";
+    } else if ($scope.selecteddiscount.lowestprice < 1000) {
+      $scope.message = "Đơn hàng tối thiểu không được dưới 1.000.";
       $scope.messageType = 'error';
-      console.error("lowestprice dưới 30.000");
+      console.error("lowestprice dưới 1.000");
       return;
     }
     if (!$scope.selecteddiscount.startdate || !$scope.selecteddiscount.enddate) {

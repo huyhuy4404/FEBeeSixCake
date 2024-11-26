@@ -3,7 +3,7 @@ var app = angular.module('myApp', []);
 // Controller cho chức năng đặt lại mật khẩu
 var app = angular.module('myApp', []);
 
-app.controller('ResetPasswordController', function($scope, $http, $window) {
+app.controller('ResetPasswordController', function($scope, $http) {
     $scope.user = { email: '' };
     $scope.resetSuccess = '';
     $scope.resetError = '';
@@ -20,27 +20,33 @@ app.controller('ResetPasswordController', function($scope, $http, $window) {
             return;
         }
 
-        $scope.isSubmitting = true;
+        $scope.isSubmitting = true; // Đánh dấu đang gửi yêu cầu
+        $scope.resetError = ''; // Reset lỗi
+        $scope.resetSuccess = ''; // Reset thành công
 
-        $http.post('http://localhost:8080/beesixcake/api/account/reset-password', { email: $scope.user.email })
-            .then(function(response) {
-                // Giả sử server trả về { message: "Liên kết đã được gửi đến email của bạn." }
-                $scope.resetSuccess = response.data.message;
-                $scope.resetError = '';
-                // Chuyển hướng đến trang OTP (nếu cần)
-                // $window.location.href = "http://127.0.0.1:5500/src/main/resources/templates/assets/opt.html";
-            })
-            .catch(function(error) {
-                if (error.data && error.data.message) {
-                    $scope.resetError = error.data.message; // Hiển thị thông điệp lỗi từ server
-                } else {
-                    $scope.resetError = "Có lỗi xảy ra, vui lòng thử lại.";
-                }
-                $scope.resetSuccess = '';
-            })
-            .finally(function() {
-                $scope.isSubmitting = false;
-            });
+        // Gửi yêu cầu đến endpoint /email/send
+        $http.post('http://localhost:8080/beesixcake/email/send', null, {
+            params: {
+                to: $scope.user.email,
+                subject: 'Yêu cầu đặt lại mật khẩu',
+                body: 'Xin chào! Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng nhấp vào liên kết dưới đây: [Liên kết đặt lại mật khẩu].'
+            }
+        })
+        .then(function(response) {
+            // Nhận phản hồi thành công
+            $scope.resetSuccess = response.data; 
+        })
+        .catch(function(error) {
+            // Hiển thị thông điệp lỗi từ server
+            if (error.data && error.data.message) {
+                $scope.resetError = error.data.message;
+            } else {
+                $scope.resetError = "Có lỗi xảy ra, vui lòng thử lại.";
+            }
+        })
+        .finally(function() {
+            $scope.isSubmitting = false; // Đánh dấu hoàn thành
+        });
     };
 });
 
