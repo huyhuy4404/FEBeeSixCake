@@ -189,42 +189,47 @@ app.controller('discountsController', function ($scope, $http) {
 
     // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
     if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
-      alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.');
-      return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.');
+        return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
     }
-    // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
-    // Kiểm tra phần trăm giảm giá không vượt quá 50%
+
+    // Kiểm tra đơn hàng tối thiểu
     if ($scope.selecteddiscount.lowestprice < 1000) {
-      alert('Đơn hàng tối thiểu 1000');
-      return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        alert('Đơn hàng tối thiểu 1000');
+        return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
     }
 
     // Kiểm tra phần trăm giảm giá không vượt quá 50%
     if ($scope.selecteddiscount.discountpercentage > 50) {
-      alert('Phần trăm giảm giá không được vượt quá 50%.');
-      return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+        alert('Phần trăm giảm giá không được vượt quá 50%.');
+        return; // Dừng thực hiện hàm nếu điều kiện không thỏa mãn
+    }
+
+    // Kiểm tra xem mã giảm giá có thể sửa được hay không
+    if (!$scope.selecteddiscount.canEdit) {
+        alert('Mã giảm giá này không thể sửa đổi.');
+        return; // Dừng thực hiện hàm nếu mã giảm giá không thể sửa
     }
 
     var editeddiscount = {
-      iddiscount: $scope.selecteddiscount.iddiscount,
-      discountcode: $scope.selecteddiscount.discountcode,
-      discountpercentage: $scope.selecteddiscount.discountpercentage,
-      startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
-      enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
-      lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
+        iddiscount: $scope.selecteddiscount.iddiscount,
+        discountcode: $scope.selecteddiscount.discountcode,
+        discountpercentage: $scope.selecteddiscount.discountpercentage,
+        startdate: $scope.selecteddiscount.startdate.toISOString(), // Chuyển đổi thành chuỗi ISO
+        enddate: $scope.selecteddiscount.enddate.toISOString(),     // Chuyển đổi thành chuỗi ISO
+        lowestprice: parseFloat($scope.selecteddiscount.lowestprice) || 0 // Chuyển đổi thành số
     };
 
     $http.put('http://localhost:8080/beesixcake/api/discount/' + editeddiscount.iddiscount, editeddiscount)
       .then(function (response) {
-        alert('Sửa khuyến mãi thành công!');
-        $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
-        $scope.resetForm(); // Làm mới form
+          alert('Sửa khuyến mãi thành công!');
+          $scope.getDiscounts(); // Tải lại danh sách sau khi sửa
+          $scope.resetForm(); // Làm mới form
       }, function (error) {
-        console.log('Error editing discount:', error);
-        alert('Có lỗi xảy ra khi sửa khuyến mãi. Vui lòng thử lại.');
+          console.log('Error editing discount:', error);
+          alert('Có lỗi xảy ra khi sửa khuyến mãi. Vui lòng thử lại.');
       });
-  };
-
+};
   // Xóa khuyến mãi
   $scope.deletediscount = function (discount) {
     if (confirm('Bạn có chắc chắn muốn xóa khuyến mãi này?')) {
