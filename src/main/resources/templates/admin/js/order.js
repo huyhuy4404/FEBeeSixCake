@@ -21,6 +21,8 @@ app.controller("OrderController", function ($scope, $window, $http) {
   // Định nghĩa base URL cho hình ảnh
   $scope.imageBaseUrl = "https://5ck6jg.csb.app/anh/";
 
+  //Lọc đơn hàng theo trạng thái
+
   // Hàm hiển thị modal thông báo
   $scope.showMessageModal = function (message, type) {
     $scope.message = message;

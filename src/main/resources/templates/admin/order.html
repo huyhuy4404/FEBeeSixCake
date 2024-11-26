@@ -34,6 +34,12 @@
     <script src="js/angular-route.js"></script>
 
     <style>
+        li button:hover {
+            font-weight: bold !important;
+            background-color: white !important;
+            color: black !important;
+        }
+
         /* Tùy chọn thêm: nếu muốn giữ trạng thái focus rõ ràng */
         select.border-0:focus-visible {
             outline: none;
@@ -334,7 +340,7 @@
                                                 <label class="input-group-text py-1 fw-bold bg-body"
                                                     for="inputGroupSelect01">Số Đơn Hàng</label>
                                                 <select class="border border-0 py-1 fw-bold" id="inputGroupSelect01"
-                                                    ng-model="itemsPerPage" ng-change="changeItemsPerPage()">
+                                                    ng-model="itemsPerPage" ng-change="changeItemsPerPage()" style="max-width: 43px;">
                                                     <option ng-value="5">5</option>
                                                     <option ng-value="8">8</option>
                                                     <option ng-value="10">10</option>
@@ -347,7 +353,7 @@
                                         <div class="col-lg-4">
                                             <div class="d-flex align-items-center float-end">
                                                 <input class="form-control me-2 py-1 border border-info border-2"
-                                                    type="search" placeholder="Nhập tên người dùng" aria-label="Search"
+                                                    type="search" placeholder="Nhập tên khách hàng" aria-label="Search"
                                                     ng-model="searchQuery">
                                             </div>
                                         </div>
@@ -370,9 +376,9 @@
                                                             </li>
                                                             <li style="width: 200px;">
                                                                 <button class="dropdown-item filter-option"
-                                                                    type="button" data-filter="paymentStatus">Lọc Theo
-                                                                    Trạng Thái
-                                                                    Thanh Toán</button>
+                                                                    type="button" data-filter="paymentStatus">
+                                                                    Lọc Theo Trạng Thái Thanh Toán
+                                                                </button>
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -649,7 +655,7 @@
                     // Tạo danh sách trạng thái dựa trên dữ liệu có sẵn
                     var optionsHtml = statusOptionsData[selectedFilter].map(function (option) {
                         return `<li style="width: 120px;">
-                            <a class="dropdown-item status-option" href="#" data-lang="${option.value}">${option.text}</a>
+                            <button class="dropdown-item status-option" type="button" data-lang="${option.value}">${option.text}</button>
                         </li>`;
                     }).join('');
 
