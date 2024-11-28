@@ -221,7 +221,7 @@
                                                             <i class="fas fa-heart text-danger"></i> {{ product.favorite
                                                             || 0 }}
                                                         </td> <!-- Hiển thị số lượng favorite -->
-                                                        <td>{{ product.sizes[0].unitprice | currency:'' }} VNĐ</td>
+                                                        <td>{{ product.sizes[0].unitprice | currency:'' }} đ</td>
                                                         <!-- Thêm VNĐ sau giá -->
                                                         <td rowspan="{{product.sizes.length}}">
                                                             <img src="https://5ck6jg.csb.app/anh/{{product.img}}"
@@ -245,7 +245,7 @@
                                                     <tr ng-repeat-end ng-repeat="size in product.sizes.slice(1)">
                                                         <td>{{ size.sizename }}</td>
                                                         <td>{{ size.quantityinstock }}</td>
-                                                        <td>{{ size.unitprice | currency:'' }} VNĐ</td>
+                                                        <td>{{ size.unitprice | currency:'' }} đ</td>
                                                         <!-- Thêm VNĐ sau giá -->
                                                     </tr>
                                                 </tbody>

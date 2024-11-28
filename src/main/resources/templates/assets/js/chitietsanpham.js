@@ -258,10 +258,10 @@ app.controller("ProductDetailController", function ($scope, $http) {
   // **8. Yêu thích sản phẩm**
   $scope.toggleHeart = () => {
     if (!$scope.loggedInUser) {
-      alert("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
+      $scope.showNotification("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
       return;
     }
-
+  
     if ($scope.isActive) {
       $http
         .delete(`${API}/favorites/${$scope.currentFavoriteId}`)
@@ -272,14 +272,14 @@ app.controller("ProductDetailController", function ($scope, $http) {
         })
         .catch((error) => {
           console.error("Error deleting favorite:", error);
-          alert("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
+          $scope.showNotification("Lỗi khi xóa yêu thích. Vui lòng thử lại.");
         });
     } else {
       const newFavorite = {
         account: { idaccount: $scope.loggedInUser.idaccount },
         product: { idproduct: productId },
       };
-
+  
       $http
         .post(`${API}/favorites`, newFavorite)
         .then((response) => {
@@ -289,7 +289,7 @@ app.controller("ProductDetailController", function ($scope, $http) {
         })
         .catch((error) => {
           console.error("Error adding favorite:", error);
-          alert("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
+          $scope.showNotification("Lỗi khi thêm yêu thích. Vui lòng thử lại.");
         });
     }
   };

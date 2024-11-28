@@ -232,7 +232,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
     }
 
     updatedOrder.statuspay.idstatuspay = 2;
-    updatedOrder.statuspay.statuspayname = "Đã thanh toán";
+    updatedOrder.statuspay.statuspayname = "Đã Thanh Toán";
 
     $http
       .put(`${API}/order/${updatedOrder.idorder}`, updatedOrder)
@@ -247,11 +247,11 @@ app.controller("OrderController", function ($scope, $window, $http) {
         );
         if (orderIndex !== -1) {
           $scope.Orders[orderIndex].statuspay.idstatuspay = 2;
-          $scope.Orders[orderIndex].statuspay.statuspayname = "Đã thanh toán";
+          $scope.Orders[orderIndex].statuspay.statuspayname = "Đã Thanh Toán";
         }
 
         $scope.selectedOrder.statuspay.idstatuspay = 2;
-        $scope.selectedOrder.statuspay.statuspayname = "Đã thanh toán";
+        $scope.selectedOrder.statuspay.statuspayname = "Đã Thanh Toán";
 
         $scope.originalPaymentStatus = 2;
       })
