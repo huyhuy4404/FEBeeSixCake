@@ -53,6 +53,7 @@ Bootstrap 5 Dashboard Admin Template
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+        
     </style>
 </head>
 
@@ -195,8 +196,8 @@ Bootstrap 5 Dashboard Admin Template
                                 
 
                             </ul>
-                            <div class="notification" ng-if="message">{{ message }}</div>
-                            <div class="notification error" ng-if="errorMessage">{{ errorMessage }}</div>
+                            <!-- <div class="notification" ng-if="message">{{ message }}</div>
+                            <div class="notification error" ng-if="errorMessage">{{ errorMessage }}</div> -->
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade " id="edit-tab-pane" role="tabpanel"
                                     aria-labelledby="edit-tab" tabindex="0">
@@ -319,6 +320,50 @@ Bootstrap 5 Dashboard Admin Template
                     </div>
                 </div>
         </div>
+        <!-- Modal xác nhận mở khóa tài khoản -->
+        <div id="unlockAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockAccountModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="unlockAccountModalLabel">Xác nhận mở khóa tài khoản</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạn có chắc chắn muốn mở khóa tài khoản này?</p>
+                        <div class="alert alert-danger d-none" id="unlockErrorMessage"></div>
+                        <div class="alert alert-success d-none" id="unlockSuccessMessage"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" id="confirmUnlockBtn" class="btn btn-primary">Mở khóa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+  
+  <!-- Modal xác nhận khóa tài khoản -->
+  <div id="lockAccountModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="lockAccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lockAccountModalLabel">Xác nhận khóa tài khoản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn khóa tài khoản này?</p>
+                <div class="alert alert-danger d-none" id="lockErrorMessage"></div>
+                <div class="alert alert-success d-none" id="lockSuccessMessage"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" id="confirmLockBtn" class="btn btn-danger">Khóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+  
         </main>
 
     </div>

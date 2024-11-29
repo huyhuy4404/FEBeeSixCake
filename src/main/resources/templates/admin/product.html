@@ -166,6 +166,7 @@
                                         <i class="fas fa-list"></i> Danh sách sản phẩm
                                     </button>
                                 </li>
+                                
                                 <!-- Tab Chỉnh sửa -->
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="edit-tab" data-bs-toggle="tab"
@@ -174,14 +175,15 @@
                                         <i class="fas fa-edit"></i> Chỉnh sửa danh sách sản phẩm
                                     </button>
                                 </li>
-                                <!-- Phần Tìm kiếm -->
+                                
+                                <!-- Bộ lọc (Đặt ở bên phải) -->
                                 <li class="nav-item ms-auto" role="presentation">
                                     <div class="d-flex align-items-center">
                                         <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm"
                                             aria-label="Search" ng-model="searchQuery">
-                                        <!-- Nếu bạn muốn giữ nút tìm kiếm, nhưng không thực hiện hành động gì:
-                        <button class="btn btn-outline-success" type="button"><i class="fas fa-search"></i> Tìm kiếm</button>
-                        -->
+                                        <!-- Bộ lọc giá với chỉ giá tối đa -->
+                                        <input class="form-control" type="number" placeholder="Giá tối đa"
+                                            ng-model="maxPrice" min="0">
                                     </div>
                                 </li>
                             </ul>
@@ -285,11 +287,11 @@
                                     tabindex="0">
                                     <form name="productForm" class="row g-3 needs-validation" novalidate>
                                         <!-- Hiển thị thông báo -->
-                                        <div ng-if="message" class="alert"
+                                        <!-- <div ng-if="message" class="alert"
                                             ng-class="{'alert-success': messageType === 'success', 'alert-danger': messageType === 'error'}"
                                             role="alert">
                                             {{ message }}
-                                        </div>
+                                        </div> -->
 
                                         <!-- Tên sản phẩm -->
                                         <div class="col-md-8">
@@ -425,10 +427,26 @@
 
 
 
+  
 
-
-
-
+<!-- Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" ng-bind="message">
+                <!-- Nội dung thông báo sẽ được hiển thị tại đây -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn" ng-class="{'btn-success': messageType === 'success', 'btn-danger': messageType === 'error'}" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
             </main>

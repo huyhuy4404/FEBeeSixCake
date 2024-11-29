@@ -56,22 +56,6 @@
                             <div class="modal-body">
                                 <form class="needs-validation" novalidate id="userAddressForm">
                                     <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="housenumber" class="form-label">Số nhà</label>
-                                            <input class="form-control" type="text" id="housenumber"
-                                                ng-model="newAddress.housenumber" required>
-                                            <div class="invalid-feedback">
-                                                Vui lòng nhập số nhà.
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="roadname" class="form-label">Tên đường</label>
-                                            <input class="form-control" type="text" id="roadname"
-                                                ng-model="newAddress.roadname" required>
-                                            <div class="invalid-feedback">
-                                                Vui lòng nhập tên đường.
-                                            </div>
-                                        </div>
                                         <div class="col-md-12">
                                             <label for="tinh" class="form-label">Tỉnh Thành</label>
                                             <input type="text" class="form-control" id="tinh"
@@ -106,6 +90,22 @@
                                             <div ng-if="isLoadingPhuongs" class="spinner-border spinner-border-sm text-primary mt-2"
                                                 role="status">
                                                 <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="housenumber" class="form-label">Số nhà</label>
+                                            <input class="form-control" type="text" id="housenumber"
+                                                ng-model="newAddress.housenumber" required>
+                                            <div class="invalid-feedback">
+                                                Vui lòng nhập số nhà.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="roadname" class="form-label">Tên đường</label>
+                                            <input class="form-control" type="text" id="roadname"
+                                                ng-model="newAddress.roadname" required>
+                                            <div class="invalid-feedback">
+                                                Vui lòng nhập tên đường.
                                             </div>
                                         </div>
                                         <div class="col-12">
