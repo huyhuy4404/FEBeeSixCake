@@ -180,6 +180,7 @@ app.controller("discountsController", function ($scope, $http) {
         console.error("Error fetching categories:", error);
       });
   };
+  
   $scope.getCategorie(); // Gọi để lấy danh mục sản phẩm
   // Khởi động ứng dụng
   $scope.getProducts(); // Gọi hàm để lấy dữ liệu ban đầu

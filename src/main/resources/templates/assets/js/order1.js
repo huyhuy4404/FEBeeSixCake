@@ -213,10 +213,54 @@ app.controller("OrderController", [
               alert("Đã xảy ra lỗi khi hủy đơn hàng. Vui lòng thử lại.");
           });
   };
+   // Function to calculate total product price
+   $scope.calculateTotalProductPrice = function () {
+    if (!$scope.orderDetails) return 0; // Handle case when orderDetails are not yet loaded
+    return $scope.orderDetails.reduce((total, detail) => {
+      return total + (detail.productdetail.unitprice * detail.quantity);
+    }, 0);
+  };
+
+  // Function to calculate discount (modify the logic as needed)
+  $scope.calculateDiscount = function () {
+    const totalPrice = $scope.calculateTotalProductPrice();
+    
+    // Kiểm tra xem đơn hàng có giảm giá không
+    if ($scope.selectedOrder.discount && $scope.selectedOrder.discount.iddiscount > 0) {
+        const discountRate = $scope.selectedOrder.discount.rate || 0.1; // Ví dụ: 10% giảm giá
+        return totalPrice * discountRate;
+    }
+    
+    return 0; // Không có giảm giá
+};
+
+  // Function to calculate final total amount
+  $scope.calculateFinalTotal = function () {
+    const totalProductPrice = $scope.calculateTotalProductPrice();
+    const discount = $scope.calculateDiscount();
+    const shippingFee = $scope.selectedOrder.shipfee || 0; // Default to 0 if not set
+    return totalProductPrice - discount + shippingFee;
+  };
+
+  // Function to fetch order details (existing function)
+  $scope.getOrderDetails = function (idorder) {
+    $http.get(`http://localhost:8080/beesixcake/api/orderdetail/order/${idorder}`)
+      .then((response) => {
+        console.log("Dữ liệu trả về từ API:", response.data);
+        $scope.orderDetails = response.data;
+
+        // Update the total whenever orderDetails are loaded
+        $scope.selectedOrder.total = $scope.calculateFinalTotal();
+      })
+      .catch((error) => {
+        console.error("Lỗi khi tải chi tiết đơn hàng:", error);
+      });
+  };
 
 
 
   },
+  
 
 
 ]);
