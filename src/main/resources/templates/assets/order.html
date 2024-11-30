@@ -91,6 +91,26 @@
           font-size: 20px;
         }
       }
+      .reviewed-btn {
+        background-color: #4caf50; /* Màu xanh lá */
+        color: white;
+        border: none;
+        padding: 5px 15px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        cursor: default; /* Không cho phép nhấn vào */
+        display: inline-flex;
+        align-items: center;
+      }
+
+      .reviewed-btn i {
+        margin-left: 5px; /* Khoảng cách giữa văn bản và biểu tượng */
+      }
+
+      .reviewed-btn:hover {
+        background-color: #45a049; /* Màu khi hover */
+      }
     </style>
   </head>
 
@@ -248,12 +268,23 @@
                             </td>
                             <!-- Cột đánh giá -->
                             <td>
-                              <div ng-if="showReviewButton" class="text-center">
+                              <div
+                                ng-if="(showReviewButton && (detail.statusreview === null || detail.statusreview === 0))"
+                                class="text-center"
+                              >
                                 <button
                                   class="btn btn-primary btn-sm"
-                                  ng-click="openReviewForm(detail.productdetail.product.idproduct)"
+                                  ng-click="openReviewForm(detail.productdetail.product.idproduct, detail.idorderdetail)"
                                 >
                                   Đánh Giá Sản Phẩm
+                                </button>
+                              </div>
+                              <div
+                                ng-if="detail.statusreview === 1 || detail.statusreview === true"
+                                class="text-center"
+                              >
+                                <button class="reviewed-btn">
+                                  Đã Đánh Giá
                                 </button>
                               </div>
                             </td>

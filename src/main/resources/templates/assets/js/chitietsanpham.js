@@ -3,10 +3,32 @@ var app = angular.module("myApp", []);
 // Tạo một controller mới với tên 'loadSanPhamDanhGia'
 app.controller("loadSanPhamDanhGia", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api"; // Địa chỉ API
-  const imageBaseUrl = "https://5ck6jg.csb.app/anh/";
+  const imageBaseUrl = "https://5ck6jg.csb.app/anh/"; // Base URL cho hình ảnh
   const productId = new URLSearchParams(window.location.search).get(
     "idproduct"
   );
+  const orderDetailId = new URLSearchParams(window.location.search).get(
+    "idorderdetail"
+  );
+
+  if (orderDetailId) {
+    $http
+      .get(`${API}/orderdetail/${orderDetailId}`)
+      .then(function (response) {
+        const orderDetail = response.data;
+        const orderId = orderDetail.order.idorder;
+        const quantity = orderDetail.quantity;
+        const productDetailId = orderDetail.productdetail.idproductdetail;
+
+        console.log("Lấy được thông tin orderdetail:", orderDetail);
+        console.log("Order ID:", orderId);
+        console.log("Quantity:", quantity);
+        console.log("Product Detail ID:", productDetailId);
+      })
+      .catch(function (error) {
+        console.error("Lỗi khi lấy thông tin orderdetail:", error);
+      });
+  }
 
   // Khởi tạo đối tượng newReview
   $scope.newReview = {
@@ -74,13 +96,11 @@ app.controller("loadSanPhamDanhGia", function ($scope, $http) {
       return; // Dừng lại không chuyển hướng về trang chủ
     }
 
-    // Kiểm tra nếu không nhập mô tả
-
     // Thêm thời gian review (ngày và giờ hiện tại)
     const reviewData = {
       rating: selectedRating,
-      reviewtext: reviewText,
-      reviewdate: new Date().toISOString(), // Lấy ngày giờ hiện tại
+      reviewtext: $scope.newReview.comment,
+      reviewdate: new Date().toISOString(),
       account: {
         idaccount: accountInfo.idaccount,
       },
@@ -93,28 +113,46 @@ app.controller("loadSanPhamDanhGia", function ($scope, $http) {
     $http
       .post(`${API}/reviews`, reviewData)
       .then(function (response) {
-        // Nếu gửi thành công, hiển thị thông báo
-        $scope.notificationMessage = "Đánh giá của bạn đã được gửi thành công!";
-        $("#notificationModal").modal("show");
+        console.log("Đánh giá thành công", response.data);
 
-        // Chuyển hướng về trang chủ sau khi thông báo thành công
-        $("#notificationModal").on("hidden.bs.modal", function () {
-          window.location.href = "index.html"; // Chuyển hướng về trang chủ
-        });
+        // Cập nhật statusreview của orderdetail
+        if (orderDetailId) {
+          const updateData = {
+            statusreview: true, // Cập nhật chỉ statusreview
+          };
+
+          // Cập nhật statusreview trong orderdetail
+          $http
+            .put(`${API}/orderdetail/${orderDetailId}`, updateData)
+            .then(function (response) {
+              console.log("Cập nhật statusreview thành công", response.data);
+              $scope.notificationMessage = "Cảm ơn bạn đã đánh giá sản phẩm!";
+              $("#notificationModal").modal("show");
+
+              // Sau khi modal đóng, chuyển hướng về trang chủ
+              $("#notificationModal").on("hidden.bs.modal", function () {
+                window.location.href = "index.html"; // Chuyển hướng về trang chủ
+              });
+            })
+            .catch(function (error) {
+              console.error("Lỗi khi cập nhật statusreview:", error);
+              $scope.notificationMessage = "Có lỗi khi cập nhật đánh giá!";
+              $("#notificationModal").modal("show");
+            });
+        }
       })
       .catch(function (error) {
-        console.error("Lỗi khi gửi đánh giá: ", error);
+        console.error("Lỗi khi gửi đánh giá:", error);
         $scope.notificationMessage =
           "Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.";
         $("#notificationModal").modal("show");
-        // Không chuyển hướng về trang chủ nếu có lỗi
       });
   };
 
   // Khi người dùng nhấn OK trong modal, chỉ đóng modal mà không chuyển hướng về trang chủ
-  $scope.closeModalAndRedirect = function () {
+  $scope.closeModalAndStay = function () {
     $("#notificationModal").modal("hide");
-    // Không chuyển hướng về trang chủ ở đây
+    // Không chuyển hướng về trang chủ ở đây nếu có lỗi
   };
 });
 
