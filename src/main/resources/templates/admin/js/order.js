@@ -58,6 +58,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
       .get(API + "/order")
       .then((response) => {
         $scope.Orders = response.data;
+
         $scope.Orders.forEach((order) => {
           if (order.product && order.product.img) {
             order.product.img =
@@ -232,26 +233,23 @@ app.controller("OrderController", function ($scope, $window, $http) {
     }
 
     updatedOrder.statuspay.idstatuspay = 2;
-    updatedOrder.statuspay.statuspayname = "Đã thanh toán";
+    updatedOrder.statuspay.statuspayname = "Đã Thanh Toán";
 
     $http
       .put(`${API}/order/${updatedOrder.idorder}`, updatedOrder)
       .then((response) => {
-        $scope.showMessageModal(
-          "Cập nhật trạng thái thành công!",
-          "success"
-        );
+        $scope.showMessageModal("Cập nhật trạng thái thành công!", "success");
 
         const orderIndex = $scope.Orders.findIndex(
           (order) => order.idorder === $scope.selectedOrder.idorder
         );
         if (orderIndex !== -1) {
           $scope.Orders[orderIndex].statuspay.idstatuspay = 2;
-          $scope.Orders[orderIndex].statuspay.statuspayname = "Đã thanh toán";
+          $scope.Orders[orderIndex].statuspay.statuspayname = "Đã Thanh Toán";
         }
 
         $scope.selectedOrder.statuspay.idstatuspay = 2;
-        $scope.selectedOrder.statuspay.statuspayname = "Đã thanh toán";
+        $scope.selectedOrder.statuspay.statuspayname = "Đã Thanh Toán";
 
         $scope.originalPaymentStatus = 2;
       })
@@ -283,42 +281,67 @@ app.controller("OrderController", function ($scope, $window, $http) {
 
   // Hàm phân trang
   $scope.updatePagination = function () {
+    // Sắp xếp các đơn hàng theo ngày giảm dần
     $scope.filteredOrders = $scope.Orders.sort(function (a, b) {
       return new Date(b.orderdate) - new Date(a.orderdate);
     });
-
+  
+    // Lọc theo tìm kiếm (searchQuery)
     if ($scope.searchQuery) {
       const query = $scope.searchQuery.toLowerCase();
       $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
         return (
-          order.idorder.toString().includes(query) ||
-          (order.statusName &&
-            order.statusName.toLowerCase().includes(query)) ||
-          (order.account &&
-            order.account.fullname &&
-            order.account.fullname.toLowerCase().includes(query))
+          order.idorder.toString().includes(query) || // Lọc theo ID đơn hàng
+          (order.statusName && order.statusName.toLowerCase().includes(query)) || // Lọc theo tên trạng thái đơn hàng
+          (order.account && order.account.fullname && order.account.fullname.toLowerCase().includes(query)) // Lọc theo tên khách hàng
         );
       });
     }
-
+  
+    // Lọc theo trạng thái đơn hàng (selectedStatus)
+    if ($scope.selectedStatus) {
+      $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+        return order.statusName === $scope.selectedStatus;
+      });
+    }
+  
+    // Lọc theo trạng thái thanh toán (selectedPaymentStatus)
+    if ($scope.selectedPaymentStatus) {
+      $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+        return (
+          order.statuspay &&
+          order.statuspay.statuspayname === $scope.selectedPaymentStatus
+        );
+      });
+    }
+  
+    // Tính tổng số trang
     $scope.totalPages =
       Math.ceil(
-        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) /
-          $scope.itemsPerPage
+        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) / $scope.itemsPerPage
       ) || 1;
-
+  
+    // Điều chỉnh trang hiện tại nếu vượt quá tổng số trang
     if ($scope.currentPage > $scope.totalPages) {
       $scope.currentPage = $scope.totalPages;
     }
-
+  
+    // Tạo danh sách các trang
     $scope.pages = [];
     for (var i = 1; i <= $scope.totalPages; i++) {
       $scope.pages.push(i);
     }
-
+  
+    // Xác định phạm vi các đơn hàng hiển thị trên trang hiện tại
     const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
     const end = start + parseInt($scope.itemsPerPage, 10);
     $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
+  };
+  
+
+  $scope.updateFilter = function () {
+    $scope.currentPage = 1; // Reset về trang đầu
+    $scope.updatePagination(); // Cập nhật danh sách
   };
 
   // Thay đổi khi itemsPerPage thay đổi
