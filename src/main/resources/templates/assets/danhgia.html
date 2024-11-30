@@ -10,7 +10,7 @@
       href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
     />
     <link rel="stylesheet" href="../assets/css/thuan.css" />
-    <link rel="stylesheet" href="../assets/css/chitietsanpham.css" />
+    <link rel="stylesheet" href="../assets/css/danhgia.css" />
 
     <style>
       .rating {
@@ -36,6 +36,7 @@
       .rating label {
         color: #ccc;
       }
+
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -48,17 +49,14 @@
     <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
     <div ng-include="'layout/menu.html'"></div>
     <div class="setDoDaiTrang">
+      
       <div class="container-fluid" style="margin-top: 55px; z-index: -1">
-        <div class="container mt-4">
+        <div class="container form-container mt-4">
+          <div class="thank-you-title text-center mt-4">
+            <h1>Cảm ơn bạn đã mua hàng!</h1>
+          </div>
           <div class="row">
-            <div
-              class="col-lg-8"
-              style="
-                border: solid 1px rgb(222, 226, 230);
-                padding-top: 20px;
-                border-radius: 5px;
-              "
-            >
+            <div>
               <div class="row">
                 <div class="col-lg-6">
                   <div class="box-img-detail">
@@ -103,7 +101,6 @@
                   </button>
                   <div class="box-price" ng-if="productDetails.length">
                     <div class="price-chitiet">
-                      <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
                       <span class="current-price"
                         >{{selectedSizeDetail.unitprice | number : 0}}₫</span
                       >
@@ -120,6 +117,7 @@
         </div>
       </div>
     </div>
+    
     <div
       class="modal fade"
       id="notificationModal"

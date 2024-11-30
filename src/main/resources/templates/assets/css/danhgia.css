@@ -1,0 +1,155 @@
+Tổng thể
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Màu nền nhẹ nhàng */
+    color: #212529; /* Màu chữ dễ nhìn */
+  }
+  
+  .container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .setDoDaiTrang {
+    min-height: calc(100vh - 200px); /* Đảm bảo trang không quá ngắn */
+  }
+  
+  h4.tenSanPhamChiTiet {
+    color: #343a40;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  /* Hình ảnh sản phẩm */
+  .box-img-detail {
+    display: flex;
+    justify-content: center; /* Canh giữa theo chiều ngang */
+    align-items: center; /* Canh giữa theo chiều dọc */
+    height: 100%; /* Đảm bảo chiếm đủ chiều cao */
+  }
+  
+  .box-img-detail img {
+    max-width: 100%; /* Đảm bảo hình không vượt quá kích thước container */
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  
+  /* Hộp giá */
+  .box-price {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .current-price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ff6f61; /* Màu cam nhấn mạnh */
+  }
+  
+  /* Đánh giá (sao) */
+  .rating {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .star {
+    font-size: 2em;
+    transition: color 0.3s, transform 0.2s;
+  }
+  
+  .star:hover {
+    transform: scale(1.2);
+  }
+  
+  .star.selected {
+    color: #ffc107; /* Màu vàng ánh kim */
+  }
+  
+  /* Nhận xét (form) */
+  .form-label {
+    font-weight: bold;
+    color: #495057;
+  }
+  
+  textarea {
+    resize: none;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1em;
+  }
+  
+  textarea:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Nút (button) */
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Nhấn nút sẽ lớn hơn một chút */
+  }
+  
+  .btn-primary:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+  
+  /* Mô tả sản phẩm */
+  .moTa {
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  
+  .text-chitietsp {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #495057;
+  }
+  
+  .moTa p {
+    font-size: 1em;
+    color: #6c757d;
+  }
+  
+  /* Modal thông báo */
+  .modal-content {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+  }
+  
+  .modal-title {
+    color: #343a40;
+    font-weight: bold;
+  }
+  
+  .modal-footer .btn-primary {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .modal-footer .btn-primary:hover {
+    background-color: #218838;
+  }
+  
+  .thank-you-title h1 {
+    font-size: 2.5em;
+    color: #28a745; /* Màu xanh lá nổi bật */
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
