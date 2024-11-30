@@ -170,7 +170,7 @@ app.controller("OrderController", [
     };
     $scope.openReviewForm = function (productId) {
       console.log("Đánh giá sản phẩm ID: ", productId);
-      // Bạn có thể mở form đánh giá hoặc xử lý thêm tại đây.
+      window.location.href = `danhgia.html?idproduct=${productId}`;
     };
     // Chức năng sửa đơn hàng
     $scope.editOrderDetails = function (order) {

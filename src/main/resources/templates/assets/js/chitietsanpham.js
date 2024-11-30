@@ -1,5 +1,123 @@
 var app = angular.module("myApp", []);
 
+// Tạo một controller mới với tên 'loadSanPhamDanhGia'
+app.controller("loadSanPhamDanhGia", function ($scope, $http) {
+  const API = "http://localhost:8080/beesixcake/api"; // Địa chỉ API
+  const imageBaseUrl = "https://5ck6jg.csb.app/anh/";
+  const productId = new URLSearchParams(window.location.search).get(
+    "idproduct"
+  );
+
+  // Khởi tạo đối tượng newReview
+  $scope.newReview = {
+    comment: "",
+  };
+
+  // Lấy thông tin sản phẩm từ API
+  if (productId) {
+    $http
+      .get(`${API}/product/${productId}`)
+      .then(function (response) {
+        console.log("Product Data:", response.data);
+        $scope.product = response.data;
+        $scope.product.img = imageBaseUrl + $scope.product.img.split("/").pop();
+      })
+      .catch(function (error) {
+        console.error("Error loading product data:", error);
+      });
+  } else {
+    console.log("Product ID is missing!");
+  }
+
+  // Lấy giá trị rating khi người dùng chọn sao
+  let selectedRating = 0;
+  document.querySelectorAll(".rating .star").forEach((star) => {
+    star.addEventListener("click", function () {
+      selectedRating = parseInt(star.getAttribute("data-value"));
+      console.log("Giá trị đánh giá: ", selectedRating);
+      highlightStars(selectedRating);
+    });
+  });
+
+  // Hàm hiển thị màu sắc các sao đã chọn
+  function highlightStars(rating) {
+    const stars = document.querySelectorAll(".rating .star");
+    stars.forEach((star) => {
+      const starValue = parseInt(star.getAttribute("data-value"));
+      if (starValue <= rating) {
+        star.classList.add("selected");
+      } else {
+        star.classList.remove("selected");
+      }
+    });
+  }
+
+  // Khi người dùng gửi đánh giá
+  $scope.submitReview = function () {
+    // Lấy nhận xét từ textarea
+    const reviewText = $scope.newReview.comment;
+
+    // Lấy thông tin tài khoản từ localStorage
+    const accountInfo = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    // Kiểm tra nếu người dùng chưa chọn sao
+    if (selectedRating === 0) {
+      $scope.notificationMessage = "Vui lòng chọn sao để đánh giá!";
+      $("#notificationModal").modal("show");
+      return; // Dừng lại không chuyển hướng về trang chủ
+    }
+
+    // Kiểm tra nếu chưa đăng nhập
+    if (!accountInfo) {
+      $scope.notificationMessage = "Vui lòng đăng nhập trước khi đánh giá!";
+      $("#notificationModal").modal("show");
+      return; // Dừng lại không chuyển hướng về trang chủ
+    }
+
+    // Kiểm tra nếu không nhập mô tả
+
+    // Thêm thời gian review (ngày và giờ hiện tại)
+    const reviewData = {
+      rating: selectedRating,
+      reviewtext: reviewText,
+      reviewdate: new Date().toISOString(), // Lấy ngày giờ hiện tại
+      account: {
+        idaccount: accountInfo.idaccount,
+      },
+      product: {
+        idproduct: productId,
+      },
+    };
+
+    // Gửi POST request để tạo đánh giá
+    $http
+      .post(`${API}/reviews`, reviewData)
+      .then(function (response) {
+        // Nếu gửi thành công, hiển thị thông báo
+        $scope.notificationMessage = "Đánh giá của bạn đã được gửi thành công!";
+        $("#notificationModal").modal("show");
+
+        // Chuyển hướng về trang chủ sau khi thông báo thành công
+        $("#notificationModal").on("hidden.bs.modal", function () {
+          window.location.href = "index.html"; // Chuyển hướng về trang chủ
+        });
+      })
+      .catch(function (error) {
+        console.error("Lỗi khi gửi đánh giá: ", error);
+        $scope.notificationMessage =
+          "Có lỗi xảy ra khi gửi đánh giá. Vui lòng thử lại.";
+        $("#notificationModal").modal("show");
+        // Không chuyển hướng về trang chủ nếu có lỗi
+      });
+  };
+
+  // Khi người dùng nhấn OK trong modal, chỉ đóng modal mà không chuyển hướng về trang chủ
+  $scope.closeModalAndRedirect = function () {
+    $("#notificationModal").modal("hide");
+    // Không chuyển hướng về trang chủ ở đây
+  };
+});
+
 app.controller("ProductDetailController", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api";
   const imageBaseUrl = "https://5ck6jg.csb.app/anh/";
@@ -258,10 +376,12 @@ app.controller("ProductDetailController", function ($scope, $http) {
   // **8. Yêu thích sản phẩm**
   $scope.toggleHeart = () => {
     if (!$scope.loggedInUser) {
-      $scope.showNotification("Vui lòng đăng nhập để sử dụng chức năng yêu thích.");
+      $scope.showNotification(
+        "Vui lòng đăng nhập để sử dụng chức năng yêu thích."
+      );
       return;
     }
-  
+
     if ($scope.isActive) {
       $http
         .delete(`${API}/favorites/${$scope.currentFavoriteId}`)
@@ -279,7 +399,7 @@ app.controller("ProductDetailController", function ($scope, $http) {
         account: { idaccount: $scope.loggedInUser.idaccount },
         product: { idproduct: productId },
       };
-  
+
       $http
         .post(`${API}/favorites`, newFavorite)
         .then((response) => {
