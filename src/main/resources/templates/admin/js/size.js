@@ -79,7 +79,10 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $scope.loggedInUser = null;
       $window.location.href = "login.html"; // Chuyển về trang đăng nhập sau khi đăng xuất
     };
-  });      
+  });     
+  
+  
+  
 app.controller('SizeController', function($scope, $http, $timeout) {
     $scope.Sizes = [];  // Danh sách kích thước
     $scope.selectedSize = {};  // Kích thước đang chọn
