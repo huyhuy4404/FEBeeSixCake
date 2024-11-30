@@ -150,6 +150,12 @@ app.controller("OrderController", [
         .then((response) => {
           console.log("Dữ liệu trả về từ API:", response.data);
           $scope.orderDetails = response.data;
+          $scope.orderDetails.forEach(function (detail) {
+            console.log(
+              `statusreview cho sản phẩm ID ${detail.idorderdetail}:`,
+              detail.statusreview
+            );
+          });
         })
         .catch((error) => {
           console.error("Lỗi khi tải chi tiết đơn hàng:", error);
@@ -168,9 +174,10 @@ app.controller("OrderController", [
       modal.show();
       console.log($scope.selectedOrder.account.idaccount);
     };
-    $scope.openReviewForm = function (productId) {
+    $scope.openReviewForm = function (productId, orderDetailId) {
       console.log("Đánh giá sản phẩm ID: ", productId);
-      window.location.href = `danhgia.html?idproduct=${productId}`;
+      console.log("ID Chi Tiết Đơn Hàng: ", orderDetailId);
+      window.location.href = `danhgia.html?idproduct=${productId}&idorderdetail=${orderDetailId}`;
     };
     // Chức năng sửa đơn hàng
     $scope.editOrderDetails = function (order) {
