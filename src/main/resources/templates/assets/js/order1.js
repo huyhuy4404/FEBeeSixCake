@@ -26,92 +26,110 @@ app.controller("OrderController", [
 
     function initialize() {
       $scope.loading = true;
-  
+
       // Biến để lưu ID trạng thái "Đã Hủy"
       $scope.canceledStatusId = null;
-  
+
       // Bước 1: Gọi API lấy danh sách trạng thái
-      $http.get("http://localhost:8080/beesixcake/api/status")
-          .then((statusResponse) => {
-              console.log("Danh sách trạng thái:", statusResponse.data);
-              $scope.statuses = statusResponse.data;
-  
-              // Tìm ID trạng thái "Đã Hủy"
-              const canceledStatus = $scope.statuses.find(status => status.statusname === "Đã Hủy");
-              if (canceledStatus) {
-                  $scope.canceledStatusId = canceledStatus.idstatus; // Lưu ID trạng thái "Đã Hủy"
-                  console.log(`ID trạng thái "Đã Hủy": ${$scope.canceledStatusId}`);
-              } else {
-                  console.error("Không tìm thấy trạng thái 'Đã Hủy' trong danh sách.");
-              }
-  
-              // Chuẩn bị cấu trúc phân loại (theo idstatus)
-              $scope.statuses.forEach((status) => {
-                  $scope.ordersByStatus[status.idstatus] = [];
-              });
-  
-              // Bước 2: Gọi API lấy danh sách đơn hàng theo tài khoản
-              return $http.get(`http://localhost:8080/beesixcake/api/order/account/${loggedInUser.idaccount}`);
-          })
-          .then((orderResponse) => {
-              console.log("Danh sách đơn hàng:", orderResponse.data);
-              const orders = orderResponse.data;
-  
-              // Chuyển đổi múi giờ UTC+7 cho `orderdate`
-              orders.forEach((order) => {
-                  if (order.orderdate) {
-                      const utcDate = new Date(order.orderdate);
-                      order.orderdate = new Date(utcDate.getTime() + 7 * 3600000);
-                  }
-              });
-  
-              // Gọi API lấy trạng thái chi tiết từng đơn hàng
-              const promises = orders.map((order) =>
-                  $http.get(`http://localhost:8080/beesixcake/api/order-status-history/by-order/${order.idorder}`)
-                      .then((statusResponse) => {
-                          const statusData = statusResponse.data[0];
-                          order.statusname = statusData?.status.statusname.trim() || "Không Xác Định";
-                          order.statusid = statusData?.status.idstatus || null;
-                      })
-                      .catch((error) => {
-                          console.error(`Lỗi khi lấy trạng thái đơn hàng ${order.idorder}:`, error);
-                          order.statusname = "Không Xác Định";
-                          order.statusid = null;
-                      })
-              );
-  
-              return Promise.all(promises).then(() => {
-                  // Phân loại đơn hàng theo trạng thái
-                  orders.forEach((order) => {
-                      if (order.statusid && $scope.ordersByStatus[order.statusid]) {
-                          $scope.ordersByStatus[order.statusid].push(order);
-                      }
-                  });
-  
-                  // Sắp xếp từng nhóm trạng thái theo thời gian (mới nhất đến cũ nhất)
-                  Object.keys($scope.ordersByStatus).forEach((statusId) => {
-                      $scope.ordersByStatus[statusId].sort((a, b) => {
-                          return new Date(b.orderdate) - new Date(a.orderdate);
-                      });
-                  });
-  
-                  // Gán mặc định đơn hàng của trạng thái đầu tiên vào bảng
-                  const firstStatusId = $scope.statuses.length > 0 ? $scope.statuses[0].idstatus : null;
-                  if (firstStatusId) {
-                      $scope.selectedOrders = $scope.ordersByStatus[firstStatusId];
-                  }
-  
-                  console.log("Orders By Status After Classification:", $scope.ordersByStatus);
-              });
-          })
-          .catch((error) => {
-              console.error("Lỗi khi tải dữ liệu:", error);
-          })
-          .finally(() => {
-              $scope.loading = false;
-              console.log("Orders By Status (Final):", $scope.ordersByStatus);
+      $http
+        .get("http://localhost:8080/beesixcake/api/status")
+        .then((statusResponse) => {
+          console.log("Danh sách trạng thái:", statusResponse.data);
+          $scope.statuses = statusResponse.data;
+
+          // Tìm ID trạng thái "Đã Hủy"
+          const canceledStatus = $scope.statuses.find(
+            (status) => status.statusname === "Đã Hủy"
+          );
+          if (canceledStatus) {
+            $scope.canceledStatusId = canceledStatus.idstatus; // Lưu ID trạng thái "Đã Hủy"
+            console.log(`ID trạng thái "Đã Hủy": ${$scope.canceledStatusId}`);
+          } else {
+            console.error(
+              "Không tìm thấy trạng thái 'Đã Hủy' trong danh sách."
+            );
+          }
+
+          // Chuẩn bị cấu trúc phân loại (theo idstatus)
+          $scope.statuses.forEach((status) => {
+            $scope.ordersByStatus[status.idstatus] = [];
           });
-  }
+
+          // Bước 2: Gọi API lấy danh sách đơn hàng theo tài khoản
+          return $http.get(
+            `http://localhost:8080/beesixcake/api/order/account/${loggedInUser.idaccount}`
+          );
+        })
+        .then((orderResponse) => {
+          console.log("Danh sách đơn hàng:", orderResponse.data);
+          const orders = orderResponse.data;
+
+          // Chuyển đổi múi giờ UTC+7 cho `orderdate`
+          orders.forEach((order) => {
+            if (order.orderdate) {
+              const utcDate = new Date(order.orderdate);
+              order.orderdate = new Date(utcDate.getTime() + 7 * 3600000);
+            }
+          });
+
+          // Gọi API lấy trạng thái chi tiết từng đơn hàng
+          const promises = orders.map((order) =>
+            $http
+              .get(
+                `http://localhost:8080/beesixcake/api/order-status-history/by-order/${order.idorder}`
+              )
+              .then((statusResponse) => {
+                const statusData = statusResponse.data[0];
+                order.statusname =
+                  statusData?.status.statusname.trim() || "Không Xác Định";
+                order.statusid = statusData?.status.idstatus || null;
+              })
+              .catch((error) => {
+                console.error(
+                  `Lỗi khi lấy trạng thái đơn hàng ${order.idorder}:`,
+                  error
+                );
+                order.statusname = "Không Xác Định";
+                order.statusid = null;
+              })
+          );
+
+          return Promise.all(promises).then(() => {
+            // Phân loại đơn hàng theo trạng thái
+            orders.forEach((order) => {
+              if (order.statusid && $scope.ordersByStatus[order.statusid]) {
+                $scope.ordersByStatus[order.statusid].push(order);
+              }
+            });
+
+            // Sắp xếp từng nhóm trạng thái theo thời gian (mới nhất đến cũ nhất)
+            Object.keys($scope.ordersByStatus).forEach((statusId) => {
+              $scope.ordersByStatus[statusId].sort((a, b) => {
+                return new Date(b.orderdate) - new Date(a.orderdate);
+              });
+            });
+
+            // Gán mặc định đơn hàng của trạng thái đầu tiên vào bảng
+            const firstStatusId =
+              $scope.statuses.length > 0 ? $scope.statuses[0].idstatus : null;
+            if (firstStatusId) {
+              $scope.selectedOrders = $scope.ordersByStatus[firstStatusId];
+            }
+
+            console.log(
+              "Orders By Status After Classification:",
+              $scope.ordersByStatus
+            );
+          });
+        })
+        .catch((error) => {
+          console.error("Lỗi khi tải dữ liệu:", error);
+        })
+        .finally(() => {
+          $scope.loading = false;
+          console.log("Orders By Status (Final):", $scope.ordersByStatus);
+        });
+    }
 
     initialize();
 
@@ -141,30 +159,75 @@ app.controller("OrderController", [
     $scope.openOrderModal = function (order) {
       $scope.selectedOrder = angular.copy(order);
       $scope.getOrderDetails(order.idorder);
-
+      $scope.showReviewButton =
+        order.statusid === 3 && order.statuspay.idstatuspay === 2;
+      console.log("Thông tin đơn hàng ID:", $scope.selectedOrder);
       const modalElement = document.getElementById("orderDetailModal");
       console.log("Modal Element:", modalElement);
       const modal = new bootstrap.Modal(modalElement, { keyboard: true });
       modal.show();
       console.log($scope.selectedOrder.account.idaccount);
     };
-
+    $scope.openReviewForm = function (productId) {
+      console.log("Đánh giá sản phẩm ID: ", productId);
+      // Bạn có thể mở form đánh giá hoặc xử lý thêm tại đây.
+    };
     // Chức năng sửa đơn hàng
     $scope.editOrderDetails = function (order) {
       $scope.editOrder = angular.copy(order); // Sao chép thông tin đơn hàng để sửa
       const editModalElement = document.getElementById("editOrderModal");
-      const editModal = new bootstrap.Modal(editModalElement, { keyboard: true });
+      const editModal = new bootstrap.Modal(editModalElement, {
+        keyboard: true,
+      });
       editModal.show();
+    };
+    $scope.calculateTotalProductPrice = function () {
+      let totalProductPrice = 0;
+      angular.forEach($scope.orderDetails, function (detail) {
+        totalProductPrice += detail.quantity * detail.productdetail.unitprice;
+      });
+      return totalProductPrice;
+    };
+
+    $scope.calculateDiscount = function () {
+      // Kiểm tra xem có giảm giá không và có phần trăm giảm giá hay không
+      if (
+        $scope.selectedOrder.discount &&
+        $scope.selectedOrder.discount.discountpercentage
+      ) {
+        const totalProductPrice = $scope.calculateTotalProductPrice(); // Tổng tiền sản phẩm
+        const discountPercentage =
+          $scope.selectedOrder.discount.discountpercentage; // Phần trăm giảm giá
+        const discountAmount = (totalProductPrice * discountPercentage) / 100; // Tính phần trăm giảm
+        // Nếu không thì áp dụng giảm theo phần trăm
+        return discountAmount;
+      }
+
+      return 0; // Nếu không có giảm giá thì trả về 0
+    };
+
+    $scope.calculateTotalOrder = function () {
+      const totalProductPrice = $scope.calculateTotalProductPrice();
+      const discountAmount = $scope.calculateDiscount();
+      const totalOrder =
+        totalProductPrice - discountAmount + $scope.selectedOrder.shipfee;
+      $scope.selectedOrder.total = totalOrder; // Cập nhật tổng tiền đơn hàng
     };
 
     // Gửi yêu cầu sửa đơn hàng
     $scope.updateOrder = function () {
-      $http.put(`http://localhost:8080/beesixcake/api/order/update/${$scope.editOrder.idorder}`, $scope.editOrder)
+      $http
+        .put(
+          `http://localhost:8080/beesixcake/api/order/update/${$scope.editOrder.idorder}`,
+          $scope.editOrder
+        )
         .then((response) => {
           console.log("Đơn hàng đã được cập nhật:", response.data);
 
           // Cập nhật danh sách đơn hàng hiển thị
-          const index = $scope.selectedOrders.findIndex(order => order.idorder === $scope.editOrder.idorder);
+          const index = $scope.selectedOrders.findIndex(
+            (order) => order.idorder === $scope.editOrder.idorder
+          );
           if (index !== -1) {
             $scope.selectedOrders[index] = angular.copy($scope.editOrder);
           }
@@ -181,88 +244,44 @@ app.controller("OrderController", [
 
     $scope.cancelOrder = function (order) {
       console.log(`Hủy đơn hàng: ${order.idorder}`);
-  
+
       // Gọi API để hủy đơn hàng
-      $http.put(`http://localhost:8080/beesixcake/api/order/cancel/${order.idorder}`)
-          .then((response) => {
-              console.log("Đơn hàng đã được hủy:", response.data);
-              order.statusname = "Đã Hủy"; // Cập nhật trạng thái thành "Đã Hủy"
-              order.statusid = $scope.canceledStatusId; // Gán trạng thái ID đã hủy
-  
-              // Cập nhật danh sách đơn hàng theo trạng thái
-              const oldStatusId = order.statusid; // Lưu trạng thái cũ
-              if ($scope.ordersByStatus[oldStatusId]) {
-                  // Xóa đơn hàng khỏi danh sách trạng thái cũ
-                  $scope.ordersByStatus[oldStatusId] = $scope.ordersByStatus[oldStatusId].filter(o => o.idorder !== order.idorder);
-              }
-  
-              // Thêm đơn hàng vào danh sách "Đã Hủy"
-              if (!$scope.ordersByStatus[$scope.canceledStatusId]) {
-                  $scope.ordersByStatus[$scope.canceledStatusId] = [];
-              }
-              $scope.ordersByStatus[$scope.canceledStatusId].push(order);
-  
-              // Cập nhật danh sách đơn hàng hiển thị
-              $scope.filterOrdersByStatus($scope.canceledStatusId);
-  
-              // Hiển thị thông báo thành công
-              alert("Đơn hàng đã được hủy thành công!");
-          })
-          .catch((error) => {
-              console.error("Lỗi khi hủy đơn hàng:", error);
-              alert("Đã xảy ra lỗi khi hủy đơn hàng. Vui lòng thử lại.");
-          });
-  };
-   // Function to calculate total product price
-   $scope.calculateTotalProductPrice = function () {
-    if (!$scope.orderDetails) return 0; // Handle case when orderDetails are not yet loaded
-    return $scope.orderDetails.reduce((total, detail) => {
-      return total + (detail.productdetail.unitprice * detail.quantity);
-    }, 0);
-  };
+      $http
+        .put(
+          `http://localhost:8080/beesixcake/api/order/cancel/${order.idorder}`
+        )
+        .then((response) => {
+          console.log("Đơn hàng đã được hủy:", response.data);
+          order.statusname = "Đã Hủy"; // Cập nhật trạng thái thành "Đã Hủy"
+          order.statusid = $scope.canceledStatusId; // Gán trạng thái ID đã hủy
 
-  // Function to calculate discount (modify the logic as needed)
-  $scope.calculateDiscount = function () {
-    const totalPrice = $scope.calculateTotalProductPrice();
-    
-    // Kiểm tra xem đơn hàng có giảm giá không
-    if ($scope.selectedOrder.discount && $scope.selectedOrder.discount.iddiscount > 0) {
-        const discountRate = $scope.selectedOrder.discount.rate || 0.1; // Ví dụ: 10% giảm giá
-        return totalPrice * discountRate;
-    }
-    
-    return 0; // Không có giảm giá
-};
+          // Cập nhật danh sách đơn hàng theo trạng thái
+          const oldStatusId = order.statusid; // Lưu trạng thái cũ
+          if ($scope.ordersByStatus[oldStatusId]) {
+            // Xóa đơn hàng khỏi danh sách trạng thái cũ
+            $scope.ordersByStatus[oldStatusId] = $scope.ordersByStatus[
+              oldStatusId
+            ].filter((o) => o.idorder !== order.idorder);
+          }
 
-  // Function to calculate final total amount
-  $scope.calculateFinalTotal = function () {
-    const totalProductPrice = $scope.calculateTotalProductPrice();
-    const discount = $scope.calculateDiscount();
-    const shippingFee = $scope.selectedOrder.shipfee || 0; // Default to 0 if not set
-    return totalProductPrice - discount + shippingFee;
-  };
+          // Thêm đơn hàng vào danh sách "Đã Hủy"
+          if (!$scope.ordersByStatus[$scope.canceledStatusId]) {
+            $scope.ordersByStatus[$scope.canceledStatusId] = [];
+          }
+          $scope.ordersByStatus[$scope.canceledStatusId].push(order);
 
-  // Function to fetch order details (existing function)
-  $scope.getOrderDetails = function (idorder) {
-    $http.get(`http://localhost:8080/beesixcake/api/orderdetail/order/${idorder}`)
-      .then((response) => {
-        console.log("Dữ liệu trả về từ API:", response.data);
-        $scope.orderDetails = response.data;
+          // Cập nhật danh sách đơn hàng hiển thị
+          $scope.filterOrdersByStatus($scope.canceledStatusId);
 
-        // Update the total whenever orderDetails are loaded
-        $scope.selectedOrder.total = $scope.calculateFinalTotal();
-      })
-      .catch((error) => {
-        console.error("Lỗi khi tải chi tiết đơn hàng:", error);
-      });
-  };
-
-
-
+          // Hiển thị thông báo thành công
+          alert("Đơn hàng đã được hủy thành công!");
+        })
+        .catch((error) => {
+          console.error("Lỗi khi hủy đơn hàng:", error);
+          alert("Đã xảy ra lỗi khi hủy đơn hàng. Vui lòng thử lại.");
+        });
+    };
   },
-  
-
-
 ]);
 
 app.controller("CheckLogin", function ($scope, $http, $window, $timeout) {
