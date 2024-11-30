@@ -147,188 +147,289 @@
         <div class="row">
             <!-- Menu -->
             <div ng-include="'layout/menu.html'"></div>
-    
+
             <!-- Main Content -->
             <main class="main-wrapper col-md-9 ms-sm-auto py-2 col-lg-9 px-md-4 border-start">
                 <div class="title-group mb-3">
                     <h1 class="h2 mb-0">Quản Lý Sản Phẩm</h1>
                 </div>
-    
+
                 <!-- Tabs -->
                 <div class="custom-block bg-white">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <!-- Tab Danh sách -->
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="true">
+                            <button class="nav-link active" id="list-tab" data-bs-toggle="tab"
+                                data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane"
+                                aria-selected="true">
                                 <i class="fas fa-list"></i> Danh sách sản phẩm
                             </button>
                         </li>
-    
+
                         <!-- Bộ lọc (Đặt ở bên phải) -->
                         <li class="nav-item ms-auto" role="presentation">
                             <div class="d-flex align-items-center">
                                 <!-- Lọc theo loại sản phẩm -->
-                                <select class="form-control me-2" ng-model="selectedCategory" ng-change="filterByCategory()">
+                                <select class="form-control me-2" ng-model="selectedCategory"
+                                    ng-change="filterByCategory()">
                                     <option value="">Chọn loại sản phẩm</option>
                                     <option ng-repeat="category in categories" value="{{category.idcategory}}">
                                         {{category.categoryname}}
                                     </option>
                                 </select>
-                                
+
                                 <!-- Tìm kiếm sản phẩm -->
-                                <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm" aria-label="Search" ng-model="searchQuery" ng-change="filterByCategory()">
-                                
+                                <input class="form-control me-2" type="search" placeholder="Tìm kiếm sản phẩm"
+                                    aria-label="Search" ng-model="searchQuery" ng-change="filterByCategory()">
+
                                 <!-- Bộ lọc giá với chỉ giá tối đa -->
-                                <input class="form-control me-2" type="number" placeholder="Giá tối đa" ng-model="maxPrice" min="0" ng-change="filterByCategory()">
+                                <input class="form-control me-2" type="number" placeholder="Giá tối đa"
+                                    ng-model="maxPrice" min="0" ng-change="filterByCategory()">
                             </div>
                         </li>
+                        <li>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#checkoutModal">
+                                Đặt hàng
+                            </button>
+                        </li>
                     </ul>
-    
+
                     <!-- Tab Content -->
                     <div class="tab-content" id="myTabContent">
-                        <!-- Danh sách sản phẩm -->
-                        <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+                        <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
+                            aria-labelledby="list-tab" tabindex="0">
                             <div class="table-responsive">
-                            <!-- Bảng Danh Sách Sản Phẩm -->
-<table class="table table-hover align-middle">
-    <thead class="table-light">
-        <tr>
-            <th scope="col">Tên sản phẩm</th>
-            <th scope="col">Loại sản phẩm</th>
-            <th scope="col">Ảnh</th>
-            <th scope="col">Kích thước</th>
-            <th scope="col">Giá</th>
-            <th scope="col">Số lượng</th>
-            <th scope="col" class="text-end">Hành động</th>
-        </tr>
-    </thead>
-    <tbody ng-if="paginatedProducts.length > 0">
-        <tr ng-repeat="product in paginatedProducts">
-            <td class="fw-bold">{{ product.productname }}</td>
-            <td>{{ product.category.categoryname }}</td>
-            <td>
-                <img src="https://5ck6jg.csb.app/anh/{{product.img}}" alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
-            </td>
-            <td>
-                <select ng-model="product.selectedSize" ng-options="size.sizename for size in product.sizes" ng-change="onSizeChange(product, product.selectedSize)">
-                </select>
-            </td>
-            <td>{{ product.unitprice | currency:'' }} VNĐ</td>
-            <td>
-                <input type="number" ng-model="product.selectedQuantity" min="1" max="{{product.quantityinstock}}" ng-change="onQuantityChange(product)" class="form-control" style="width: 80px;" />
-                <span class="text-muted" style="margin-left: 10px;">
-                    (Tồn kho: {{ product.quantityinstock }})
-                </span>
-            </td>
-            <td class="text-end">
-                <div class="btn-group" role="group">
-                    <button class="btn btn-sm" ng-class="{'btn-warning': !product.isAdded, 'btn-success': product.isAdded}" ng-click="toggleOrderStatus(product)" title="Chỉnh sửa">
-                        <i class="bi bi-pencil-square"></i>
-                        {{ product.isAdded ? 'Đã thêm vào đơn hàng' : 'Thêm vào giỏ hàng' }}
-                    </button>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-    <tbody ng-if="paginatedProducts.length == 0">
-        <tr>
-            <td colspan="7" class="text-center text-muted">Không có sản phẩm nào.</td>
-        </tr>
-    </tbody>
-    
-</table>
+                                <!-- Bảng Danh Sách Sản Phẩm -->
+                                <table class="table table-hover align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col">Tên sản phẩm</th>
+                                            <th scope="col">Loại sản phẩm</th>
+                                            <th scope="col">Ảnh</th>
+                                            <th scope="col">Kích thước</th>
+                                            <th scope="col">Giá</th>
+                                            <th scope="col">Số lượng</th>
+                                            <th scope="col" class="text-end">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-if="paginatedProducts.length > 0">
+                                        <tr ng-repeat="product in paginatedProducts">
+                                            <td class="fw-bold">{{ product.productname }}</td>
+                                            <td>{{ product.category.categoryname }}</td>
+                                            <td>
+                                                <img src="https://5ck6jg.csb.app/anh/{{product.img}}" alt="Ảnh sản phẩm"
+                                                    class="img-thumbnail"
+                                                    style="width: 60px; height: 60px; object-fit: cover;">
+                                            </td>
+                                            <td>
+                                                <select ng-model="product.selectedSize"
+                                                    ng-options="size.sizename for size in product.sizes"
+                                                    ng-change="onSizeChange(product, product.selectedSize)">
+                                                </select>
+                                            </td>
+                                            <td>{{ product.unitprice | currency:'' }} VNĐ</td>
+                                            <td>
+                                                <input type="number" ng-model="product.selectedQuantity" min="1"
+                                                    max="{{product.quantityinstock}}"
+                                                    ng-change="onQuantityChange(product)" class="form-control"
+                                                    style="width: 80px;" />
+                                                <span class="text-muted" style="margin-left: 10px;">(Tồn kho: {{
+                                                    product.quantityinstock }})</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group" role="group">
+                                                    <!-- Nút Thêm vào giỏ hàng -->
+                                                    <button class="btn btn-sm"
+                                                        ng-class="{'btn-warning': !product.isAdded, 'btn-success': product.isAdded}"
+                                                        ng-click="addToCart(product)" title="Thêm vào giỏ hàng">
+                                                        <i class="bi bi-cart-plus"></i>
+                                                        {{ product.isAdded ? 'Đã thêm vào giỏ hàng' : 'Thêm vào giỏ
+                                                        hàng' }}
+                                                    </button>
+
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tbody ng-if="paginatedProducts.length == 0">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">Không có sản phẩm nào.</td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
 
                             </div>
-    
+
                             <!-- Thanh phân trang -->
                             <nav aria-label="Page navigation" class="mt-4">
                                 <ul class="pagination justify-content-center mb-0">
                                     <li class="page-item" ng-class="{disabled: currentPage === 1}">
-                                        <a class="page-link" href="#" aria-label="Previous" ng-click="goToPage(currentPage - 1)">
+                                        <a class="page-link" href="#" aria-label="Previous"
+                                            ng-click="goToPage(currentPage - 1)">
                                             <span aria-hidden="true">&laquo; Trang Trước</span>
                                         </a>
                                     </li>
-                                    <li class="page-item" ng-repeat="page in pages" ng-class="{active: currentPage === page}">
+                                    <li class="page-item" ng-repeat="page in pages"
+                                        ng-class="{active: currentPage === page}">
                                         <a class="page-link" href="#" ng-click="goToPage(page)">{{ page }}</a>
                                     </li>
                                     <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
-                                        <a class="page-link" href="#" aria-label="Next" ng-click="goToPage(currentPage + 1)">
+                                        <a class="page-link" href="#" aria-label="Next"
+                                            ng-click="goToPage(currentPage + 1)">
                                             <span aria-hidden="true">Trang Sau &raquo;</span>
                                         </a>
                                     </li>
                                 </ul>
                             </nav>
                         </div>
+
+
+
                     </div>
                 </div>
             </main>
         </div>
-    
-        <!-- Modal Chỉnh sửa sản phẩm -->
-        <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+
+        <!-- Nút kích hoạt Modal -->
+
+        <!-- Modal thông tin đặt hàng -->
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editProductModalLabel">Chỉnh sửa sản phẩm</h5>
+                        <h5 class="modal-title" id="checkoutModalLabel">Thông Tin Đặt Hàng</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form name="productForm" class="row g-3 needs-validation" novalidate>
-                            <div class="col-md-8">
-                                <label for="product-name" class="form-label">Tên sản phẩm</label>
-                                <input type="text" id="product-name" ng-model="selectedProduct.productname" placeholder="Nhập tên sản phẩm" class="form-control" required />
-                                <div class="invalid-feedback">Vui lòng nhập tên sản phẩm.</div>
+                        <!-- Thông Tin Sản Phẩm -->
+                        <div class="thongTinSP mb-4">
+                            <p class="titleThongTinSP">Thông Tin Sản Phẩm</p>
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-secondary text-center">
+                                    <tr>
+                                        <th style="width: 15%">Hình</th>
+                                        <th style="width: 30%">Tên Sản Phẩm</th>
+                                        <th style="width: 8%">Kích Cỡ</th>
+                                        <th style="width: 25%">Giá</th>
+                                        <th style="width: 8%">Số Lượng</th>
+                                        <th style="width: 25%">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr ng-repeat="product in cart">
+                                        <td>
+                                            <img src="https://5ck6jg.csb.app/anh/{{product.img}}" alt="Ảnh sản phẩm"
+                                                class="img-thumbnail"
+                                                style="width: 60px; height: 60px; object-fit: cover;">
+                                        </td>
+                                        <td>{{ product.productname }}</td>
+                                        <td>{{ product.selectedSize.sizename }}</td>
+                                        <td>{{ product.unitprice | number: 0 }} VNĐ</td>
+                                        <td>{{ product.selectedQuantity }}</td>
+                                        <td>
+                                            {{ product.totalPrice | number: 0 }} VNĐ
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Voucher và Phương Thức Thanh Toán -->
+                        <div class="row mb-4">
+                            <!-- Mã giảm giá -->
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="input-group">
+                                    <label class="input-group-text">Nhập mã giảm giá</label>
+                                    <input type="text" class="form-control text-uppercase"
+                                        placeholder="Nhập mã giảm giá" ng-model="discountCode"
+                                        ng-disabled="currentDiscount" />
+                                    <button class="btn btn-outline-info" type="button" ng-click="applyDiscountCode()"
+                                        ng-disabled="currentDiscount">Áp dụng</button>
+                                </div>
+                                <div ng-if="currentDiscount" class="mt-2">
+                                    <p class="text-success">
+                                        Đã áp dụng mã: <strong>{{ currentDiscount.discountcode }}</strong>
+                                    </p>
+                                    <button class="btn btn-danger" type="button" ng-click="cancelDiscountCode()">Hủy mã
+                                        giảm giá</button>
+                                </div>
+                                <p class="text-danger mt-2" ng-if="discountError">{{ discountError }}</p>
+                                <p class="text-success mt-2" ng-if="discountSuccess">{{ discountSuccess }}</p>
                             </div>
-                            <div class="col-md-4">
-                                <label for="category-select" class="form-label">Loại sản phẩm</label>
-                                <select class="form-select" id="category-select" ng-model="selectedProduct.category" ng-options="category as category.categoryname for category in categories track by category.idcategory" required>
-                                    <option value="" disabled selected>Chọn loại sản phẩm</option>
-                                </select>
-                                <div class="invalid-feedback" ng-show="productForm.$submitted && !selectedProduct.category">
-                                    Vui lòng chọn danh mục.
+
+                            <!-- Phương thức thanh toán -->
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <label for="">Phương Thức Thanh Toán</label>
+                                        <p>{{ selectedPayment.paymentname }}</p>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-info btn-sm"
+                                        ng-click="openPaymentModal()">Thay đổi</button>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="product-image" class="form-label">Ảnh sản phẩm</label>
-                                <input class="form-control" type="file" id="product-image" onchange="angular.element(this).scope().uploadImage(this.files[0])" />
-                                <img id="preview" ng-src="{{selectedProduct.imgPreview}}" alt="Xem trước ảnh" width="100" style="margin-top: 10px;" ng-if="selectedProduct.imgPreview" />
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Kích thước</label>
-                                <div ng-repeat="size in sizes">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" ng-model="size.isSelected" id="size-{{size.idsize}}" ng-change="logSelectedSize(size)">
-                                        <label class="form-check-label" for="size-{{size.idsize}}">
-                                            {{size.sizename}}
-                                        </label>
+                        </div>
+
+
+                        <!-- Mã QR và Tổng Tiền -->
+                        <div class="row mb-4">
+                            <div class="col-lg-6 thongTinND"
+                                ng-if="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng'">
+                                <div class="text-center">
+                                    <h5 class="titleThongTinND mb-4">Thông tin thanh toán</h5>
+                                    <div ng-if="!qrCodeGenerated">
+                                        <button type="button" class="btn btn-primary" ng-click="generateQRCode()">Lấy
+                                            Thông Tin Thanh Toán</button>
                                     </div>
-                                    <div ng-if="size.isSelected" class="row g-3">
-                                        <div class="col-md-4">
-                                            <label for="product-price-{{size.idsize}}" class="form-label">Giá cho {{size.sizename}}</label>
-                                            <input type="number" id="product-price-{{size.idsize}}" ng-model="size.unitprice" placeholder="Nhập giá" class="form-control" required ng-change="logPriceChange(size)" min="1" ng-class="{'is-invalid': productForm['product-price-' + size.idsize].$invalid && productForm['product-price-' + size.idsize].$touched}" />
-                                            <div class="invalid-feedback">Vui lòng nhập giá cho kích thước này.</div>
+                                    <div ng-if="qrCodeGenerated">
+                                        <div class="card border-secondary mb-3">
+                                            <div class="card-header bg-secondary text-white">Thông tin ngân hàng</div>
+                                            <div class="card-body">
+                                                <p><strong>Ngân hàng:</strong> MB Bank</p>
+                                                <p><strong>Số tài khoản:</strong> {{ accountNumber }}</p>
+                                                <p><strong>Chủ tài khoản:</strong> {{ accountName }}</p>
+                                                <p><strong>Nội dung chuyển khoản:</strong> {{ description }}</p>
+                                                <p><strong>Tổng tiền:</strong> {{ finalTotal | number: 0 }} VNĐ</p>
+                                            </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <label for="product-quantity-{{size.idsize}}" class="form-label">Số lượng cho {{size.sizename}}</label>
-                                            <input type="number" id="product-quantity-{{size.idsize}}" ng-model="size.quantityinstock" placeholder="Nhập số lượng" class="form-control" required ng-change="logQuantityChange(size)" min="1" ng-class="{'is-invalid': productForm['product-quantity-' + size.idsize].$invalid && productForm['product-quantity-' + size.idsize].$touched}" />
-                                            <div class="invalid-feedback">Vui lòng nhập số lượng cho kích thước này.</div>
-                                        </div>
+                                        <h6 class="mb-3">Mã QR thanh toán</h6>
+                                        <img ng-src="{{ qrCodeUrl }}" alt="QR Code Thanh Toán" class="img-fluid mb-3" />
+                                        <p><strong>Thời gian còn lại:</strong> <span>{{ countdownDisplay }}</span></p>
+                                        <button type="button" class="btn btn-danger" ng-click="cancelPayment()">Hủy
+                                            Thanh Toán</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <button type="button" class="btn btn-primary" ng-click="addProduct()" ng-hide="isEditMode"><i class="fas fa-plus"></i> Thêm</button>
-                                <button type="button" class="btn btn-info" ng-click="updateProduct()" ng-show="isEditMode"><i class="fas fa-edit"></i> Cập nhật</button>
-                                <button type="button" class="btn btn-danger" ng-click="deleteProduct(selectedProduct.idproduct)" ng-show="isEditMode"><i class="fas fa-trash-alt"></i> Xóa</button>
-                                <button type="button" class="btn btn-secondary ms-2" ng-click="resetForm()"><i class="fas fa-sync-alt"></i> Làm mới</button>
+
+                            <div class="col-lg-6 tong-TT thongTinND">
+                                <p>Tổng tiền hàng: <span>{{ totalPrice | number: 0 }}đ</span></p>
+                                <p>Tổng giảm giá: <span>{{ voucherDiscount | number: 0 }}đ</span></p>
+                                <p>Tổng tiền thanh toán: <span class="tongThanhTien">{{ finalTotal | number: 0}}đ</span></p>
+
                             </div>
-                        </form>
+                        </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" ng-click="placeOrder()"
+                            ng-disabled="selectedPaymentId === 2">Đặt hàng</button>
+                    </div>
+
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
     </div>
-    
+
 
 
 
