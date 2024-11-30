@@ -1,133 +1,159 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp" ng-controller="ProductDetailController">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đánh giá</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../assets/css/thuan.css" />
+    <link rel="stylesheet" href="../assets/css/chitietsanpham.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Đánh giá</title>
-  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="../assets/bootstrap-icons-1.11.3/font/bootstrap-icons.css" />
-  <link rel="stylesheet" href="../assets/css/thuan.css" />
-  <link rel="stylesheet" href="../assets/css/chitietsanpham.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="../assets/js/angular.min.js"></script>
-  <script src="../assets/js/angular-route.js"></script>
-  <script src="../assets/js/chitietsanpham.js"></script>
-</head>
+    <style>
+      .rating {
+        display: flex;
+        gap: 5px;
+        cursor: pointer;
+      }
 
-<body ng-controller="loadLoaiSanPham">
-  <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
-  <div ng-include="'layout/menu.html'"></div>
-  <div class="setDoDaiTrang">
-    <div class="container-fluid" style="margin-top: 55px; z-index: -1">
+      .star {
+        font-size: 2em;
+        color: #ccc; /* Màu xám khi chưa click */
+      }
 
+      .star.selected {
+        color: gold; /* Màu vàng khi chọn */
+      }
 
-      <div class="container mt-4">
-        <div class="row">
-          <div class="col-lg-8" style="
-              border: solid 1px rgb(222, 226, 230);
-              padding-top: 20px;
-              border-radius: 5px;
-            ">
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="box-img-detail">
-                  <a href="">
-                    <img ng-src="{{product.img}}" alt="{{product.productname}}" class="img-reponsive mt-0"
-                      style="width: auto; height: 290px; margin-bottom: 0px" />
-                  </a>
-                </div>
-              </div>
-              <div class="col-lg-6">
-                <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
-                <div class="danhgia text-chitietsp">
-                  <b>5.0</b>
-                  <div class="rating">
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                  </div>
-                  <span>| Số lượt đánh giá</span>
-                </div>
-                <div class="mb-3">
-        <label for="comment" class="form-label">Nhận xét:</label>
-        <textarea id="comment" ng-model="newReview.comment" class="form-control" rows="3" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-                <div class="box-price" ng-if="productDetails.length">
-                  <div class="price-chitiet">
-                    <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
-                    <span class="current-price">{{selectedSizeDetail.unitprice | number : 0}}₫</span>
-                  </div>
-                </div>
-              </div>
-              <div class="moTa mt-3" style="padding-left: 50px">
-                <span class="text-chitietsp">Mô tả:</span>
-                <p>{{ product.description }}</p>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-        <div>
-          <h3 class="textSanPham mt-4 mb-2">Những Sản phẩm Được Yêu Thích Nhất</h3>
-          <div class="row" ng-controller="FavoriteTopController">
-            <div class="col-lg-3 mb-4" ng-repeat="item in favoriteProducts | limitTo: 4">
-              <div class="pd-box"
-                style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                <!-- Hình ảnh sản phẩm -->
-                <div class="box-images">
-                  <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}">
-                    <img ng-src="{{item.img}}" alt="{{item.productname}}" class="img-fluid"
-                      style="width: auto; height: 295px; margin-bottom: 0px" </a>
-                </div>
+      .rating label {
+        cursor: pointer;
+      }
 
-                <!-- Nội dung sản phẩm -->
-                <div class="box-content p-3">
-                  <!-- Tên sản phẩm -->
-                  <h3 class="product-name">
-                    <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}"
-                      class="text-dark text-decoration-none tenTheSP">
-                      {{item.productname}}
+      /* Đảm bảo các sao lúc chưa chọn đều có màu xám */
+      .rating label {
+        color: #ccc;
+      }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="../assets/js/angular.min.js"></script>
+    <script src="../assets/js/angular-route.js"></script>
+    <script src="../assets/js/chitietsanpham.js"></script>
+  </head>
+
+  <body ng-controller="loadSanPhamDanhGia">
+    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+    <div ng-include="'layout/menu.html'"></div>
+    <div class="setDoDaiTrang">
+      <div class="container-fluid" style="margin-top: 55px; z-index: -1">
+        <div class="container mt-4">
+          <div class="row">
+            <div
+              class="col-lg-8"
+              style="
+                border: solid 1px rgb(222, 226, 230);
+                padding-top: 20px;
+                border-radius: 5px;
+              "
+            >
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="box-img-detail">
+                    <a href="">
+                      <img
+                        ng-src="{{product.img}}"
+                        alt="{{product.productname}}"
+                        class="img-reponsive mt-0"
+                        style="width: auto; height: 290px; margin-bottom: 0px"
+                      />
                     </a>
-                  </h3>
-                  <!-- Giá sản phẩm -->
-                  <div class="product-price mt-2">
-                    <span class="price text-danger fw-bold">
-                      <span class="price">{{ formatCurrency(item.unitprice) }}</span>
-                    </span>
                   </div>
+                </div>
+                <div class="col-lg-6">
+                  <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
+                  <div class="danhgia text-chitietsp">
+                    <span>Đáng giá sản phẩm |</span>
+                    <div class="rating">
+                      <label class="star" data-value="1">★</label>
+                      <label class="star" data-value="2">★</label>
+                      <label class="star" data-value="3">★</label>
+                      <label class="star" data-value="4">★</label>
+                      <label class="star" data-value="5">★</label>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="comment" class="form-label">Nhận xét:</label>
+                    <textarea
+                      id="comment"
+                      ng-model="newReview.comment"
+                      class="form-control"
+                      rows="3"
+                      required
+                    ></textarea>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    ng-click="submitReview()"
+                  >
+                    Gửi đánh giá
+                  </button>
+                  <div class="box-price" ng-if="productDetails.length">
+                    <div class="price-chitiet">
+                      <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
+                      <span class="current-price"
+                        >{{selectedSizeDetail.unitprice | number : 0}}₫</span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="moTa mt-3" style="padding-left: 50px">
+                  <span class="text-chitietsp">Mô tả:</span>
+                  <p>{{ product.description }}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-  </div>
-  <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="notificationModalLabel">Thông báo</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">{{ notificationMessage }}</div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
-            OK
-          </button>
+    <div
+      class="modal fade"
+      id="notificationModal"
+      tabindex="-1"
+      aria-labelledby="notificationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="notificationModalLabel">Thông báo</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">{{ notificationMessage }}</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              ng-click="closeModalAndRedirect()"
+            >
+              OK
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div ng-include="'layout/footer.html'"></div>
-  <script src="../assets/js/bootstrap.bundle.js"></script>
-</body>
-
+    <div ng-include="'layout/footer.html'"></div>
+    <script src="../assets/js/bootstrap.bundle.js"></script>
+  </body>
 </html>
