@@ -149,33 +149,30 @@ app.controller("OrderController", function ($scope, $window, $http) {
   // Cập nhật trạng thái đơn hàng
   $scope.updateOrderStatus = function () {
     $scope.isUpdating = true;
-
+  
     var newStatus = parseInt($scope.selectedOrder.status.idstatus, 10);
     var oldStatus = parseInt($scope.originalStatus, 10);
-
+  
     if (oldStatus === newStatus) {
       $scope.showMessageModal("Trạng thái không thay đổi.", "info");
       $scope.isUpdating = false;
       return;
     }
-
+  
     var orderStatusHistory = {
       order: { idorder: $scope.selectedOrder.idorder },
       status: { idstatus: newStatus },
       timestamp: new Date().toISOString(),
     };
-
+  
     $http
-      .put(
-        `${API}/order-status-history/${$scope.selectedOrder.idorder}`,
-        orderStatusHistory
-      )
+      .put(`${API}/order-status-history/${$scope.selectedOrder.idorder}`, orderStatusHistory)
       .then((response) => {
         $scope.showMessageModal("Cập nhật trạng thái thành công!", "success");
-
+  
         // Cập nhật trạng thái trong $scope
         $scope.selectedOrder.status.idstatus = newStatus;
-
+  
         const orderIndex = $scope.Orders.findIndex(
           (order) => order.idorder === $scope.selectedOrder.idorder
         );
@@ -183,7 +180,12 @@ app.controller("OrderController", function ($scope, $window, $http) {
           $scope.Orders[orderIndex].status.idstatus = newStatus;
           $scope.Orders[orderIndex].statusName = response.data.statusName;
         }
-
+  
+        // Nếu trạng thái mới là "Đã Hủy" (idstatus = 4), khôi phục tồn kho
+        if (newStatus === 4) {
+          $scope.restoreInventory($scope.selectedOrder.idorder);
+        }
+  
         // Kiểm tra nếu trạng thái mới là "Đã giao hàng" (idstatus = 3)
         if (
           newStatus === 3 &&
@@ -203,6 +205,51 @@ app.controller("OrderController", function ($scope, $window, $http) {
         $scope.isUpdating = false;
       });
   };
+  //Thêm sản phẩm tồn kho khi đơn hàng hủy
+  $scope.restoreInventory = function (idorder) {
+    $http
+      .get(`${API}/orderdetail/order/${idorder}`)
+      .then((response) => {
+        const orderDetails = response.data;
+  
+        orderDetails.forEach((detail) => {
+          if (detail.productdetail && detail.quantity) {
+            const productDetail = angular.copy(detail.productdetail);
+  
+            // Kiểm tra và xử lý giá trị tồn kho
+            const quantityInStock = parseInt(productDetail.quantityinstock, 10) || 0;
+            const quantityToRestore = parseInt(detail.quantity, 10) || 0;
+  
+            productDetail.quantityinstock = quantityInStock + quantityToRestore;
+  
+            console.log(
+              `Khôi phục tồn kho: Sản phẩm ${productDetail.idproductdetail}, Tồn kho mới: ${productDetail.quantityinstock}`
+            );
+  
+            $http
+              .put(`${API}/productdetail/${productDetail.idproductdetail}`, productDetail)
+              .then(() => {
+                console.log(
+                  `Đã khôi phục tồn kho cho sản phẩm ${productDetail.idproductdetail}`
+                );
+              })
+              .catch((error) => {
+                console.error(
+                  `Có lỗi khi khôi phục tồn kho cho sản phẩm ${productDetail.idproductdetail}: `,
+                  error
+                );
+              });
+          } else {
+            console.warn("Chi tiết đơn hàng thiếu dữ liệu hoặc không hợp lệ:", detail);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng:", error);
+      });
+  };
+  
+  
 
   // Cập nhật trạng thái thanh toán
   $scope.updateOrderStatusPay = function () {
