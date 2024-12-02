@@ -23,7 +23,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body ng-app="myApp">
+<body ng-app="myApp"  ng-controller="discountsController">
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
@@ -181,7 +181,7 @@
                                 </li>
                             </ul>
             
-                            <div class="tab-content" id="myTabContent" ng-controller="discountsController">
+                            <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                                     <div class="table-responsive">
                                         <table class="account-table table">

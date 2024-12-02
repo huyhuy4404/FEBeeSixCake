@@ -55,7 +55,8 @@
   </div>
 </nav>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  ng-controller="discountsController">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -66,27 +67,46 @@
         <!-- Input tìm kiếm -->
         <div class="modal-body">
           <!-- Input tìm kiếm -->
-          <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm" ng-model="searchQuery" ng-change="searchProducts()"/>
-      </div>    </div>
-    
-      <div class="modal-footer SPTimKiem" ng-if="filteredProducts.length > 0">
-        <div class="row" ng-repeat="item in filteredProducts">
-            <div class="cart-item-timkiem">
-                <div class="cart-image">
-                    <img ng-src="../admin/images/{{item.img}}" alt="{{item.productname}}" class="img-fluid" style="width: 50px; height: 50px;">
-                </div>
-                <div class="cart-details">
-                    <h5>{{item.productname}}</h5>
-                    <p>{{ formatCurrency(item.unitprice) }}</p>
-                </div>
-            </div>
+          <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm"
+            ng-model="searchQuery" ng-change="searchProducts()" />
         </div>
-    </div>
-    <div ng-if="filteredProducts.length === 0">
-        <p>Không tìm thấy sản phẩm phù hợp.</p>
-    </div>
-    
-   
+      </div>
+
+
+      <div class="modal-footer SPTimKiem" ng-if="filteredProducts.length > 0">
+        <div class="row" style="width: 1200px;">
+          <div ng-repeat="item in filteredProducts | limitTo: limit"> <!-- Chỉ hiển thị sản phẩm đến biến limit -->
+            <div class="row align-items-center mb-2"> <!-- Dùng align-items-center để căn giữa -->
+              <div class="col-sm-6"> <!-- Cột cho thông tin sản phẩm -->
+                <div class="cart-details">
+                  <h5>{{item.productname}}</h5>
+                  <p>{{ formatCurrency(item.unitprice) }}</p>
+                </div>
+              </div>
+              <div class="col-sm-6 text-end"> <!-- Cột cho hình ảnh, thêm text-end để căn phải -->
+                <div class="cart-image">
+                  <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}">
+
+                    <img ng-src="../admin/images/{{item.img}}" alt="{{item.productname}}" class="img-fluid"
+                      style="width: 70px; height: 50px;">
+                  </a>
+
+                </div>
+              </div>
+              <hr>
+            </div>
+          </div>
+
+          <!-- Liên kết "Xem thêm" -->
+          <div class="col-12 text-center" ng-if="filteredProducts.length > limit">
+            <button class="btn btn-primary" ng-click="showMore()">Xem thêm ({{ productCount }})</button>
+
+
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 </div>
