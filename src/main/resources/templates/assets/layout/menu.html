@@ -8,22 +8,13 @@
 
         <li class="nav-item">
           <div class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Danh Mục
             </a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonDark">
               <li ng-repeat="item in category">
                 <!-- Sửa đổi từ Products thành category -->
-                <a
-                  class="dropdown-item"
-                  ng-click="filterProducts(item.categoryname)"
-                >
+                <a class="dropdown-item" ng-click="filterProducts(item.categoryname)">
                   {{item.categoryname}}
                   <!-- Hiển thị tên danh mục -->
                 </a>
@@ -44,10 +35,7 @@
       <ul class="navbar-nav menu-right">
         <li class="nav-item">
           <div data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <i
-              class="fa-solid fa-magnifying-glass"
-              style="margin-top: 13px; margin-right: 10px; color: #2e1d15"
-            ></i>
+            <i class="fa-solid fa-magnifying-glass" style="margin-top: 13px; margin-right: 10px; color: #2e1d15"></i>
           </div>
         </li>
         <li class="nav-item">
@@ -59,9 +47,7 @@
         </li>
 
         <li class="nav-item fs-4 position-relative pt-1 pe-3">
-          <a href="giohang.html"
-            ><img src="cart.png" alt="" style="width: 38px"
-          /></a>
+          <a href="giohang.html"><img src="cart.png" alt="" style="width: 38px" /></a>
           <span class="cart-count">0</span>
         </li>
       </ul>
@@ -69,54 +55,38 @@
   </div>
 </nav>
 <!-- Modal -->
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Tìm Kiếm</h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- Input tìm kiếm -->
-        <input
-          type="text"
-          class="form-control"
-          id="searchInput"
-          placeholder="Nhập tên sản phẩm cần tìm"
-        />
-      </div>
-      <div class="modal-footer SPTimKiem">
-        <!-- Cart mẫu để hiển thị kết quả tìm kiếm -->
-        <div class="cart-item-timkiem">
-          <div class="cart-image">
-            <img src="image_url_here" alt="Sản phẩm" width="50" height="50" />
-          </div>
-          <div class="cart-details">
-            <h5>Tên sản phẩm</h5>
-            <p>Giá: 100.000 VND</p>
-          </div>
+        <div class="modal-body">
+          <!-- Input tìm kiếm -->
+          <input type="text" class="form-control" id="searchInput" placeholder="Nhập tên sản phẩm cần tìm" ng-model="searchQuery" ng-change="searchProducts()"/>
+      </div>    </div>
+    
+      <div class="modal-footer SPTimKiem" ng-if="filteredProducts.length > 0">
+        <div class="row" ng-repeat="item in filteredProducts">
+            <div class="cart-item-timkiem">
+                <div class="cart-image">
+                    <img ng-src="../admin/images/{{item.img}}" alt="{{item.productname}}" class="img-fluid" style="width: 50px; height: 50px;">
+                </div>
+                <div class="cart-details">
+                    <h5>{{item.productname}}</h5>
+                    <p>{{ formatCurrency(item.unitprice) }}</p>
+                </div>
+            </div>
         </div>
-        <div class="cart-item-timkiem">
-          <div class="cart-image">
-            <img src="image_url_here" alt="Sản phẩm" width="50" height="50" />
-          </div>
-          <div class="cart-details">
-            <h5>Tên sản phẩm</h5>
-            <p>Giá: 200.000 VND</p>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div ng-if="filteredProducts.length === 0">
+        <p>Không tìm thấy sản phẩm phù hợp.</p>
+    </div>
+    
+   
     </div>
   </div>
 </div>

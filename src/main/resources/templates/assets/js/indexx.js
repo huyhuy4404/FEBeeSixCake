@@ -1,11 +1,13 @@
 var app = angular.module("myApp", []);
-
 app.controller("discountsController", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api";
+  
+  // Khởi tạo các biến
   $scope.Products = [];
   $scope.category = [];
   $scope.filteredProducts = []; // Mảng chứa sản phẩm đã lọc
   $scope.selectedCategory = "";
+  $scope.searchQuery = ""; // Biến tìm kiếm
 
   // Thêm biến cho phân trang
   $scope.currentPage = 1;
@@ -52,6 +54,9 @@ app.controller("discountsController", function ($scope, $http) {
         // Sắp xếp sản phẩm mới theo ID từ cao đến thấp
         $scope.newProducts = $scope.Products.filter(item => item.isactive).sort((a, b) => b.idproduct - a.idproduct);
 
+        // Khởi tạo filteredProducts với tất cả sản phẩm ban đầu
+        $scope.filteredProducts = $scope.newProducts;
+
         // Tính toán tổng số trang sau khi dữ liệu đã được tải
         $scope.calculateTotalPages();
 
@@ -66,6 +71,21 @@ app.controller("discountsController", function ($scope, $http) {
         console.error("Error fetching data:", error);
       });
   };
+
+  // Tìm kiếm sản phẩm theo tên
+  $scope.searchProducts = function () {
+    console.log("Searching for:", $scope.searchQuery); // Để kiểm tra giá trị tìm kiếm
+    if (!$scope.searchQuery) {
+        $scope.filteredProducts = $scope.newProducts;
+    } else {
+        const query = $scope.searchQuery.toLowerCase();
+        $scope.filteredProducts = $scope.newProducts.filter(product =>
+            product.productname.toLowerCase().includes(query)
+        );
+    }
+    $scope.calculateTotalPages();
+    console.log("Filtered Products:", $scope.filteredProducts); // Để kiểm tra sản phẩm đã lọc
+};
 
   // Lọc sản phẩm theo loại
   $scope.filterProducts = function (categoryName, shouldRedirect = true) {
@@ -115,7 +135,7 @@ app.controller("discountsController", function ($scope, $http) {
   // Lấy sản phẩm trên trang hiện tại
   $scope.getPaginatedProducts = function () {
     const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
-    return $scope.newProducts.slice(start, start + $scope.itemsPerPage);
+    return $scope.filteredProducts.slice(start, start + $scope.itemsPerPage);
   };
 
   // Chuyển trang
@@ -127,7 +147,7 @@ app.controller("discountsController", function ($scope, $http) {
 
   // Tính toán tổng số trang
   $scope.calculateTotalPages = function () {
-    $scope.totalPages = Math.ceil($scope.newProducts.length / $scope.itemsPerPage);
+    $scope.totalPages = Math.ceil($scope.filteredProducts.length / $scope.itemsPerPage);
   };
 
   // Lấy danh mục sản phẩm
@@ -147,6 +167,7 @@ app.controller("discountsController", function ($scope, $http) {
         console.error("Error fetching categories:", error);
       });
   };
+
   $scope.getCategorie = function () {
     $http
       .get(`${API}/category`)
