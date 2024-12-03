@@ -155,7 +155,6 @@ app.controller("loadSanPhamDanhGia", function ($scope, $http) {
     // Không chuyển hướng về trang chủ ở đây nếu có lỗi
   };
 });
-
 app.controller("ProductDetailController", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api";
   const imageBaseUrl = "https://5ck6jg.csb.app/anh/";
@@ -484,6 +483,92 @@ app.controller("ProductDetailController", function ($scope, $http) {
   fetchProductDetails();
   fetchFavoriteData();
   fetchCategories();
+
+});
+app.controller("DanhGiaSanPhamController", function ($scope, $http) {
+  const API = "http://localhost:8080/beesixcake/api";
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get("id");
+
+  // Biến khởi tạo
+  $scope.reviews = [];
+  $scope.filteredReviews = []; // Biến lưu trữ đánh giá đã lọc
+  $scope.averageRating = 0;
+  $scope.reviewCount = 0;
+
+  // Kiểm tra nếu productId không tồn tại
+  if (!productId) {
+    console.error("Product ID is missing from the URL");
+    return;
+  }
+
+  // **Lấy đánh giá sản phẩm**
+  const fetchReviews = () => {
+    $http
+      .get(`${API}/reviews`)
+      .then((response) => {
+        console.log("Response data:", response.data); // Log toàn bộ dữ liệu trả về
+
+        // Lọc đánh giá theo sản phẩm hiện tại
+        const productReviews = response.data.filter(
+          (review) => review.product.idproduct == productId
+        );
+        console.log("Filtered Reviews:", productReviews); // Log dữ liệu đã lọc
+
+        // Tính toán nếu có đánh giá
+        if (productReviews.length > 0) {
+          const totalRating = productReviews.reduce(
+            (sum, review) => sum + review.rating,
+            0
+          );
+          console.log("Total Rating:", totalRating); // Log tổng số sao
+
+          $scope.averageRating = parseFloat(
+            (totalRating / productReviews.length).toFixed(1)
+          );
+          console.log("Average Rating Calculated:", $scope.averageRating); // Log trung bình số sao
+
+          $scope.reviewCount = productReviews.length;
+        } else {
+          // Không có đánh giá
+          $scope.averageRating = "N/A";  // Hoặc có thể là 0, hoặc bất kỳ giá trị hợp lý nào
+          $scope.reviewCount = 0;
+        }
+
+        // Gán dữ liệu đánh giá vào scope
+        $scope.reviews = productReviews;
+        $scope.filteredReviews = productReviews; // Lưu đánh giá ban đầu vào filteredReviews
+      })
+      .catch((error) => console.error("Error fetching reviews:", error));
+  };
+
+  // **Lọc đánh giá**
+  $scope.filterReviews = function (rating) {
+    if (rating === "all") {
+      // Nếu là "Tất cả", trả về tất cả đánh giá
+      $scope.filteredReviews = $scope.reviews;
+    } else if (rating === "withComment") {
+      // Nếu là "Có bình luận", chỉ hiển thị các đánh giá có reviewtext
+      $scope.filteredReviews = $scope.reviews.filter(review => review.reviewtext);
+    } else {
+      // Lọc các đánh giá theo rating (1-5 sao)
+      $scope.filteredReviews = $scope.reviews.filter(review => review.rating === rating);
+    }
+  };
+
+  // **Tính số lượng đánh giá phù hợp với rating**
+  $scope.filterReviewCount = function (rating) {
+    if (rating === "all") {
+      return $scope.reviews.length;
+    } else if (rating === "withComment") {
+      return $scope.reviews.filter(review => review.reviewtext).length;
+    } else {
+      return $scope.reviews.filter(review => review.rating === rating).length;
+    }
+  };
+
+  // Gọi khi khởi tạo controller
+  fetchReviews();
 });
 app.controller("FavoriteTopController", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api";
@@ -610,7 +695,6 @@ app.controller("FavoriteTopController", function ($scope, $http) {
   $scope.getMostFavoritedProducts(); // Gọi để lấy sản phẩm có lượt yêu thích nhiều nhất
   $scope.getCategorie(); // Gọi để lấy danh mục sản phẩm
 });
-
 app.controller("loadLoaiSanPham", function ($scope, $http) {
   // Khởi tạo mảng để chứa loại sản phẩm
   $scope.category = [];

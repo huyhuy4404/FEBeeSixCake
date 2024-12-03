@@ -13,6 +13,61 @@
   <script src="../assets/js/angular.min.js"></script>
   <script src="../assets/js/angular-route.js"></script>
   <script src="../assets/js/chitietsanpham.js"></script>
+  <style>
+    .product-rating {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+    }
+
+    .stars {
+      color: #ff9900;
+    }
+
+    .rating-num {
+      margin-left: 10px;
+    }
+
+    .filter-btns {
+      margin-top: 10px;
+    }
+
+    .filter-btns button {
+      padding: 10px;
+      margin-right: 5px;
+      background-color: #ddd;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .reviews {
+      margin-top: 30px;
+    }
+
+    .review {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f1f1f1;
+      border-radius: 8px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+    }
+
+    .review-body {
+      margin-top: 10px;
+    }
+
+    .seller-response {
+      margin-top: 15px;
+      color: #007bff;
+      font-style: italic;
+    }
+  </style>
 </head>
 
 <body ng-controller="loadLoaiSanPham">
@@ -29,7 +84,7 @@
       </div>
 
 
-      <div class="container mt-4">
+      <div class="container mt-4" ng-controller="DanhGiaSanPhamController">
         <div class="row">
           <div class="col-lg-8" style="
               border: solid 1px rgb(222, 226, 230);
@@ -47,18 +102,29 @@
               </div>
               <div class="col-lg-6">
                 <h4 class="tenSanPhamChiTiet">{{product.productname}}</h4>
-                <div class="danhgia text-chitietsp">
-                  <b>5.0</b>
+                <div class="danhgia text-chitietsp" ng-if="reviewCount > 0">
+                  <!-- Hiển thị trung bình số sao -->
+                  <b class="ng-binding">{{ averageRating }}</b>
+                  <!-- Hiển thị sao -->
                   <div class="rating">
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                    <label class="active">★</label>
-                    <label class="active">★</label>
+                    <span ng-repeat="star in [1, 2, 3, 4, 5]" class="ng-scope">
+                      <label ng-class="{
+                        active: star <= Math.floor(averageRating), 
+                        half: star === Math.ceil(averageRating) && averageRating % 1 !== 0
+                      }">
+                        ★
+                      </label>
+                    </span>
                   </div>
-                  <span>| số lượt đánh giá</span>
+                  <!-- Hiển thị số lượt đánh giá -->
+                  <span class="text-chitietsp">
+                    <b class="ng-binding">{{ reviewCount }}</b> | Số lượt đánh giá
+                  </span>
                 </div>
-
+                <!-- Hiển thị thông báo nếu không có đánh giá -->
+                <div class="danhgia text-chitietsp" ng-if="reviewCount === 0">
+                  <span>Sản phẩm chưa có đánh giá</span>
+                </div>
                 <div class="box-price" ng-if="productDetails.length">
                   <div class="price-chitiet">
                     <!-- Hiển thị giá hiện tại với ký hiệu ₫ sau -->
@@ -136,6 +202,80 @@
             </div>
           </div>
         </div>
+        <h3 class="textSanPham mt-4 mb-2">Đánh Giá Sản Phẩm</h3>
+        <div class="pb-0"
+          style="border: solid 1px rgb(222, 226, 230); border-radius: 5px; padding: 15px;">
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="row">
+                <!-- Hiển thị khi có đánh giá -->
+                <div class="col-lg-12" ng-if="reviewCount > 0">
+                  <!-- Hiển thị điểm trung bình -->
+                  <div class="rating-num fw-bold" style="font-size: 28px; margin-left: 30px;">
+                    {{averageRating}} / 5
+                  </div>
+                </div>
+                <div class="col-lg-12" ng-if="reviewCount > 0">
+                  <div class="product-rating">
+                    <div class="rating">
+                      <span ng-repeat="star in [1, 2, 3, 4, 5]" class="ng-scope">
+                        <label style="font-size: 35px;" ng-class="{
+                                            active: star <= Math.floor(averageRating), 
+                                            half: star === Math.ceil(averageRating) && averageRating % 1 !== 0
+                                          }">
+                          ★
+                        </label>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Hiển thị khi không có đánh giá -->
+                <div class="col-lg-12" ng-if="reviewCount === 0">
+                  <div class="text-center mt-3" style="font-size: 20px; margin-top: 10px;">
+                    Sản phẩm chưa có đánh giá
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-9">
+              <div class="filter-btns">
+                <button ng-click="filterReviews('all')">Tất cả ({{ reviewCount }})</button>
+                <button ng-click="filterReviews(5)">5 Sao ({{filterReviewCount(5)}})</button>
+                <button ng-click="filterReviews(4)">4 Sao ({{filterReviewCount(4)}})</button>
+                <button ng-click="filterReviews(3)">3 Sao ({{filterReviewCount(3)}})</button>
+                <button ng-click="filterReviews(2)">2 Sao ({{filterReviewCount(2)}})</button>
+                <button ng-click="filterReviews(1)">1 Sao ({{filterReviewCount(1)}})</button>
+                <button ng-click="filterReviews('withComment')">Có bình luận
+                  ({{filterReviewCount('withComment')}})</button>
+
+              </div>
+            </div>
+          </div>
+          <div class="reviews">
+            <div class="review" ng-repeat="review in filteredReviews">
+              <div class="review-header">
+                <div>{{review.account.fullname}} <br>
+                  <div class="rating">
+                    <span ng-repeat="star in [1, 2, 3, 4, 5]" class="ng-scope">
+                      <label ng-class="{
+                                active: star <= review.rating,
+                                half: star === Math.ceil(review.rating) && review.rating % 1 !== 0
+                              }">
+                        ★
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                <div>{{review.reviewdate | date:'HH:mm - dd-MM-yyyy'}}</div> <!-- Định dạng lại ngày -->
+              </div>
+              <div class="review-body">
+                {{review.reviewtext || "Chưa có bình luận"}}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div>
           <h3 class="textSanPham mt-4 mb-2">Những Sản phẩm Được Yêu Thích Nhất</h3>
           <div class="row" ng-controller="FavoriteTopController">

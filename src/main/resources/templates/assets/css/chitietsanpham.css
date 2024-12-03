@@ -41,7 +41,6 @@
 
 /* Định dạng chung cho các thành phần */
 
-
 .number-card span {
   margin-right: 10px;
 }
@@ -50,47 +49,45 @@
   border: none;
 }
 
-
 .buttons_added {
-    opacity: 1;
-    display: inline-block;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    white-space: nowrap;
-    vertical-align: top;
-  }
-  .is-form {
-    overflow: hidden;
-    position: relative;
-    background-color: white;
-    height: 2.2rem;
-    width: 1.9rem;
-    padding: 0;
-    text-shadow: 1px 1px 1px #fff;
-    border: none;
-    font-size: 20px;
-  
-  }
-  
-  .input-qty {
-    background-color: #fff;
-    height: 2.2rem;
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    display: inline-block;
-    vertical-align: top;
-    margin: 0;
-    border-left: 0;
-    border-right: 0;
-    padding: 0;
-    border: none;
-  }
-  .input-qty::-webkit-outer-spin-button,
-  .input-qty::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+  opacity: 1;
+  display: inline-block;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  white-space: nowrap;
+  vertical-align: top;
+}
+.is-form {
+  overflow: hidden;
+  position: relative;
+  background-color: white;
+  height: 2.2rem;
+  width: 1.9rem;
+  padding: 0;
+  text-shadow: 1px 1px 1px #fff;
+  border: none;
+  font-size: 20px;
+}
+
+.input-qty {
+  background-color: #fff;
+  height: 2.2rem;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
+  border-left: 0;
+  border-right: 0;
+  padding: 0;
+  border: none;
+}
+.input-qty::-webkit-outer-spin-button,
+.input-qty::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 .bst .btn {
   border: none;
@@ -209,21 +206,40 @@ input[type="radio"]:checked + .size-label {
   color: white;
   border-color: #d38450;
 }
-
 .danhgia {
-  display: flex; /* Sử dụng Flexbox để xếp theo hàng */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  gap: 10px; /* Khoảng cách giữa các phần tử */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
+
 .rating {
   display: flex;
-  gap: 1px; /* Khoảng cách giữa các sao */
-}
-.rating label {
-  font-size: 1.6em;
-  color: gold; /* Màu vàng cho các sao */
+  gap: 1px;
 }
 
+.rating label {
+  font-size: 1.6em;
+  color: #ccc !important; /* Màu xám cho sao chưa kích hoạt */
+}
+
+.rating label.active {
+  color: gold;  /* Màu vàng cho sao đầy */
+}
+
+.rating label.half {
+  position: relative;
+  color: gold;
+}
+
+.rating label.half::after {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 50%;
+  color: gold;
+  overflow: hidden;
+  z-index: 1;
+}
 .btn-chitietsanpham .btn-primary {
   background-color: #d38450;
   width: 180px;
@@ -265,4 +281,3 @@ input[type="radio"]:checked + .size-label {
   padding: 10px;
   border: 1px solid rgb(222, 226, 230);
 }
-
