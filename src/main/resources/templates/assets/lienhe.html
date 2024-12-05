@@ -14,13 +14,14 @@
   <script src="../assets/js/angular-route.js"></script>
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/indexx.js"></script>
+  <script src="../assets/js/lienhe.js"></script>
   <!-- Plugins CSS -->
   <link rel="stylesheet" href="assets/css/plugins.css" />
 </head>
 
-<body ng-app="myApp" ng-controller="discountsController">
-  <div ng-include="'layout/header.html'"></div>
-  <div ng-include="'layout/menu.html'" ng-controller="CheckLogin"></div>
+<body ng-app="myApp" >
+  <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
+  <div ng-include="'layout/menu.html'" ></div>
   <div class="setDoDaiTrang">
     <!-- About Section -->
     <section id="about" class="py-5">
@@ -47,25 +48,61 @@
     </section>
 
     <!-- Contact Form Section -->
-    <section id="contact-form" class="py-5 bg-light text-center">
+    <section id="contact-form" class="py-5 bg-light text-center" ng-controller="contactController">
       <div class="container">
         <h2 class="mb-4">Gửi Thắc Mắc Của Bạn</h2>
-        <form>
+        <form ng-submit="sendEmail()">
           <div class="form-row">
             <div class="col-md-6 mb-3">
-              <input type="text" class="form-control" placeholder="Tên của bạn" required />
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Tên của bạn"
+                ng-model="user.name"
+                required
+              />
             </div>
             <div class="col-md-6 mb-3">
-              <input type="email" class="form-control" placeholder="Email của bạn" required />
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Email của bạn"
+                ng-model="user.email"
+                required
+              />
             </div>
           </div>
           <div class="form-group mb-4">
-            <textarea class="form-control" rows="5" placeholder="Tin nhắn của bạn" required></textarea>
+            <textarea
+              class="form-control"
+              rows="5"
+              placeholder="Tin nhắn của bạn"
+              ng-model="user.message"
+              required
+            ></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Gửi</button>
         </form>
       </div>
     </section>
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="successModalLabel">Thành Công</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  Tin nhắn của bạn đã được gửi thành công! Chúng tôi sẽ phản hồi sớm nhất có thể.
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+              </div>
+          </div>
+      </div>
+  </div>
+    
+
 
     <!-- Features Section -->
     <section id="features" class="py-5 text-center">
