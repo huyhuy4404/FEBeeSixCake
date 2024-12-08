@@ -1,3 +1,88 @@
 h5{
     color: blue;
 }
+.textSanPham1{
+    margin-left: 780px;
+     font-size: 60px;
+     color: #1e5692;
+     
+    
+}
+.textSanPham1:hover{
+    color: rgb(89, 137, 17);
+}
+.box-content {
+    background-color: #f9f9f9; /* Light background for the box */
+    padding: 20px; /* Padding around the content */
+    border-radius: 8px; /* Rounded corners */
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align items horizontally */
+    text-align: center; /* Center text */
+}
+
+.product-name {
+    font-size: 24px; /* Adjust font size for product name */
+    font-weight: bold; /* Make the product name bold */
+    color: #000; /* Color for the product name */
+}
+
+.product-code {
+    font-size: 16px; /* Font size for the product code */
+    color: #555; /* Color for the product code */
+    margin-bottom: 10px; /* Space below the product code */
+}
+
+.price-container {
+    background-color: #c0d600; /* Background color for the price */
+    padding: 10px 15px; /* Padding around the price */
+    border-radius: 5px 10px 0 10px; /* Rounded corners on the left */
+    align-items: center; /* Center align items vertically */
+    justify-content: center; /* Center align items horizontally */
+    margin-left: -234px;
+}
+
+.price {
+    color: white; /* Color for the price */
+    font-size: 20px; /* Adjust font size for the price */
+    margin-right: 10px; /* Space between price and button */
+}
+
+.add-to-cart {
+    background-color: #4e3b24; /* Background color for the button */
+    color: white; /* Text color for the button */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor */
+    padding: 5px 10px; /* Padding for the button */
+    border-radius: 0 5px 5px 5px; /* Rounded corners on the right */
+}
+.product-price {
+    margin-left: -188px;
+    display: inline-block;
+    padding: 0px 30px;
+    height: 50px;
+    margin-top: 4px;
+    line-height: 50px;
+    background: #c0c906;
+    color: #fff;
+    float: left;
+    border-top-right-radius: 10px;
+    position: relative;
+    z-index: 2;
+    font-size: 25px;
+    font-weight: bold;
+}
+.product-actions button {
+    height: 50px;
+    line-height: 50px;
+    width: 60px;
+
+    padding: 0px;
+    margin: 4px 0px 0px -39px;
+    background: #3d1a1a;
+    color: #fff;
+    border-top-right-radius: 10px;
+}
