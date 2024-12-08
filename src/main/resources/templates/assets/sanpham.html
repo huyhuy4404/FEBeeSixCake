@@ -47,15 +47,14 @@
           <hr class="mt-2 me-1" />
           <div class="container">
             <div class="row">
-              <div class="col-lg-3 mb-4" ng-repeat="item in filteredProducts">
-                <div class="pd-box" s  style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+              <div class="col-lg-4 mb-4" ng-repeat="item in getPaginatedProducts()">
+                <div class="pd-box" style="border: 1px solid rgb(222, 226, 230); border-radius: 8px; overflow: hidden; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                   <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}">
                     <img ng-src="../admin/images/{{item.img}}" style="width: 100%; height: 300px" />
                   </a>
                   <div class="box-content">
                     <h3>
-                      <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}"
-                        class="tenTheSP">{{item.productname}}</a>
+                      <a href="../assets/chitietsanpham.html?id={{item.idproduct}}" title="{{item.productname}}" class="tenTheSP">{{item.productname}}</a>
                     </h3>
                     <div>
                       <span class="original-price" ng-if="item.discount > 0" style="text-decoration: line-through">
@@ -66,17 +65,22 @@
                       </span>
                     </div>
                     <div class="cd-content">
-                      <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03"
-                        data-start="09-13-2024-21-28-03" data-active="true">
+                      <div class="timer-view" data-countdown="countdown" data-date="09-13-2024-21-28-03" data-start="09-13-2024-21-28-03" data-active="true">
                         <div class="lof-labelexpired"></div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div class="pagination" style="text-align: center; margin: 20px auto;margin-left: 550px;">
+                <button class="btn btn-primary" ng-click="changePage(currentPage - 1)" ng-disabled="currentPage === 1">Trang trước</button>
+                <span style="margin: 0 15px; font-size: 18px; font-weight: bold;">{{ currentPage }} / {{ totalPages }}</span>
+                <button class="btn btn-primary" ng-click="changePage(currentPage + 1)" ng-disabled="currentPage === totalPages">Trang sau</button>
+              </div>
             </div>
           </div>
         </div>
+        
 
         <div class="col-lg-3">
           <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">

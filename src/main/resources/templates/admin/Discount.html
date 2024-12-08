@@ -11,24 +11,30 @@
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
- 
+
     <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
     <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
     <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="css/tooplate-mini-finance.css" rel="stylesheet">
- 
+
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+<style>
+    .account-table th {
+        padding: 12px 15px;
+        font-size: 16px;
+    }
+</style>
 
-<body ng-app="myApp"  ng-controller="discountsController">
+<body ng-app="myApp" ng-controller="discountsController">
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
                 <i class="bi-box"></i>
-                BEE SIX CAKE 
+                BEE SIX CAKE
             </a>
         </div>
 
@@ -49,7 +55,8 @@
                     <a class="nav-link dropdown-toggle text-center" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="bi-bell"></i>
-                        <span class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                        <span
+                            class="position-absolute start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                             <span class="visually-hidden">New alerts</span>
                         </span>
                     </a>
@@ -154,7 +161,7 @@
                 <div class="title-group mb-3">
                     <h1 class="h2 mb-0">Quản Lý Mã Giảm Giá</h1>
                 </div>
-            
+
                 <div class="row my-4">
                     <div class="">
                         <div class="custom-block bg-white">
@@ -177,12 +184,21 @@
                                     <div class="d-flex align-items-center">
                                         <input class="form-control me-2" type="search" placeholder="Tìm kiếm mã"
                                             aria-label="Search" ng-model="searchQuery" ng-change="updateSearch()">
+                                        <label class="input-group-text fw-bold" for="orderStatusSelect">Hạn sử
+                                            dụng</label>
+                                        <select class="form-select me-2" ng-model="filterOption"
+                                            ng-change="updateFilter()">
+                                            <option value="">Tất cả</option>
+                                            <option value="valid">Còn hạn</option>
+                                            <option value="expired">Hết hạn</option>
+                                        </select>
                                     </div>
                                 </li>
                             </ul>
-            
+
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                                <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel"
+                                    aria-labelledby="profile-tab" tabindex="0">
                                     <div class="table-responsive">
                                         <table class="account-table table">
                                             <thead>
@@ -197,7 +213,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="category in paginatedDiscounts">
+                                                <tr ng-repeat="category in paginatedDiscounts | filter:filterCondition">
                                                     <td>{{category.iddiscount}}</td>
                                                     <td>{{category.discountcode}}</td>
                                                     <td>{{category.discountpercentage}}%</td>
@@ -205,35 +221,43 @@
                                                     <td>{{category.enddate | date:'dd/MM/yyyy'}}</td>
                                                     <td>{{formatCurrency(category.lowestprice)}}</td>
                                                     <td class="text-end">
-                                                        <button class="btn btn-sm btn-warning" ng-click="goToEdit(category)">Chỉnh sửa</button>
-                                                        <button class="btn btn-sm btn-danger" ng-click="deletediscount(category)">Xóa</button>
+                                                        <button class="btn btn-sm btn-warning"
+                                                            ng-click="goToEdit(category)"> <i
+                                                                class="bi bi-pencil-square"></i> Chỉnh sửa</button>
+                                                        <button class="btn btn-sm btn-danger"
+                                                            ng-click="deletediscount(category)"><i
+                                                                class="bi bi-trash"></i> Xóa</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-            
+
                                     <!-- Phân trang -->
                                     <nav aria-label="Page navigation">
                                         <ul class="pagination justify-content-center">
-                                           
                                             <li class="page-item" ng-class="{'disabled': currentPage === 1}">
-                                                <button class="page-link" ng-click="goToPage(currentPage - 1)"> Trang trước</button>
+                                                <button class="page-link" ng-click="goToPage(currentPage - 1)">Trang
+                                                    trước</button>
                                             </li>
-                                            <li class="page-item" ng-repeat="page in [].constructor(totalPages) track by $index" ng-class="{'active': currentPage === $index + 1}">
-                                                <button class="page-link" ng-click="goToPage($index + 1)">{{$index + 1}}</button>
+                                            <li class="page-item"
+                                                ng-repeat="page in [].constructor(totalPages) track by $index"
+                                                ng-class="{'active': currentPage === $index + 1}">
+                                                <button class="page-link" ng-click="goToPage($index + 1)">{{$index +
+                                                    1}}</button>
                                             </li>
                                             <li class="page-item" ng-class="{'disabled': currentPage === totalPages}">
-                                                <button class="page-link" ng-click="goToPage(currentPage + 1)">Trang Sau</button>
+                                                <button class="page-link" ng-click="goToPage(currentPage + 1)">Trang
+                                                    sau</button>
                                             </li>
-                                           
                                         </ul>
                                     </nav>
                                 </div>
-            
-                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel" aria-labelledby="password-tab" tabindex="0">
-                                    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel"
-                                        aria-hidden="true">
+
+                                <div class="tab-pane fade" id="password-tab-pane" role="tabpanel"
+                                    aria-labelledby="password-tab" tabindex="0">
+                                    <div class="modal fade" id="messageModal" tabindex="-1"
+                                        aria-labelledby="messageModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -245,7 +269,8 @@
                                                     <!-- Nội dung thông báo -->
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Hủy</button>
                                                     <button type="button" id="confirmModalButton" class="btn btn-danger"
                                                         style="display: none;" data-bs-dismiss="modal">Xác nhận</button>
                                                 </div>
@@ -256,43 +281,58 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Mã giảm giá:</p>
-                                                <input class="form-control" type="text" name="Discounts-code" id="Discounts-code" placeholder="Mã giảm giá" ng-model="selecteddiscount.discountcode" required>
+                                                <input class="form-control" type="text" name="Discounts-code"
+                                                    id="Discounts-code" placeholder="Mã giảm giá"
+                                                    ng-model="selecteddiscount.discountcode" required>
                                             </div>
                                             <div class="col-md-6">
                                                 <p>Đơn hàng tối thiểu:</p>
-                                                <input class="form-control" type="number" name="lowestPrice" id="lowestPrice" ng-model="selecteddiscount.lowestprice" placeholder="Đơn hàng tối thiểu" required>
+                                                <input class="form-control" type="number" name="lowestPrice"
+                                                    id="lowestPrice" ng-model="selecteddiscount.lowestprice"
+                                                    placeholder="Đơn hàng tối thiểu" required>
                                             </div>
                                         </div>
-            
+
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Phần trăm giảm giá:</p>
-                                                <input class="form-control" type="number" name="Discounts-percentage" id="Discounts-percentage" placeholder="Phần trăm giảm giá" ng-model="selecteddiscount.discountpercentage" min="0" max="100" required>
+                                                <input class="form-control" type="number" name="Discounts-percentage"
+                                                    id="Discounts-percentage" placeholder="Phần trăm giảm giá"
+                                                    ng-model="selecteddiscount.discountpercentage" min="0" max="100"
+                                                    required>
                                             </div>
                                             <div class="col-md-6">
                                                 <p>Ngày bắt đầu:</p>
-                                                <input class="form-control" placeholder="Ngày bắt đầu" type="date" name="Discounts-startdate" id="Discounts-startdate" ng-model="selecteddiscount.startdate" required>
+                                                <input class="form-control" placeholder="Ngày bắt đầu" type="date"
+                                                    name="Discounts-startdate" id="Discounts-startdate"
+                                                    ng-model="selecteddiscount.startdate" required>
                                             </div>
                                         </div>
-            
+
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <p>Ngày kết thúc:</p>
-                                                <input class="form-control" placeholder="Ngày kết thúc" type="date" name="Discounts-enddate" id="Discounts-enddate" ng-model="selecteddiscount.enddate" required>
+                                                <input class="form-control" placeholder="Ngày kết thúc" type="date"
+                                                    name="Discounts-enddate" id="Discounts-enddate"
+                                                    ng-model="selecteddiscount.enddate" required>
                                             </div>
                                         </div>
-            
+
                                         <div class="d-flex justify-content-start mt-3">
-                                            <button type="button" class="btn btn-primary me-2" id="add-btn" ng-click="adddiscount()">
+                                            <button type="button" class="btn btn-primary me-2" id="add-btn"
+                                                ng-click="adddiscount()">
                                                 <i class="fas fa-plus"></i> Thêm
                                             </button>
-                                            <button type="button" class="btn btn-warning me-2" id="edit-btn" ng-click="editdiscount()" ng-disabled="discountForm.$invalid">
+                                            <button type="button" class="btn btn-warning me-2" id="edit-btn"
+                                                ng-click="editdiscount()" ng-disabled="discountForm.$invalid">
                                                 <i class="fas fa-edit"></i> Sửa
                                             </button>
-                                            <button type="button" class="btn btn-danger me-2" id="delete-btn" ng-click="deletediscount(selecteddiscount)">
+                                            <button type="button" class="btn btn-danger me-2" id="delete-btn"
+                                                ng-click="deletediscount(selecteddiscount)">
                                                 <i class="fas fa-trash-alt"></i> Xóa
                                             </button>
-                                            <button type="reset" class="btn btn-secondary ms-2" id="reset-btn" ng-click="resetForm()">
+                                            <button type="reset" class="btn btn-secondary ms-2" id="reset-btn"
+                                                ng-click="resetForm()">
                                                 <i class="fas fa-sync-alt"></i> Làm mới
                                             </button>
                                         </div>
