@@ -1,2 +1,36 @@
+.qr-code {
+  width: 150px; /* Chiều rộng cố định */
+  height: 150px; /* Chiều cao cố định */
+  object-fit: cover;
+  margin: 0 auto; /* Canh giữa hình ảnh */
+}
 
+/* Giảm kích thước font cho thông tin ngân hàng */
+.card-body p {
+  font-size: 0.9rem; /* Giảm kích thước chữ */
+  margin-bottom: 0.5rem; /* Khoảng cách giữa các đoạn */
+}
 
+/* Điều chỉnh padding của card để gọn gàng hơn */
+.card-body {
+  padding: 0.5rem; /* Giảm padding */
+}
+
+/* Điều chỉnh kích thước button hủy thanh toán */
+.btn-danger.btn-sm {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Điều chỉnh khoảng cách giữa các phần tử trong radio buttons */
+.form-check {
+  margin-bottom: 0.5rem;
+}
+
+/* Tối ưu hiển thị trên màn hình nhỏ */
+@media (max-width: 767.98px) {
+  .qr-code {
+    width: 120px;
+    height: 120px;
+  }
+}
