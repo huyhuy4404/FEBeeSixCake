@@ -410,6 +410,47 @@ app.controller("ProductDetailController", function ($scope, $http) {
     if ($scope.quantity < $scope.maxQuantity) $scope.quantity++;
   };
 
+  let increaseInterval;
+  let decreaseInterval;
+
+  // Bắt đầu tăng số lượng khi nhấn và giữ nút cộng
+  $scope.startIncreasing = () => {
+    if (!increaseInterval) {
+      $scope.increaseQuantity(); // Tăng ngay lập tức khi click
+      increaseInterval = setInterval(() => {
+        if ($scope.quantity < $scope.maxQuantity) {
+          $scope.quantity++;
+          $scope.$apply(); // Cập nhật giao diện sau khi thay đổi giá trị
+        }
+      }, 100); // Tăng liên tục sau mỗi 100ms khi giữ
+    }
+  };
+
+  // Dừng tăng số lượng khi không còn giữ nút
+  $scope.stopIncreasing = () => {
+    clearInterval(increaseInterval); // Dừng lại khi không nhấn nữa
+    increaseInterval = null; // Đặt lại biến interval
+  };
+
+  // Bắt đầu giảm số lượng khi nhấn và giữ nút trừ
+  $scope.startDecreasing = () => {
+    if (!decreaseInterval) {
+      $scope.decreaseQuantity(); // Giảm ngay lập tức khi click
+      decreaseInterval = setInterval(() => {
+        if ($scope.quantity > 1) {
+          $scope.quantity--;
+          $scope.$apply(); // Cập nhật giao diện sau khi thay đổi giá trị
+        }
+      }, 100); // Giảm liên tục sau mỗi 100ms khi giữ
+    }
+  };
+
+  // Dừng giảm số lượng khi không còn giữ nút
+  $scope.stopDecreasing = () => {
+    clearInterval(decreaseInterval); // Dừng lại khi không nhấn nữa
+    decreaseInterval = null; // Đặt lại biến interval
+  };
+
   // **8. Yêu thích sản phẩm**
   $scope.toggleHeart = () => {
     if (!$scope.loggedInUser) {
@@ -483,7 +524,6 @@ app.controller("ProductDetailController", function ($scope, $http) {
   fetchProductDetails();
   fetchFavoriteData();
   fetchCategories();
-
 });
 app.controller("DanhGiaSanPhamController", function ($scope, $http) {
   const API = "http://localhost:8080/beesixcake/api";
@@ -515,6 +555,11 @@ app.controller("DanhGiaSanPhamController", function ($scope, $http) {
         );
         console.log("Filtered Reviews:", productReviews); // Log dữ liệu đã lọc
 
+        // Sắp xếp đánh giá theo ngày, mới nhất lên đầu
+        productReviews.sort(
+          (a, b) => new Date(b.reviewdate) - new Date(a.reviewdate)
+        );
+
         // Tính toán nếu có đánh giá
         if (productReviews.length > 0) {
           const totalRating = productReviews.reduce(
@@ -531,29 +576,47 @@ app.controller("DanhGiaSanPhamController", function ($scope, $http) {
           $scope.reviewCount = productReviews.length;
         } else {
           // Không có đánh giá
-          $scope.averageRating = "N/A";  // Hoặc có thể là 0, hoặc bất kỳ giá trị hợp lý nào
+          $scope.averageRating = "N/A"; // Hoặc có thể là 0
           $scope.reviewCount = 0;
         }
 
-        // Gán dữ liệu đánh giá vào scope
+        // Gán dữ liệu đánh giá
         $scope.reviews = productReviews;
-        $scope.filteredReviews = productReviews; // Lưu đánh giá ban đầu vào filteredReviews
+        $scope.filteredReviews = productReviews; // Dữ liệu ban đầu (lọc tất cả)
+        $scope.visibleReviews = productReviews.slice(0, 2); // Hiển thị 3 đánh giá đầu tiên
       })
       .catch((error) => console.error("Error fetching reviews:", error));
   };
 
   // **Lọc đánh giá**
+  $scope.selectedFilter = "all"; // Mặc định chọn "Tất cả"
+
   $scope.filterReviews = function (rating) {
+    $scope.selectedFilter = rating; // Cập nhật bộ lọc đã chọn
+  
     if (rating === "all") {
-      // Nếu là "Tất cả", trả về tất cả đánh giá
-      $scope.filteredReviews = $scope.reviews;
+      $scope.filteredReviews = $scope.reviews; // Hiển thị tất cả
     } else if (rating === "withComment") {
-      // Nếu là "Có bình luận", chỉ hiển thị các đánh giá có reviewtext
-      $scope.filteredReviews = $scope.reviews.filter(review => review.reviewtext);
+      $scope.filteredReviews = $scope.reviews.filter((review) => review.reviewtext); // Có bình luận
     } else {
-      // Lọc các đánh giá theo rating (1-5 sao)
-      $scope.filteredReviews = $scope.reviews.filter(review => review.rating === rating);
+      $scope.filteredReviews = $scope.reviews.filter((review) => review.rating === rating); // Theo số sao
     }
+  
+    // Cập nhật lại danh sách hiển thị
+    $scope.visibleReviews = $scope.filteredReviews.slice(0, 2);  // Hiển thị 3 đánh giá đầu tiên
+    $scope.showAll = false; // Reset trạng thái nút "Xem thêm"
+  };
+  
+  // **Hiển thị thêm bình luận**
+  $scope.showMoreReviews = function () {
+    $scope.showAll = true;
+    $scope.visibleReviews = $scope.filteredReviews; // Hiển thị toàn bộ đánh giá sau khi lọc
+  };
+  
+  // **Ẩn bớt bình luận**
+  $scope.showLessReviews = function () {
+    $scope.showAll = false;
+    $scope.visibleReviews = $scope.filteredReviews.slice(0, 2); // Hiển thị lại 3 đánh giá đầu tiên
   };
 
   // **Tính số lượng đánh giá phù hợp với rating**
@@ -561,9 +624,9 @@ app.controller("DanhGiaSanPhamController", function ($scope, $http) {
     if (rating === "all") {
       return $scope.reviews.length;
     } else if (rating === "withComment") {
-      return $scope.reviews.filter(review => review.reviewtext).length;
+      return $scope.reviews.filter((review) => review.reviewtext).length;
     } else {
-      return $scope.reviews.filter(review => review.rating === rating).length;
+      return $scope.reviews.filter((review) => review.rating === rating).length;
     }
   };
 

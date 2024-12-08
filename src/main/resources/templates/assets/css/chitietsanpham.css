@@ -206,40 +206,122 @@ input[type="radio"]:checked + .size-label {
   color: white;
   border-color: #d38450;
 }
+
+/* Đánh giá */
 .danhgia {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.rating {
+.product-rating {
   display: flex;
-  gap: 1px;
+  align-items: center;
+  font-size: 18px;
 }
 
-.rating label {
-  font-size: 1.6em;
-  color: #ccc !important; /* Màu xám cho sao chưa kích hoạt */
+.stars {
+  color: #ff9900;
 }
 
-.rating label.active {
-  color: gold;  /* Màu vàng cho sao đầy */
+.rating-num {
+  margin-left: 10px;
 }
 
-.rating label.half {
+.filter-btns {
+  margin-top: 10px;
+}
+
+.filter-btns button {
+  padding: 10px;
+  margin-right: 5px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reviews {
+  margin-top: 30px;
+}
+
+.review {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.review-body {
+  margin-top: 10px;
+}
+
+.seller-response {
+  margin-top: 15px;
+  color: #007bff;
+  font-style: italic;
+}
+
+.stars-outer {
   position: relative;
-  color: gold;
+  display: inline-block;
+  font-size: 24px;
+  /* Kích thước ngôi sao */
+  color: #ccc;
+  /* Màu xám cho sao trống */
 }
 
-.rating label.half::after {
-  content: "★";
-  position: absolute;
-  left: 0;
-  width: 50%;
-  color: gold;
-  overflow: hidden;
-  z-index: 1;
+.stars-outer i {
+  margin-right: 2px;
+  /* Khoảng cách giữa các sao */
 }
+
+.stars-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #ff9900;
+  /* Màu vàng cho sao đầy */
+  width: 0;
+  /* Sẽ được cập nhật động bằng AngularJS */
+}
+
+.stars-inner i {
+  margin-right: 2px;
+  /* Khoảng cách giữa các sao đầy */
+}
+
+.filter-btns button {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  font-weight: normal;
+  padding: 10px 15px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.filter-btns button:hover {
+  background-color: #f2f2f2;
+}
+
+.filter-btns button.active-filter {
+  border: 1px solid orange;
+  background-color: #d38450;
+  color: white;
+  font-weight: bold;
+}
+
 .btn-chitietsanpham .btn-primary {
   background-color: #d38450;
   width: 180px;
