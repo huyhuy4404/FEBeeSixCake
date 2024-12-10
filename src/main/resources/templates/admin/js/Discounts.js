@@ -216,15 +216,7 @@ app.controller('discountsController', function ($scope, $http) {
             console.error("Thiếu discountcode");
             return;
         }
-        if (!$scope.selecteddiscount.discountpercentage) {
-            $scope.showMessageModal("Vui lòng nhập phần trăm giảm giá.", true);
-            console.error("Thiếu discountpercentage");
-            return;
-        } else if ($scope.selecteddiscount.discountpercentage > 50) {
-            $scope.showMessageModal("Phần trăm giảm giá không được vượt quá 50%.", true);
-            console.error("discountpercentage vượt quá 50%");
-            return;
-        }
+       
         if (!$scope.selecteddiscount.lowestprice) {
             $scope.showMessageModal("Vui lòng nhập đơn hàng tối thiểu.", true);
             console.error("Thiếu lowestprice");
@@ -241,6 +233,15 @@ app.controller('discountsController', function ($scope, $http) {
         } else if ($scope.selecteddiscount.startdate > $scope.selecteddiscount.enddate) {
             $scope.showMessageModal("Ngày bắt đầu không thể lớn hơn ngày kết thúc. Vui lòng kiểm tra lại.", true);
             console.error("startdate lớn hơn enddate");
+            return;
+        }
+        if (!$scope.selecteddiscount.discountpercentage) {
+            $scope.showMessageModal("Vui lòng nhập phần trăm giảm giá.", true);
+            console.error("Thiếu discountpercentage");
+            return;
+        } else if ($scope.selecteddiscount.discountpercentage > 50) {
+            $scope.showMessageModal("Phần trăm giảm giá không được vượt quá 50%.", true);
+            console.error("discountpercentage vượt quá 50%");
             return;
         }
 

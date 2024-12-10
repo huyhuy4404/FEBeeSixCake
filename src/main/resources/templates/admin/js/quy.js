@@ -145,87 +145,100 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
 
     // Hàm vẽ biểu đồ
     $scope.renderChart = function() {
-      // Nếu không có dữ liệu, hiển thị thông báo
-      if ($scope.quarterlyStats.length === 0 || $scope.quarterlyStats.every(stat => stat.totalRevenue === 0)) {
-          document.getElementById("bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
-          return;
-      }
-  
-      // Cập nhật biểu đồ nếu đã tồn tại
-      if ($scope.chart) {
-          $scope.chart.updateOptions({
-              series: [
-                  {
-                      name: 'Doanh Thu',
-                      data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
-                  },
-                  {
-                      name: ' Số Lượng đơn hàng',
-                      data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
-                  }
-              ],
-              xaxis: {
-                  categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`) // Tên quý
-              }
-          });
-      } else {
-          // Tạo biểu đồ mới nếu chưa có
-          var options = {
-              series: [
-                  {
-                      name: 'Doanh Thu',
-                      data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
-                  },
-                  {
-                      name: 'Số lượng đơn hang',
-                      data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
-                  }
-              ],
-              chart: {
-                  type: 'bar',
-                  height: 300,
-                  width: '100%'
-              },
-              plotOptions: {
-                  bar: {
-                      horizontal: false,
-                      columnWidth: '50%',
-                  }
-              },
-              xaxis: {
-                  categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`), // Tên quý
-              },
-              yaxis: [
-                  {
-                      title: {
-                          text: 'Doanh Thu (VND)', // Tiêu đề cho trục y đầu tiên
-                      }
-                  },
-                  {
-                      opposite: true, // Hiển thị trục y thứ hai ở phía bên phải
-                      title: {
-                          text: 'Tổng Số Lượng', // Tiêu đề cho trục y thứ hai
-                      }
-                  }
-              ],
-              responsive: [{
-                  breakpoint: 480,
-                  options: {
-                      chart: {
-                          width: 200,
-                      },
-                      legend: {
-                          position: 'bottom'
-                      }
-                  }
-              }]
-          };
-  
-          // Tạo biểu đồ mới
-          $scope.chart = new ApexCharts(document.querySelector("#bar-chart"), options);
-          $scope.chart.render();
-      }
-  };
+        // Nếu không có dữ liệu, hiển thị thông báo
+        if ($scope.quarterlyStats.length === 0 || $scope.quarterlyStats.every(stat => stat.totalRevenue === 0)) {
+            document.getElementById("bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
+            return;
+        }
+    
+        // Cập nhật biểu đồ nếu đã tồn tại
+        if ($scope.chart) {
+            $scope.chart.updateOptions({
+                series: [
+                    {
+                        name: 'Doanh Thu',
+                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                    },
+                    {
+                        name: 'Số Lượng Đơn Hàng',
+                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
+                    }
+                ],
+                xaxis: {
+                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`) // Tên quý
+                }
+            });
+        } else {
+            // Tạo biểu đồ mới nếu chưa có
+            var options = {
+                series: [
+                    {
+                        name: 'Doanh Thu',
+                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                    },
+                    {
+                        name: 'Số lượng Đơn Hàng',
+                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
+                    }
+                ],
+                chart: {
+                    type: 'line', // Chuyển thành biểu đồ sóng
+                    height: 300,
+                    width: '100%',
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                stroke: {
+                    curve: 'smooth', // Làm cho đường cong
+                    width: 2, // Độ dày của đường
+                    colors: ['#007bff', '#00aaff'] // Màu sắc (xanh biển)
+                },
+                xaxis: {
+                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`), // Tên quý
+                },
+                yaxis: [
+                    {
+                        title: {
+                            text: 'Doanh Thu (VND)', // Tiêu đề cho trục y đầu tiên
+                        }
+                    },
+                    {
+                        opposite: true, // Hiển thị trục y thứ hai ở phía bên phải
+                        title: {
+                            text: 'Tổng Số Lượng', // Tiêu đề cho trục y thứ hai
+                        }
+                    }
+                ],
+                tooltip: {
+                    shared: true,
+                    intersect: false,
+                    formatter: function(series) {
+                        return series.map((s, index) => {
+                            const revenue = $scope.formatCurrency($scope.quarterlyStats[index].totalRevenue); // Định dạng doanh thu
+                            const quantity = $scope.quarterlyStats[index].totalQuantity; // Số lượng đơn hàng
+                            return `Quý ${$scope.quarterlyStats[index].quarter} ${$scope.quarterlyStats[index].year}<br>Doanh thu: ${revenue}<br>Số lượng: ${quantity}`;
+                        }).join('<br>');
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200,
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+    
+            // Tạo biểu đồ mới
+            $scope.chart = new ApexCharts(document.querySelector("#bar-chart"), options);
+            $scope.chart.render();
+        }
+    };
 
     // Hàm định dạng tiền tệ
     $scope.formatCurrency = function(amount) {

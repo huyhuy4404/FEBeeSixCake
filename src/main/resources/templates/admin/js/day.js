@@ -150,86 +150,103 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
 
     // Hàm tính toán thống kê theo ngày
     $scope.calculateDailyStats = function() {
-        $scope.dailyStats = [];
-        const statsMap = {};
+      $scope.dailyStats = [];
+      const statsMap = {};
+  
+      const currentMonth = $scope.selectedMonth || new Date().getMonth() + 1;
+      const currentYear = $scope.selectedYear || new Date().getFullYear();
+      const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+  
+      for (let day = 1; day <= daysInMonth; day++) {
+          const formattedDate = `${currentYear} ${day}`;
+          statsMap[formattedDate] = {
+              date: formattedDate,
+              totalOrders: 0,
+              totalRevenue: 0
+          };
+      }
+  
+      $scope.filteredOrderDetails.forEach(function(item) {
+          const orderDate = new Date(item.date);
+          const day = orderDate.getDate();
+          const formattedDate = `${orderDate.getFullYear()} ${day}`;
+  
+          statsMap[formattedDate].totalOrders += 1;
+          statsMap[formattedDate].totalRevenue += item.total; // Đảm bảo item.total chứa giá trị doanh thu
+      });
+  
+      $scope.dailyStats = Object.values(statsMap);
+      console.log($scope.dailyStats); // Kiểm tra dữ liệu
+  };
+     // Hàm định dạng tiền tệ
+     $scope.formatCurrency = function(amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+  };
 
-        // Tạo mảng chứa 30 ngày
-        const currentMonth = $scope.selectedMonth || new Date().getMonth() + 1;
-        const currentYear = $scope.selectedYear || new Date().getFullYear();
-        const daysInMonth = new Date(currentYear, currentMonth, 0).getDate(); // Số ngày trong tháng
+  $scope.renderDailyChart = function() {
+    if ($scope.dailyStats.length === 0) {
+        document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
+        return;
+    }
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            const formattedDate = `${currentYear} ${day}`; // Định dạng lại ngày
-            statsMap[formattedDate] = {
-                date: formattedDate,
-                totalOrders: 0,
-                totalRevenue: 0
-            };
-        }
+    document.getElementById("daily-bar-chart").innerHTML = "";
 
-        // Nhóm dữ liệu theo ngày
-        $scope.filteredOrderDetails.forEach(function(item) {
-            const orderDate = new Date(item.date);
-            const day = orderDate.getDate(); // Lấy ngày của tháng
-            const formattedDate = `${orderDate.getFullYear()} ${day}`; // Định dạng lại ngày
-
-            statsMap[formattedDate].totalOrders += 1;
-            statsMap[formattedDate].totalRevenue += item.total;
-        });
-
-        // Chuyển đổi đối tượng thành mảng
-        $scope.dailyStats = Object.values(statsMap);
+    var options = {
+        series: [
+            {
+                name: 'Tổng Đơn Hàng',
+                data: $scope.dailyStats.map(stat => stat.totalOrders),
+            },
+            {
+                name: 'Tổng tiền',
+                data: $scope.dailyStats.map(stat => stat.totalRevenue),
+            },
+        ],
+        chart: {
+            type: 'line', // Change to line chart
+            height: 300,
+            width: '100%',
+            zoom: {
+                enabled: false
+            },
+        },
+        stroke: {
+            curve: 'smooth', // Makes the line smooth
+            width: 2, // Adjust line width if needed
+            colors: ['#007bff', '#00aaff'] // Set line colors (ocean blue)
+        },
+        colors: ['#007bff', '#00aaff'], // Set colors for each series
+        xaxis: {
+            categories: $scope.dailyStats.map(stat => stat.date.split(' ')[1]), // Use day for x-axis
+        },
+        tooltip: {
+            shared: true,
+            intersect: false,
+            formatter: function(series) {
+                return series.map((s, index) => {
+                    const revenue = $scope.formatCurrency($scope.dailyStats[index].totalRevenue);
+                    const orders = $scope.dailyStats[index].totalOrders;
+                    return `Ngày: ${$scope.dailyStats[index].date}<br>Tổng Đơn Hàng: ${orders}<br>Doanh Thu: ${revenue}`;
+                }).join('<br>');
+            },
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200,
+                },
+                legend: {
+                    position: 'bottom',
+                },
+            },
+        }],
     };
 
-    // Hàm vẽ biểu đồ theo ngày
-    $scope.renderDailyChart = function() {
-        if ($scope.dailyStats.length === 0) {
-            document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
-            return;
-        }
-
-        document.getElementById("daily-bar-chart").innerHTML = "";
-
-        var options = {
-            series: [{
-                name: 'Doanh Thu',
-                data: $scope.dailyStats.map(stat => stat.totalRevenue), // Sử dụng tổng doanh thu
-            }],
-            chart: {
-                type: 'bar',
-                height: 300,
-                width: '100%'
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '70%',
-                }
-            },
-            xaxis: {
-                categories: $scope.dailyStats.map(stat => ` ${stat.date.split(' ')[1]}`), // Sử dụng ngày
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200,
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
-            }]
-        };
-
-        var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
-        chart.render();
-    };
-
-    // Hàm định dạng tiền tệ
-    $scope.formatCurrency = function(amount) {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    };
+    var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
+    chart.render();
+};
+   
 
     // Gọi hàm để lấy dữ liệu
     $scope.getStatusPayments();

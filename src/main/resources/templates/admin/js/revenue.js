@@ -160,7 +160,7 @@
             var options = {
                 series: $scope.groupedOrderDetails.map(item => item.totalQuantity),
                 chart: {
-                    width: 380,
+                    width: 580,
                     type: 'pie',
                 },
                 labels: $scope.groupedOrderDetails.map(item => item.categoryName),
