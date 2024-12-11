@@ -3,6 +3,7 @@ app.controller("RegisterController", function ($scope, $http, $window, $timeout)
     $scope.user = {
         idaccount: '',   // Tên tài khoản
         password: '',    // Mật khẩu
+        confirmPassword: '',  // Nhập lại mật khẩu
         fullname: '',    // Họ và tên
         email: '',       // Email
         phonenumber: '', // Số điện thoại
@@ -26,6 +27,12 @@ app.controller("RegisterController", function ($scope, $http, $window, $timeout)
             return; // Dừng lại nếu form không hợp lệ
         }
 
+        // Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp không
+        if ($scope.user.password !== $scope.user.confirmPassword) {
+            $scope.registerError = 'Mật khẩu và mật khẩu nhập lại không khớp!';
+            return;
+        }
+
         // Gửi yêu cầu đăng ký
         $http({
             method: "POST",
@@ -38,7 +45,7 @@ app.controller("RegisterController", function ($scope, $http, $window, $timeout)
                 $scope.registerError = ''; // Xóa thông báo lỗi
                 $timeout(function () {
                     $window.location.href = 'login.html';
-                }, 2000); // Chuyển hướng sau 3 giây
+                }, 2000); // Chuyển hướng sau 2 giây
             } else if (response.data && response.data.error) {
                 // Hiển thị lỗi nếu có
                 $scope.registerError = parseErrorMessage(response.data.error);
@@ -47,20 +54,18 @@ app.controller("RegisterController", function ($scope, $http, $window, $timeout)
                 $scope.registerSuccess = 'Đăng ký thành công! Vui lòng đăng nhập.'; // Xóa thông báo thành công
                 $timeout(function () {
                     $window.location.href = 'login.html';
-                }, 2000); // Chuyển hướng sau 3 giây
+                }, 2000); // Chuyển hướng sau 2 giây
             }
         }).catch(function (error) {
             if (error.data && error.data.error) {
                 const errorDetails = error.data.error.details || JSON.stringify(error.data.error);
-        $scope.registerError = `${errorDetails.replace(/["{}]/g, '')}`;
+                $scope.registerError = `${errorDetails.replace(/["{}]/g, '')}`;
             } else {
                 $scope.registerError = 'Đăng ký thất bại! Không thể kết nối tới máy chủ.';
             }
             $scope.registerSuccess = ''; // Xóa thông báo thành công
             console.error('Chi tiết lỗi:', error);
         });
-        
-        
     };
 
     // Hàm phân tích lỗi từ API
