@@ -9,7 +9,8 @@ app.controller("discountsController", function ($scope, $http) {
     $scope.selectedCategory = "";
     $scope.searchQuery = ""; // Biến tìm kiếm
     $scope.productCount = 0; // Biến lưu số sản phẩm
-
+    $scope.minPrice = null; // Biến cho giá tối thiểu
+    $scope.maxPrice = null; // Biến cho giá tối đa
     // Thêm biến cho phân trang
     $scope.currentPage = 1;
     $scope.itemsPerPage = 8; // Số sản phẩm hiển thị trên mỗi trang
@@ -85,16 +86,35 @@ app.controller("discountsController", function ($scope, $http) {
     // Tìm kiếm sản phẩm theo tên
     $scope.searchProducts = function () {
         console.log("Searching for:", $scope.searchQuery);
-        if (!$scope.searchQuery) {
-            $scope.filteredProducts = $scope.newProducts; // Hiển thị tất cả sản phẩm nếu không có truy vấn
-        } else {
+    
+        // Bắt đầu với tất cả sản phẩm
+        let productsToFilter = $scope.newProducts;
+    
+        // Nếu có truy vấn tìm kiếm, lọc sản phẩm theo tên
+        if ($scope.searchQuery) {
             const query = $scope.searchQuery.toLowerCase();
-            $scope.filteredProducts = $scope.newProducts.filter(product =>
+            productsToFilter = productsToFilter.filter(product =>
                 product.productname.toLowerCase().includes(query)
             );
         }
-        $scope.productCount = $scope.filteredProducts.length; // Cập nhật số sản phẩm
-        $scope.calculateTotalPages(); // Cập nhật số trang
+    
+        // Cập nhật danh sách sản phẩm đã lọc theo tên
+        $scope.filteredProducts = productsToFilter;
+    
+        // Nếu đã nhập giá, lọc theo giá
+        if ($scope.minPrice !== null || $scope.maxPrice !== null) {
+            $scope.filteredProducts = $scope.filteredProducts.filter(product => {
+                const isWithinPriceRange = (
+                    (isNaN($scope.minPrice) || product.unitprice >= $scope.minPrice) &&
+                    (isNaN($scope.maxPrice) || product.unitprice <= $scope.maxPrice)
+                );
+                return isWithinPriceRange;
+            });
+        }
+    
+        // Cập nhật số sản phẩm và trang
+        $scope.productCount = $scope.filteredProducts.length; 
+        $scope.calculateTotalPages(); 
         console.log("Filtered Products:", $scope.filteredProducts);
     };
 

@@ -259,7 +259,47 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
         var chart = new ApexCharts(document.querySelector("#monthly-bar-chart"), options);
         chart.render();
     };
-
+    $scope.exportToExcel = function() {
+        // Tạo một workbook mới
+        const wb = XLSX.utils.book_new();
+        
+        // Tạo dữ liệu cho bảng
+        const data = [
+            ["Tháng", "Tổng Đơn Hàng", "Tổng Tiền"]
+        ];
+    
+        // Thêm dữ liệu thống kê vào bảng
+        $scope.monthlyStats.forEach(stat => {
+            data.push([`Tháng ${stat.monthYear.split('-')[1]}`, stat.totalOrders, stat.totalRevenue]);
+        });
+    
+        // Tạo worksheet từ dữ liệu
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        
+        // Căn chỉnh kích thước cột
+        const columnWidths = [
+            { wch: 15 }, // Chiều rộng cột tháng
+            { wch: 20 }, // Chiều rộng cột tổng đơn hàng
+            { wch: 20 }  // Chiều rộng cột tổng tiền
+        ];
+        ws['!cols'] = columnWidths; // Gán kích thước cột cho worksheet
+    
+        // Định dạng cột tổng tiền
+        for (let i = 1; i < data.length; i++) {
+            const cellAddress = `C${i + 1}`; // Cột C cho tổng tiền
+            ws[cellAddress] = {
+                v: data[i][2], // Giá trị
+                t: 'n', // Kiểu số
+                z: '"₫"#,##0.00' // Định dạng tiền tệ với ký hiệu
+            };
+        }
+    
+        // Thêm worksheet vào workbook
+        XLSX.utils.book_append_sheet(wb, ws, "Doanh Thu Tháng");
+    
+        // Xuất file Excel
+        XLSX.writeFile(wb, `Doanh_Thu_Theo_Thang_${new Date().getFullYear()}.xlsx`);
+    };
     // Hàm định dạng tiền tệ
     $scope.formatCurrency = function(amount) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
