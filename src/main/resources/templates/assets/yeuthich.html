@@ -15,10 +15,10 @@
     <script src="../assets/js/favorite.js"></script>
 </head>
 
-<body ng-controller="loadLoaiSanPham">
+<body ng-controller="discountsController">
     <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
     <div ng-include="'layout/menu.html'"></div>
-    <div class="setDoDaiTrang">
+    <div class="setDoDaiTrang" ng-controller="loadLoaiSanPham" >
         <div class="container-fluid" style="margin-top: 55px; z-index: -1">
             <div style="font-size: 20px" class=" ms-4">
                 <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>

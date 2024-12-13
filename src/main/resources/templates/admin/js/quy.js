@@ -156,12 +156,12 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             $scope.chart.updateOptions({
                 series: [
                     {
-                        name: 'Doanh Thu',
-                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
-                    },
-                    {
                         name: 'Số Lượng Đơn Hàng',
                         data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
+                    },
+                    {
+                        name: 'Doanh Thu',
+                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
                     }
                 ],
                 xaxis: {
@@ -173,24 +173,30 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             var options = {
                 series: [
                     {
-                        name: 'Doanh Thu',
-                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                        name: 'Số Lượng Đơn Hàng',
+                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
                     },
                     {
-                        name: 'Số lượng Đơn Hàng',
-                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
+                        name: 'Doanh Thu',
+                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
                     }
                 ],
                 chart: {
-                    type: 'line', // Chuyển thành biểu đồ sóng
+                    type: 'bar', // Biểu đồ cột
                     height: 300,
                     width: '100%',
                     zoom: {
                         enabled: false
                     }
                 },
+                plotOptions: {
+                    bar: {
+                        horizontal: false, // Cột đứng
+                        columnWidth: '50%', // Chiều rộng cột
+                        endingShape: 'rounded' // Hình dáng cột
+                    }
+                },
                 stroke: {
-                    curve: 'smooth', // Làm cho đường cong
                     width: 2, // Độ dày của đường
                     colors: ['#007bff', '#00aaff'] // Màu sắc (xanh biển)
                 },
@@ -200,13 +206,23 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 yaxis: [
                     {
                         title: {
-                            text: 'Doanh Thu (VND)', // Tiêu đề cho trục y đầu tiên
+                            text: 'Số lượng Đơn Hàng' // Tiêu đề cho trục y đầu tiên
+                        },
+                        labels: {
+                            formatter: function(value) {
+                                return value; // Hiển thị số lượng đơn hàng
+                            }
                         }
                     },
                     {
                         opposite: true, // Hiển thị trục y thứ hai ở phía bên phải
                         title: {
-                            text: 'Tổng Số Lượng', // Tiêu đề cho trục y thứ hai
+                            text: 'Doanh Thu (VND)' // Tiêu đề cho trục y thứ hai
+                        },
+                        labels: {
+                            formatter: function(value) {
+                                return $scope.formatCurrency(value); // Định dạng doanh thu
+                            }
                         }
                     }
                 ],
@@ -215,9 +231,9 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     intersect: false,
                     formatter: function(series) {
                         return series.map((s, index) => {
-                            const revenue = $scope.formatCurrency($scope.quarterlyStats[index].totalRevenue); // Định dạng doanh thu
                             const quantity = $scope.quarterlyStats[index].totalQuantity; // Số lượng đơn hàng
-                            return `Quý ${$scope.quarterlyStats[index].quarter} ${$scope.quarterlyStats[index].year}<br>Doanh thu: ${revenue}<br>Số lượng: ${quantity}`;
+                            const revenue = $scope.formatCurrency($scope.quarterlyStats[index].totalRevenue); // Định dạng doanh thu
+                            return `Quý ${$scope.quarterlyStats[index].quarter} ${$scope.quarterlyStats[index].year}<br>Số lượng: ${quantity}<br>Doanh thu: ${revenue}`;
                         }).join('<br>');
                     }
                 },

@@ -101,60 +101,63 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
     };
 
     // Hàm lấy dữ liệu đơn hàng từ API
-   $scope.getDiscounts = function() {
-    $http.get('http://localhost:8080/beesixcake/api/order')
-    .then(function(response) {  
-        console.log(response.data);
-        $scope.orderdetai = response.data.map(function(item) {
-            var orderDate = new Date(item.orderdate);
-            var month = orderDate.getMonth() + 1;
-            var year = orderDate.getFullYear();
-
-            return {
-                date: orderDate.toISOString().split('T')[0],
-                month: month,
-                year: year,
-                addressDetail: item.addressdetail,
-                shipFee: item.shipfee,
-                total: item.total,
-                account: item.account.fullname,
-                paymentMethod: item.payment.paymentname,
-                statusId: item.statuspay.idstatuspay,
-            };
+    $scope.getDiscounts = function() {
+        $http.get('http://localhost:8080/beesixcake/api/order')
+        .then(function(response) {
+            console.log(response.data);
+            $scope.orderdetai = response.data.map(function(item) {
+                var orderDate = new Date(item.orderdate);
+                var month = orderDate.getMonth() + 1;
+                var year = orderDate.getFullYear();
+    
+                return {
+                    date: orderDate.toISOString().split('T')[0],
+                    month: month,
+                    year: year,
+                    addressDetail: item.addressdetail,
+                    shipFee: item.shipfee,
+                    total: item.total,
+                    account: item.account.fullname,
+                    paymentMethod: item.payment.paymentname,
+                    statusId: item.statuspay.idstatuspay,
+                };
+            });
+    
+            // Lấy các năm duy nhất và sắp xếp theo thứ tự tăng dần
+            $scope.availableYears = [...new Set($scope.orderdetai.map(item => item.year))].sort((a, b) => a - b); // Sắp xếp
+        })
+        .catch(function(error) {
+            console.error('Error fetching order details:', error);
         });
-
-        // Lấy các năm duy nhất và sắp xếp theo thứ tự tăng dần
-        $scope.availableYears = [...new Set($scope.orderdetai.map(item => item.year))].sort((a, b) => a - b); // Sắp xếp
-    })
-    .catch(function(error) {
-        console.error('Error fetching order details:', error);
-    });
-};
+    };
 
     // Hàm lọc dữ liệu theo năm
     $scope.filterData = function() {
+        // Đặt lại monthlyStats và filteredOrderDetails trước khi lọc
+        $scope.monthlyStats = [];
+        $scope.filteredOrderDetails = [];
+    
         if ($scope.selectedYear) {
             // Lọc dữ liệu cho năm được chọn
             $scope.filteredOrderDetails = $scope.orderdetai.filter(item => {
-                return item.year == $scope.selectedYear && item.statusId === 2;
+                return item.year == $scope.selectedYear && item.statusId === 2; // Trạng thái thanh toán là 2
             });
+            
+            // Tính toán thống kê tháng từ danh sách chi tiết đơn hàng đã lọc
             $scope.calculateMonthlyStats();
-        } else {
-            // Nếu chưa chọn năm, thiết lập dữ liệu rỗng
-            $scope.filteredOrderDetails = [];
-            $scope.monthlyStats = [];
-        }
+        } 
+        
         $scope.renderMonthlyChart(); // Cập nhật biểu đồ
     };
 
     // Hàm tính toán thống kê hàng tháng
     $scope.calculateMonthlyStats = function() {
         const statsMap = {};
-
+    
         // Nhóm dữ liệu theo tháng
         $scope.filteredOrderDetails.forEach(function(item) {
             var monthYear = `${item.year}-${item.month < 10 ? '0' + item.month : item.month}`;
-
+    
             if (!statsMap[monthYear]) {
                 statsMap[monthYear] = {
                     monthYear: monthYear,
@@ -162,11 +165,11 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     totalRevenue: 0
                 };
             }
-
-            statsMap[monthYear].totalOrders += 1;
-            statsMap[monthYear].totalRevenue += item.total;
+    
+            statsMap[monthYear].totalOrders += 1; // Cập nhật tổng đơn hàng
+            statsMap[monthYear].totalRevenue += item.total; // Cập nhật tổng doanh thu
         });
-
+    
         // Đảm bảo có các tháng từ 01 đến 12 trong năm đã chọn
         const currentYear = $scope.selectedYear;
         for (let month = 1; month <= 12; month++) {
@@ -179,12 +182,12 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 };
             }
         }
-
+    
         // Chuyển đổi đối tượng thành mảng và sắp xếp theo thứ tự tháng
         $scope.monthlyStats = Object.values(statsMap).sort((a, b) => {
             return new Date(a.monthYear) - new Date(b.monthYear);
         });
-
+    
         console.log('Monthly Stats after calculation:', $scope.monthlyStats); // Ghi lại thống kê đã tính toán
     };
 
@@ -209,17 +212,19 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 }
             ],
             chart: {
-                type: 'line', // Chuyển thành biểu đồ sóng
+                type: 'bar', // Đổi thành biểu đồ cột
                 height: 300,
                 width: '100%',
                 zoom: {
                     enabled: false
                 }
             },
-            stroke: {
-                curve: 'smooth', // Làm cho đường cong
-                width: 2, // Độ dày của đường
-                colors: ['#007bff', '#00aaff'] // Màu sắc (xanh biển)
+            plotOptions: {
+                bar: {
+                    horizontal: false, // Cột đứng
+                    columnWidth: '50%', // Chiều rộng cột
+                    endingShape: 'rounded' // Hình dáng cột
+                }
             },
             xaxis: {
                 categories: $scope.monthlyStats.map(stat => `Tháng ${stat.monthYear.split('-')[1]}`),

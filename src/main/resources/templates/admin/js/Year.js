@@ -224,6 +224,8 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             const chartDiv = document.getElementById("yearly-bar-chart");
             chartDiv.innerHTML = "";
         
+            const maxOrders = Math.max(...$scope.yearlyStats.map(stat => stat.totalOrders)); // Tìm số lượng tối đa
+        
             var options = {
                 series: [
                     {
@@ -236,17 +238,23 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     }
                 ],
                 chart: {
-                    type: 'line', // Chuyển thành biểu đồ sóng
+                    type: 'bar', // Biểu đồ cột
                     height: 300,
                     width: '100%',
                     zoom: {
                         enabled: false
                     },
                 },
+                plotOptions: {
+                    bar: {
+                        horizontal: false, // Cột đứng
+                        columnWidth: '50%', // Chiều rộng cột
+                        endingShape: 'rounded' // Hình dáng cột
+                    }
+                },
                 stroke: {
-                    curve: 'smooth', // Làm cho đường cong
                     width: 2, // Độ dày của đường
-                    colors: ['#007bff', '#00aaff'] // Màu sắc (xanh biển)
+                    colors: ['#007bff', '#00aaff'] // Màu sắc
                 },
                 xaxis: {
                     categories: $scope.yearlyStats.map(stat => stat.year), // Hiển thị năm
@@ -256,13 +264,21 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                         title: {
                             text: 'Số lượng'
                         },
-                        min: 0
+                        min: 0,
+                        max: maxOrders, // Giới hạn tối đa cho trục y
+                        tickAmount: Math.ceil(maxOrders / 2), // Số nhãn chẵn
+                        labels: {
+                            formatter: function(value) {
+                                return value % 2 === 0 ? value : ''; // Chỉ hiển thị số lượng chẵn
+                            }
+                        }
                     },
                     {
                         title: {
                             text: 'Tổng tiền (VND)'
                         },
                         opposite: true, // Trục y bên phải
+                        min: 0,
                         labels: {
                             formatter: function(value) {
                                 return $scope.formatCurrency(value); // Định dạng nhãn trục y

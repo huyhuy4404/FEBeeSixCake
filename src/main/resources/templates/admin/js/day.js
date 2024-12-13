@@ -178,18 +178,21 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
       $scope.dailyStats = Object.values(statsMap);
       console.log($scope.dailyStats); // Kiểm tra dữ liệu
   };
-     // Hàm định dạng tiền tệ
-     $scope.formatCurrency = function(amount) {
-      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-  };
+// Hàm định dạng tiền tệ
+$scope.formatCurrency = function(amount) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
 
-  $scope.renderDailyChart = function() {
+$scope.renderDailyChart = function() {
     if ($scope.dailyStats.length === 0) {
         document.getElementById("daily-bar-chart").innerHTML = "<p>Không có dữ liệu để hiển thị biểu đồ.</p>";
         return;
     }
 
     document.getElementById("daily-bar-chart").innerHTML = "";
+
+    // Tạo danh sách ngày từ 1 đến 31
+    const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
     var options = {
         series: [
@@ -198,26 +201,34 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 data: $scope.dailyStats.map(stat => stat.totalOrders),
             },
             {
-                name: 'Tổng tiền',
+                name: 'Tổng Tiền',
                 data: $scope.dailyStats.map(stat => stat.totalRevenue),
             },
         ],
         chart: {
-            type: 'line', // Change to line chart
+            type: 'bar', // Biểu đồ cột
             height: 300,
             width: '100%',
             zoom: {
                 enabled: false
             },
         },
-        stroke: {
-            curve: 'smooth', // Makes the line smooth
-            width: 2, // Adjust line width if needed
-            colors: ['#007bff', '#00aaff'] // Set line colors (ocean blue)
+        plotOptions: {
+            bar: {
+                horizontal: false, // Cột đứng
+                columnWidth: '50%', // Chiều rộng cột
+                endingShape: 'rounded' // Hình dáng cột
+            }
         },
-        colors: ['#007bff', '#00aaff'], // Set colors for each series
+        stroke: {
+            width: 2, // Độ dày đường viền cột
+        },
+        colors: ['#007bff', '#00aaff'], // Màu sắc cho từng chuỗi
         xaxis: {
-            categories: $scope.dailyStats.map(stat => stat.date.split(' ')[1]), // Use day for x-axis
+            categories: days.map(day => day + ''), // Hiển thị từ 1 đến 31
+            title: {
+                text: 'Ngày trong tháng'
+            }
         },
         tooltip: {
             shared: true,
@@ -226,9 +237,19 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 return series.map((s, index) => {
                     const revenue = $scope.formatCurrency($scope.dailyStats[index].totalRevenue);
                     const orders = $scope.dailyStats[index].totalOrders;
-                    return `Ngày: ${$scope.dailyStats[index].date}<br>Tổng Đơn Hàng: ${orders}<br>Doanh Thu: ${revenue}`;
+                    return `Ngày: ${days[index]}<br>Tổng Đơn Hàng: ${orders}<br>Doanh Thu: ${revenue}`;
                 }).join('<br>');
             },
+        },
+        dataLabels: {
+            enabled: true,
+            formatter: function(val, opts) {
+                // Định dạng giá trị cho từng cột
+                if (opts.seriesIndex === 1) { // Nếu là chuỗi 'Tổng Tiền'
+                    return $scope.formatCurrency(val); // Định dạng tiền tệ
+                }
+                return val; // Không định dạng cho 'Tổng Đơn Hàng'
+            }
         },
         responsive: [{
             breakpoint: 480,
