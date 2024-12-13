@@ -1,85 +1,112 @@
-    <!-- Sidebar Menu -->
-    <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
-        <div class="position-sticky py-4 px-3 sidebar-sticky">
-            <ul class="nav flex-column h-100">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="index.html">
-                        <i class="bi-house-fill me-2"></i>
-                        Trang Chủ
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="accounts.html">
-                        <i class="bi-people-fill me-2"></i>
-                        Quản Lý Người Dùng
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="product-type.html">
-                        <i class="bi-tags-fill me-2"></i>
-                        Quản Lý Danh Mục Sản Phẩm
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="size.html">
-                        <i class="bi-arrows-expand me-2"></i>
-                        Quản Lý Kích Thước
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="product.html">
-                        <i class="bi-cart-fill me-2"></i>
-                        Quản Lý Sản Phẩm
-                    </a>
-                    <ul>
-                        
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="order.html">
-                        <i class="bi-receipt-cutoff me-2"></i>
-                        Quản Lý Đơn Hàng
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="Discount.html">
-                        <i class="bi-percent me-2"></i>
-                        Quản Lý Mã Giảm Giá
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi-person me-2"></i>
-                        Quản Lý Doanh Thu
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li>
-                            <a class="dropdown-item" href="profile.html">Tồn kho theo loại</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="Year.html">Quản Lý Doanh Thu theo Năm</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="quy.html">Quản Lý Doanh Thu theo Quý</a>
-                        </li>
-                       
-                        <li>
-                            <a class="dropdown-item" href="thang.html">Quản Lý Doanh Thu theo Tháng</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="day.html">Quản Lý Doanh Thu theo Ngày</a>
-                        </li>
-                      
-                    </ul>
-                </li>
+<!-- Sidebar Menu -->
+<nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block sidebar collapse">
+    <div class="position-sticky py-4 px-3 sidebar-sticky">
+        <ul class="nav flex-column h-100">
+            <!-- Trang chủ -->
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index.html">
+                    <i class="bi-house-fill me-2"></i>
+                    Trang Chủ
+                </a>
+            </li>
             
-                <li class="nav-item border-top mt-auto pt-2">
-                    <a class="nav-link" href="login.html">
-                        <i class="bi-box-arrow-left me-2"></i>
-                        Logout
-                    </a>
-                </li>
-            </ul>
-            
-        </div>
-    </nav>
+            <!-- Quản lý chính -->
+            <li class="nav-item border-top mt-3 pt-2">
+                <span class="nav-link text-uppercase fw-bold">Quản Lý Chính</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="admin-order.html">
+                    <i class="bi-cash-stack me-2"></i>
+                    Thanh Toán Tại Quầy
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="accounts.html">
+                    <i class="bi-people-fill me-2"></i>
+                    Quản Lý Người Dùng
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="order.html">
+                    <i class="bi-receipt-cutoff me-2"></i>
+                    Quản Lý Đơn Hàng
+                </a>
+            </li>
+
+            <!-- Quản lý sản phẩm -->
+            <li class="nav-item border-top mt-3 pt-2">
+                <span class="nav-link text-uppercase fw-bold">Quản Lý Sản Phẩm</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="product-type.html">
+                    <i class="bi-tags-fill me-2"></i>
+                    Danh Mục Sản Phẩm
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="size.html">
+                    <i class="bi-arrows-expand me-2"></i>
+                    Kích Thước
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="product.html">
+                    <i class="bi-cart-fill me-2"></i>
+                    Sản Phẩm
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="Discount.html">
+                    <i class="bi-percent me-2"></i>
+                    Mã Giảm Giá
+                </a>
+            </li>
+
+            <!-- Quản lý doanh thu -->
+            <li class="nav-item border-top mt-3 pt-2">
+                <span class="nav-link text-uppercase fw-bold">Quản Lý Doanh Thu</span>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi-bar-chart-fill me-2"></i>
+                    Doanh Thu
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="profile.html">Tồn Kho Theo Loại</a></li>
+                    <li><a class="dropdown-item" href="Year.html">Theo Năm</a></li>
+                    <li><a class="dropdown-item" href="quy.html">Theo Quý</a></li>
+                    <li><a class="dropdown-item" href="thang.html">Theo Tháng</a></li>
+                    <li><a class="dropdown-item" href="day.html">Theo Ngày</a></li>
+                </ul>
+            </li>
+
+            <!-- Đăng xuất -->
+            <li class="nav-item border-top mt-auto pt-3">
+                <a class="nav-link text-danger" href="login.html">
+                    <i class="bi-box-arrow-left me-2"></i>
+                    Đăng Xuất
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy URL hiện tại
+        const currentUrl = window.location.pathname;
+
+        // Tất cả các link trong sidebar
+        const menuLinks = document.querySelectorAll("#sidebarMenu .nav-link");
+
+        // Lặp qua các link và thêm lớp `active` nếu URL khớp
+        menuLinks.forEach(link => {
+            if (link.getAttribute("href") === currentUrl) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+    });
+
+</script>

@@ -39,6 +39,7 @@
                             <div ng-if="!isLoggedIn">
                                 <form id="form" name="loginForm" ng-submit="login()">
                                     <p>
+                                        <label for="txtIDAccount">Tên tài khoản</label>
                                         <input type="text" ng-model="user.idaccount" placeholder="Tên tài khoản (*)"
                                             class="mb-2" name="txtIDAccount" required><br>
                                     <div class="form-text text-danger"
@@ -47,6 +48,7 @@
                                     </div>
                                     </p>
                                     <p>
+                                        <label for="txtPassword">Mật khẩu</label>
                                         <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)"
                                             minlength="6" name="txtPassword" class="mt-2 mb-2" required><br>
                                     <div class="form-text text-danger"

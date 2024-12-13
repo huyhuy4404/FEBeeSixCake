@@ -32,18 +32,20 @@
                         <img src="../assets/img/sticker-cake2.png" class="sticker sticker-right-bottom" alt="Sticker bánh kem">
                         <form id="form" name="loginForm" ng-submit="login()">
                             <p>
+                                <label for="txtIDAccount">Tên tài khoản</label>
                                 <input type="text" ng-model="user.idaccount" placeholder="Tên tài khoản (*)"
-                                    class="mb-2 form-control" name="txtIDAccount" required>
+                                       class="mb-2 form-control" name="txtIDAccount" id="txtIDAccount" required>
                                 <div class="form-text text-danger"
-                                    ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
+                                     ng-show="loginForm.txtIDAccount.$touched && loginForm.txtIDAccount.$invalid">
                                     Tên tài khoản không hợp lệ
                                 </div>
                             </p>
                             <p>
+                                <label for="txtPassword">Mật khẩu</label>
                                 <input type="password" ng-model="user.password" placeholder="Mật khẩu (*)" minlength="6"
-                                    name="txtPassword" class="mt-2 mb-2 form-control" required>
+                                       name="txtPassword" class="mt-2 mb-2 form-control" id="txtPassword" required>
                                 <div class="form-text text-danger"
-                                    ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
+                                     ng-show="loginForm.txtPassword.$touched && loginForm.txtPassword.$invalid">
                                     Mật khẩu phải có ít nhất 6 ký tự
                                 </div>
                             </p>
@@ -55,9 +57,8 @@
                                 <div class="form-text text-success" ng-show="loginSuccess">
                                     {{loginSuccess}}
                                 </div>
-    
                             </div>
-                        </form>
+                        </form>                        
                     </div>
                 </div>
                 
