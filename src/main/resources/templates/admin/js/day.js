@@ -246,7 +246,47 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
     var chart = new ApexCharts(document.querySelector("#daily-bar-chart"), options);
     chart.render();
 };
-   
+$scope.exportToExcel = function() {
+  // Tạo một workbook mới
+  const wb = XLSX.utils.book_new();
+  
+  // Tạo dữ liệu cho bảng
+  const data = [
+      ["Ngày", "Tổng Đơn Hàng", "Tổng Tiền"]
+  ];
+
+  // Thêm dữ liệu thống kê vào bảng
+  $scope.dailyStats.forEach(stat => {
+      data.push([stat.date, stat.totalOrders, stat.totalRevenue]);
+  });
+
+  // Tạo worksheet từ dữ liệu
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  
+  // Căn chỉnh kích thước cột
+  const columnWidths = [
+      { wch: 15 }, // Chiều rộng cột ngày
+      { wch: 15 }, // Chiều rộng cột tổng đơn hàng
+      { wch: 15 }  // Chiều rộng cột tổng tiền
+  ];
+  ws['!cols'] = columnWidths; // Gán kích thước cột cho worksheet
+
+  // Định dạng cột tổng tiền
+  for (let i = 1; i < data.length; i++) {
+      const cellAddress = `C${i + 1}`; // Cột C cho tổng tiền
+      ws[cellAddress] = {
+          v: data[i][2], // Giá trị
+          t: 'n', // Kiểu số
+          z: '0đ' // Định dạng tiền tệ
+      };
+  }
+
+  // Thêm worksheet vào workbook
+  XLSX.utils.book_append_sheet(wb, ws, "Doanh Thu Ngày");
+
+  // Xuất file Excel
+  XLSX.writeFile(wb, `Doanh_Thu_Theo_Ngay_${new Date().getFullYear()}.xlsx`);
+};
 
     // Gọi hàm để lấy dữ liệu
     $scope.getStatusPayments();

@@ -297,7 +297,29 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             var chart = new ApexCharts(chartDiv, options);
             chart.render();
         };
-
+        $scope.exportToExcel = function() {
+            // Tạo một workbook mới
+            const wb = XLSX.utils.book_new();
+            
+            // Tạo dữ liệu cho bảng
+            const data = [
+                ["Năm", "Số Lượng Đơn Hàng", "Tổng Tiền"]
+            ];
+        
+            // Thêm dữ liệu thống kê vào bảng
+            $scope.yearlyStats.forEach(stat => {
+                data.push([stat.year, stat.totalOrders, stat.totalRevenue]);
+            });
+        
+            // Tạo worksheet từ dữ liệu
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // Thêm worksheet vào workbook
+            XLSX.utils.book_append_sheet(wb, ws, "Doanh Thu");
+        
+            // Xuất file Excel
+            XLSX.writeFile(wb, `Doanh_Thu_Theo_Nam_${new Date().getFullYear()}.xlsx`);
+        };
         // Hàm định dạng tiền tệ
         $scope.formatCurrency = function(amount) {
             if (isNaN(amount)) {

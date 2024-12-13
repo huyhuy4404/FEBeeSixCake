@@ -239,6 +239,44 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             $scope.chart.render();
         }
     };
+    $scope.exportToExcel = function() {
+        // Tạo một workbook mới
+        const wb = XLSX.utils.book_new();
+        
+        // Tạo dữ liệu cho bảng
+        const data = [
+            ["Quý", "Tổng Số Lượng", "Tổng Doanh Thu"]
+        ];
+    
+        // Thêm dữ liệu thống kê vào bảng
+        $scope.quarterlyStats.forEach(stat => {
+            data.push([`Quý ${stat.quarter} ${stat.year}`, stat.totalQuantity, stat.totalRevenue]);
+        });
+    
+        // Tạo worksheet từ dữ liệu
+        const ws = XLSX.utils.aoa_to_sheet(data);
+        
+        // Thêm worksheet vào workbook
+        XLSX.utils.book_append_sheet(wb, ws, "Doanh Thu");
+        const columnWidths = [
+            { wch: 15 }, // Chiều rộng cột ngày
+            { wch: 15 }, // Chiều rộng cột tổng đơn hàng
+            { wch: 15 }  // Chiều rộng cột tổng tiền
+        ];
+        ws['!cols'] = columnWidths; // Gán kích thước cột cho worksheet
+    
+        // Định dạng cột tổng tiền
+        for (let i = 1; i < data.length; i++) {
+            const cellAddress = `C${i + 1}`; // Cột C cho tổng tiền
+            ws[cellAddress] = {
+                v: data[i][2], // Giá trị
+                t: 'n', // Kiểu số
+                z: '"₫"#,##0.00' // Định dạng tiền tệ với ký hiệu
+            };
+        }
+        // Xuất file Excel
+        XLSX.writeFile(wb, `Doanh_Thu_Theo_Quy_${$scope.selectedYear}.xlsx`);
+    };
 
     // Hàm định dạng tiền tệ
     $scope.formatCurrency = function(amount) {
