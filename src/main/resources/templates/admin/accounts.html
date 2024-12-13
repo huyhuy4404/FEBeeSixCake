@@ -272,7 +272,7 @@ Bootstrap 5 Dashboard Admin Template
                                                                 <th>Họ và tên</th>
                                                                 <th>Email</th>
                                                                 <th>Số điện thoại</th>
-                                                                <th>Chức vụ</th>
+                                                                <th>Phân quyền</th>
                                                                 <th>Trạng thái</th>
                                                                 <th class="text-end">Hành động</th>
                                                             </tr>
@@ -282,7 +282,7 @@ Bootstrap 5 Dashboard Admin Template
                                                                 <td>{{ user.fullname }}</td>
                                                                 <td>{{ user.email }}</td>
                                                                 <td>{{ user.phonenumber }}</td>
-                                                                <td>{{ user.idrole === 1 ? 'Admin' : 'Người dùng' }}</td>
+                                                                <td>{{ user.idrole === 1 ? 'Admin' : 'Khách hàng' }}</td>
                                                                 <td>{{ user.active ? 'Đang hoạt động' : 'Không hoạt động' }}</td>
                                                                 <td class="text-end">
                                                                     <button type="button" class="btn btn-sm btn-warning" ng-click="editUser(user)">Xem chi tiết</button>
