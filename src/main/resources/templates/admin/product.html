@@ -219,7 +219,7 @@
                                                         <th scope="col">Yêu thích</th>
                                                         <th scope="col">Giá</th>
                                                         <th scope="col">Ảnh</th>
-                                                        <th scope="col">Trạng thái sản phẩm</th>
+                                                        <th scope="col">Trạng thái</th>
                                                         <th scope="col" class="text-end">Hành động</th>
                                                     </tr>
                                                 </thead>
@@ -246,7 +246,7 @@
                                                         <!-- Trạng thái hiển thị sản phẩm -->
                                                         <td rowspan="{{product.sizes.length}}">
                                                             <span ng-if="product.isactive" class="badge bg-success">Hiển thị</span>
-                                                            <span ng-if="!product.isactive" class="badge bg-secondary">Không hiển thị</span>
+                                                            <span ng-if="!product.isactive" class="badge bg-secondary">Ẩn</span>
                                                         </td>
                                                         <!-- Hành động (Chỉnh sửa, Xóa) -->
                                                         <td class="text-end" rowspan="{{product.sizes.length}}" style="white-space: nowrap;">
@@ -290,10 +290,6 @@
                                         </nav>
                                         
                                     </div>
-                                    <!-- Thanh Phân Trang -->
-                           
-
-
                                     <!-- Tab Chỉnh sửa -->
                                     <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel"
                                         aria-labelledby="edit-tab" tabindex="0">
@@ -440,28 +436,45 @@
 
 
                         <!-- Modal -->
-                        <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="messageModalLabel">Thông báo</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body" ng-bind="message">
-                                        <!-- Nội dung thông báo sẽ được hiển thị tại đây -->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Đóng</button>
-                                        <button type="button" class="btn"
-                                            ng-class="{'btn-success': messageType === 'success', 'btn-danger': messageType === 'error'}"
-                                            data-bs-dismiss="modal">OK</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                   <!-- Modal xác nhận -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ confirmationMessage }} <!-- Nội dung thông báo xác nhận -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" ng-click="confirmDelete()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal thông báo thành công hoặc lỗi -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messageModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" ng-bind="message">
+                <!-- Nội dung thông báo sẽ được hiển thị tại đây -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn"
+                        ng-class="{'btn-success': messageType === 'success', 'btn-danger': messageType === 'error'}"
+                        data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
             </main>

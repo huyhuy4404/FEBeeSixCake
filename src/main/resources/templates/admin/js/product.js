@@ -695,22 +695,30 @@ $scope.updateProduct = function () {
     
 $scope.deleteProduct = function (idproduct) {
     if (!idproduct) {
-        showModal("Không tìm thấy sản phẩm để xóa.", 'error');
+        $scope.message = "Không tìm thấy sản phẩm để xóa.";
+        $scope.messageType = 'error';
+        $('#messageModal').modal('show');
         return;
     }
 
-    if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
-        return;
-    }
+    // Hiển thị modal xác nhận
+    $scope.confirmationMessage = "Bạn có chắc chắn muốn xóa sản phẩm này?";
+    $scope.productToDelete = idproduct; // Lưu lại id sản phẩm để xóa
+    $('#confirmationModal').modal('show');
+};
 
+// Hàm thực hiện xóa sản phẩm khi người dùng xác nhận
+$scope.confirmDelete = function () {
+    var idproduct = $scope.productToDelete;
     var product = $scope.Products.find(product => product.idproduct === idproduct);
     if (!product) {
-        showModal("Không tìm thấy sản phẩm để xóa.", 'error');
+        $scope.message = "Không tìm thấy sản phẩm để xóa.";
+        $scope.messageType = 'error';
+        $('#messageModal').modal('show');
         return;
     }
 
     var detailsToDelete = product.sizes;
-
     var deletePromises = [];
 
     // Thêm các promise xóa chi tiết sản phẩm (productdetail)
@@ -725,21 +733,32 @@ $scope.deleteProduct = function (idproduct) {
         return $http.delete('http://localhost:8080/beesixcake/api/product/' + idproduct);
     }).then(function (response) {
         console.log("Sản phẩm đã được xóa thành công:", response.data);
-        showModal("Xóa sản phẩm thành công!", 'success');
+
+        // Hiển thị thông báo thành công
+        $scope.message = "Xóa sản phẩm thành công!";
+        $scope.messageType = 'success';
+        $('#messageModal').modal('show');
 
         // Tải lại danh sách sản phẩm sau khi xóa
         $scope.loadProducts();
     }).catch(function (error) {
         console.error('Lỗi khi xóa sản phẩm hoặc chi tiết sản phẩm:', error);
 
-        // Nếu có lỗi khi xóa, hiển thị thông báo lỗi
+        // Hiển thị thông báo lỗi khi xóa thất bại
         if (error.status === 400 || error.status === 500) {
-            showModal("Xóa sản phẩm thất bại! Sản phẩm đã có trong đơn hàng.", 'error');
+            $scope.message = "Xóa sản phẩm thất bại! Sản phẩm đã có trong đơn hàng.";
+            $scope.messageType = 'error';
         } else {
-            showModal("Xóa sản phẩm thất bại! Vui lòng thử lại.", 'error');
+            $scope.message = "Xóa sản phẩm thất bại! Vui lòng thử lại.";
+            $scope.messageType = 'error';
         }
+        $('#messageModal').modal('show');
     });
+
+    // Đóng modal xác nhận sau khi xóa
+    $('#confirmationModal').modal('hide');
 };
+
 
 
 

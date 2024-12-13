@@ -277,7 +277,7 @@ app.controller("Admin-oder", [
 
 
 
-    $scope.searchProducts = function () {
+    $scope.filterByCategory = function () {
       // Kiểm tra nếu dữ liệu sản phẩm không tồn tại
       if (!$scope.Products || $scope.Products.length === 0) {
           $scope.filteredProducts = [];
@@ -324,12 +324,6 @@ app.controller("Admin-oder", [
   };
   
 
-
-
-
-
-
-
     // Watch để cập nhật phân trang khi Products hoặc searchQuery thay đổi
     $scope.$watchGroup(
       ["Products", "searchQuery"],
@@ -342,7 +336,7 @@ app.controller("Admin-oder", [
     // Hàm thêm sản phẩm vào giỏ hàng
     $scope.addToCart = function (product) {
       if (product.selectedQuantity > product.quantityinstock) {
-        $scope.showModal("Thông báo", "Hết Hàng. Sản phẩm hiện không còn trong kho!");
+        $scope.showModal("Thông báo", "Hết Hàng. Sản phẩm hiện không còn trong kho");
         return;
       }
 
