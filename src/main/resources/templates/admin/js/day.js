@@ -230,6 +230,26 @@ $scope.renderDailyChart = function() {
                 text: 'Ngày trong tháng'
             }
         },
+        yaxis: [
+            {
+                title: {
+                    text: 'Tổng Đơn Hàng'
+                },
+                min: 0
+            },
+            {
+                title: {
+                    text: 'Tổng Tiền (VND)'
+                },
+                opposite: true,
+                min: 0,
+                labels: {
+                    formatter: function(value) {
+                        return $scope.formatCurrency(value); // Định dạng nhãn trục y
+                    }
+                }
+            }
+        ],
         tooltip: {
             shared: true,
             intersect: false,
@@ -242,14 +262,7 @@ $scope.renderDailyChart = function() {
             },
         },
         dataLabels: {
-            enabled: true,
-            formatter: function(val, opts) {
-                // Định dạng giá trị cho từng cột
-                if (opts.seriesIndex === 1) { // Nếu là chuỗi 'Tổng Tiền'
-                    return $scope.formatCurrency(val); // Định dạng tiền tệ
-                }
-                return val; // Không định dạng cho 'Tổng Đơn Hàng'
-            }
+            enabled: false, // Tắt hiển thị số trong cột
         },
         responsive: [{
             breakpoint: 480,

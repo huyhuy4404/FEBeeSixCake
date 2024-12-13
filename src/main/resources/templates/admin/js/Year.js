@@ -297,6 +297,9 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                         }).join('<br>');
                     }
                 },
+                dataLabels: {
+                    enabled: false // Tắt hiển thị số liệu trong cột
+                },
                 responsive: [{
                     breakpoint: 480,
                     options: {

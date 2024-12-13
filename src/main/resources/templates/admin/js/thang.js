@@ -240,13 +240,22 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     title: {
                         text: 'Tổng Tiền (VND)'
                     },
-                    opposite: true
+                    opposite: true,
+                    min: 0,
+                    labels: {
+                        formatter: function(value) {
+                            return $scope.formatCurrency(value); // Định dạng nhãn trục y
+                        }
+                    }
                 }
             ],
             tooltip: {
                 shared: true,
                 intersect: false,
                 followCursor: true // Tooltip theo con trỏ chuột
+            },
+            dataLabels: {
+                enabled: false // Tắt hiển thị số liệu trong cột
             },
             responsive: [{
                 breakpoint: 480,
@@ -309,7 +318,12 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
     $scope.formatCurrency = function(amount) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
-
+    $scope.formatCurrency = function(amount) {
+        if (isNaN(amount)) {
+            return '0 ₫'; // Hoặc một giá trị mặc định
+        }
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    };
     // Gọi hàm để lấy dữ liệu
     $scope.getStatusPayments();
     $scope.getDiscounts();
