@@ -338,10 +338,11 @@
                                             <div class="input-group border border-info border-2 rounded mb-1"
                                                 style="width: 100% !important;">
                                                 <label class="input-group-text py-1 fw-bold bg-body"
-                                                    for="inputGroupSelect01" style="max-width: 70% !important;">Số Đơn Hàng</label>
-                                                <select class="border border-0 py-1 fw-bold float-end" id="inputGroupSelect01"
-                                                    ng-model="itemsPerPage" ng-change="changeItemsPerPage()"
-                                                    style="width: 30% !important;">
+                                                    for="inputGroupSelect01" style="max-width: 70% !important;">Số Đơn
+                                                    Hàng</label>
+                                                <select class="border border-0 py-1 fw-bold float-end"
+                                                    id="inputGroupSelect01" ng-model="itemsPerPage"
+                                                    ng-change="changeItemsPerPage()" style="width: 30% !important;">
                                                     <option ng-value="5">5</option>
                                                     <option ng-value="8">8</option>
                                                     <option ng-value="10">10</option>
@@ -362,7 +363,8 @@
                                             <div class="row">
                                                 <div class="col-lg-6 px-0">
                                                     <div class="input-group mb-3">
-                                                        <label class="input-group-text fw-bold" for="orderStatusSelect">Trạng
+                                                        <label class="input-group-text fw-bold"
+                                                            for="orderStatusSelect">Trạng
                                                             thái đơn hàng</label>
                                                         <select class="form-select" id="orderStatusSelect"
                                                             ng-model="selectedStatus" ng-change="updateFilter()">
@@ -376,15 +378,15 @@
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="input-group mb-3">
-                                                        <label class="input-group-text fw-bold" for="paymentStatusSelect">Trạng
-                                                            thái thanh toán</label>
+                                                        <label class="input-group-text fw-bold"
+                                                            for="paymentStatusSelect">Hình Thức Bán</label>
                                                         <select class="form-select" id="paymentStatusSelect"
-                                                            ng-model="selectedPaymentStatus" ng-change="updateFilter()">
+                                                            ng-model="selectedIdRole"
+                                                            ng-change="updatePaginatedOrders()">
                                                             <option value="">Tất cả</option>
-                                                            <option value="Đã Thanh Toán">Đã Thanh Toán</option>
-                                                            <option value="Chưa Thanh Toán">Chưa Thanh Toán</option>
+                                                            <option value="2">Bán Online</option> <!-- idrole = 2 -->
+                                                            <option value="1">Bán Tại Quầy</option> <!-- idrole = 1 -->
                                                         </select>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -405,7 +407,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="order in paginatedOrders | orderBy:'-orderdate '"
+                                            <tr ng-repeat="order in paginatedOrders | filter: getFilterCondition() | orderBy: '-orderdate'"
                                                 style="text-align: center; font-size: 16px;">
                                                 <td>{{$index + 1}}</td>
                                                 <td>{{ order.idorder }}</td>
@@ -464,7 +466,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="mb-3" style="border: 1px solid grey; padding: 10px; border-radius: 5px;">
+                            <div class="mb-3" style="border: 1px solid grey; padding: 10px; border-radius: 5px;"
+                                ng-if="order.account.idrole === 2">
                                 <p style="font-weight: bold; color: black;">Thông tin khách hàng</p>
                                 <table class="account-table table table-order mb-0">
                                     <thead>
@@ -473,6 +476,7 @@
                                             <th class="text-center">Tên Khách Hàng</th>
                                             <th class="text-center">Số Điện Thoại</th>
                                             <th class="text-center">Địa Chỉ Nhận Hàng</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
                                         <tr style="text-align: center; font-size: 16px;">
@@ -562,9 +566,9 @@
                                         </label>
                                     </div>
 
-                                    <!-- Nút Cập Nhật Trạng Thái Đơn Hàng -->
                                     <button class="btn btn-primary" ng-click="updateOrderStatus()" style="float: right;"
-                                        ng-disabled="isUpdateDisabled(originalStatus, selectedOrder.status.idstatus)">
+                                        ng-disabled="isUpdateDisabled(originalStatus, selectedOrder.status.idstatus)"
+                                        ng-if="order.account.idrole === 2">
                                         Cập nhật
                                     </button>
 
@@ -573,7 +577,8 @@
                                     <div class="border-tt" style="padding-bottom: 12px;">
                                         <h6>Tổng tiền sản phẩm: <span>{{ calculateTotalProductPrice() | number: 0 }}
                                                 ₫</span></h6>
-                                        <h6>Phí vận chuyển: <span>{{ selectedOrder.shipfee | number: 0 }} ₫</span>
+                                        <h6 ng-if="order.account.idrole === 2">Phí vận chuyển: <span>{{
+                                                selectedOrder.shipfee | number: 0 }} ₫</span>
                                         </h6>
                                         <h6>Giảm giá: <span>{{ calculateDiscount() | number: 0 }} ₫</span></h6>
                                         <h6>Tổng tiền đơn hàng:

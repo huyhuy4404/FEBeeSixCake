@@ -320,11 +320,24 @@ app.controller("OrderController", function ($scope, $window, $http) {
     $scope.selectedOrder = angular.copy(order); // Sao chép thông tin đơn hàng
     $scope.originalStatus = order.status.idstatus; // Lưu trạng thái ban đầu
     $scope.originalPaymentStatus = order.statuspay.idstatuspay; // Lưu trạng thái thanh toán ban đầu
+    
+    // Kiểm tra idrole và quyết định hiển thị thông tin khách hàng
+    if (order.account.idrole === 1) {
+      // Nếu bán tại quầy, không hiển thị thông tin khách hàng
+      $scope.showCustomerInfo = false;
+    } else if (order.account.idrole === 2) {
+      // Nếu bán online, hiển thị thông tin khách hàng
+      $scope.showCustomerInfo = true;
+    }
+  
     $scope.getOrderDetails(order.idorder); // Lấy chi tiết đơn hàng
-
+  
     // Đồng bộ AngularJS với giao diện
     $scope.$applyAsync();
   };
+  
+  // Sửa lại modal trong HTML để hiển thị/ẩn thông tin khách hàng dựa vào biến showCustomerInfo
+  
 
   // Hàm phân trang
   $scope.updatePagination = function () {
@@ -362,6 +375,13 @@ app.controller("OrderController", function ($scope, $window, $http) {
       });
     }
   
+    // Lọc theo hình thức bán (selectedIdRole)
+    if ($scope.selectedIdRole) {
+      $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
+        return order.account && order.account.idrole == $scope.selectedIdRole;
+      });
+    }
+  
     // Tính tổng số trang
     $scope.totalPages =
       Math.ceil(
@@ -384,6 +404,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
     const end = start + parseInt($scope.itemsPerPage, 10);
     $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
   };
+  
   
 
   $scope.updateFilter = function () {
@@ -434,6 +455,42 @@ app.controller("OrderController", function ($scope, $window, $http) {
     return originalStatus === selectedStatus;
   };
 
+  $scope.getFilterCondition = function() {
+    // Điều kiện lọc chung
+    const filterCondition = {};
+  
+    // Lọc theo trạng thái đơn hàng
+    if ($scope.selectedStatus) {
+      filterCondition.statusName = $scope.selectedStatus;
+    }
+  
+    // Lọc theo trạng thái thanh toán
+    if ($scope.selectedPaymentStatus) {
+      filterCondition.statuspay = { statuspayname: $scope.selectedPaymentStatus };
+    }
+  
+    // Lọc theo hình thức bán (idrole)
+    if ($scope.selectedIdRole) {
+      filterCondition.account = { idrole: $scope.selectedIdRole };
+    }
+  
+    return filterCondition;
+  };
+  
+  $scope.updatePaginatedOrders = function () {
+    // Lọc các đơn hàng theo idrole nếu có, nếu không thì không lọc gì
+    if ($scope.selectedIdRole === "") {
+      $scope.paginatedOrders = angular.copy($scope.Orders); // Hiển thị tất cả các đơn hàng
+    } else {
+      $scope.paginatedOrders = $scope.Orders.filter(function(order) {
+        return order.account.idrole == $scope.selectedIdRole;
+      });
+    }
+  
+    // Cập nhật lại phân trang
+    $scope.updatePagination();
+  };
+  
   $scope.loadOrders();
 });
 
