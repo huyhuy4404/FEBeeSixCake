@@ -274,51 +274,61 @@ app.controller("Admin-oder", [
         });
     };
 
-    // Lọc sản phẩm theo danh mục, tìm kiếm và giá tối đa
-    $scope.filterByCategory = function () {
-      $scope.filteredProducts = $scope.Products.filter(function (product) {
-        let matchesCategory =
-          !$scope.selectedCategory ||
-          product.category.idcategory === $scope.selectedCategory;
-        let matchesSearchQuery =
-          !$scope.searchQuery ||
-          product.productname
-            .toLowerCase()
-            .includes($scope.searchQuery.toLowerCase());
-        let matchesMaxPrice =
-          !$scope.maxPrice || product.unitprice <= $scope.maxPrice;
-        return matchesCategory && matchesSearchQuery && matchesMaxPrice;
-      });
 
+
+
+    $scope.searchProducts = function () {
+      // Kiểm tra nếu dữ liệu sản phẩm không tồn tại
+      if (!$scope.Products || $scope.Products.length === 0) {
+          $scope.filteredProducts = [];
+          $scope.updatePagination();
+          return;
+      }
+  
+      // Thực hiện lọc sản phẩm
+      $scope.filteredProducts = $scope.Products.filter(function (product) {
+          // Lọc theo danh mục (nếu có chọn danh mục)
+          let matchesCategory =
+              !$scope.selectedCategory || 
+              product.category.idcategory == $scope.selectedCategory;
+  
+          // Lọc theo từ khóa tìm kiếm (nếu có nhập từ khóa)
+          let matchesSearchQuery =
+              !$scope.searchQuery ||
+              product.productname
+                  .toLowerCase()
+                  .includes($scope.searchQuery.toLowerCase());
+  
+          // Lọc theo giá tối đa (nếu có nhập giá)
+          let matchesMaxPrice =
+              !$scope.maxPrice || product.unitprice <= $scope.maxPrice;
+  
+          // Sản phẩm phải thỏa mãn tất cả điều kiện
+          return matchesCategory && matchesSearchQuery && matchesMaxPrice;
+      });
+  
+      // Cập nhật số lượng sản phẩm sau khi lọc
+      $scope.productCount = $scope.filteredProducts.length;
+  
+      // Ghi log nếu không có sản phẩm phù hợp
+      if ($scope.filteredProducts.length === 0) {
+          console.log("Không có sản phẩm nào phù hợp với bộ lọc hiện tại.");
+      } else {
+          console.log(
+              `Đã tìm thấy ${$scope.filteredProducts.length} sản phẩm phù hợp.`
+          );
+      }
+  
       // Cập nhật phân trang sau khi lọc
       $scope.updatePagination();
-    };
+  };
+  
 
-    // Cập nhật phân trang
-    $scope.updatePagination = function () {
-      let productsToPaginate = $scope.filteredProducts || $scope.Products;
-      $scope.totalPages =
-        Math.ceil(productsToPaginate.length / $scope.itemsPerPage) || 1;
-      $scope.pages = [];
-      for (let i = 1; i <= $scope.totalPages; i++) {
-        $scope.pages.push(i);
-      }
-      if ($scope.currentPage > $scope.totalPages) {
-        $scope.currentPage = $scope.totalPages;
-      }
-      let start = ($scope.currentPage - 1) * $scope.itemsPerPage;
-      let end = start + $scope.itemsPerPage;
-      $scope.paginatedProducts = productsToPaginate.slice(start, end);
-    };
 
-    // Chuyển trang
-    $scope.goToPage = function (page) {
-      if (page < 1 || page > $scope.totalPages) {
-        return;
-      }
-      $scope.currentPage = page;
-      $scope.updatePagination();
-    };
+
+
+
+
 
     // Watch để cập nhật phân trang khi Products hoặc searchQuery thay đổi
     $scope.$watchGroup(
@@ -332,7 +342,7 @@ app.controller("Admin-oder", [
     // Hàm thêm sản phẩm vào giỏ hàng
     $scope.addToCart = function (product) {
       if (product.selectedQuantity > product.quantityinstock) {
-        alert("Số lượng sản phẩm không đủ trong kho!");
+        $scope.showModal("Thông báo", "Hết Hàng. Sản phẩm hiện không còn trong kho!");
         return;
       }
 
@@ -387,6 +397,62 @@ app.controller("Admin-oder", [
       }
     };
 
+
+// Cập nhật giá và số lượng khi thay đổi size
+$scope.onSizeChange = function (product, selectedSize) {
+  if (selectedSize) {
+    product.unitprice = selectedSize.unitprice;
+    product.quantityinstock = selectedSize.quantityinstock;
+    product.selectedQuantity = 1; // Đặt lại số lượng khi thay đổi size
+  }
+};
+
+$scope.onQuantityChange = function (product) {
+  // Kiểm tra nếu số lượng nhập vào không phải là một số hợp lệ
+  if (isNaN(product.selectedQuantity) || product.selectedQuantity < 1) {
+    // Hiển thị modal thông báo lỗi
+    $scope.showModal("Thông báo", "Số lượng sản phẩm không đủ trong kho!");
+    product.selectedQuantity = 1; // Đặt lại số lượng về 1 nếu không hợp lệ
+  } else if (product.selectedQuantity > product.selectedSize.quantityinstock) {
+    // Hiển thị modal thông báo lỗi nếu số lượng nhập vượt quá số lượng trong kho
+    $scope.showModal("Lỗi", "Số lượng sản phẩm không đủ trong kho!");
+    product.selectedQuantity = product.selectedSize.quantityinstock; // Đặt lại số lượng theo tồn kho
+  }
+  // Cập nhật giỏ hàng sau khi thay đổi số lượng
+  $scope.updateCart();
+  $scope.calculateTotals();
+};
+
+
+
+
+
+        // Cập nhật phân trang
+        $scope.updatePagination = function () {
+          let productsToPaginate = $scope.filteredProducts || $scope.Products;
+          $scope.totalPages =
+            Math.ceil(productsToPaginate.length / $scope.itemsPerPage) || 1;
+          $scope.pages = [];
+          for (let i = 1; i <= $scope.totalPages; i++) {
+            $scope.pages.push(i);
+          }
+          if ($scope.currentPage > $scope.totalPages) {
+            $scope.currentPage = $scope.totalPages;
+          }
+          let start = ($scope.currentPage - 1) * $scope.itemsPerPage;
+          let end = start + $scope.itemsPerPage;
+          $scope.paginatedProducts = productsToPaginate.slice(start, end);
+        };
+    
+        // Chuyển trang
+        $scope.goToPage = function (page) {
+          if (page < 1 || page > $scope.totalPages) {
+            return;
+          }
+          $scope.currentPage = page;
+          $scope.updatePagination();
+        };
+    
     // Tính tổng tiền
     $scope.calculateTotals = function () {
       $scope.totalPrice = $scope.cart.reduce(
