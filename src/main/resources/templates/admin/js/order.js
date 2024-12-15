@@ -476,6 +476,17 @@ app.controller("OrderController", function ($scope, $window, $http) {
   
     return filterCondition;
   };
+
+  $scope.getSaleMethod = function(idrole) {
+    if (idrole === 1) {
+        return "Bán Tại Quầy";
+    } else if (idrole === 2) {
+        return "Bán Online";
+    } else {
+        return "Không xác định"; // Phòng trường hợp giá trị khác không mong muốn
+    }
+};
+
   
   $scope.updatePaginatedOrders = function () {
     // Lọc các đơn hàng theo idrole nếu có, nếu không thì không lọc gì

@@ -398,6 +398,7 @@
                                             <tr>
                                                 <th class="text-center fw-bold">STT</th>
                                                 <th class="text-center">ID</th>
+                                                <th class="text-center">Hình Thức Bán</th>
                                                 <th class="text-center">Tên Khách Hàng</th>
                                                 <th class="text-center">Thời Gian Đặt Hàng</th>
                                                 <th class="text-center">Trạng Thái Đơn Hàng</th>
@@ -411,6 +412,7 @@
                                                 style="text-align: center; font-size: 16px;">
                                                 <td>{{$index + 1}}</td>
                                                 <td>{{ order.idorder }}</td>
+                                                <td>{{ getSaleMethod(order.account.idrole) }}</td>
                                                 <td>{{ order.account.fullname }}</td>
                                                 <td>{{ addHoursToOrderDate(order.orderdate, 7) |
                                                     date:'HH:mm:ss - dd/MM/yyyy' }}</td>
@@ -497,7 +499,7 @@
                                             <th scope="col">Hình ảnh</th>
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Số lượng</th>
-                                            <th scope="col">Kích cỡ</th>
+                                            <th scope="col">Kích thướt</th>
                                             <th scope="col">Giá sản phẩm</th>
                                         </tr>
                                     </thead>
@@ -527,8 +529,8 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <p class="fw-bold mb-2" style="color: black; ">Trạng thái đơn hàng</p>
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <p class="fw-bold mb-2" style="color: black; " ng-if="order.account.idrole === 2">Trạng thái đơn hàng</p>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons" ng-if="order.account.idrole === 2">
                                         <!-- Nút Chờ Xác Nhận -->
                                         <label class="btn btn-primary"
                                             ng-class="{'active': selectedOrder.status.idstatus === 1}"
@@ -561,7 +563,7 @@
                                             ng-class="{'active': selectedOrder.status.idstatus === 4}"
                                             ng-if="getVisibleStatusButtons(originalStatus).includes(4)">
                                             <input type="radio" ng-model="selectedOrder.status.idstatus" ng-value="4"
-                                                autocomplete="off" ng-click="setOrderStatus(4)"> Đã
+                                                autocomplete="off" ng-click="setOrderStatus(4)"> 
                                             Hủy
                                         </label>
                                     </div>
