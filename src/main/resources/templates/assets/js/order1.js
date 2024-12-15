@@ -1,4 +1,5 @@
 var app = angular.module("myApp", ["ngRoute"]);
+const API = "http://localhost:8080/beesixcake/api";
 app.controller("OrderController", [
   "$scope",
   "$http",
@@ -142,25 +143,24 @@ app.controller("OrderController", [
       );
     };
 
-    $scope.getOrderDetails = function (idorder) {
-      $http
-        .get(
-          `http://localhost:8080/beesixcake/api/orderdetail/order/${idorder}`
-        )
-        .then((response) => {
-          console.log("Dữ liệu trả về từ API:", response.data);
-          $scope.orderDetails = response.data;
-          $scope.orderDetails.forEach(function (detail) {
-            console.log(
-              `statusreview cho sản phẩm ID ${detail.idorderdetail}:`,
-              detail.statusreview
-            );
-          });
-        })
-        .catch((error) => {
-          console.error("Lỗi khi tải chi tiết đơn hàng:", error);
+    // Lấy chi tiết đơn hàng
+  $scope.getOrderDetails = function (idorder) {
+    $http
+      .get(`${API}/orderdetail/order/${idorder}`)
+      .then((response) => {
+        $scope.orderDetails = response.data;
+        $scope.orderDetails.forEach((detail) => {
+          if (detail.product && detail.product.img) {
+            detail.product.img =
+              $scope.imageBaseUrl + detail.product.img.split("/").pop();
+          }
         });
-    };
+      })
+      .catch((error) => {
+        console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng: ", error);
+        $scope.showMessageModal("Không thể tải chi tiết đơn hàng!", "error");
+      });
+  };
 
     $scope.openOrderModal = function (order) {
       $scope.selectedOrder = angular.copy(order);
@@ -250,44 +250,143 @@ app.controller("OrderController", [
     };
 
     $scope.cancelOrder = function (order) {
-      console.log(`Hủy đơn hàng: ${order.idorder}`);
-
-      // Gọi API để hủy đơn hàng
+      // Lấy trạng thái mới nhất của đơn hàng từ API trước khi thực hiện hủy
       $http
-        .put(
-          `http://localhost:8080/beesixcake/api/order/cancel/${order.idorder}`
-        )
+        .get(`${API}/order-status-history/${order.idorder}`)
         .then((response) => {
-          console.log("Đơn hàng đã được hủy:", response.data);
-          order.statusname = "Đã Hủy"; // Cập nhật trạng thái thành "Đã Hủy"
-          order.statusid = $scope.canceledStatusId; // Gán trạng thái ID đã hủy
-
-          // Cập nhật danh sách đơn hàng theo trạng thái
-          const oldStatusId = order.statusid; // Lưu trạng thái cũ
-          if ($scope.ordersByStatus[oldStatusId]) {
-            // Xóa đơn hàng khỏi danh sách trạng thái cũ
-            $scope.ordersByStatus[oldStatusId] = $scope.ordersByStatus[
-              oldStatusId
-            ].filter((o) => o.idorder !== order.idorder);
+          const latestStatus = response.data.status;
+    
+          // Kiểm tra nếu trạng thái đơn hàng không còn là "Chờ Xác Nhận" (ID 1)
+          if (latestStatus.idstatus !== 1) {
+            alert(
+              `Đơn hàng ID: ${order.idorder} hiện đã chuyển sang trạng thái "${latestStatus.statusname}". Bạn không thể hủy đơn hàng này nữa!`
+            );
+            // Reload lại trang để cập nhật trạng thái mới
+            location.reload();
+            return;
           }
-
-          // Thêm đơn hàng vào danh sách "Đã Hủy"
-          if (!$scope.ordersByStatus[$scope.canceledStatusId]) {
-            $scope.ordersByStatus[$scope.canceledStatusId] = [];
+    
+          // Nếu trạng thái là "Chờ Xác Nhận", hiển thị xác nhận hủy
+          const confirmation = confirm(
+            `Bạn có chắc chắn muốn hủy đơn hàng ID: ${order.idorder} không?`
+          );
+    
+          if (!confirmation) {
+            return; // Thoát nếu người dùng chọn "Hủy"
           }
-          $scope.ordersByStatus[$scope.canceledStatusId].push(order);
-
-          // Cập nhật danh sách đơn hàng hiển thị
-          $scope.filterOrdersByStatus($scope.canceledStatusId);
-
-          // Hiển thị thông báo thành công
-          alert("Đơn hàng đã được hủy thành công!");
+    
+          console.log(`Hủy đơn hàng: ${order.idorder}`);
+    
+          // Cập nhật trạng thái đơn hàng sang "Đã Hủy" (idstatus = 4)
+          const orderStatusHistory = {
+            order: { idorder: order.idorder },
+            status: { idstatus: 4 }, // Trạng thái "Đã Hủy"
+            timestamp: new Date().toISOString(),
+          };
+    
+          $http
+            .put(`${API}/order-status-history/${order.idorder}`, orderStatusHistory)
+            .then(() => {
+              // Hiển thị thông báo thành công
+              alert("Hủy đơn hàng thành công!");
+    
+              // Khôi phục tồn kho (cộng lại số lượng sản phẩm đã mua vào kho)
+              $scope.restoreInventory(order.idorder);
+    
+              // Reload lại trang web
+              location.reload();
+            })
+            .catch((error) => {
+              console.error("Có lỗi xảy ra khi hủy đơn hàng:", error);
+    
+              // Hiển thị thông báo lỗi
+              $scope.showMessageModal(
+                "Không thể hủy đơn hàng. Vui lòng thử lại sau!",
+                "error"
+              );
+            });
         })
         .catch((error) => {
-          console.error("Lỗi khi hủy đơn hàng:", error);
-          alert("Đã xảy ra lỗi khi hủy đơn hàng. Vui lòng thử lại.");
+          console.error("Có lỗi xảy ra khi kiểm tra trạng thái đơn hàng:", error);
+    
+          // Hiển thị thông báo lỗi
+          $scope.showMessageModal(
+            "Không thể kiểm tra trạng thái đơn hàng. Vui lòng thử lại sau!",
+            "error"
+          );
         });
     };
+    $scope.restoreInventory = function (idorder) {
+      $http
+        .get(`${API}/orderdetail/order/${idorder}`)
+        .then((response) => {
+          const orderDetails = response.data;
+    
+          // Kiểm tra nếu dữ liệu chi tiết đơn hàng hợp lệ
+          if (!orderDetails || orderDetails.length === 0) {
+            console.warn("Không có chi tiết đơn hàng hoặc chi tiết không hợp lệ.");
+            return;
+          }
+    
+          // Duyệt qua từng chi tiết đơn hàng
+          orderDetails.forEach((detail) => {
+            if (detail.productdetail && detail.quantity) {
+              const productDetail = angular.copy(detail.productdetail);
+    
+              // Kiểm tra và xử lý giá trị tồn kho
+              const quantityInStock = parseInt(productDetail.quantityinstock, 10) || 0;
+              const quantityToRestore = parseInt(detail.quantity, 10) || 0;
+    
+              // Log để kiểm tra giá trị tồn kho
+              console.log(`Sản phẩm ${productDetail.idproductdetail}: Tồn kho hiện tại: ${quantityInStock}, Số lượng khôi phục: ${quantityToRestore}`);
+    
+              if (quantityToRestore > 0) {
+                // Cập nhật tồn kho mới
+                productDetail.quantityinstock = quantityInStock + quantityToRestore;
+    
+                console.log(
+                  `Khôi phục tồn kho: Sản phẩm ${productDetail.idproductdetail}, Tồn kho mới: ${productDetail.quantityinstock}`
+                );
+    
+                // Cập nhật lại tồn kho trong hệ thống
+                $http
+                  .put(`${API}/productdetail/${productDetail.idproductdetail}`, productDetail)
+                  .then((updateResponse) => {
+                    // Log thông tin cập nhật thành công
+                    console.log(
+                      `Đã khôi phục tồn kho cho sản phẩm ${productDetail.idproductdetail}. Tồn kho mới: ${productDetail.quantityinstock}`
+                    );
+                    // Xác nhận rằng tồn kho đã được khôi phục
+                    $scope.showMessageModal("Khôi phục tồn kho thành công!", "success");
+                  })
+                  .catch((error) => {
+                    console.error(
+                      `Có lỗi khi khôi phục tồn kho cho sản phẩm ${productDetail.idproductdetail}: `,
+                      error
+                    );
+                    // Hiển thị thông báo lỗi nếu không thể khôi phục tồn kho
+                    $scope.showMessageModal(
+                      "Không thể khôi phục tồn kho cho sản phẩm. Vui lòng thử lại!",
+                      "error"
+                    );
+                  });
+              } else {
+                console.warn(`Số lượng cần khôi phục cho sản phẩm ${productDetail.idproductdetail} không hợp lệ.`);
+              }
+            } else {
+              console.warn("Chi tiết đơn hàng thiếu dữ liệu hoặc không hợp lệ:", detail);
+            }
+          });
+        })
+        .catch((error) => {
+          console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng:", error);
+          $scope.showMessageModal(
+            "Không thể lấy thông tin chi tiết đơn hàng. Vui lòng thử lại!",
+            "error"
+          );
+        });
+    };
+     
   },
 ]);
 
