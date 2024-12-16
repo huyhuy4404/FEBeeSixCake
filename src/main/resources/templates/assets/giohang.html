@@ -14,8 +14,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
 
-  <body ng-app="order" ng-controller="discountsController" >
-    <div ng-include="'layout/header.html'"ng-controller="CheckLogin"></div>
+  <body ng-app="order" ng-controller="discountsController">
+    <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
     <div ng-include="'layout/menu.html'" ng-controller="loadLoaiSanPham"></div>
     <div class="setDoDaiTrang">
       <br />
@@ -209,6 +209,41 @@
             </div>
           </div>
           <!-- Modal thông báo chọn sản phẩm -->
+          <div
+            class="modal fade"
+            id="vuotquatonkho"
+            tabindex="-1"
+            aria-labelledby="vuotquatonkho"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="vuotquatonkho">Thông báo</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  Không thể thanh toán vì số lượng của các sản phẩm sau vượt quá
+                  tồn kho
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div
             class="modal fade"
             id="noProductSelectedModal"

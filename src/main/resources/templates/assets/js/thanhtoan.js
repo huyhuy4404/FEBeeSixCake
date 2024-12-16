@@ -191,6 +191,7 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
 
   // Đặt hàng
   $scope.placeOrder = function () {
+    // Bước 1: Kiểm tra nếu giỏ hàng không có sản phẩm
     if ($scope.products.length === 0) {
       $scope.showModal(
         "Lỗi",
@@ -199,44 +200,94 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
       return;
     }
 
-    const isPaid = $scope.paymentStatus === "PAID"; // Kiểm tra trạng thái thanh toán từ API
-    const order = {
-      orderdate: new Date().toISOString(),
-      addressdetail: $scope.address,
-      shipfee: $scope.shippingFee,
-      total: $scope.finalTotal,
-      account: { idaccount: $scope.userId },
-      discount: $scope.currentDiscount || { iddiscount: 0 },
-      payment: { idpayment: $scope.selectedPaymentId },
-      statuspay: { idstatuspay: isPaid ? 2 : 1 }, // Nếu đã thanh toán, idstatuspay = 2
-    };
+    // Bước 2: Kiểm tra số lượng tồn kho cho từng productdetail
+    let isStockAvailable = true; // Biến kiểm tra tình trạng tồn kho
+    let errorOccurred = false; // Cờ kiểm tra lỗi
 
-    // Gửi yêu cầu tạo đơn hàng
-    $http
-      .post("http://localhost:8080/beesixcake/api/order", order)
-      .then(function (response) {
-        // Kiểm tra dữ liệu trả về
-        console.log("Đơn hàng được tạo:", response.data);
+    // Lặp qua tất cả sản phẩm trong giỏ hàng
+    for (let i = 0; i < $scope.products.length; i++) {
+      const product = $scope.products[i];
 
-        // Sau khi tạo đơn hàng, xử lý chi tiết đơn hàng
-        $scope.createOrderDetails(response.data);
+      // Lấy idproductdetail từ sản phẩm
+      const productDetailId = product.idproductdetail;
 
-        // Hiển thị thông báo trạng thái
-        const message = isPaid
-          ? "Đơn hàng đã được thanh toán thành công và đặt hàng thành công!"
-          : "Đơn hàng chưa được thanh toán. Đặt hàng thành công với trạng thái 'Chưa thanh toán'.";
-        $scope.showModal("Đặt Hàng Thành Công", message);
+      // Gửi yêu cầu API để lấy chi tiết sản phẩm và kiểm tra tồn kho
+      $http
+        .get(
+          `http://localhost:8080/beesixcake/api/productdetail/${productDetailId}`
+        )
+        .then(function (response) {
+          const productDetail = response.data; // Lấy chi tiết sản phẩm
+          const stockQuantity = productDetail.quantityinstock; // Số lượng tồn kho
+          const cartQuantity = product.quantity; // Số lượng trong giỏ hàng
 
-        // Chuyển hướng tới trang đặt hàng nếu cần
-        setTimeout(() => {
-          console.log("Chuyển hướng sau 5 giây.");
-          $window.location.href = "order.html";
-        }, 5000);
-      })
-      .catch((error) => {
-        console.error("Lỗi khi đặt hàng:", error);
-        $scope.showModal("Lỗi", "Không thể đặt hàng. Vui lòng thử lại.");
-      });
+          // Kiểm tra xem số lượng sản phẩm trong giỏ có vượt quá số lượng tồn kho không
+          if (cartQuantity > stockQuantity) {
+            // Nếu chưa có lỗi xảy ra, hiển thị thông báo lỗi và dừng
+            if (!errorOccurred) {
+              $scope.showModal(
+                "Lỗi",
+                "Sản phẩm có thể đã không còn đủ số lượng! Nếu bạn đã thanh toán, Admin sẽ liên hệ và hoàn tiền trong 24h."
+              );
+              errorOccurred = true; // Đánh dấu là đã có lỗi xảy ra
+            }
+            isStockAvailable = false; // Đánh dấu là không đủ tồn kho
+            return; // Dừng lại ngay lập tức nếu phát hiện không đủ hàng
+          }
+
+          // Bước 3: Nếu tất cả sản phẩm có đủ số lượng, tiếp tục thực hiện đơn hàng
+          if (i === $scope.products.length - 1 && isStockAvailable) {
+            const isPaid = $scope.paymentStatus === "PAID"; // Kiểm tra trạng thái thanh toán
+            const order = {
+              orderdate: new Date().toISOString(),
+              addressdetail: $scope.address,
+              shipfee: $scope.shippingFee,
+              total: $scope.finalTotal,
+              account: { idaccount: $scope.userId },
+              discount: $scope.currentDiscount || { iddiscount: 0 },
+              payment: { idpayment: $scope.selectedPaymentId },
+              statuspay: { idstatuspay: isPaid ? 2 : 1 }, // Nếu đã thanh toán, idstatuspay = 2
+            };
+
+            // Gửi yêu cầu tạo đơn hàng
+            $http
+              .post("http://localhost:8080/beesixcake/api/order", order)
+              .then(function (response) {
+                // Kiểm tra dữ liệu trả về
+                console.log("Đơn hàng được tạo:", response.data);
+
+                // Sau khi tạo đơn hàng, xử lý chi tiết đơn hàng
+                $scope.createOrderDetails(response.data);
+
+                // Hiển thị thông báo trạng thái
+                const message = isPaid
+                  ? "Đơn hàng đã được thanh toán thành công và đặt hàng thành công!"
+                  : "Đơn hàng chưa được thanh toán. Đặt hàng thành công với trạng thái 'Chưa thanh toán'.";
+                $scope.showModal("Đặt Hàng Thành Công", message);
+
+                // Chuyển hướng tới trang đặt hàng nếu cần
+                setTimeout(() => {
+                  console.log("Chuyển hướng sau 5 giây.");
+                  $window.location.href = "order.html";
+                }, 5000);
+              })
+              .catch((error) => {
+                console.error("Lỗi khi đặt hàng:", error);
+                $scope.showModal(
+                  "Lỗi",
+                  "Không thể đặt hàng. Vui lòng thử lại."
+                );
+              });
+          }
+        })
+        .catch(function (error) {
+          console.error("Lỗi khi lấy thông tin sản phẩm:", error);
+          $scope.showModal(
+            "Lỗi",
+            "Có lỗi xảy ra khi kiểm tra số lượng sản phẩm."
+          );
+        });
+    }
   };
 
   // Tạo OrderDetail

@@ -158,7 +158,7 @@ app.controller("CartController", [
             console.error("Lỗi khi cập nhật số lượng:", error); // Log chi tiết lỗi
             console.error("Thông tin lỗi:", error.data); // Thêm thông tin từ máy chủ nếu có
           });
-      }, 200); // Đợi 3 giây
+      }, 1); // Đợi 3 giây
     };
 
     $scope.increaseQuantity = function (product) {
@@ -262,8 +262,21 @@ app.controller("CartController", [
         (product) => product.selected
       );
 
+      // Kiểm tra xem có sản phẩm nào vượt quá tồn kho không
+      const outOfStockProducts = selectedProducts.filter(
+        (product) => product.quantity > product.stockQuantity
+      );
+
+      if (outOfStockProducts.length > 0) {
+        // Hiển thị modal thông báo nếu có sản phẩm vượt quá tồn kho
+        $("#exceedStockModal").modal("show"); // Đảm bảo modal này được định nghĩa trong HTML
+
+        // Ngừng chuyển hướng đến trang thanh toán
+        return;
+      }
+
       if (selectedProducts.length === 0) {
-        // Hiển thị thông báo khi không có sản phẩm nào được chọn
+        // Hiển thị modal nếu không có sản phẩm nào được chọn
         $("#noProductSelectedModal").modal("show");
       } else {
         // Lưu danh sách sản phẩm đã chọn vào localStorage
