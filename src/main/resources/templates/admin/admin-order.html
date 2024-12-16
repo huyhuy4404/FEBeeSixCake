@@ -242,11 +242,18 @@
                                             </td>
                                             <td class="text-end">
                                                 <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm" ng-class="{'btn-warning': !product.isAdded, 'btn-success': product.isAdded}"
-                                                            ng-click="addToCart(product)" title="Thêm vào giỏ hàng">
-                                                        <i class="bi bi-cart-plus"></i>
-                                                        {{ product.isAdded ? 'Đã thêm ' : 'Thêm ' }}
-                                                    </button>
+                                                 <!-- Nút "Thêm" hoặc "Đã thêm + Size" -->
+<button class="btn btn-sm"
+ng-class="{
+    'btn-warning': !product.selectedSize.isAdded, 
+    'btn-success': product.selectedSize.isAdded
+}"
+ng-click="addToCart(product)" title="Thêm vào giỏ hàng">
+<i class="bi bi-cart-plus"></i>
+<!-- Hiển thị trạng thái: Thêm hoặc Đã thêm + Size -->
+{{ product.selectedSize.isAdded ? 'Đã thêm + ' + product.selectedSize.sizename : 'Thêm ' }}
+</button>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -419,29 +426,29 @@
                             hàng</button>
 
                     </div>
-                               <!-- Modal for Notification -->
-                               <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="infoModalLabel">{{ modalTitle }}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>{{ modalMessage }}</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                             
                 </div>
             </div>
         </div>
 
 
+  <!-- Modal for Notification -->
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">{{ modalTitle }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ modalMessage }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
