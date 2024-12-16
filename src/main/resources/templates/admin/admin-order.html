@@ -211,6 +211,7 @@
                                 <table class="table table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
+                                            <th scope="col">STT</th> <!-- Thêm cột Số thứ tự -->
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Danh mục sản phẩm</th>
                                             <th scope="col">Ảnh</th>
@@ -222,247 +223,279 @@
                                     </thead>
                                     <tbody ng-if="paginatedProducts.length > 0">
                                         <tr ng-repeat="product in paginatedProducts">
+                                            <td>{{ $index + 1 }}</td> <!-- Hiển thị số thứ tự -->
                                             <td class="fw-bold">{{ product.productname }}</td>
                                             <td>{{ product.category.categoryname }}</td>
                                             <td>
-                                                <img src="https://5ck6jg.csb.app/anh/{{ product.img || 'default-image.jpg' }}" alt="Ảnh sản phẩm"
-                                                    class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                                                <img src="https://5ck6jg.csb.app/anh/{{ product.img || 'default-image.jpg' }}"
+                                                    alt="Ảnh sản phẩm" class="img-thumbnail"
+                                                    style="width: 80px; height: 80px; object-fit: cover;">
                                             </td>
                                             <td>
-                                                <select ng-model="product.selectedSize" ng-options="size.sizename for size in product.sizes"
-                                                        ng-change="onSizeChange(product, product.selectedSize)">
+                                                <select ng-model="product.selectedSize"
+                                                    ng-options="size.sizename for size in product.sizes"
+                                                    ng-change="onSizeChange(product, product.selectedSize)">
                                                 </select>
                                             </td>
                                             <td>{{ product.unitprice | currency:'':0 }} VNĐ</td>
                                             <td>
                                                 <input type="number" ng-model="product.selectedQuantity" min="1"
-                                                       max="{{product.selectedSize.quantityinstock}}"
-                                                       ng-change="onQuantityChange(product)" class="form-control" style="width: 80px;" />
-                                                <span class="text-muted" style="margin-left: 10px;">(Tồn kho: {{ product.selectedSize.quantityinstock }})</span>
+                                                    max="{{product.selectedSize.quantityinstock}}"
+                                                    ng-change="onQuantityChange(product)" class="form-control"
+                                                    style="width: 80px;" />
+                                                <span class="text-muted" style="margin-left: 10px;">(Tồn kho: {{
+                                                    product.selectedSize.quantityinstock }})</span>
                                             </td>
                                             <td class="text-end">
                                                 <div class="btn-group" role="group">
-                                                 <!-- Nút "Thêm" hoặc "Đã thêm + Size" -->
-<button class="btn btn-sm"
-ng-class="{
-    'btn-warning': !product.selectedSize.isAdded, 
-    'btn-success': product.selectedSize.isAdded
-}"
-ng-click="addToCart(product)" title="Thêm vào giỏ hàng">
-<i class="bi bi-cart-plus"></i>
-<!-- Hiển thị trạng thái: Thêm hoặc Đã thêm + Size -->
-{{ product.selectedSize.isAdded ? 'Đã thêm + ' + product.selectedSize.sizename : 'Thêm ' }}
-</button>
-
+                                                    <button class="btn btn-sm" ng-class="{
+                                                                'btn-warning': !product.selectedSize.isAdded, 
+                                                                'btn-success': product.selectedSize.isAdded
+                                                            }" ng-click="addToCart(product)" title="Thêm vào giỏ hàng">
+                                                        <i class="bi bi-cart-plus"></i>
+                                                        {{ product.selectedSize.isAdded ? 'Đã thêm + ' +
+                                                        product.selectedSize.sizename : 'Thêm ' }}
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                     <tbody ng-if="paginatedProducts.length == 0">
                                         <tr>
-                                            <td colspan="7" class="text-center text-muted">Không có sản phẩm nào.</td>
+                                            <td colspan="8" class="text-center text-muted">Không có sản phẩm nào.</td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            
+
+
                                 <!-- Pagination Section -->
                                 <nav aria-label="Page navigation" class="mt-4">
                                     <ul class="pagination justify-content-center mb-0">
                                         <li class="page-item" ng-class="{disabled: currentPage === 1}">
-                                            <a class="page-link" href="#" aria-label="Previous" ng-click="goToPage(currentPage - 1)">
+                                            <a class="page-link" href="#" aria-label="Previous"
+                                                ng-click="goToPage(currentPage - 1)">
                                                 <span aria-hidden="true">&laquo; Trang Trước</span>
                                             </a>
                                         </li>
-                                        <li class="page-item" ng-repeat="page in pages" ng-class="{active: currentPage === page}">
+                                        <li class="page-item" ng-repeat="page in pages"
+                                            ng-class="{active: currentPage === page}">
                                             <a class="page-link" href="#" ng-click="goToPage(page)">{{ page }}</a>
                                         </li>
                                         <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
-                                            <a class="page-link" href="#" aria-label="Next" ng-click="goToPage(currentPage + 1)">
+                                            <a class="page-link" href="#" aria-label="Next"
+                                                ng-click="goToPage(currentPage + 1)">
                                                 <span aria-hidden="true">Trang Sau &raquo;</span>
                                             </a>
                                         </li>
                                     </ul>
                                 </nav>
                             </div>
-                            
-                 
-                            
 
-        <!-- Nút kích hoạt Modal -->
 
-        <!-- Modal thông tin đặt hàng -->
-        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="checkoutModalLabel">Thông Tin Đặt Hàng</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Thông Tin Sản Phẩm -->
-                        <div class="thongTinSP mb-4">
-                            <p class="titleThongTinSP">Thông Tin Sản Phẩm</p>
-                            <table class="table table-bordered table-striped">
-                                <thead class="table-secondary text-center">
-                                    <tr>
-                                        <th style="width: 15%">Hình</th>
-                                        <th style="width: 30%">Tên Sản Phẩm</th>
-                                        <th style="width: 8%">Kích Cỡ</th>
-                                        <th style="width: 25%">Giá</th>
-                                        <th style="width: 8%">Số Lượng</th>
-                                        <th style="width: 25%">Thành tiền</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="text-center">
-                                    <tr ng-repeat="product in cart">
-                                        <td>
-                                            <img src="https://5ck6jg.csb.app/anh/{{product.img}}" alt="Ảnh sản phẩm"
-                                                class="img-thumbnail"
-                                                style="width: 60px; height: 60px; object-fit: cover;">
-                                        </td>
-                                        <td>{{ product.productname }}</td>
-                                        <td>{{ product.selectedSize.sizename }}</td>
-                                        <td>{{ product.unitprice | number: 0 }} VNĐ</td>
-                                        <td>{{ product.selectedQuantity }}</td>
-                                        <td>
-                                            {{ product.totalPrice | number: 0 }} VNĐ
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
-                        <!-- Voucher và Phương Thức Thanh Toán -->
-                        <div class="row mb-4">
-                            <!-- Mã giảm giá -->
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="input-group">
-                                    <label class="input-group-text">Nhập mã giảm giá</label>
-                                    <input type="text" class="form-control text-uppercase"
-                                        placeholder="Nhập mã giảm giá" ng-model="discountCode"
-                                        ng-disabled="currentDiscount" />
-                                    <button class="btn btn-outline-info" type="button" ng-click="applyDiscountCode()"
-                                        ng-disabled="currentDiscount">Áp dụng</button>
-                                </div>
-                                <div ng-if="currentDiscount" class="mt-2">
-                                    <p class="text-success">
-                                        Đã áp dụng mã: <strong>{{ currentDiscount.discountcode }}</strong>
-                                    </p>
-                                    <button class="btn btn-danger" type="button" ng-click="cancelDiscountCode()">Hủy mã
-                                        giảm giá</button>
-                                </div>
-                                <p class="text-danger mt-2" ng-if="discountError">{{ discountError }}</p>
-                                <p class="text-success mt-2" ng-if="discountSuccess">{{ discountSuccess }}</p>
-                            </div>
 
-                            <!-- Phương thức thanh toán -->
-                            <div class="col-lg-6 col-md-6 col-sm-12">
-                                <div class="row mb-4">
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <label>Phương Thức Thanh Toán</label>
-                                        <div>
-                                            <!-- Radio button cho phương thức thanh toán -->
-                                            <input type="radio" id="paymentCash" name="paymentMethod"
-                                                ng-model="selectedPayment.paymentname" value="Tiền Mặt"
-                                                ng-change="updatePaymentMethod()">
-                                            <label for="paymentCash">Tiền Mặt</label>
-                                            <input type="radio" id="paymentTransfer" name="paymentMethod"
-                                                ng-model="selectedPayment.paymentname"
-                                                value="Thanh Toán Qua Chuyển Khoản Ngân Hàng"
-                                                ng-change="updatePaymentMethod()">
-                                            <label for="paymentTransfer">Chuyển Khoản</label>
+                            <!-- Nút kích hoạt Modal -->
+
+                            <!-- Modal thông tin đặt hàng -->
+                            <div class="modal fade" id="checkoutModal" tabindex="-1"
+                                aria-labelledby="checkoutModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="checkoutModalLabel">Thông Tin Đặt Hàng</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                        <div class="modal-body">
+                                            <!-- Thông Tin Sản Phẩm -->
+                                            <div class="thongTinSP mb-4">
+                                                <p class="titleThongTinSP">Thông Tin Sản Phẩm</p>
+                                                <table class="table table-bordered table-striped">
+                                                    <thead class="table-secondary text-center">
+                                                        <tr>
+                                                            <th style="width: 15%">Hình</th>
+                                                            <th style="width: 30%">Tên Sản Phẩm</th>
+                                                            <th style="width: 8%">Kích Cỡ</th>
+                                                            <th style="width: 25%">Giá</th>
+                                                            <th style="width: 8%">Số Lượng</th>
+                                                            <th style="width: 25%">Thành tiền</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="text-center">
+                                                        <tr ng-repeat="product in cart">
+                                                            <td>
+                                                                <img src="https://5ck6jg.csb.app/anh/{{product.img}}"
+                                                                    alt="Ảnh sản phẩm" class="img-thumbnail"
+                                                                    style="width: 60px; height: 60px; object-fit: cover;">
+                                                            </td>
+                                                            <td>{{ product.productname }}</td>
+                                                            <td>{{ product.selectedSize.sizename }}</td>
+                                                            <td>{{ product.unitprice | number: 0 }} VNĐ</td>
+                                                            <td>{{ product.selectedQuantity }}</td>
+                                                            <td>
+                                                                {{ product.totalPrice | number: 0 }} VNĐ
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
-                        <!-- Mã QR và Tổng Tiền -->
-                        <div class="row mb-4">
+                                            <!-- Voucher và Phương Thức Thanh Toán -->
+                                            <div class="row mb-4">
+                                                <!-- Mã giảm giá -->
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="input-group">
+                                                        <label class="input-group-text">Nhập mã giảm giá</label>
+                                                        <input type="text" class="form-control text-uppercase"
+                                                            placeholder="Nhập mã giảm giá" ng-model="discountCode"
+                                                            ng-disabled="currentDiscount" />
+                                                        <button class="btn btn-outline-info" type="button"
+                                                            ng-click="applyDiscountCode()"
+                                                            ng-disabled="currentDiscount">Áp dụng</button>
+                                                    </div>
+                                                    <div ng-if="currentDiscount" class="mt-2">
+                                                        <p class="text-success">
+                                                            Đã áp dụng mã: <strong>{{ currentDiscount.discountcode
+                                                                }}</strong>
+                                                        </p>
+                                                        <button class="btn btn-danger" type="button"
+                                                            ng-click="cancelDiscountCode()">Hủy mã
+                                                            giảm giá</button>
+                                                    </div>
+                                                    <p class="text-danger mt-2" ng-if="discountError">{{ discountError
+                                                        }}</p>
+                                                    <p class="text-success mt-2" ng-if="discountSuccess">{{
+                                                        discountSuccess }}</p>
+                                                </div>
+
+                                                <!-- Phương thức thanh toán -->
+                                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                                    <div class="row mb-4">
+                                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                                            <label>Phương Thức Thanh Toán</label>
+                                                            <div>
+                                                                <!-- Radio button cho phương thức thanh toán -->
+                                                                <input type="radio" id="paymentCash"
+                                                                    name="paymentMethod"
+                                                                    ng-model="selectedPayment.paymentname"
+                                                                    value="Tiền Mặt" ng-change="updatePaymentMethod()"
+                                                                    ng-init="selectedPayment.paymentname = 'Tiền Mặt'">
+                                                                <label for="paymentCash">Tiền Mặt</label>
+
+                                                                <input type="radio" id="paymentTransfer"
+                                                                    name="paymentMethod"
+                                                                    ng-model="selectedPayment.paymentname"
+                                                                    value="Thanh Toán Qua Chuyển Khoản Ngân Hàng"
+                                                                    ng-change="updatePaymentMethod()">
+                                                                <label for="paymentTransfer">Chuyển Khoản</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
 
-                            <div class="col-lg-6 tong-TT thongTinND">
-                                <p>Tổng tiền hàng: <span>{{ totalPrice | number: 0 }}đ</span></p>
-                                <p>Tổng giảm giá: <span>{{ voucherDiscount | number: 0 }}đ</span></p>
-                                <p>Tổng tiền thanh toán: <span class="tongThanhTien">{{ finalTotal | number: 0}}đ</span>
-                                </p>
-                            </div>
-                            <div class="col-lg-6 thongTinND"
-                                ng-if="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng'">
-                                <div class="text-center">
-                                    <h5 class="titleThongTinND mb-4">Thông tin thanh toán</h5>
-                                    <div ng-if="!qrCodeGenerated">
-                                        <button type="button" class="btn btn-primary" ng-click="generateQRCode()">Lấy
-                                            Thông Tin Thanh Toán</button>
-                                    </div>
-                                    <div ng-if="qrCodeGenerated">
-                                        <div class="card border-secondary mb-3">
-                                            <div class="card-header bg-secondary text-white">Thông tin ngân hàng</div>
-                                            <div class="card-body">
-                                                <p><strong>Ngân hàng:</strong> MB Bank</p>
-                                                <p><strong>Số tài khoản:</strong> {{ accountNumber }}</p>
-                                                <p><strong>Chủ tài khoản:</strong> {{ accountName }}</p>
-                                                <p><strong>Nội dung chuyển khoản:</strong> {{ description }}</p>
-                                                <p><strong>Tổng tiền:</strong> {{ finalTotal | number: 0 }} VNĐ</p>
+                                            </div>
+
+                                            <!-- Mã QR và Tổng Tiền -->
+                                            <div class="row mb-4">
+
+
+                                                <div class="col-lg-6 tong-TT thongTinND">
+                                                    <p>Tổng tiền hàng: <span>{{ totalPrice | number: 0 }}đ</span></p>
+                                                    <p>Tổng giảm giá: <span>{{ voucherDiscount | number: 0 }}đ</span>
+                                                    </p>
+                                                    <p>Tổng tiền thanh toán: <span class="tongThanhTien">{{ finalTotal |
+                                                            number: 0}}đ</span>
+                                                    </p>
+                                                </div>
+                                                <div class="col-lg-6 thongTinND"
+                                                    ng-if="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng'">
+                                                    <div class="text-center">
+                                                        <h5 class="titleThongTinND mb-4">Thông tin thanh toán</h5>
+                                                        <div ng-if="!qrCodeGenerated">
+                                                            <button type="button" class="btn btn-primary"
+                                                                ng-click="generateQRCode()">Lấy
+                                                                Thông Tin Thanh Toán</button>
+                                                        </div>
+                                                        <div ng-if="qrCodeGenerated">
+                                                            <div class="card border-secondary mb-3">
+                                                                <div class="card-header bg-secondary text-white">Thông
+                                                                    tin ngân hàng</div>
+                                                                <div class="card-body">
+                                                                    <p><strong>Ngân hàng:</strong> MB Bank</p>
+                                                                    <p><strong>Số tài khoản:</strong> {{ accountNumber
+                                                                        }}</p>
+                                                                    <p><strong>Chủ tài khoản:</strong> {{ accountName }}
+                                                                    </p>
+                                                                    <p><strong>Nội dung chuyển khoản:</strong> {{
+                                                                        description }}</p>
+                                                                    <p><strong>Tổng tiền:</strong> {{ finalTotal |
+                                                                        number: 0 }} VNĐ</p>
+                                                                </div>
+                                                            </div>
+                                                            <h6 class="mb-3">Mã QR thanh toán</h6>
+                                                            <img style="width: 350px; height: 350px; object-fit: cover;"
+                                                                ng-src="{{ qrCodeUrl }}" alt="QR Code Thanh Toán"
+                                                                class="img-fluid mb-3" />
+                                                            <p><strong>Thời gian còn lại:</strong> <span>{{
+                                                                    countdownDisplay }}</span></p>
+                                                            <button type="button" class="btn btn-danger"
+                                                                ng-click="cancelPayment()">Hủy
+                                                                Thanh Toán</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <h6 class="mb-3">Mã QR thanh toán</h6>
-                                        <img style="width: 350px; height: 350px; object-fit: cover;"
-                                            ng-src="{{ qrCodeUrl }}" alt="QR Code Thanh Toán" class="img-fluid mb-3" />
-                                        <p><strong>Thời gian còn lại:</strong> <span>{{ countdownDisplay }}</span></p>
-                                        <button type="button" class="btn btn-danger" ng-click="cancelPayment()">Hủy
-                                            Thanh Toán</button>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Đóng</button>
+                                            <button type="button" class="btn btn-primary" ng-click="placeOrder()"
+                                                ng-disabled="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng' && !qrCodeGenerated">Đặt
+                                                hàng</button>
+
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
+
+
+                            <!-- Modal for Notification -->
+                            <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="infoModalLabel">{{ modalTitle }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ modalMessage }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary"
+                                                data-bs-dismiss="modal">OK</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-primary" ng-click="placeOrder()"
-                            ng-disabled="selectedPayment.paymentname === 'Thanh Toán Qua Chuyển Khoản Ngân Hàng' && !qrCodeGenerated">Đặt
-                            hàng</button>
 
-                    </div>
-                             
-                </div>
-            </div>
+
+
+            </main>
+
         </div>
-
-
-  <!-- Modal for Notification -->
-  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="infoModalLabel">{{ modalTitle }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>{{ modalMessage }}</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-    </div>
-
-
-
-
-    </main>
-
-    </div>
     </div>
 
     <!-- JAVASCRIPT FILES -->

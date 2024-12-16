@@ -173,13 +173,16 @@
                                     <button class="nav-link" id="edit-tab" data-bs-toggle="tab"
                                         data-bs-target="#edit-tab-pane" type="button" role="tab"
                                         aria-controls="edit-tab-pane" aria-selected="false">
-                                        <i class="fas fa-edit"></i> Chỉnh sửa danh sách sản phẩm
+                                        <i class="fas fa-edit"></i> 
+                                        <!-- Thêm điều kiện hiển thị tên tab -->
+                                        {{isEditMode ? 'Chỉnh sửa danh sách sản phẩm' : 'Thêm danh sách sản phẩm'}}
                                     </button>
                                 </li>
-
+                                
                                 <!-- Bộ lọc (Đặt ở bên phải) -->
                                 <li class="nav-item ms-auto" role="presentation">
                                     <div class="d-flex align-items-center">
+                                        <!-- Lọc theo loại sản phẩm -->
                                         <!-- Lọc theo loại sản phẩm -->
                                         <select class="form-control me-2" ng-model="selectedCategory"
                                             ng-change="searchProducts()">
@@ -196,6 +199,7 @@
                                         <!-- Bộ lọc giá với chỉ giá tối đa -->
                                         <input class="form-control me-2" type="number" placeholder="Giá tối đa"
                                             ng-model="maxPrice" min="0" ng-change="searchProducts()">
+
                                     </div>
                                 </li>
                             </ul>
@@ -212,6 +216,7 @@
                                             <table class="table table-hover align-middle custom-block bg-white">
                                                 <thead class="table-light">
                                                     <tr>
+                                                        <th scope="col">STT</th> <!-- Cột số thứ tự -->
                                                         <th scope="col">Tên sản phẩm</th>
                                                         <th scope="col">Kích thước</th>
                                                         <th scope="col">Số lượng</th>
@@ -225,48 +230,51 @@
                                                 </thead>
                                                 <tbody ng-if="paginatedProducts.length > 0">
                                                     <tr ng-repeat-start="product in paginatedProducts">
-                                                        <!-- Tên sản phẩm, cột sẽ có rowspan cho tất cả các kích thước -->
-                                                        <td rowspan="{{product.sizes.length}}" class="fw-bold">{{ product.productname }}</td>
-                                                        <!-- Kích thước và số lượng của kích thước đầu tiên -->
+                                                        <td rowspan="{{product.sizes.length}}">{{ $index + 1 }}</td>
+                                                        <td rowspan="{{product.sizes.length}}" class="fw-bold">{{
+                                                            product.productname }}</td>
                                                         <td>{{ product.sizes[0].sizename }}</td>
                                                         <td>{{ product.sizes[0].quantityinstock }}</td>
-                                                        <!-- Danh mục sản phẩm -->
-                                                        <td rowspan="{{product.sizes.length}}">{{ product.category.categoryname }}</td>
-                                                        <!-- Số lượng yêu thích -->
+                                                        <td rowspan="{{product.sizes.length}}">{{
+                                                            product.category.categoryname }}</td>
                                                         <td rowspan="{{product.sizes.length}}">
-                                                            <i class="fas fa-heart text-danger"></i> {{ product.favorite || 0 }}
+                                                            <i class="fas fa-heart text-danger"></i> {{ product.favorite
+                                                            || 0 }}
                                                         </td>
-                                                        <!-- Giá của kích thước đầu tiên -->
-                                                        <td style="white-space: nowrap;">{{ product.sizes[0].unitprice | number:0 }} đ</td>
-                                                        <!-- Ảnh sản phẩm -->
+                                                        <td style="white-space: nowrap;">{{ product.sizes[0].unitprice |
+                                                            number:0 }} đ</td>
                                                         <td rowspan="{{product.sizes.length}}">
-                                                            <img src="https://5ck6jg.csb.app/anh/{{product.img}}" alt="Ảnh sản phẩm" class="img-thumbnail"
-                                                                 style="width: 80px; height: 80px; object-fit: cover;">
+                                                            <img src="https://5ck6jg.csb.app/anh/{{product.img}}"
+                                                                alt="Ảnh sản phẩm" class="img-thumbnail"
+                                                                style="width: 80px; height: 80px; object-fit: cover;">
                                                         </td>
-                                                        <!-- Trạng thái hiển thị sản phẩm -->
                                                         <td rowspan="{{product.sizes.length}}">
-                                                            <span ng-if="product.isactive" class="badge bg-success">Hiển thị</span>
-                                                            <span ng-if="!product.isactive" class="badge bg-secondary">Ẩn</span>
+                                                            <span ng-if="product.isactive" class="badge bg-success">Hiển
+                                                                thị</span>
+                                                            <span ng-if="!product.isactive"
+                                                                class="badge bg-secondary">Ẩn</span>
                                                         </td>
-                                                        <!-- Hành động (Chỉnh sửa, Xóa) -->
-                                                        <td class="text-end" rowspan="{{product.sizes.length}}" style="white-space: nowrap;">
-                                                            <button class="btn btn-sm btn-warning" ng-click="editProduct(product)" title="Chỉnh sửa">
+                                                        <td class="text-end" rowspan="{{product.sizes.length}}"
+                                                            style="white-space: nowrap;">
+                                                            <button class="btn btn-sm btn-warning"
+                                                                ng-click="editProduct(product)" title="Chỉnh sửa">
                                                                 <i class="bi bi-pencil-square"></i> Chỉnh sửa
                                                             </button>
-                                                            <button class="btn btn-sm btn-danger" ng-click="deleteProduct(product.idproduct)" title="Xóa">
+                                                            <button class="btn btn-sm btn-danger"
+                                                                ng-click="deleteProduct(product.idproduct)" title="Xóa">
                                                                 <i class="bi bi-trash"></i> Xóa
                                                             </button>
                                                         </td>
                                                     </tr>
-                                                    <!-- Lặp qua các kích thước còn lại -->
                                                     <tr ng-repeat-end ng-repeat="size in product.sizes.slice(1)">
                                                         <td>{{ size.sizename }}</td>
                                                         <td>{{ size.quantityinstock }}</td>
-                                                        <!-- Giá cho từng kích thước -->
                                                         <td>{{ size.unitprice | number:0 }} đ</td>
                                                     </tr>
                                                 </tbody>
+
                                             </table>
+
                                         </div>
                                         <nav aria-label="Page navigation" class="mt-4">
                                             <ul class="pagination justify-content-center mb-0">
@@ -278,7 +286,8 @@
                                                 </li>
                                                 <li class="page-item" ng-repeat="page in pages"
                                                     ng-class="{active: currentPage === page}">
-                                                    <a class="page-link" href="#" ng-click="goToPage(page)">{{ page }}</a>
+                                                    <a class="page-link" href="#" ng-click="goToPage(page)">{{ page
+                                                        }}</a>
                                                 </li>
                                                 <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
                                                     <a class="page-link" href="#" aria-label="Next"
@@ -288,7 +297,7 @@
                                                 </li>
                                             </ul>
                                         </nav>
-                                        
+
                                     </div>
                                     <!-- Tab Chỉnh sửa -->
                                     <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel"
@@ -436,45 +445,52 @@
 
 
                         <!-- Modal -->
-                   <!-- Modal xác nhận -->
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {{ confirmationMessage }} <!-- Nội dung thông báo xác nhận -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="button" class="btn btn-danger" ng-click="confirmDelete()">Xóa</button>
-            </div>
-        </div>
-    </div>
-</div>
+                        <!-- Modal xác nhận -->
+                        <div class="modal fade" id="confirmationModal" tabindex="-1"
+                            aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmationModalLabel">Xác nhận</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ confirmationMessage }} <!-- Nội dung thông báo xác nhận -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-danger"
+                                            ng-click="confirmDelete()">Xóa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-<!-- Modal thông báo thành công hoặc lỗi -->
-<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="messageModalLabel">Thông báo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" ng-bind="message">
-                <!-- Nội dung thông báo sẽ được hiển thị tại đây -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn"
-                        ng-class="{'btn-success': messageType === 'success', 'btn-danger': messageType === 'error'}"
-                        data-bs-dismiss="modal">OK</button>
-            </div>
-        </div>
-    </div>
-</div>
+                        <!-- Modal thông báo thành công hoặc lỗi -->
+                        <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="messageModalLabel">Thông báo</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" ng-bind="message">
+                                        <!-- Nội dung thông báo sẽ được hiển thị tại đây -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                        <button type="button" class="btn"
+                                            ng-class="{'btn-success': messageType === 'success', 'btn-danger': messageType === 'error'}"
+                                            data-bs-dismiss="modal">OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
             </main>

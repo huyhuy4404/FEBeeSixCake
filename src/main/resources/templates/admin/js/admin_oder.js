@@ -411,7 +411,7 @@ $scope.onQuantityChange = function (product) {
   // Kiểm tra nếu số lượng nhập vào không phải là một số hợp lệ
   if (isNaN(product.selectedQuantity) || product.selectedQuantity < 1) {
     // Hiển thị modal thông báo lỗi
-    $scope.showModal("Thông báo", "Số lượng sản phẩm không hợp lệ!");
+    $scope.showModal("Thông báo", "Vượt quá số lượng trong kho");
     product.selectedQuantity = 1; // Đặt lại số lượng về 1 nếu không hợp lệ
   } else if (product.selectedQuantity > product.selectedSize.quantityinstock) {
     // Hiển thị modal thông báo lỗi nếu số lượng nhập vượt quá số lượng trong kho
@@ -559,6 +559,11 @@ $scope.onQuantityChange = function (product) {
         });
     };
 
+    $scope.openCheckoutModal = function() {
+      $scope.selectedPayment.paymentname = 'Tiền Mặt';  // Đảm bảo chọn "Tiền Mặt" mặc định
+      // Mở modal logic
+  };
+  
     // Hủy mã giảm giá
     $scope.cancelDiscountCode = function () {
       $scope.discountError = "";
