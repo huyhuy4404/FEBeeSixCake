@@ -13,6 +13,14 @@
   <script src="../assets/js/angular-route.js"></script>
 
   <style>
+    .nav-link.tab-status.active {
+      font-weight: bold;
+      background-color: #d38450;
+      color: #f8f9fa !important;
+    }
+    .tab-status:hover{
+      font-weight: bold;
+    }
     .nav-item a {
       cursor: pointer;
       /* Hiển thị hình bàn tay */
@@ -125,8 +133,12 @@
   <div class="setDoDaiTrang">
     <div class="order-container">
       <div class="container">
+        <div style="font-size: 20px" class=" ms-4 my-3">
+          <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
+          <span class="fw-bold mx-2">/</span>
+          <span>Đơn Hàng Của Bạn</span>
+        </div>
         <div class="content-wrapper" ng-controller="OrderController">
-          <h3 class="order-header">ĐƠN HÀNG CỦA BẠN</h3>
           <div ng-if="loading" class="empty-message">
             Đang tải đơn hàng...
           </div>
@@ -135,14 +147,14 @@
             <ul class="nav nav-tabs justify-content-center" role="tablist">
               <li class="nav-item" ng-repeat="status in statuses"
                 ng-click="filterOrdersByStatus(status.idstatus); setActiveTab($index)">
-                <a class="nav-link" ng-class="{'active': activeTab === $index}" role="tab" style="cursor: pointer">
+                <a class="nav-link tab-status" ng-class="{'active': activeTab === $index}" role="tab" style="cursor: pointer; color: #2e1d15;">
                   {{ status.statusname }}
                 </a>
               </li>
             </ul>
 
             <!-- Table Content -->
-            <div class="table-responsive mt-4">
+            <div class="table-responsive">
               <table class="table table-striped table-bordered">
                 <thead>
                   <tr>
@@ -178,7 +190,9 @@
                 </tbody>
               </table>
               <div ng-if="selectedOrders.length === 0">
-                Không có đơn hàng nào trong trạng thái này.
+                <p class="fw-bold text-center mt-3" style="font-size: 18px;">Không có đơn hàng nào trong trạng thái này.
+                </p>
+                <img src="../admin/images/br-order.png" class="my-3 " width="400px" alt="" style="margin-left: 448px;">
               </div>
             </div>
           </div>
