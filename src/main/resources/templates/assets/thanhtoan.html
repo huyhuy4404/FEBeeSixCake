@@ -83,21 +83,16 @@
       <!-- Breadcrumb -->
       <div class="container-fluid bg-light py-3">
         <div class="container">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="index.html">Trang Chủ</a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">
-                Thanh Toán
-              </li>
-            </ol>
-          </nav>
+          <div style="font-size: 20px" class=" ms-4 my-3">
+            <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
+            <span class="fw-bold mx-2">/</span>
+            <span>Thanh Toán</span>
+          </div>
         </div>
       </div>
 
       <!-- Nội dung chính -->
-      <div class="container mt-4" ng-controller="CheckoutController">
+      <div class="container" ng-controller="CheckoutController">
         <!-- Thông Tin Người Nhận và Địa Chỉ -->
         <div class="row mb-4">
           <div class="col-lg-3 thongTinND">
