@@ -16,7 +16,7 @@
 
 </head>
 
-<body   ng-controller="discountsController">
+<body ng-controller="discountsController">
   <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
   <div ng-include="'layout/menu.html'"></div>
   <div class="setDoDaiTrang" ng-controller="loadLoaiSanPham">
@@ -24,7 +24,9 @@
       <div style="font-size: 20px" class="ms-4">
         <a href="index.html" style="color: #2e1d15"><span>Trang Chủ</span></a>
         <span class="fw-bold mx-2">/</span>
-        <a href="" style="color: #2e1d15"><span>{{ product.category.categoryname }}</span></a>
+        <span ng-click="setCategoryName(product.category.categoryname)" style="color: #2e1d15; cursor: pointer;">
+          {{ product.category.categoryname }}
+        </span>
         <span class="fw-bold mx-2">/</span>
         <span>{{ product.productname }}</span>
       </div>
@@ -57,7 +59,8 @@
                     <i class="bi bi-star"></i>
                     <i class="bi bi-star"></i>
                     <i class="bi bi-star"></i>
-                    <div class="stars-inner" style="font-size: 18px;" ng-style="{'width': (averageRating / 5 * 100) + '%'}">
+                    <div class="stars-inner" style="font-size: 18px;"
+                      ng-style="{'width': (averageRating / 5 * 100) + '%'}">
                       <i class="bi bi-star-fill"></i>
                       <i class="bi bi-star-fill"></i>
                       <i class="bi bi-star-fill"></i>
@@ -107,18 +110,20 @@
                 <div class="number-card text-chitietsp mt-3">
                   <span>Số lượng:</span>
                   <div class="buttons_added">
-                    <button class="minus is-form" type="button" ng-mousedown="startDecreasing()" ng-mouseup="stopDecreasing()">
+                    <button class="minus is-form" type="button" ng-mousedown="startDecreasing()"
+                      ng-mouseup="stopDecreasing()">
                       <i class="bi bi-dash-lg"></i>
                     </button>
-                
+
                     <input aria-label="quantity" class="input-qty" max="{{maxQuantity}}" min="1" ng-model="quantity"
                       name="quantity" type="number" readonly />
-                
-                    <button class="plus is-form" type="button" ng-mousedown="startIncreasing()" ng-mouseup="stopIncreasing()">
+
+                    <button class="plus is-form" type="button" ng-mousedown="startIncreasing()"
+                      ng-mouseup="stopIncreasing()">
                       <i class="bi bi-plus-lg"></i>
                     </button>
                   </div>
-                </div>                
+                </div>
                 <div class="inner-load mt-3 ps-0">
                   <div class="box-add">
                     <div class="btn-chitietsanpham">
@@ -143,8 +148,9 @@
             <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">
               <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
               <hr />
-              <ul class="list-group">
-                <li class="list-group-item" style="border: none" ng-repeat="category in categories">
+              <ul class="list-group" ng-repeat="category in categories">
+                <li class="list-group-item" style="border: none; cursor: pointer;"
+                  ng-click="filterProducts(category.categoryname)">
                   {{ category.categoryname }}
                   <span class="">({{ category.count }})</span>
                 </li>
@@ -189,7 +195,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div class="col-lg-9">
               <div class="filter-btns float-end">
                 <button ng-click="filterReviews('all')" ng-class="{'active-filter': selectedFilter === 'all'}">
@@ -210,13 +216,14 @@
                 <button ng-click="filterReviews(1)" ng-class="{'active-filter': selectedFilter === 1}">
                   1 Sao ({{filterReviewCount(1)}})
                 </button>
-                <button ng-click="filterReviews('withComment')" ng-class="{'active-filter': selectedFilter === 'withComment'}">
+                <button ng-click="filterReviews('withComment')"
+                  ng-class="{'active-filter': selectedFilter === 'withComment'}">
                   Có bình luận ({{filterReviewCount('withComment')}})
                 </button>
               </div>
             </div>
           </div>
-          
+
           <div class="reviews">
             <div class="review" ng-repeat="review in visibleReviews">
               <div class="review-header">
@@ -228,7 +235,8 @@
                     <i class="bi bi-star"></i>
                     <i class="bi bi-star"></i>
                     <i class="bi bi-star"></i>
-                    <div class="stars-inner" style="font-size: 18px;" ng-style="{'width': (review.rating / 5 * 100) + '%'}">
+                    <div class="stars-inner" style="font-size: 18px;"
+                      ng-style="{'width': (review.rating / 5 * 100) + '%'}">
                       <i class="bi bi-star-fill"></i>
                       <i class="bi bi-star-fill"></i>
                       <i class="bi bi-star-fill"></i>
@@ -243,23 +251,23 @@
                 {{review.reviewtext || "Chưa có bình luận"}}
               </div>
             </div>
-          
+
             <!-- Nút "Xem thêm" chỉ hiển thị nếu có nhiều hơn 2 đánh giá trong bộ lọc -->
             <div class="text-center my-3" ng-if="filteredReviews.length > 2 && !showAll">
               <button class="btn" style="background-color: #d38450; color: white;" ng-click="showMoreReviews()">
                 Xem thêm
               </button>
             </div>
-          
+
             <!-- Nút "Thu gọn" -->
             <div class="text-center my-3" ng-if="showAll">
               <button class="btn btn-secondary" ng-click="showLessReviews()">
                 Thu gọn
               </button>
             </div>
-          </div>          
+          </div>
         </div>
-        
+
         <div>
           <h3 class="textSanPham mt-4 mb-2">
             Những Sản phẩm Được Yêu Thích Nhất

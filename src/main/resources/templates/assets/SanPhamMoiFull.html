@@ -84,13 +84,14 @@
                     <div class="card-type mx-4 p-3" style="border: 1px solid rgb(222, 226, 230); border-radius: 1%">
                         <h4 style="text-align: center">Danh Mục Sản Phẩm</h4>
                         <hr />
-                        <ul class="list-group">
-                            <li class="list-group-item" style="border: none" ng-repeat="category in categories">
-                                {{ category.categoryname }}
-                                <span class="">({{ category.count }})</span>
-                            </li>
+                        <ul class="list-group" ng-repeat="category in categories">
+                          <li class="list-group-item" style="border: none; cursor: pointer;"
+                            ng-click="filterProducts(category.categoryname)">
+                            {{ category.categoryname }}
+                            <span class="">({{ category.count }})</span>
+                          </li>
                         </ul>
-                    </div>
+                      </div>
                 </div>
             </div>
         </div>
