@@ -330,21 +330,21 @@ app.controller("Admin-oder", [
     );
 
     $scope.addToCart = function (product) {
-      // Kiểm tra nếu số lượng nhập vào không phải là một số hợp lệ
-      if (product.selectedQuantity > product.quantityinstock) {
+      // Kiểm tra nếu số lượng nhập vào không hợp lệ
+      if (product.selectedQuantity > product.quantityinstock || product.selectedQuantity <= 0) {
         $scope.showModal(
           "Thông báo",
-          "Hết Hàng. Sản phẩm hiện không còn trong kho"
+          "Sản phẩm đã hết hàng!."
         );
         return;
       }
-
+    
       var index = $scope.cart.findIndex(
         (item) =>
           item.productname === product.productname &&
           item.selectedSize.sizename === product.selectedSize.sizename
       );
-
+    
       if (index === -1) {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm vào giỏ
         product.selectedSize.isAdded = true; // Đánh dấu là đã thêm vào giỏ
@@ -358,19 +358,57 @@ app.controller("Admin-oder", [
           idproductdetail: product.selectedSize.idproductdetail,
           idcartitem: product.idproduct,
         });
+    
+        // Log thông tin sản phẩm đã được thêm vào giỏ hàng
+        console.log('Product added to cart:', product);
+    
       } else {
         // Nếu sản phẩm đã có trong giỏ hàng, xóa khỏi giỏ
-        $scope.cart.splice(index, 1);
-        product.selectedSize.isAdded = false; // Đánh dấu lại là chưa thêm vào giỏ
+        const removedProduct = $scope.cart.splice(index, 1)[0]; // Lấy sản phẩm bị xóa
+        removedProduct.selectedSize.isAdded = false; // Đánh dấu lại là chưa thêm vào giỏ
+    
+        // Log thông tin sản phẩm đã được xóa khỏi giỏ hàng
+        console.log('Product removed from cart:', removedProduct);
       }
-
+    
       // Cập nhật giỏ hàng và tính toán lại tổng giá trị
       $scope.updateCart();
       $scope.calculateTotals();
-
+    
       // Cập nhật giỏ hàng trong localStorage
       $scope.saveCartToLocalStorage();
     };
+    
+    
+    $scope.deleteProduct = function (idcartitem) {
+      // Tìm sản phẩm trong giỏ hàng theo idcartitem
+      var index = $scope.cart.findIndex(function (item) {
+        return item.idcartitem === idcartitem;
+      });
+    
+      // Nếu tìm thấy sản phẩm trong giỏ hàng
+      if (index !== -1) {
+        var product = $scope.cart[index]; // Lấy sản phẩm cần xóa
+    
+        // Xóa sản phẩm khỏi giỏ hàng
+        $scope.cart.splice(index, 1);
+    
+        // Cập nhật lại trạng thái isAdded của sản phẩm đã xóa
+        product.selectedSize.isAdded = false;
+    
+        // Cập nhật giỏ hàng và tính toán lại tổng giá trị
+        $scope.updateCart();
+        $scope.calculateTotals();
+    
+        // Cập nhật giỏ hàng trong localStorage
+        $scope.saveCartToLocalStorage();
+    
+        // In ra thông tin đã xóa sản phẩm
+        console.log('Sản phẩm đã bị xóa khỏi giỏ hàng:', product);
+      }
+    };
+    
+    
 
     // Cập nhật giỏ hàng
     $scope.updateCart = function () {
@@ -404,55 +442,77 @@ app.controller("Admin-oder", [
       }
     };
 
-    $scope.onQuantityChange = function (product) {
-      // Kiểm tra nếu số lượng nhập vào không phải là một số hợp lệ
+    $scope.onQuantityChange = function (product, source) {
+      // Kiểm tra số lượng hợp lệ
       if (isNaN(product.selectedQuantity) || product.selectedQuantity < 1) {
-        // Hiển thị modal thông báo lỗi
-        $scope.showModal("Thông báo", "Vượt quá số lượng trong kho");
-        product.selectedQuantity = 1; // Đặt lại số lượng về 1 nếu không hợp lệ
-      } else if (
-        product.selectedQuantity > product.selectedSize.quantityinstock
-      ) {
-        // Hiển thị modal thông báo lỗi nếu số lượng nhập vượt quá số lượng trong kho
-        $scope.showModal("Lỗi", "Số lượng sản phẩm không đủ trong kho!");
-        product.selectedQuantity = product.selectedSize.quantityinstock; // Đặt lại số lượng theo tồn kho
+        $scope.showModal("Thông báo", "Số lượng vượt quá tồn kho!");
+        product.selectedQuantity = 1; // Đặt lại về 1 nếu không hợp lệ
+      } else if (product.selectedQuantity > product.selectedSize.quantityinstock) {
+        $scope.showModal("Lỗi", "Số lượng vượt quá tồn kho!");
+        product.selectedQuantity = product.selectedSize.quantityinstock; // Đặt lại theo tồn kho
       }
-
-      // Cập nhật lại thông tin trong giỏ hàng
-      var cartItem = $scope.cart.find(function (item) {
-        return (
-          item.productname === product.productname &&
-          item.selectedSize.sizename === product.selectedSize.sizename
+    
+      // Tính lại tổng tiền cho sản phẩm
+      product.totalPrice = product.selectedQuantity * product.unitprice;
+    
+      // Đồng bộ hóa với bảng còn lại
+      if (source === "cart") {
+        // Nếu thay đổi từ giỏ hàng, cập nhật sản phẩm trong paginatedProducts
+        const correspondingProduct = $scope.paginatedProducts.find(
+          (p) =>
+            p.productname === product.productname &&
+            p.selectedSize.sizename === product.selectedSize.sizename
         );
-      });
-
-      if (cartItem) {
-        cartItem.selectedQuantity = product.selectedQuantity;
-        cartItem.totalPrice = product.selectedQuantity * cartItem.unitprice; // Cập nhật lại giá trị tổng
+        if (correspondingProduct) {
+          correspondingProduct.selectedQuantity = product.selectedQuantity;
+        }
+      } else if (source === "products") {
+        // Nếu thay đổi từ paginatedProducts, cập nhật sản phẩm trong giỏ hàng
+        const cartItem = $scope.cart.find(
+          (item) =>
+            item.productname === product.productname &&
+            item.selectedSize.sizename === product.selectedSize.sizename
+        );
+        if (cartItem) {
+          cartItem.selectedQuantity = product.selectedQuantity;
+          cartItem.totalPrice = product.selectedQuantity * cartItem.unitprice;
+        }
       }
-
-      // Cập nhật giỏ hàng và tính toán lại tổng giá trị
+    
+      // Cập nhật lại tổng giá trị giỏ hàng
       $scope.updateCart();
       $scope.calculateTotals();
-
+    
       // Cập nhật giỏ hàng trong localStorage
       $scope.saveCartToLocalStorage();
     };
+    
+    
 
     // Lưu giỏ hàng vào localStorage
     $scope.saveCartToLocalStorage = function () {
       localStorage.setItem("adminCart", JSON.stringify($scope.cart));
     };
-
-    // Load giỏ hàng từ localStorage
     $scope.loadCartFromLocalStorage = function () {
       const savedCart = JSON.parse(localStorage.getItem("adminCart"));
+      
       if (savedCart && savedCart.length > 0) {
         $scope.cart = savedCart;
+    
+        // Khôi phục trạng thái 'isAdded' cho mỗi sản phẩm trong giỏ hàng
+        angular.forEach($scope.cart, function (item) {
+          if (item.selectedSize) {
+            item.selectedSize.isAdded = true; // Giả sử sản phẩm đã được thêm vào giỏ
+          }
+        });
+    
+        // Cập nhật giỏ hàng và tính toán lại tổng giá trị
         $scope.updateCart();
         $scope.calculateTotals();
       }
     };
+    
+    
 
     // Cập nhật phân trang
     $scope.updatePagination = function () {
@@ -696,6 +756,15 @@ app.controller("Admin-oder", [
         .padStart(2, "0")}`;
     };
 
+
+
+
+
+
+
+
+    
+
     // Hàm hủy thanh toán
     $scope.cancelPayment = function () {
       $scope.qrCodeGenerated = false; // Ẩn QR Code
@@ -845,15 +914,7 @@ app.controller("Admin-oder", [
         });
     };
 
-    // Hàm xóa sản phẩm khỏi giỏ hàng
-    $scope.deleteProduct = function (productId) {
-      $scope.cart = $scope.cart.filter(
-        (item) => item.idproductdetail !== productId
-      );
-      $scope.updateCart();
-      $scope.calculateTotals();
-      $scope.saveCartToLocalStorage();
-    };
+
 
     // Hàm chuyển hướng về trang giỏ hàng
     $scope.returnToCart = function () {

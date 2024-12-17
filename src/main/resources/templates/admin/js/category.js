@@ -105,6 +105,7 @@ app.controller("CategoryController", function ($scope, $http) {
         showMessageModal("Trùng loại sản phẩm. Vui lòng nhập lại!");
       });
   };
+  
 
   // Chỉnh sửa loại sản phẩm
   $scope.editCategory = function () {
@@ -138,6 +139,7 @@ app.controller("CategoryController", function ($scope, $http) {
       });
   };
 
+  
   // Xóa loại sản phẩm
   // Xóa loại sản phẩm
   $scope.deleteCategory = function (category) {
