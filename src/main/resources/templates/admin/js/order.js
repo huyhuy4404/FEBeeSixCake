@@ -149,30 +149,33 @@ app.controller("OrderController", function ($scope, $window, $http) {
   // Cập nhật trạng thái đơn hàng
   $scope.updateOrderStatus = function () {
     $scope.isUpdating = true;
-  
+
     var newStatus = parseInt($scope.selectedOrder.status.idstatus, 10);
     var oldStatus = parseInt($scope.originalStatus, 10);
-  
+
     if (oldStatus === newStatus) {
       $scope.showMessageModal("Trạng thái không thay đổi.", "info");
       $scope.isUpdating = false;
       return;
     }
-  
+
     var orderStatusHistory = {
       order: { idorder: $scope.selectedOrder.idorder },
       status: { idstatus: newStatus },
       timestamp: new Date().toISOString(),
     };
-  
+
     $http
-      .put(`${API}/order-status-history/${$scope.selectedOrder.idorder}`, orderStatusHistory)
+      .put(
+        `${API}/order-status-history/${$scope.selectedOrder.idorder}`,
+        orderStatusHistory
+      )
       .then((response) => {
         $scope.showMessageModal("Cập nhật trạng thái thành công!", "success");
-  
+
         // Cập nhật trạng thái trong $scope
         $scope.selectedOrder.status.idstatus = newStatus;
-  
+
         const orderIndex = $scope.Orders.findIndex(
           (order) => order.idorder === $scope.selectedOrder.idorder
         );
@@ -180,12 +183,12 @@ app.controller("OrderController", function ($scope, $window, $http) {
           $scope.Orders[orderIndex].status.idstatus = newStatus;
           $scope.Orders[orderIndex].statusName = response.data.statusName;
         }
-  
+
         // Nếu trạng thái mới là "Đã Hủy" (idstatus = 4), khôi phục tồn kho
         if (newStatus === 4) {
           $scope.restoreInventory($scope.selectedOrder.idorder);
         }
-  
+
         // Kiểm tra nếu trạng thái mới là "Đã giao hàng" (idstatus = 3)
         if (
           newStatus === 3 &&
@@ -211,23 +214,27 @@ app.controller("OrderController", function ($scope, $window, $http) {
       .get(`${API}/orderdetail/order/${idorder}`)
       .then((response) => {
         const orderDetails = response.data;
-  
+
         orderDetails.forEach((detail) => {
           if (detail.productdetail && detail.quantity) {
             const productDetail = angular.copy(detail.productdetail);
-  
+
             // Kiểm tra và xử lý giá trị tồn kho
-            const quantityInStock = parseInt(productDetail.quantityinstock, 10) || 0;
+            const quantityInStock =
+              parseInt(productDetail.quantityinstock, 10) || 0;
             const quantityToRestore = parseInt(detail.quantity, 10) || 0;
-  
+
             productDetail.quantityinstock = quantityInStock + quantityToRestore;
-  
+
             console.log(
               `Khôi phục tồn kho: Sản phẩm ${productDetail.idproductdetail}, Tồn kho mới: ${productDetail.quantityinstock}`
             );
-  
+
             $http
-              .put(`${API}/productdetail/${productDetail.idproductdetail}`, productDetail)
+              .put(
+                `${API}/productdetail/${productDetail.idproductdetail}`,
+                productDetail
+              )
               .then(() => {
                 console.log(
                   `Đã khôi phục tồn kho cho sản phẩm ${productDetail.idproductdetail}`
@@ -240,7 +247,10 @@ app.controller("OrderController", function ($scope, $window, $http) {
                 );
               });
           } else {
-            console.warn("Chi tiết đơn hàng thiếu dữ liệu hoặc không hợp lệ:", detail);
+            console.warn(
+              "Chi tiết đơn hàng thiếu dữ liệu hoặc không hợp lệ:",
+              detail
+            );
           }
         });
       })
@@ -248,8 +258,6 @@ app.controller("OrderController", function ($scope, $window, $http) {
         console.error("Có lỗi xảy ra khi lấy chi tiết đơn hàng:", error);
       });
   };
-  
-  
 
   // Cập nhật trạng thái thanh toán
   $scope.updateOrderStatusPay = function () {
@@ -320,7 +328,7 @@ app.controller("OrderController", function ($scope, $window, $http) {
     $scope.selectedOrder = angular.copy(order); // Sao chép thông tin đơn hàng
     $scope.originalStatus = order.status.idstatus; // Lưu trạng thái ban đầu
     $scope.originalPaymentStatus = order.statuspay.idstatuspay; // Lưu trạng thái thanh toán ban đầu
-    
+
     // Kiểm tra idrole và quyết định hiển thị thông tin khách hàng
     if (order.account.idrole === 1) {
       // Nếu bán tại quầy, không hiển thị thông tin khách hàng
@@ -329,15 +337,14 @@ app.controller("OrderController", function ($scope, $window, $http) {
       // Nếu bán online, hiển thị thông tin khách hàng
       $scope.showCustomerInfo = true;
     }
-  
+
     $scope.getOrderDetails(order.idorder); // Lấy chi tiết đơn hàng
-  
+
     // Đồng bộ AngularJS với giao diện
     $scope.$applyAsync();
   };
-  
+
   // Sửa lại modal trong HTML để hiển thị/ẩn thông tin khách hàng dựa vào biến showCustomerInfo
-  
 
   // Hàm phân trang
   $scope.updatePagination = function () {
@@ -345,26 +352,29 @@ app.controller("OrderController", function ($scope, $window, $http) {
     $scope.filteredOrders = $scope.Orders.sort(function (a, b) {
       return new Date(b.orderdate) - new Date(a.orderdate);
     });
-  
+
     // Lọc theo tìm kiếm (searchQuery)
     if ($scope.searchQuery) {
       const query = $scope.searchQuery.toLowerCase();
       $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
         return (
           order.idorder.toString().includes(query) || // Lọc theo ID đơn hàng
-          (order.statusName && order.statusName.toLowerCase().includes(query)) || // Lọc theo tên trạng thái đơn hàng
-          (order.account && order.account.fullname && order.account.fullname.toLowerCase().includes(query)) // Lọc theo tên khách hàng
+          (order.statusName &&
+            order.statusName.toLowerCase().includes(query)) || // Lọc theo tên trạng thái đơn hàng
+          (order.account &&
+            order.account.fullname &&
+            order.account.fullname.toLowerCase().includes(query)) // Lọc theo tên khách hàng
         );
       });
     }
-  
+
     // Lọc theo trạng thái đơn hàng (selectedStatus)
     if ($scope.selectedStatus) {
       $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
         return order.statusName === $scope.selectedStatus;
       });
     }
-  
+
     // Lọc theo trạng thái thanh toán (selectedPaymentStatus)
     if ($scope.selectedPaymentStatus) {
       $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
@@ -374,38 +384,37 @@ app.controller("OrderController", function ($scope, $window, $http) {
         );
       });
     }
-  
+
     // Lọc theo hình thức bán (selectedIdRole)
     if ($scope.selectedIdRole) {
       $scope.filteredOrders = $scope.filteredOrders.filter(function (order) {
         return order.account && order.account.idrole == $scope.selectedIdRole;
       });
     }
-  
+
     // Tính tổng số trang
     $scope.totalPages =
       Math.ceil(
-        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) / $scope.itemsPerPage
+        ($scope.filteredOrders ? $scope.filteredOrders.length : 0) /
+          $scope.itemsPerPage
       ) || 1;
-  
+
     // Điều chỉnh trang hiện tại nếu vượt quá tổng số trang
     if ($scope.currentPage > $scope.totalPages) {
       $scope.currentPage = $scope.totalPages;
     }
-  
+
     // Tạo danh sách các trang
     $scope.pages = [];
     for (var i = 1; i <= $scope.totalPages; i++) {
       $scope.pages.push(i);
     }
-  
+
     // Xác định phạm vi các đơn hàng hiển thị trên trang hiện tại
     const start = ($scope.currentPage - 1) * $scope.itemsPerPage;
     const end = start + parseInt($scope.itemsPerPage, 10);
     $scope.paginatedOrders = $scope.filteredOrders.slice(start, end);
   };
-  
-  
 
   $scope.updateFilter = function () {
     $scope.currentPage = 1; // Reset về trang đầu
@@ -455,53 +464,52 @@ app.controller("OrderController", function ($scope, $window, $http) {
     return originalStatus === selectedStatus;
   };
 
-  $scope.getFilterCondition = function() {
+  $scope.getFilterCondition = function () {
     // Điều kiện lọc chung
     const filterCondition = {};
-  
+
     // Lọc theo trạng thái đơn hàng
     if ($scope.selectedStatus) {
       filterCondition.statusName = $scope.selectedStatus;
     }
-  
+
     // Lọc theo trạng thái thanh toán
     if ($scope.selectedPaymentStatus) {
-      filterCondition.statuspay = { statuspayname: $scope.selectedPaymentStatus };
+      filterCondition.statuspay = {
+        statuspayname: $scope.selectedPaymentStatus,
+      };
     }
-  
+
     // Lọc theo hình thức bán (idrole)
     if ($scope.selectedIdRole) {
       filterCondition.account = { idrole: $scope.selectedIdRole };
     }
-  
+
     return filterCondition;
   };
 
-  $scope.getSaleMethod = function(idrole) {
+  $scope.getSaleMethod = function (idrole) {
     if (idrole === 1) {
-        return "Bán Tại Quầy";
+      return "Bán Tại Quầy";
     } else if (idrole === 2) {
-        return "Bán Online";
-    } else {
-        return "Không xác định"; // Phòng trường hợp giá trị khác không mong muốn
+      return "Bán Online";
     }
-};
+  };
 
-  
   $scope.updatePaginatedOrders = function () {
     // Lọc các đơn hàng theo idrole nếu có, nếu không thì không lọc gì
     if ($scope.selectedIdRole === "") {
       $scope.paginatedOrders = angular.copy($scope.Orders); // Hiển thị tất cả các đơn hàng
     } else {
-      $scope.paginatedOrders = $scope.Orders.filter(function(order) {
+      $scope.paginatedOrders = $scope.Orders.filter(function (order) {
         return order.account.idrole == $scope.selectedIdRole;
       });
     }
-  
+
     // Cập nhật lại phân trang
     $scope.updatePagination();
   };
-  
+
   $scope.loadOrders();
 });
 

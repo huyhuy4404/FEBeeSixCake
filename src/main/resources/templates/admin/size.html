@@ -1,68 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
     <title>BEE SIX CAKE</title>
 
     <!-- CSS FILES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 
+    <link href="../admin/css/bootstrap.min.css" rel="stylesheet" />
 
-    <link href="../admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../admin/css/bootstrap-icons.css" rel="stylesheet" />
 
-    <link href="../admin/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet" />
 
-    <link href="../admin/css/tooplate-mini-finance.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        td,
+        th {
+            font-size: 16px !important;
+        }
+    </style>
 
-
-
-
-    <!--
-
-    Tooplate 2135 Mini Finance
-
-    https://www.tooplate.com/view/2135-mini-finance
-
-    Bootstrap 5 Dashboard Admin Template
-
-    -->
 </head>
 
-<body class="row my-4" ng-app="myApp" ng-controller="SizeController">
+<body ng-app="myApp" ng-controller="SizeController">
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
                 <i class="bi-box"></i>
-                BEE SIX CAKE </a>
+                BEE SIX CAKE
+            </a>
         </div>
-
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-    
         <div class="navbar-nav me-lg-2">
             <div class="nav-item text-nowrap d-flex align-items-center">
-             
-
-                <!-- User Profile Dropdown -->
+                <div class="dropdown ps-3">
+                </div>
                 <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
             </div>
         </div>
@@ -80,135 +65,106 @@
                     <h1 class="h2 mb-0">Quản Lý Kích Thước</h1>
                 </div>
                 <!-- Tabs -->
-                <div>
-                    <div class="col-12">
-                        <div class="custom-block bg-white">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="list-tab" data-bs-toggle="tab"
-                                        data-bs-target="#list-tab-pane" type="button" role="tab"
-                                        aria-controls="list-tab-pane" aria-selected="true">
-                                        <i class="fas fa-list"></i> Danh sách kích thước
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="edit-tab" data-bs-toggle="tab"
-                                        data-bs-target="#edit-tab-pane" type="button" role="tab"
-                                        aria-controls="edit-tab-pane" aria-selected="false">
-                                        <i class="fas fa-edit"></i> Chỉnh sửa kích thước
-                                    </button>
-                                </li>
 
-                            </ul>
+                <div class="custom-block bg-white">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="list-tab" data-bs-toggle="tab"
+                                data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane"
+                                aria-selected="true">
+                                <i class="fas fa-list"></i> Danh sách kích thước
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit-tab-pane"
+                                type="button" role="tab" aria-controls="edit-tab-pane" aria-selected="false">
+                                <i class="fas fa-edit"></i> Chỉnh sửa kích thước
+                            </button>
+                        </li>
+                    </ul>
 
-                            <div class="tab-content" id="myTabContent">
-                                <!-- Nội dung Tab Chỉnh sửa -->
-                                <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab"
-                                    tabindex="0">
-                                    <form class="row g-3 needs-validation" novalidate>
-                                        <div ng-if="message" class="alert" ng-class="{
-                            'alert-success': messageType === 'success',
-                            'alert-danger': messageType === 'error',
-                            'alert-info': messageType === 'info',
-                            'alert-warning': messageType === 'warning'
-                        }" role="alert">
-                                            {{ message }}
-                                        </div>
-                                        <!-- ID Size -->
-                                        <!-- <div class="col-md-6">
-                            <label for="size-id" class="form-label">ID Size</label>
-                            <input type="text" id="size-id" ng-model="selectedSize.idsize" placeholder="" class="form-control" required readonly />
-                        </div> -->
-
-                                        <!-- Kích thước -->
-                                        <div class="col-md-12">
-                                            <label for="size-name" class="form-label">Kích Thước</label>
-                                            <input type="text" id="size-name" ng-model="selectedSize.sizename"
-                                                class="form-control form-control-rounded" placeholder="Nhập kích thước"
-                                                required />
-                                        </div>
-
-                                        <!-- Hành động -->
-                                        <div class="col-md-12">
-                                            <button type="button" class="btn btn-primary" ng-click="addSize()"
-                                                ng-show="!isEditMode">
-                                                <i class="fas fa-plus"></i> Thêm
-                                            </button>
-                                            <!-- Nút Cập nhật -->
-                                            <button type="button" class="btn btn-info" ng-click="updateSize()"
-                                                ng-show="isEditMode">
-                                                <i class="fas fa-edit"></i> Cập nhật
-                                            </button>
-                                            <!-- Nút Xóa -->
-                                            <button type="button" class="btn btn-danger"
-                                                ng-click="deleteSize(selectedSize.idsize)" ng-show="isEditMode">
-                                                <i class="fas fa-trash-alt"></i> Xóa
-                                            </button>
-                                            <!-- Nút Làm mới -->
-                                            <button type="button" class="btn btn-secondary ms-2" ng-click="loadSizes()">
-                                                <i class="fas fa-sync-alt"></i> Làm mới
-                                            </button>
-                                        </div>
-                                    </form>
+                    <div class="tab-content" id="myTabContent">
+                        <!-- Nội dung Tab Chỉnh sửa -->
+                        <div class="tab-pane fade" id="edit-tab-pane" role="tabpanel" aria-labelledby="edit-tab"
+                            tabindex="0">
+                            <form class="row g-3 needs-validation" novalidate>
+                                <div ng-if="message" class="alert" ng-class="{
+                                        'alert-success': messageType === 'success',
+                                        'alert-danger': messageType === 'error',
+                                        'alert-info': messageType === 'info',
+                                        'alert-warning': messageType === 'warning'}" role="alert">{{ message }}
+                                </div>
+                                <!-- Kích thước -->
+                                <div class="col-md-12">
+                                    <label for="size-name" class="form-label">Kích Thước</label>
+                                    <input type="text" style="width: 500px;" id="size-name"
+                                        ng-model="selectedSize.sizename"
+                                        ng-change="selectedSize.sizename = selectedSize.sizename.toUpperCase()"
+                                        class="form-control form-control-rounded" placeholder="Nhập kích thước"
+                                        required />
                                 </div>
 
-                                <!-- Nội dung Tab Danh sách -->
-                                <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
-                                    aria-labelledby="list-tab" tabindex="0">
-
-                                    <div class="table-responsive" class="custom-block bg-white">
-                                        <table class="account-table table">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID Size</th>
-                                                    <th>Kích thước</th>
-                                                    <th class="text-end">Hành động</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody ng-if="Sizes.length > 0">
-                                                <tr ng-repeat="size in Sizes">
-                                                    <td>{{ size.idsize }}</td>
-                                                    <td>{{ size.sizename }}</td>
-                                                    <td class="text-end" style="white-space: nowrap;">
-                                                        <button class="btn btn-sm btn-warning" ng-click="editSize(size)" title="Chỉnh sửa">
-                                                            <i class="bi bi-pencil-square"></i> Chỉnh sửa
-                                                        </button>
-                                                        <button class="btn btn-sm btn-danger" ng-click="deleteSize(size.idsize)" title="Xóa">
-                                                            <i class="bi bi-trash"></i> Xóa
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            
-                                            <tbody ng-if="Sizes.length == 0">
-                                                <tr>
-                                                    <td colspan="3" class="text-center">Không có kích thước nào.
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!-- Thanh Phân Trang -->
-    <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center mb-0">
-            <li class="page-item" ng-class="{disabled: currentPage === 1}">
-                <a class="page-link" href="#" aria-label="Previous" ng-click="goToPage(currentPage - 1)">
-                    <span aria-hidden="true">&laquo; Trang Trước</span>
-                </a>
-            </li>
-            <li class="page-item" ng-repeat="page in pages" ng-class="{active: currentPage === page}">
-                <a class="page-link" href="#" ng-click="goToPage(page)">{{ page }}</a>
-            </li>
-            <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
-                <a class="page-link" href="#" aria-label="Next" ng-click="goToPage(currentPage + 1)">
-                    <span aria-hidden="true">Trang Sau &raquo;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-
+                                <!-- Hành động -->
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-primary me-2" ng-click="addSize()"
+                                        ng-show="!isEditMode">
+                                        <i class="fas fa-plus"></i> Thêm
+                                    </button>
+                                    <!-- Nút Cập nhật -->
+                                    <button type="button" class="btn btn-info" ng-click="updateSize()"
+                                        ng-show="isEditMode">
+                                        <i class="fas fa-edit"></i> Cập nhật
+                                    </button>
+                                    <!-- Nút Xóa -->
+                                    <button type="button" class="btn btn-danger mx-2"
+                                        ng-click="deleteSize(selectedSize.idsize)" ng-show="isEditMode">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </button>
+                                    <!-- Nút Làm mới -->
+                                    <button type="button" class="btn btn-secondary" ng-click="loadSizes()">
+                                        <i class="fas fa-sync-alt"></i> Làm mới
+                                    </button>
                                 </div>
+                            </form>
+                        </div>
+
+                        <!-- Nội dung Tab Danh sách -->
+                        <div class="tab-pane fade show active" id="list-tab-pane" role="tabpanel"
+                            aria-labelledby="list-tab" tabindex="0">
+
+                            <div class="table-responsive" class="custom-block bg-white">
+                                <table class="account-table table">
+                                    <thead>
+                                        <tr  class="text-center">
+                                            <th>ID Size</th>
+                                            <th>Kích thước</th>
+                                            <th class="text-end">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-if="Sizes.length > 0">
+                                        <tr  class="text-center" ng-repeat="size in Sizes">
+                                            <td>{{ size.idsize }}</td>
+                                            <td>{{ size.sizename }}</td>
+                                            <td class="text-end" style="white-space: nowrap;">
+                                                <button class="btn btn-sm btn-warning" ng-click="editSize(size)"
+                                                    title="Chỉnh sửa">
+                                                    <i class="bi bi-pencil-square"></i> Chỉnh sửa
+                                                </button>
+                                                <button class="btn btn-sm btn-danger" ng-click="deleteSize(size.idsize)"
+                                                    title="Xóa">
+                                                    <i class="bi bi-trash"></i> Xóa
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+
+                                    <tbody ng-if="Sizes.length == 0">
+                                        <tr>
+                                            <td colspan="3" class="text-center">Không có kích thước nào.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -235,27 +191,30 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
-
+                <footer class="site-footer"></footer>
             </main>
         </div>
     </div>
 
-
-
-    </main>
-
+    <!-- Modal -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="messageModalBody">
+                    <!-- Nội dung thông báo -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" id="confirmModalButton" class="btn btn-danger" style="display: none;"
+                        data-bs-dismiss="modal">Xác nhận</button>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-
     <!-- JAVASCRIPT FILES -->
     <script src="../admin/js/jquery.min.js"></script>
     <script src="../admin/js/bootstrap.bundle.min.js"></script>

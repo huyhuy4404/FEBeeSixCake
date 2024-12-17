@@ -27,18 +27,16 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!--
+  <style>
+    td,
+    th {
+      font-size: 16px !important;
+    }
+  </style>
 
-Tooplate 2135 Mini Finance
-
-https://www.tooplate.com/view/2135-mini-finance
-
-Bootstrap 5 Dashboard Admin Template
-
--->
 </head>
 
-<body ng-app="myApp" ng-Co>
+<body ng-app="myApp">
   <header class="navbar sticky-top flex-md-nowrap">
     <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
       <a class="navbar-brand" href="index.html">
@@ -46,19 +44,10 @@ Bootstrap 5 Dashboard Admin Template
         BEE SIX CAKE
       </a>
     </div>
-
-
-
     <div class="navbar-nav me-lg-2">
       <div class="nav-item text-nowrap d-flex align-items-center">
         <div class="dropdown ps-3">
-
-
-
         </div>
-
-
-
         <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
       </div>
     </div>
@@ -81,14 +70,15 @@ Bootstrap 5 Dashboard Admin Template
                 <li class="nav-item" role="presentation">
                   <button class="nav-link active" id="password-tab" data-bs-toggle="tab"
                     data-bs-target="#password-tab-pane" type="button" role="tab" aria-controls="password-tab-pane"
-                    aria-selected="true"><i class="fas fa-list"></i>  
-                    Danh sách danh mục sản phẩm 
+                    aria-selected="true"><i class="fas fa-list"></i>
+                    Danh sách danh mục sản phẩm
                   </button>
                 </li>
                 <li class="nav-item" role="presentation">
                   <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane"
-                    type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false"> <i class="fas fa-edit"></i> 
-                  Thêm  danh mục sản phẩm
+                    type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false"> <i
+                      class="fas fa-edit"></i>
+                    Thêm danh mục sản phẩm
                   </button>
                 </li>
               </ul>
@@ -100,14 +90,14 @@ Bootstrap 5 Dashboard Admin Template
                   <div class="table-responsive">
                     <table class="account-table table">
                       <thead>
-                        <tr>
+                        <tr class="text-center">
                           <th>ID</th>
                           <th>Tên Loại Sản Phẩm</th>
                           <th class="text-end">Hành động</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr ng-repeat="category in categories">
+                        <tr  class="text-center" ng-repeat="category in categories">
                           <td>{{category.idcategory}}</td>
                           <td>{{category.categoryname}}</td>
                           <td class="text-end" style="white-space: nowrap;">
@@ -120,64 +110,40 @@ Bootstrap 5 Dashboard Admin Template
                           </td>
                         </tr>
                       </tbody>
-
                     </table>
-                    <nav aria-label="Page navigation" class="mt-4">
-                      <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item" ng-class="{disabled: currentPage === 1}">
-                          <a class="page-link" href="#" aria-label="Previous" ng-click="goToPage(currentPage - 1)">
-                            <span aria-hidden="true">&laquo; Trang Trước</span>
-                          </a>
-                        </li>
-                        <li class="page-item" ng-repeat="page in pages" ng-class="{active: currentPage === page}">
-                          <a class="page-link" href="#" ng-click="goToPage(page)">{{ page }}</a>
-                        </li>
-                        <li class="page-item" ng-class="{disabled: currentPage === totalPages}">
-                          <a class="page-link" href="#" aria-label="Next" ng-click="goToPage(currentPage + 1)">
-                            <span aria-hidden="true">Trang Sau &raquo;</span>
-                          </a>
-                        </li>
-                      </ul>
-                    </nav>
                   </div>
                 </div>
-                <!-- Thanh Phân Trang -->
-
-
-
                 <!-- Tab "Sửa đổi" giữ nguyên -->
                 <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
                   tabindex="0">
                   <!-- Form sửa đổi -->
-                  <form class="custom-form profile-form" action="#" method="post" role="form">
+                  <form class="profile-form" action="#" method="post" role="form">
                     <!-- <p>ID:</p>
                                             <input class="form-control" type="text" name="category-id" id="category-id" ng-model="selectedCategory.idcategory" readonly>
                      -->
                     <p>Tên Loại Sản Phẩm:</p>
-                    <input class="form-control" type="text" name="category-name" id="category-name"
-                      placeholder="Nhập tên loại sản phẩm" ng-model="selectedCategory.categoryname" />
+                    <input class="form-control form-control-rounded" style="width: 700px;" type="text"
+                      name="category-name" id="category-name" placeholder="Nhập tên loại sản phẩm"
+                      ng-model="selectedCategory.categoryname" required />
 
                     <div class="d-flex justify-content-start mt-3">
-                      <button type="button" class="btn btn-primary " id="add-btn" ng-click="addCategory()"
-                        ng-if="!isEditing">
+                      <button class="btn btn-primary" ng-click="addCategory()" ng-if="!isEditing">
                         <i class="fas fa-plus"></i> Thêm
                       </button>
-                      <button type="button" class="btn btn-info" id="edit-btn" ng-click="editCategory()"
-                        ng-if="isEditing">
+                      <button class="btn btn-info" id="edit-btn" ng-click="editCategory()" ng-if="isEditing">
                         <i class="fas fa-edit"></i> Sửa
                       </button>
-                      <button type="reset" class="btn btn-secondary " id="reset-btn" ng-click="resetForm()">
+                      <button type="reset" class="btn btn-secondary ms-3" id="reset-btn" ng-click="resetForm()">
                         <i class="fas fa-sync-alt"></i> Làm mới
                       </button>
                     </div>
-                    
+
                   </form>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <footer class="site-footer"></footer>
       </main>
     </div>
   </div>

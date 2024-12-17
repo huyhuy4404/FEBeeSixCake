@@ -34,6 +34,16 @@
     <script src="js/angular-route.js"></script>
 
     <style>
+        .orange-text {
+            color: orange;
+            /* Màu chữ đỏ */
+        }
+
+        .blue-text {
+            color: blue;
+            /* Màu chữ xanh dương */
+        }
+
         li button:hover {
             font-weight: bold !important;
             background-color: white !important;
@@ -146,7 +156,7 @@
         }
 
         .product-image {
-            max-width: 50px;
+            max-width: 90px;
             /* Đặt kích thước tối đa cho ảnh trong bảng */
             height: auto;
         }
@@ -213,7 +223,7 @@
 
 </head>
 
-<body class="row my-4" ng-app="myApp" ng-controller="OrderController">
+<body class="row" ng-app="myApp" ng-controller="OrderController">
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
@@ -398,13 +408,13 @@
                                             <tr>
                                                 <th class="text-center fw-bold">STT</th>
                                                 <th class="text-center">ID</th>
-                                                <th class="text-center">Hình Thức Bán</th>
-                                                <th class="text-center">Tên Khách Hàng</th>
-                                                <th class="text-center">Thời Gian Đặt Hàng</th>
-                                                <th class="text-center">Trạng Thái Đơn Hàng</th>
-                                                <th class="text-center">Trạng Thái Thanh Toán</th>
-                                                <th class="text-center">Tổng Tiền</th>
-                                                <th class="text-center">Hành Động</th>
+                                                <th class="text-center">Hình thức bán</th>
+                                                <th class="text-center">Tên khách hàng</th>
+                                                <th class="text-center">Thời gian đặt hhàng</th>
+                                                <th class="text-center">Trạng thái đơn hàng</th>
+                                                <th class="text-center">Trạng thái thanh toán</th>
+                                                <th class="text-center">Tổng tiền</th>
+                                                <th class="text-center">Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -412,13 +422,16 @@
                                                 style="text-align: center; font-size: 16px;">
                                                 <td>{{$index + 1}}</td>
                                                 <td>{{ order.idorder }}</td>
-                                                <td>{{ getSaleMethod(order.account.idrole) }}</td>
+                                                <td class="fw-bold" ng-class="{'orange-text': getSaleMethod(order.account.idrole) === 'Bán Tại Quầy', 
+                                                'blue-text': getSaleMethod(order.account.idrole) === 'Bán Online'}">
+                                                    {{ getSaleMethod(order.account.idrole) }}
+                                                </td>
                                                 <td>{{ order.account.fullname }}</td>
                                                 <td>{{ addHoursToOrderDate(order.orderdate, 7) |
                                                     date:'HH:mm:ss - dd/MM/yyyy' }}</td>
                                                 <td>{{ order.statusName }}</td>
                                                 <td>{{ order.statuspay.statuspayname }}</td>
-                                                <td>{{ order.total | number : 0}} ₫</td>
+                                                <td style="font-weight: bold; font-size: 20px; color: red;">{{ order.total | number : 0}} ₫</td>
                                                 <td>
                                                     <button type="button" class="btn btn-sm btn-primary"
                                                         data-bs-toggle="modal" data-bs-target="#modal-{{order.idorder}}"
@@ -470,14 +483,14 @@
                         <div class="modal-body">
                             <div class="mb-3" style="border: 1px solid grey; padding: 10px; border-radius: 5px;"
                                 ng-if="order.account.idrole === 2">
-                                <p style="font-weight: bold; color: black;">Thông tin khách hàng</p>
+                                <p style="font-weight: bold; color: black;">Thông Tin Khách Hàng</p>
                                 <table class="account-table table table-order mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-center">Tên Tài Khoản</th>
-                                            <th class="text-center">Tên Khách Hàng</th>
-                                            <th class="text-center">Số Điện Thoại</th>
-                                            <th class="text-center">Địa Chỉ Nhận Hàng</th>
+                                            <th class="text-center">Tên tài khoản</th>
+                                            <th class="text-center">Tên khách hàng</th>
+                                            <th class="text-center">Số điện thoại</th>
+                                            <th class="text-center">Địa chỉ nhận hàng</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -491,20 +504,20 @@
                                 </table>
                             </div>
                             <!-- Table content for order details -->
-                            <div style="border: 1px solid grey; padding: 10px; border-radius: 5px;">
-                                <p style="font-weight: bold; color: black;">Thông tin đơn hàng</p>
+                            <div style="text-align: center; border: 1px solid grey; padding: 10px; border-radius: 5px;">
+                                <p style="font-weight: bold; color: black;">Thông Tin Đơn Hàng</p>
                                 <table class="account-table table table-order mb-0">
                                     <thead>
                                         <tr>
                                             <th scope="col">Hình ảnh</th>
                                             <th scope="col">Tên sản phẩm</th>
                                             <th scope="col">Số lượng</th>
-                                            <th scope="col">Kích thướt</th>
+                                            <th scope="col">Kích thước</th>
                                             <th scope="col">Giá sản phẩm</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="detail in orderDetails" style="font-size: 16px;">
+                                        <tr ng-repeat="detail in orderDetails" style="font-size: 16px; text-align: center; vertical-align: middle;">
                                             <td><img ng-src="{{imageBaseUrl + detail.productdetail.product.img}}"
                                                     class="product-image"></td>
                                             <td>{{detail.productdetail.product.productname}}</td>
@@ -529,15 +542,17 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <p class="fw-bold mb-2" style="color: black; " ng-if="order.account.idrole === 2">Trạng thái đơn hàng</p>
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons" ng-if="order.account.idrole === 2">
+                                    <p class="fw-bold mb-2" style="color: black; " ng-if="order.account.idrole === 2">
+                                        Trạng thái đơn hàng</p>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons"
+                                        ng-if="order.account.idrole === 2">
                                         <!-- Nút Chờ Xác Nhận -->
                                         <label class="btn btn-primary"
                                             ng-class="{'active': selectedOrder.status.idstatus === 1}"
                                             ng-if="getVisibleStatusButtons(originalStatus).includes(1)">
                                             <input type="radio" ng-model="selectedOrder.status.idstatus" ng-value="1"
                                                 autocomplete="off" ng-click="setOrderStatus(1)">
-                                            Chờ Xác Nhận
+                                            Chờ xác nhận
                                         </label>
 
                                         <!-- Nút Chờ Giao Hàng -->
@@ -546,7 +561,7 @@
                                             ng-if="getVisibleStatusButtons(originalStatus).includes(2)">
                                             <input type="radio" ng-model="selectedOrder.status.idstatus" ng-value="2"
                                                 autocomplete="off" ng-click="setOrderStatus(2)">
-                                            Chờ Giao Hàng
+                                            Chờ giao hàng
                                         </label>
 
                                         <!-- Nút Đã Giao Hàng -->
@@ -555,7 +570,7 @@
                                             ng-if="getVisibleStatusButtons(originalStatus).includes(3)">
                                             <input type="radio" ng-model="selectedOrder.status.idstatus" ng-value="3"
                                                 autocomplete="off" ng-click="setOrderStatus(3)"> Đã
-                                            Giao Hàng
+                                            giao hàng
                                         </label>
 
                                         <!-- Nút Đã Hủy -->
@@ -563,7 +578,7 @@
                                             ng-class="{'active': selectedOrder.status.idstatus === 4}"
                                             ng-if="getVisibleStatusButtons(originalStatus).includes(4)">
                                             <input type="radio" ng-model="selectedOrder.status.idstatus" ng-value="4"
-                                                autocomplete="off" ng-click="setOrderStatus(4)"> 
+                                                autocomplete="off" ng-click="setOrderStatus(4)">
                                             Hủy
                                         </label>
                                     </div>

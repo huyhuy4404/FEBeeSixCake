@@ -43,24 +43,16 @@
     -->
 </head>
 
-<body class="row my-4" ng-app="myApp" ng-controller="ProController">
+<body ng-app="myApp" ng-controller="ProController">
     <header class="navbar sticky-top flex-md-nowrap">
         <div class="col-md-3 col-lg-3 me-0 px-3 fs-6">
             <a class="navbar-brand" href="index.html">
                 <i class="bi-box"></i>
                 BEE SIX CAKE </a>
         </div>
-
-      
-      
-
         <div class="navbar-nav me-lg-2">
             <div class="nav-item text-nowrap d-flex align-items-center">
                 <!-- Notifications Dropdown -->
-              
-
-           
-
                 <!-- User Profile Dropdown -->
                 <div ng-include="'layout/header.html'" ng-controller="CheckLogin"></div>
             </div>
@@ -98,12 +90,12 @@
                                     <button class="nav-link" id="edit-tab" data-bs-toggle="tab"
                                         data-bs-target="#edit-tab-pane" type="button" role="tab"
                                         aria-controls="edit-tab-pane" aria-selected="false">
-                                        <i class="fas fa-edit"></i> 
+                                        <i class="fas fa-edit"></i>
                                         <!-- Thêm điều kiện hiển thị tên tab -->
                                         {{isEditMode ? 'Chỉnh sửa danh sách sản phẩm' : 'Thêm danh sách sản phẩm'}}
                                     </button>
                                 </li>
-                                
+
                                 <!-- Bộ lọc (Đặt ở bên phải) -->
                                 <li class="nav-item ms-auto" role="presentation">
                                     <div class="d-flex align-items-center">
@@ -156,7 +148,7 @@
                                                 <tbody ng-if="paginatedProducts.length > 0">
                                                     <tr ng-repeat-start="product in paginatedProducts">
                                                         <td rowspan="{{product.sizes.length}}">{{ $index + 1 }}</td>
-                                                        <td rowspan="{{product.sizes.length}}" >{{
+                                                        <td rowspan="{{product.sizes.length}}">{{
                                                             product.productname }}</td>
                                                         <td>{{ product.sizes[0].sizename }}</td>
                                                         <td>{{ product.sizes[0].quantityinstock }}</td>
