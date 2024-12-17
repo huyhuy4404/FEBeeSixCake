@@ -102,41 +102,40 @@ app.controller('SizeController', function($scope, $http, $timeout) {
             });
     };
 
-    // Hàm thêm kích thước
     $scope.addSize = function() {
-        // Kiểm tra xem kích thước đã tồn tại trong danh sách chưa
-        const sizeExists = $scope.Sizes.some(function(size) {
-            return size.sizename === $scope.selectedSize.sizename;  // Sử dụng 'sizename'
-        });
-
-        if (sizeExists) {
-            showMessageModal('Kích thước đã tồn tại!', false);
-            $scope.selectedSize = {};  // Reset form nếu kích thước đã tồn tại
-            return;  // Dừng lại nếu kích thước đã tồn tại
-        }
-
-        // Kiểm tra xem trường 'sizename' có trống không
-        if (!$scope.selectedSize.sizename || !$scope.selectedSize.sizename.trim()) {
-            showMessageModal('Vui lòng nhập kích thước.', false);
-            return;
-        }
-
-        // Nếu không có trùng lặp, thực hiện thêm kích thước
-        $http.post('http://localhost:8080/beesixcake/api/size', $scope.selectedSize)
-            .then(function(response) {
-                showMessageModal('Thêm kích thước thành công!', false);
-                $scope.Sizes.unshift(response.data);  // Thêm kích thước mới vào đầu danh sách
-                $scope.selectedSize = {};  // Reset form sau khi thêm thành công
-            })
-            .catch(function(error) {
-                if (error.data && error.data.message) {
-                    showMessageModal('Có lỗi xảy ra khi thêm kích thước: ' + error.data.message, false);
-                } else {
-                    showMessageModal('Có lỗi xảy ra khi thêm kích thước.', false);
-                }
-            });
-    };
-
+      // Kiểm tra xem kích thước đã tồn tại trong danh sách chưa
+      const sizeExists = $scope.Sizes.some(function(size) {
+          return size.sizename.toLowerCase() === $scope.selectedSize.sizename.toLowerCase();  // So sánh không phân biệt chữ hoa, chữ thường
+      });
+  
+      if (sizeExists) {
+          showMessageModal('Kích thước đã tồn tại!', false);
+          $scope.selectedSize = {};  // Reset form nếu kích thước đã tồn tại
+          return;  // Dừng lại nếu kích thước đã tồn tại
+      }
+  
+      // Kiểm tra xem trường 'sizename' có trống không
+      if (!$scope.selectedSize.sizename || !$scope.selectedSize.sizename.trim()) {
+          showMessageModal('Vui lòng nhập kích thước.', false);
+          return;
+      }
+  
+      // Nếu không có trùng lặp, thực hiện thêm kích thước
+      $http.post('http://localhost:8080/beesixcake/api/size', $scope.selectedSize)
+          .then(function(response) {
+              showMessageModal('Thêm kích thước thành công!', false);
+              $scope.Sizes.unshift(response.data);  // Thêm kích thước mới vào đầu danh sách
+              $scope.selectedSize = {};  // Reset form sau khi thêm thành công
+          })
+          .catch(function(error) {
+              if (error.data && error.data.message) {
+                  showMessageModal('Có lỗi xảy ra khi thêm kích thước: ' + error.data.message, false);
+              } else {
+                  showMessageModal('Có lỗi xảy ra khi thêm kích thước.', false);
+              }
+          });
+  };
+  
     // Hàm chỉnh sửa kích thước
     $scope.editSize = function(size) {
         $scope.selectedSize = angular.copy(size);  // Sao chép dữ liệu kích thước vào form

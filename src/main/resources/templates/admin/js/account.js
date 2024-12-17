@@ -88,7 +88,7 @@ app.controller("UserController", function($scope, $http) {
     $scope.errorMessage = '';
     $scope.searchQuery = ''; // Trường lưu trữ giá trị tìm kiếm
     $scope.currentPage = 1; // Trang hiện tại
-    $scope.pageSize = 4; // Số lượng bản ghi mỗi trang
+    $scope.pageSize = 10; // Số lượng bản ghi mỗi trang
     $scope.pages = []; // Danh sách các trang
     $scope.totalPages = 0; // Tổng số trang
 
