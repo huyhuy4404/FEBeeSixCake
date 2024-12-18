@@ -65,7 +65,7 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
 
   // Hàm chuyển hướng đến trang thêm địa chỉ
   $scope.redirectToAddAddress = function () {
-    window.location.href = "addrest.html";
+    window.location.href = "address.html";
   };
 
   // Tính tổng giá tiền
@@ -261,15 +261,15 @@ app.controller("CheckoutController", function ($scope, $window, $http) {
 
                 // Hiển thị thông báo trạng thái
                 const message = isPaid
-                  ? "Đơn hàng đã được thanh toán thành công và đặt hàng thành công!"
-                  : "Đơn hàng chưa được thanh toán. Đặt hàng thành công với trạng thái 'Chưa thanh toán'.";
+                  ? "Đã đặt hàng thành công!"
+                  : "Đã đặt hàng thành công!";
                 $scope.showModal("Đặt Hàng Thành Công", message);
 
                 // Chuyển hướng tới trang đặt hàng nếu cần
                 setTimeout(() => {
-                  console.log("Chuyển hướng sau 5 giây.");
+                  console.log("Chuyển hướng sau 3 giây.");
                   $window.location.href = "order.html";
-                }, 5000);
+                }, 3000);
               })
               .catch((error) => {
                 console.error("Lỗi khi đặt hàng:", error);
