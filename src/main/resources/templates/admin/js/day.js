@@ -193,7 +193,9 @@ $scope.renderDailyChart = function() {
 
     // Tạo danh sách ngày từ 1 đến 31
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
-
+   // Tính toán giá trị tối đa cho tổng đơn hàng và tổng tiền
+   const maxOrders = Math.max(...$scope.dailyStats.map(stat => stat.totalOrders)) || 0;
+   const maxRevenue = Math.max(...$scope.dailyStats.map(stat => stat.totalRevenue)) || 0;
     var options = {
         series: [
             {
@@ -223,7 +225,7 @@ $scope.renderDailyChart = function() {
         stroke: {
             width: 2, // Độ dày đường viền cột
         },
-        colors: ['#007bff', '#00aaff'], // Màu sắc cho từng chuỗi
+        colors: ['#007bff', '#28a745'], // Màu cho tổng đơn hàng và tổng tiền
         xaxis: {
             categories: days.map(day => day + ''), // Hiển thị từ 1 đến 31
             title: {
@@ -235,7 +237,8 @@ $scope.renderDailyChart = function() {
                 title: {
                     text: 'Tổng Đơn Hàng'
                 },
-                min: 0
+                min: 0,
+                max: maxOrders + 10 // Giới hạn tối đa cho trục y tổng đơn hàng
             },
             {
                 title: {

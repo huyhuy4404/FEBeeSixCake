@@ -151,22 +151,35 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             return;
         }
     
+        // Tính toán giá trị tối đa cho số lượng đơn hàng và doanh thu
+        const maxQuantity = Math.max(...$scope.quarterlyStats.map(stat => stat.totalQuantity)) || 0;
+        const maxRevenue = Math.max(...$scope.quarterlyStats.map(stat => stat.totalRevenue)) || 0;
+    
         // Cập nhật biểu đồ nếu đã tồn tại
         if ($scope.chart) {
             $scope.chart.updateOptions({
                 series: [
                     {
                         name: 'Số Lượng Đơn Hàng',
-                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
+                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity)
                     },
                     {
                         name: 'Doanh Thu',
-                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue)
                     }
                 ],
                 xaxis: {
-                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`) // Tên quý
-                }
+                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`)
+                },
+                yaxis: [
+                    {
+                        max: maxQuantity + 10 // Giới hạn tối đa cho trục y số lượng đơn hàng
+                    },
+                    {
+                        opposite: true,
+                        max: maxRevenue + 10 // Giới hạn tối đa cho trục y doanh thu
+                    }
+                ]
             });
         } else {
             // Tạo biểu đồ mới nếu chưa có
@@ -174,15 +187,15 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 series: [
                     {
                         name: 'Số Lượng Đơn Hàng',
-                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity) // Tổng số lượng cho từng quý
+                        data: $scope.quarterlyStats.map(stat => stat.totalQuantity)
                     },
                     {
                         name: 'Doanh Thu',
-                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue) // Doanh thu cho từng quý
+                        data: $scope.quarterlyStats.map(stat => stat.totalRevenue)
                     }
                 ],
                 chart: {
-                    type: 'bar', // Biểu đồ cột
+                    type: 'bar',
                     height: 300,
                     width: '100%',
                     zoom: {
@@ -191,37 +204,40 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 },
                 plotOptions: {
                     bar: {
-                        horizontal: false, // Cột đứng
-                        columnWidth: '50%', // Chiều rộng cột
-                        endingShape: 'rounded' // Hình dáng cột
+                        horizontal: false,
+                        columnWidth: '50%',
+                        endingShape: 'rounded'
                     }
                 },
                 stroke: {
-                    width: 2, // Độ dày của đường
-                    colors: ['#007bff', '#00aaff'] // Màu sắc (xanh biển)
+                    width: 2,
+                    colors: ['#007bff', '#00aaff']
                 },
                 xaxis: {
-                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`), // Tên quý
+                    categories: $scope.quarterlyStats.map(stat => `Quý ${stat.quarter} ${stat.year}`)
                 },
                 yaxis: [
                     {
                         title: {
-                            text: 'Số lượng Đơn Hàng' // Tiêu đề cho trục y đầu tiên
+                            text: 'Số lượng Đơn Hàng'
                         },
+                        min: 0,
+                        max: maxQuantity + 10, // Giới hạn tối đa cho trục y số lượng đơn hàng
                         labels: {
                             formatter: function(value) {
-                                return value; // Hiển thị số lượng đơn hàng
+                                return value;
                             }
                         }
                     },
                     {
-                        opposite: true, // Hiển thị trục y thứ hai ở phía bên phải
+                        opposite: true,
                         title: {
-                            text: 'Doanh Thu (VND)' // Tiêu đề cho trục y thứ hai
+                            text: 'Doanh Thu (VND)'
                         },
+                        max: maxRevenue + 10, // Giới hạn tối đa cho trục y doanh thu
                         labels: {
                             formatter: function(value) {
-                                return $scope.formatCurrency(value); // Định dạng doanh thu
+                                return $scope.formatCurrency(value);
                             }
                         }
                     }
@@ -231,8 +247,8 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     intersect: false,
                     formatter: function(series) {
                         return series.map((s, index) => {
-                            const quantity = $scope.quarterlyStats[index].totalQuantity; // Số lượng đơn hàng
-                            const revenue = $scope.formatCurrency($scope.quarterlyStats[index].totalRevenue); // Định dạng doanh thu
+                            const quantity = $scope.quarterlyStats[index].totalQuantity;
+                            const revenue = $scope.formatCurrency($scope.quarterlyStats[index].totalRevenue);
                             return `Quý ${$scope.quarterlyStats[index].quarter} ${$scope.quarterlyStats[index].year}<br>Số lượng: ${quantity}<br>Doanh thu: ${revenue}`;
                         }).join('<br>');
                     }

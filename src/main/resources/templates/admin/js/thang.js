@@ -200,6 +200,10 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
     
         document.getElementById("monthly-bar-chart").innerHTML = "";
     
+        // Tính toán giá trị tối đa cho tổng đơn hàng và tổng tiền
+        const maxOrders = Math.max(...$scope.monthlyStats.map(stat => stat.totalOrders)) || 0;
+        const maxRevenue = Math.max(...$scope.monthlyStats.map(stat => stat.totalRevenue)) || 0;
+    
         var options = {
             series: [
                 {
@@ -212,7 +216,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                 }
             ],
             chart: {
-                type: 'bar', // Đổi thành biểu đồ cột
+                type: 'bar',
                 height: 300,
                 width: '100%',
                 zoom: {
@@ -221,9 +225,9 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             },
             plotOptions: {
                 bar: {
-                    horizontal: false, // Cột đứng
-                    columnWidth: '50%', // Chiều rộng cột
-                    endingShape: 'rounded' // Hình dáng cột
+                    horizontal: false,
+                    columnWidth: '50%',
+                    endingShape: 'rounded'
                 }
             },
             xaxis: {
@@ -234,7 +238,8 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     title: {
                         text: 'Tổng Đơn Hàng'
                     },
-                    min: 0
+                    min: 0,
+                    max: maxOrders + 10 // Giới hạn tối đa cho trục y tổng đơn hàng
                 },
                 {
                     title: {
@@ -242,9 +247,10 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                     },
                     opposite: true,
                     min: 0,
+                    max: maxRevenue + 10, // Giới hạn tối đa cho trục y tổng tiền
                     labels: {
                         formatter: function(value) {
-                            return $scope.formatCurrency(value); // Định dạng nhãn trục y
+                            return $scope.formatCurrency(value);
                         }
                     }
                 }
@@ -252,10 +258,10 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
             tooltip: {
                 shared: true,
                 intersect: false,
-                followCursor: true // Tooltip theo con trỏ chuột
+                followCursor: true
             },
             dataLabels: {
-                enabled: false // Tắt hiển thị số liệu trong cột
+                enabled: false
             },
             responsive: [{
                 breakpoint: 480,

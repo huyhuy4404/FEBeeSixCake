@@ -265,7 +265,7 @@ app.controller("CheckLogin", function ($scope, $http, $window) {
                             text: 'Số lượng'
                         },
                         min: 0,
-                        max: maxOrders, // Giới hạn tối đa cho trục y
+                        max: maxOrders + 12, // Giới hạn tối đa cho trục y
                         tickAmount: Math.ceil(maxOrders / 2), // Số nhãn chẵn
                         labels: {
                             formatter: function(value) {
