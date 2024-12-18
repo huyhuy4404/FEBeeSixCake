@@ -548,18 +548,27 @@ app.controller("DanhGiaSanPhamController", function ($scope, $http) {
       .get(`${API}/reviews`)
       .then((response) => {
         console.log("Response data:", response.data); // Log toàn bộ dữ liệu trả về
-
+  
         // Lọc đánh giá theo sản phẩm hiện tại
         const productReviews = response.data.filter(
           (review) => review.product.idproduct == productId
         );
+  
+        // Chuyển đổi múi giờ UTC+7 cho `reviewdate`
+        productReviews.forEach((review) => {
+          if (review.reviewdate) {
+            const utcDate = new Date(review.reviewdate);
+            review.reviewdate = new Date(utcDate.getTime() + 7 * 3600000);
+          }
+        });
+  
         console.log("Filtered Reviews:", productReviews); // Log dữ liệu đã lọc
-
+  
         // Sắp xếp đánh giá theo ngày, mới nhất lên đầu
         productReviews.sort(
           (a, b) => new Date(b.reviewdate) - new Date(a.reviewdate)
         );
-
+  
         // Tính toán nếu có đánh giá
         if (productReviews.length > 0) {
           const totalRating = productReviews.reduce(
@@ -567,26 +576,27 @@ app.controller("DanhGiaSanPhamController", function ($scope, $http) {
             0
           );
           console.log("Total Rating:", totalRating); // Log tổng số sao
-
+  
           $scope.averageRating = parseFloat(
             (totalRating / productReviews.length).toFixed(1)
           );
           console.log("Average Rating Calculated:", $scope.averageRating); // Log trung bình số sao
-
+  
           $scope.reviewCount = productReviews.length;
         } else {
           // Không có đánh giá
           $scope.averageRating = "N/A"; // Hoặc có thể là 0
           $scope.reviewCount = 0;
         }
-
+  
         // Gán dữ liệu đánh giá
         $scope.reviews = productReviews;
         $scope.filteredReviews = productReviews; // Dữ liệu ban đầu (lọc tất cả)
-        $scope.visibleReviews = productReviews.slice(0, 2); // Hiển thị 3 đánh giá đầu tiên
+        $scope.visibleReviews = productReviews.slice(0, 2); // Hiển thị 2 đánh giá đầu tiên
       })
       .catch((error) => console.error("Error fetching reviews:", error));
   };
+  
 
   // **Lọc đánh giá**
   $scope.selectedFilter = "all"; // Mặc định chọn "Tất cả"
