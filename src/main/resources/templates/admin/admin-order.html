@@ -238,54 +238,47 @@
                                             <div class="thongTinSP mb-4">
                                                 <p class="titleThongTinSP">Thông Tin Sản Phẩm</p>
                                                 <table class="table table-bordered table-striped">
-                                                    <thead class="table-secondary text-center">
-                                                        <tr>
-                                                            <th style="width: 15%">Hình</th>
-                                                            <th style="width: 30%">Tên Sản Phẩm</th>
-                                                            <th style="width: 8%">Kích Cỡ</th>
-                                                            <th style="width: 25%">Giá</th>
-                                                            <th style="width: 8%">Số Lượng</th>
-                                                            <th style="width: 25%">Thành tiền</th>
-                                                            <th style="width: 5%">Hủy</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="text-center">
-                                                        <!-- Lặp qua các sản phẩm trong giỏ hàng -->
-                                                        <tr ng-repeat="product in cart">
-                                                            <td>
-                                                                <img src="https://5ck6jg.csb.app/anh/{{product.img}}"
-                                                                    alt="Ảnh sản phẩm" class="img-thumbnail"
-                                                                    style="width: 90px; height: 90px; object-fit: cover;">
-                                                            </td>
-                                                            <td>{{ product.productname }}</td>
-                                                            <td>{{ product.selectedSize.sizename }}</td>
-                                                            <td>{{ product.unitprice | number: 0 }} VNĐ</td>
-                                                            <td>
-                                                                <!-- Thêm input để thay đổi số lượng -->
-                                                                <input type="number" ng-model="product.selectedQuantity"
-                                                                    min="1"
-                                                                    max="{{product.selectedSize.quantityinstock}}"
-                                                                    ng-change="onQuantityChange(product, 'cart')"
-                                                                    class="form-control" style="width: 80px;" />
-
-                                                                <span class="text-muted">(Tồn kho: {{
-                                                                    product.selectedSize.quantityinstock }})</span>
-                                                            </td>
-                                                            <td>
-                                                                <!-- Hiển thị thành tiền theo số lượng và giá -->
-                                                                {{ product.totalPrice | number: 0 }} VNĐ
-                                                            </td>
-                                                            <td>
-                                                                <button class="btn btn-danger btn-sm"
-                                                                    ng-click="deleteProduct(product.idcartitem)">
-                                                                    <i class="bi bi-trash"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
+                                                  <thead class="table-secondary text-center">
+                                                    <tr>
+                                                      <th style="width: 10%; text-align: center;">Hình</th>
+                                                      <th style="width: 35%; text-align: left;">Tên Sản Phẩm</th>
+                                                      <th style="width: 10%; text-align: center;">Kích Cỡ</th>
+                                                      <th style="width: 15%; text-align: center;">Giá</th>
+                                                      <th style="width: 10%; text-align: center;">Số Lượng</th>
+                                                      <th style="width: 15%; text-align: center;">Thành tiền</th>
+                                                      <th style="width: 5%; text-align: center;">Hủy</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+                                                    <tr ng-repeat="product in cart" class="text-center align-middle">
+                                                      <td>
+                                                        <img src="https://5ck6jg.csb.app/anh/{{product.img}}" alt="Ảnh sản phẩm" class="img-thumbnail"
+                                                          style="width: 90px; height: 90px; object-fit: cover;">
+                                                      </td>
+                                                      <td class="text-start align-middle">{{ product.productname }}</td>
+                                                      <td class="align-middle">{{ product.selectedSize.sizename }}</td>
+                                                      <td class="align-middle">{{ product.unitprice | number: 0 }} VNĐ</td>
+                                                      <td class="align-middle">
+                                                        <!-- Thêm input để thay đổi số lượng -->
+                                                        <input type="number" ng-model="product.selectedQuantity" min="1" max="{{product.selectedSize.quantityinstock}}"
+                                                          ng-change="onQuantityChange(product, 'cart')" class="form-control text-center" style="width: 80px;" />
+                                                        <span class="text-muted">(Tồn kho: {{ product.selectedSize.quantityinstock }})</span>
+                                                      </td>
+                                                      <td class="align-middle">
+                                                        <!-- Hiển thị thành tiền theo số lượng và giá -->
+                                                        {{ product.totalPrice | number: 0 }} VNĐ
+                                                      </td>
+                                                      <td class="align-middle">
+                                                        <button class="btn btn-danger btn-sm" ng-click="deleteProduct(product.idcartitem)">
+                                                          <i class="bi bi-trash"></i>
+                                                        </button>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
                                                 </table>
-
-                                            </div>
+                                              </div>
+                                              
 
                                             <!-- Phần thông tin voucher và phương thức thanh toán vẫn giữ nguyên -->
                                             <div class="row mb-4">
